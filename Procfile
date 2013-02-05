@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -cp target/classes$PATH_SEPARATORtarget/dependency/* init.Init
+web: java ${JAVA_OPTS} -cp target/classes${PATH_SEPARATOR}target/dependency/* init.Init
