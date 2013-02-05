@@ -3,4 +3,4 @@
 .git
 bin
 target
-user.properties
+settings.xml
