@@ -1,0 +1,6 @@
+.classpath
+.env
+.git
+bin
+target
+user.properties
