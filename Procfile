@@ -1,1 +1,1 @@
-web: play "run $PORT"
+web: target/start
