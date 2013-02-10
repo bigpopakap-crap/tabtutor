@@ -1,9 +1,20 @@
-# Routes
-# This file defines all application routes (Higher priority routes first)
-# ~~~~
+# Routing definitions
+# 
+# - page routes can be any path, except for reserved ones below
+# - /api/* is reserved for API calls. Everything should utilize these to do the actual work
+# - /internal/* is reserved for developer or admin pages
+# - /internal/devtools/* is reserved for pages that will not be available in production
+# - /internal/admin/* is reserved for pages that will be available, even in production
+# - /public/* is reserved for static files and resources
+#
 
+# ---------------- BEGIN PAGE ROUTING -------------------------------- #
 # Home page
 GET     /                           controllers.Application.index()
 
-# Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+# ---------------- BEGIN INTERNAL/DEVTOOLS PAGE ROUTING -------------- #
+
+# ---------------- BEGIN INTERNAL/ADMIN PAGE ROUTING ----------------- #
+
+# ---------------- BEGIN STATIC FILE ROUTING ------------------------- #
+GET     /public/*file               controllers.Assets.at(path="/public", file)
