@@ -10,11 +10,13 @@
 
 # ---------------- BEGIN PAGE ROUTING -------------------------------- #
 # Home page
-GET     /                           controllers.Application.index()
+GET     /                           controllers.PageController.index()
 
 # ---------------- BEGIN INTERNAL/DEVTOOLS PAGE ROUTING -------------- #
 
 # ---------------- BEGIN INTERNAL/ADMIN PAGE ROUTING ----------------- #
+
+# ---------------- BEGIN API ROUTING --------------------------------- #
 
 # ---------------- BEGIN STATIC FILE ROUTING ------------------------- #
 GET     /public/*file               controllers.Assets.at(path="/public", file)
