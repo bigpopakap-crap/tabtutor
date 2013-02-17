@@ -10,7 +10,7 @@
 
 # ---------------- BEGIN PAGE ROUTING -------------------------------- #
 # Home page
-GET     /                           controllers.PageController.index()
+GET     /                           controllers.PageController.landing()
 
 # ---------------- BEGIN INTERNAL/DEVTOOLS PAGE ROUTING -------------- #
 
