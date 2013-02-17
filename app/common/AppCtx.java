@@ -26,14 +26,21 @@ public abstract class AppCtx {
 		
 		DOMAIN("WTF_DOMAIN"),
 		PORT("WTF_HTTP_PORT"),
-		FB_APP_ID("WTF_FB_APP_ID");
+		FB_APP_ID("WTF_FB_APP_ID"),
+		FB_APP_SECRET("WTF_FB_APP_SECRET", true);
 		
+		private final boolean isSecuredSecret;	//indicates that this should never be surfaced in the UI
 		private final String key;
 		private final String val;
 		
 		private Var(String key) {
+			this(key, false);
+		}
+		
+		private Var(String key, boolean isSecret) {
 			this.key = key;
 			this.val = System.getenv(this.key);
+			this.isSecuredSecret = isSecret;
 		}
 		
 		/** Gets the name of the environment variable as it was defined */
@@ -41,9 +48,14 @@ public abstract class AppCtx {
 			return key;
 		}
 		
-		/** Gets the value fo the environment variable */
+		/** Gets the value of the environment variable */
 		public synchronized String val() {
 			return val;
+		}
+		
+		/** Returns true if this is a guarded secret */
+		public boolean isSecuredSecret() {
+			return isSecuredSecret;
 		}
 		
 	}

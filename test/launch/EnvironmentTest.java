@@ -81,5 +81,6 @@ public class EnvironmentTest extends BaseFuncTest {
 	
 	//TODO write a static analysis test to make sure nobody references the Play class directly
 	//TODO write a static analysis test to make sure nobody references System.getenv(..) directly
+	//TODO write a static analysis test to make sure nobody uses private AppCtx.Vars in the UI
 	
 }
