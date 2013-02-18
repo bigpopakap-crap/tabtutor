@@ -13,6 +13,7 @@ import play.mvc.Result;
  */
 public class BaseWebController extends Controller {
 	
+	/** Show the landing page */
 	public static Result landing() {
 		return ok(views.html.landing.render());
 	}

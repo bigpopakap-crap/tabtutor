@@ -9,7 +9,11 @@
 #
 
 # ---------------- BEGIN PAGE ROUTING -------------------------------- #
-GET     /                           controllers.PageController.landing()	#Landing page
+# Landing page
+GET     /                           controllers.BaseWebController.landing()
+
+# Facebook login entry point
+GET		/fblogin					controllers.FbAuthWebController.fblogin(code ?= null)
 
 # ---------------- BEGIN INTERNAL/DEVTOOLS PAGE ROUTING -------------- #
 # TODO these will be implemented as and when we find a need
