@@ -19,6 +19,15 @@ import common.AppCtx;
  */
 public class FbAuthWebController extends BaseWebController {
 	
+	//TODO test the registration/login flow
+	//TODO add a redirectUrl parameter so that a user gets back to whatever page they were viewing
+	
+	/**
+	 * TODO handle various cases:
+	 * 		- the user de-authorized the app
+	 * 		- the auth token from Facebook expired
+	 */
+	
 	/**
 	 * Handles the Facebook login. Redirects the user to the Facebook login dialogue,
 	 * or exchange the code for an access token
@@ -28,6 +37,7 @@ public class FbAuthWebController extends BaseWebController {
 	public static Result fblogin(String code) {
 		if (code == null) {
 			//the login flow has started, redirect to the Facebook login dialogue
+			//TODO use something else for url encoding
 			return redirect(
 						"https://www.facebook.com/dialog/oauth" +
 						"?client_id=" + AppCtx.Var.FB_APP_ID.val() +
@@ -36,6 +46,7 @@ public class FbAuthWebController extends BaseWebController {
 					);
 		}
 		else {
+			//TODO handle the case that they did not authorize the app
 			return null;
 		}
 	}
