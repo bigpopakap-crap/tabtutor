@@ -13,12 +13,13 @@ import play.mvc.Http.RequestHeader;
 import play.mvc.Result;
 
 /**
+ * This the global controller, that implements hooks in the app's lifecycle
  * 
  * @author bigpopakap@gmail.com
  * @since 2013/02/10
  *
  */
-public class Global extends GlobalSettings {
+public class GlobalController extends GlobalSettings {
 	
 	@Override
 	public void onStart(Application app) {
