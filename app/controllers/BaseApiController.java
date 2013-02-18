@@ -15,5 +15,7 @@ import play.mvc.Controller;
  *
  */
 public class BaseApiController extends Controller {
+	
+	//TODO add exposed API paths when we want to start exposing an API
 
 }
