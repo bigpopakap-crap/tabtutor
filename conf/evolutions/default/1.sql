@@ -1,15 +1,15 @@
 # --- !Ups
-# TODO define constants for max lengths of fields
+-- TODO define constants for max lengths of fields
 
-CREATE TYPE pk_t AS INTEGER; # TODO use a different type?
+CREATE TYPE pk_t AS INTEGER; -- TODO use a different type?
 CREATE TYPE user_username_t AS VARCHAR(80);
 CREATE TYPE user_name_t AS VARCHAR(80);
 CREATE TYPE email_t AS VARCHAR(255);
 CREATE TYPE facebook_id_t AS VARCHAR(80);
-CREATE TYPE facebook_token_t VARCHAR(80);
-CREATE TYPE facebook_auth_state_t AS INTEGER; # TODO use smaller integer?
+CREATE TYPE facebook_token_t AS VARCHAR(80);
+CREATE TYPE facebook_auth_state_t AS INTEGER; -- TODO use smaller integer?
 
-# TODO define constants for 3 fbauthStage values
+-- TODO define constants for 3 fbauthStage values
 
 CREATE TABLE User (
 	pk pk_t PRIMARY KEY,
