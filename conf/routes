@@ -9,14 +9,16 @@
 #
 
 # ---------------- BEGIN PAGE ROUTING -------------------------------- #
-# Home page
-GET     /                           controllers.PageController.landing()
+GET     /                           controllers.PageController.landing()	#Landing page
 
 # ---------------- BEGIN INTERNAL/DEVTOOLS PAGE ROUTING -------------- #
+# TODO these will be implemented as and when we find a need
 
 # ---------------- BEGIN INTERNAL/ADMIN PAGE ROUTING ----------------- #
+# TODO these will be implemented as and when we find a need
 
 # ---------------- BEGIN API ROUTING --------------------------------- #
+# TODO this will be implemented later
 
 # ---------------- BEGIN STATIC FILE ROUTING ------------------------- #
 GET     /public/*file               controllers.Assets.at(path="/public", file)
