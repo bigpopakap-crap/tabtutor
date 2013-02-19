@@ -7,6 +7,8 @@ import play.libs.WS;
 import play.mvc.Result;
 
 import common.AppCtx;
+import common.SecurityEscapingUtil;
+import common.SecurityEscapingUtil.Escaper;
 
 /**
  * This class handles all API requests related to Facebook authentication
@@ -47,19 +49,17 @@ public class FbAuthWebController extends BaseWebController {
 		}
 		else {
 			//TODO handle the case that they did not authorize the app
-			String tokenUrl = "https://graph.facebook.com/oauth/access_token" +
+			final String tokenUrl = "https://graph.facebook.com/oauth/access_token" +
 								"?client_id=" + AppCtx.Var.FB_APP_ID.val() +
-								"&redirect_uri=" + getDomainUrlEncoded() +
+								"&redirect_uri=" + getFbloginUrlEncoded() +
 								"&client_secret=" + AppCtx.Var.FB_APP_SECRET.val() +
 								"&code=" + code;
-			System.out.println("\n\n\nredir: " + tokenUrl + "\n\n\n");
 			return async(
 				WS.url(tokenUrl).post("").map(
 					new Function<WS.Response, Result>() {
 						@Override
 						public Result apply(WS.Response resp) {
-							System.out.println("\n\n\n" + resp.getBody() + "\n\n\n");
-							return null;
+							return ok("url: " + tokenUrl + "\n\nresponse: " + resp.getBody());
 						}
 					}
 				)
@@ -67,17 +67,12 @@ public class FbAuthWebController extends BaseWebController {
 		}
 	}
 	
-	private static String getDomainUrlEncoded() {
-		return urlEncode(AppCtx.Var.DOMAIN.val());
-	}
-	
+	/** Gets the absolute url to the fblogin() action, URL-escaped */
 	private static String getFbloginUrlEncoded() {
-		return urlEncode(routes.FbAuthWebController.fblogin(null).absoluteURL(request()));
+		return SecurityEscapingUtil.escape(
+					routes.FbAuthWebController.fblogin(null).absoluteURL(request()),
+					Escaper.URL
+				);
 	}
 	
-	private static String urlEncode(String url) {
-		//TODO use something else for url encoding
-		return URLEncoder.encode(url);
-	}
-
 }
