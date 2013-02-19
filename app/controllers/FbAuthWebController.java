@@ -2,6 +2,8 @@ package controllers;
 
 import java.net.URLEncoder;
 
+import play.libs.F.Function;
+import play.libs.WS;
 import play.mvc.Result;
 
 import common.AppCtx;
@@ -37,18 +39,45 @@ public class FbAuthWebController extends BaseWebController {
 	public static Result fblogin(String code) {
 		if (code == null) {
 			//the login flow has started, redirect to the Facebook login dialogue
-			//TODO use something else for url encoding
-			return redirect(
-						"https://www.facebook.com/dialog/oauth" +
-						"?client_id=" + AppCtx.Var.FB_APP_ID.val() +
-						"&redirect_uri=" + URLEncoder.encode(routes.FbAuthWebController.fblogin(null).absoluteURL(request()))
-						//TODO add CSRF protection
-					);
+			String redirectUrl = "https://www.facebook.com/dialog/oauth" +
+								"?client_id=" + AppCtx.Var.FB_APP_ID.val() +
+								"&redirect_uri=" + getFbloginUrlEncoded();
+								//TODO add CSRF protection
+			return redirect(redirectUrl);
 		}
 		else {
 			//TODO handle the case that they did not authorize the app
-			return null;
+			String tokenUrl = "https://graph.facebook.com/oauth/access_token" +
+								"?client_id=" + AppCtx.Var.FB_APP_ID.val() +
+								"&redirect_uri=" + getDomainUrlEncoded() +
+								"&client_secret=" + AppCtx.Var.FB_APP_SECRET.val() +
+								"&code=" + code;
+			System.out.println("\n\n\nredir: " + tokenUrl + "\n\n\n");
+			return async(
+				WS.url(tokenUrl).post("").map(
+					new Function<WS.Response, Result>() {
+						@Override
+						public Result apply(WS.Response resp) {
+							System.out.println("\n\n\n" + resp.getBody() + "\n\n\n");
+							return null;
+						}
+					}
+				)
+			);
 		}
+	}
+	
+	private static String getDomainUrlEncoded() {
+		return urlEncode(AppCtx.Var.DOMAIN.val());
+	}
+	
+	private static String getFbloginUrlEncoded() {
+		return urlEncode(routes.FbAuthWebController.fblogin(null).absoluteURL(request()));
+	}
+	
+	private static String urlEncode(String url) {
+		//TODO use something else for url encoding
+		return URLEncoder.encode(url);
 	}
 
 }
