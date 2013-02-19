@@ -1,7 +1,5 @@
 package controllers;
 
-import java.net.URLEncoder;
-
 import play.libs.F.Function;
 import play.libs.WS;
 import play.mvc.Result;
@@ -25,6 +23,7 @@ public class FbAuthWebController extends BaseWebController {
 	
 	//TODO test the registration/login flow
 	//TODO add a redirectUrl parameter so that a user gets back to whatever page they were viewing
+	//TODO use a pop-up instead of redirecting the whole browser to Facebook
 	
 	/**
 	 * TODO handle various cases:
@@ -55,7 +54,7 @@ public class FbAuthWebController extends BaseWebController {
 								"&client_secret=" + AppCtx.Var.FB_APP_SECRET.val() +
 								"&code=" + code;
 			return async(
-				WS.url(tokenUrl).post("").map(
+				WS.url(tokenUrl).get().map(
 					new Function<WS.Response, Result>() {
 						@Override
 						public Result apply(WS.Response resp) {
