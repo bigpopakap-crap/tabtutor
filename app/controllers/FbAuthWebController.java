@@ -24,6 +24,8 @@ public class FbAuthWebController extends BaseWebController {
 	//TODO test the registration/login flow
 	//TODO add a redirectUrl parameter so that a user gets back to whatever page they were viewing
 	//TODO use a pop-up instead of redirecting the whole browser to Facebook
+	//TODO move as much logic to an Action class as possible
+	//TODO change url to /login/fb? or /fb/login?
 	
 	/**
 	 * TODO handle various cases:
