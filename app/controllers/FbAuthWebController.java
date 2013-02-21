@@ -47,6 +47,7 @@ public class FbAuthWebController extends BaseWebController {
 	 * @return
 	 */
 	public static Result fblogin(String code) {
+		System.out.println("\n\n\n\n\n" + getFbloginUrlEncoded() + "\n\n\n\n"); //TODO
 		if (code == null) {
 			//the login flow has started, redirect to the Facebook login dialogue
 			String redirectUrl = "https://www.facebook.com/dialog/oauth" +
@@ -78,7 +79,7 @@ public class FbAuthWebController extends BaseWebController {
 	/** Gets the absolute url to the fblogin() action, URL-escaped */
 	private static String getFbloginUrlEncoded() {
 		return SecurityEscapingUtil.escape(
-					routes.FbAuthWebController.fblogin(null).absoluteURL(request()),
+					AppCtx.Var.FB_SITE_URL.val() + routes.FbAuthWebController.fblogin(null).url().substring(1),
 					Escaper.URL
 				);
 	}

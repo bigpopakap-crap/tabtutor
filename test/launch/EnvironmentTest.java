@@ -13,9 +13,9 @@ public class EnvironmentTest extends BaseFuncTest {
 	
 	/** This is the list of expected environment variables */
 	private static final String[] EXPECTED_ENV_KEYS = new String[] {
-		"WTF_PLAY_MODE", "WTF_MODE", "WTF_DOMAIN",
+		"WTF_PLAY_MODE", "WTF_MODE",
 		"WTF_HTTP_PORT", "WTF_CRYPTO_SECRET",
-		"WTF_FB_APP_ID", "WTF_FB_APP_SECRET"
+		"WTF_FB_SITE_URL", "WTF_FB_APP_ID", "WTF_FB_APP_SECRET"
 	};
 	
 	/**

@@ -24,8 +24,8 @@ public abstract class AppCtx {
 	 */
 	public static enum Var {
 		
-		DOMAIN("WTF_DOMAIN"),
-		PORT("WTF_HTTP_PORT"),
+		HTTP_PORT("WTF_HTTP_PORT"),
+		FB_SITE_URL("WTF_FB_SITE_URL"),
 		FB_APP_ID("WTF_FB_APP_ID"),
 		FB_APP_SECRET("WTF_FB_APP_SECRET", true);
 		
