@@ -24,14 +24,21 @@ public class FbAuthWebController extends BaseWebController {
 	//TODO test the registration/login flow
 	//TODO add a redirectUrl parameter so that a user gets back to whatever page they were viewing
 	//TODO use a pop-up instead of redirecting the whole browser to Facebook
+	
 	//TODO move as much logic to an Action class as possible
 	//TODO change url to /login/fb? or /fb/login?
 	
-	/**
-	 * TODO handle various cases:
-	 * 		- the user de-authorized the app
-	 * 		- the auth token from Facebook expired
+	//TODO add "fbTokenExpiresTime" column to DB? Add session timeout?
+
+	/*
+	 * TODO add this flow to a top-level place where we can deal with:
+	 * 		- re-authenticating timed-out sessions
+	 * 		- refreshing expired fb tokens
+	 * 		- authenticating for pages that need it
+	 * 		- re-authenticating for pages that want to force it
 	 */
+	
+	//TODO handle the case that the user deauthorizes the app
 	
 	/**
 	 * Handles the Facebook login. Redirects the user to the Facebook login dialogue,
