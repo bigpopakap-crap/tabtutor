@@ -79,7 +79,7 @@ public class FbAuthWebController extends BaseWebController {
 	/** Gets the absolute url to the fblogin() action, URL-escaped */
 	private static String getFbloginUrlEncoded() {
 		return SecurityEscapingUtil.escape(
-					AppCtx.Var.FB_SITE_URL.val() + routes.FbAuthWebController.fblogin(null).url().substring(1),
+					routes.FbAuthWebController.fblogin(null).absoluteURL(request()),
 					Escaper.URL
 				);
 	}
