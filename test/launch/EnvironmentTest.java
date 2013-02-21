@@ -11,29 +11,25 @@ import common.AppCtx;
 
 public class EnvironmentTest extends BaseFuncTest {
 	
-	/** This is the list of expected environment variables */
-	private static final String[] EXPECTED_ENV_KEYS = new String[] {
-		"WTF_PLAY_MODE", "WTF_MODE",
-		"WTF_HTTP_PORT", "WTF_CRYPTO_SECRET",
-		"WTF_FB_SITE_URL", "WTF_FB_APP_ID", "WTF_FB_APP_SECRET"
-	};
-	
-	/**
-	 * Tests that a minimum set of system environment variables are actually defined
-	 */
+	/** Test that the environment variables necessary for Heroku are present */
 	@Test
-	public void testExpectedEnvironmentVariables() {
-		for (String envKey : EXPECTED_ENV_KEYS) {
-			Assert.assertNotNull(
-				"Expected environment variable was not found: " + envKey,
-				System.getenv(envKey)
-			);
-		}
+	public void testExpectedHerokuEnvironmentVariables() {
+		LaunchPackageHelpers.helpTestExpectedEnvironmentVariables(new String [] { "WTF_HTTP_PORT" });
 	}
 	
-	/**
-	 * Tests that the AppCtx class has no null values
-	 */
+	/** Test that the environment variables necessary for Play are present */
+	@Test
+	public void testExpectedPlayEnvironmentVariables() {
+		LaunchPackageHelpers.helpTestExpectedEnvironmentVariables(new String [] { "WTF_PLAY_MODE", "WTF_CRYPTO_SECRET" });
+	}
+	
+	/** Test that the environment variables necessary for the app are present */
+	@Test
+	public void testExpectedAppEnvironmentVariables() {
+		LaunchPackageHelpers.helpTestExpectedEnvironmentVariables(new String [] { "WTF_MODE" });
+	}
+	
+	/** Tests that the AppCtx class has no null values */
 	@Test
 	public void testAppCtxVars() {
 		running(fakeApplication(), new Runnable() {
@@ -48,9 +44,7 @@ public class EnvironmentTest extends BaseFuncTest {
 		});
 	}
 	
-	/**
-	 * Tests that the environment returned by 
-	 */
+	/** Tests that the mode returned by AppCtx matches the boolean state-querier methods */
 	@Test
 	public void testAppCtxMode() {
 		running(fakeApplication(), new Runnable() {
