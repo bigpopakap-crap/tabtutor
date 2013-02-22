@@ -41,6 +41,9 @@ public class FbAuthWebController extends BaseWebController {
 	 * 		- re-authenticating for pages that want to force it
 	 */
 	
+	private static final Pattern FB_TOKEN_PATTERN = Pattern.compile("^access_token=(.+)&");
+	private static final Pattern FB_TOKEN_EXPIRY_PATTERN = Pattern.compile("&expires=(\\d+)$");
+	
 	/**
 	 * Handles the Facebook login. Redirects the user to the Facebook login dialogue,
 	 * or exchange the code for an access token
@@ -66,16 +69,7 @@ public class FbAuthWebController extends BaseWebController {
 					new Function<WS.Response, Result>() {
 						@Override
 						public Result apply(WS.Response resp) {
-							Pattern tokenPattern = Pattern.compile("^access_token=(.+)&");
-							Pattern expiresPattern = Pattern.compile("&expires=(\\d+)$");
-							
-							Matcher tokenMatcher = tokenPattern.matcher(resp.getBody());
-							Matcher expiresMatcher = expiresPattern.matcher(resp.getBody());
-							
-							String token = (tokenMatcher.find()) ? tokenMatcher.group(1) : null;
-							String expires = (expiresMatcher.find()) ? expiresMatcher.group(1) : null;
-							
-							return ok("token: " + token + "\nexpires: " + expires);
+							return ok("token: " + parseToken(resp) + "\nexpires: " + parseTokenExpiry(resp));
 						}
 					}
 				)
@@ -89,6 +83,29 @@ public class FbAuthWebController extends BaseWebController {
 					routes.FbAuthWebController.fblogin(null).absoluteURL(request()),
 					Escaper.URL
 				);
+	}
+	
+	/** Parses for the access token returned from Facebook, or returns null */
+	private static String parseToken(WS.Response resp) {
+		try {
+			Matcher tokenMatcher = FB_TOKEN_PATTERN.matcher(resp.getBody());
+			return (tokenMatcher.find()) ? tokenMatcher.group(1) : null;
+		}
+		catch (Exception ex) {
+			return null;
+		}
+	}
+	
+	/** Parses for the access token expiry time returned from Facebook as an int number of seconds left, or returns null */
+	private static int parseTokenExpiry(WS.Response resp) {
+		try {
+			Matcher tokenExpiryMatcher = FB_TOKEN_EXPIRY_PATTERN.matcher(resp.getBody());
+			String tokenExpiry = (tokenExpiryMatcher.find()) ? tokenExpiryMatcher.group(1) : null;
+			return Integer.parseInt(tokenExpiry);
+		}
+		catch (Exception ex) {
+			return 0;
+		}
 	}
 	
 }
