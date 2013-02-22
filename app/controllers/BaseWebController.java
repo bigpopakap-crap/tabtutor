@@ -13,6 +13,11 @@ import play.mvc.Result;
  */
 public class BaseWebController extends Controller {
 	
+	/** Redirect to the favicon */
+	public static Result favicon() {
+		return redirect(routes.Assets.at("/public/images/favicon.png"));
+	}
+	
 	/** Show the landing page */
 	public static Result landing() {
 		return ok(views.html.landing.render());
