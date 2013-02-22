@@ -1,5 +1,8 @@
 package controllers;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import play.libs.F.Function;
 import play.libs.WS;
 import play.mvc.Result;
@@ -67,7 +70,16 @@ public class FbAuthWebController extends BaseWebController {
 					new Function<WS.Response, Result>() {
 						@Override
 						public Result apply(WS.Response resp) {
-							return ok(resp.getBody());
+							Pattern tokenPattern = Pattern.compile("^access_token=(.+)&");
+							Pattern expiresPattern = Pattern.compile("&expires=(\\d+)$");
+							
+							Matcher tokenMatcher = tokenPattern.matcher(resp.getBody());
+							Matcher expiresMatcher = expiresPattern.matcher(resp.getBody());
+							
+							String token = (tokenMatcher.find()) ? tokenMatcher.group(1) : null;
+							String expires = (expiresMatcher.find()) ? expiresMatcher.group(1) : null;
+							
+							return ok("token: " + token + "\nexpires: " + expires);
 						}
 					}
 				)
