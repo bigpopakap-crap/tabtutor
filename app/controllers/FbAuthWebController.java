@@ -27,12 +27,12 @@ public class FbAuthWebController extends BaseWebController {
 	//TODO test the registration/login flow
 	//TODO add a redirectUrl parameter so that a user gets back to whatever page they were viewing
 	//TODO use a pop-up instead of redirecting the whole browser to Facebook
+	//TODO add CSRF protection
+	//TODO handle the case that they did not authorize the app
 	
 	//TODO move as much logic to an Action class as possible
-	//TODO change url to /login/fb? or /fb/login?
+	//TODO handle the case that the user deauthorizes the app
 	
-	//TODO add "fbTokenExpiresTime" column to DB? Add session timeout?
-
 	/*
 	 * TODO add this flow to a top-level place where we can deal with:
 	 * 		- re-authenticating timed-out sessions
@@ -40,8 +40,6 @@ public class FbAuthWebController extends BaseWebController {
 	 * 		- authenticating for pages that need it
 	 * 		- re-authenticating for pages that want to force it
 	 */
-	
-	//TODO handle the case that the user deauthorizes the app
 	
 	/**
 	 * Handles the Facebook login. Redirects the user to the Facebook login dialogue,
@@ -55,11 +53,9 @@ public class FbAuthWebController extends BaseWebController {
 			String redirectUrl = "https://www.facebook.com/dialog/oauth" +
 								"?client_id=" + AppCtx.Var.FB_APP_ID.val() +
 								"&redirect_uri=" + getFbloginUrlEncoded();
-								//TODO add CSRF protection
 			return redirect(redirectUrl);
 		}
 		else {
-			//TODO handle the case that they did not authorize the app
 			final String tokenUrl = "https://graph.facebook.com/oauth/access_token";
 			final String tokenParams = "client_id=" + AppCtx.Var.FB_APP_ID.val() +
 								"&redirect_uri=" + getFbloginUrlEncoded() +

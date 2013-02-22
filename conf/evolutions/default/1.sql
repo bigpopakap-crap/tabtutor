@@ -22,8 +22,10 @@ CREATE TABLE Session (
 	pk pk_t PRIMARY KEY,
 	user_pk pk_t REFERENCES User(pk),
 	fbtoken facebook_token_t,
+	fbtokenExpiryTime timestamp,
 	startTime timestamp NOT NULL,
-	updateTime timestamp NOT NULL
+	updateTime timestamp NOT NULL,
+	CHECK((fbtoken IS NULL AND fbtokenExpiryTime IS NULL) OR (fbtoken IS NOT NULL AND fbtokenExpiryTime IS NOT NULL)) -- both are null or not null
 );
 
 # --- !Downs
