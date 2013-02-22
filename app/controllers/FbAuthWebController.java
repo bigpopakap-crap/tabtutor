@@ -47,7 +47,6 @@ public class FbAuthWebController extends BaseWebController {
 	 * @return
 	 */
 	public static Result fblogin(String code) {
-		System.out.println("\n\n\n\n\n" + getFbloginUrlEncoded() + "\n\n\n\n"); //TODO
 		if (code == null) {
 			//the login flow has started, redirect to the Facebook login dialogue
 			String redirectUrl = "https://www.facebook.com/dialog/oauth" +
@@ -58,17 +57,17 @@ public class FbAuthWebController extends BaseWebController {
 		}
 		else {
 			//TODO handle the case that they did not authorize the app
-			final String tokenUrl = "https://graph.facebook.com/oauth/access_token" +
-								"?client_id=" + AppCtx.Var.FB_APP_ID.val() +
+			final String tokenUrl = "https://graph.facebook.com/oauth/access_token";
+			final String tokenParams = "client_id=" + AppCtx.Var.FB_APP_ID.val() +
 								"&redirect_uri=" + getFbloginUrlEncoded() +
 								"&client_secret=" + AppCtx.Var.FB_APP_SECRET.val() +
 								"&code=" + code;
 			return async(
-				WS.url(tokenUrl).get().map(
+				WS.url(tokenUrl).post(tokenParams).map(
 					new Function<WS.Response, Result>() {
 						@Override
 						public Result apply(WS.Response resp) {
-							return ok("url: " + tokenUrl + "\n\nresponse: " + resp.getBody());
+							return ok(resp.getBody());
 						}
 					}
 				)

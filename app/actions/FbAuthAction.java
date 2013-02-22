@@ -8,5 +8,7 @@ package actions;
  *
  */
 public class FbAuthAction extends BaseAction {
+	
+	
 
 }
