@@ -1,0 +1,26 @@
+@(detectLogin: Boolean = false)
+@import common.AppCtx;
+@import common.AppCtx.Var;
+@import common.AppCtx.Mode;
+@import routes.FbAuthWebController;
+<div id="fb-root"></div>
+<script type="text/javascript" src="http://connect.facebook.net/en_us/all.js"></script>
+<script>
+	// Initialize the Facebook SDK after it is loaded
+	FB.init({
+		appId      : '@(AppCtx.Var.FB_APP_ID)',
+		channelUrl : null,
+		status     : true,
+		cookie     : false,
+		xfbml      : false
+	});
+	
+	@if(detectLogin) {
+		// If logged in, redirect to the Facebook login handler
+		FB.getLoginStatus(function (response) {
+			if (response.status === 'connected') {
+				window.location = '@(routes.FbAuthWebController.fblogin(null))';
+			}
+		});
+	}
+</script>

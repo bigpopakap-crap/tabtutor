@@ -26,7 +26,7 @@ public class EnvironmentTest extends BaseFuncTest {
 	/** Test that the environment variables necessary for the app are present */
 	@Test
 	public void testExpectedAppEnvironmentVariables() {
-		LaunchPackageHelpers.helpTestExpectedEnvironmentVariables(new String [] { "WTF_MODE" });
+		LaunchPackageHelpers.helpTestExpectedEnvironmentVariables(new String [] { "WTF_APP_TITLE", "WTF_MODE" });
 	}
 	
 	/** Tests that the AppCtx class has no null values */
@@ -37,8 +37,8 @@ public class EnvironmentTest extends BaseFuncTest {
 			public void run() {
 				//in the fake application, assert each environment var has no nulls
 				for (AppCtx.Var envVar : AppCtx.Var.values()) {
-					Assert.assertNotNull("AppCtx key has null key: ", envVar.key());
-					Assert.assertNotNull("AppCtx key has null value: " + envVar, envVar.val());
+					Assert.assertNotNull("AppCtx key has null key: " + envVar.name(), envVar.key());
+					Assert.assertNotNull("AppCtx key has null value: " + envVar.name(), envVar.val());
 				}
 			}
 		});

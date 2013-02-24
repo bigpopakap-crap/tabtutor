@@ -25,7 +25,10 @@ CREATE TABLE Session (
 	fbtokenExpiryTime timestamp,
 	startTime timestamp NOT NULL,
 	updateTime timestamp NOT NULL,
-	CHECK((fbtoken IS NULL AND fbtokenExpiryTime IS NULL) OR (fbtoken IS NOT NULL AND fbtokenExpiryTime IS NOT NULL)) -- both are null or not null
+	CHECK ( -- both are null or not null
+		(fbtoken IS NULL AND fbtokenExpiryTime IS NULL)
+		OR (fbtoken IS NOT NULL AND fbtokenExpiryTime IS NOT NULL)
+	)
 );
 
 # --- !Downs

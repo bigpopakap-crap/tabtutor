@@ -24,6 +24,7 @@ public abstract class AppCtx {
 	 */
 	public static enum Var {
 		
+		APP_TITLE("WTF_APP_TITLE"),
 		HTTP_PORT("WTF_HTTP_PORT"),
 		FB_SITE_URL("WTF_FB_SITE_URL"),
 		FB_APP_ID("WTF_FB_APP_ID"),
@@ -41,6 +42,18 @@ public abstract class AppCtx {
 			this.key = key;
 			this.val = System.getenv(this.key);
 			this.isSecuredSecret = isSecret;
+		}
+		
+		/**
+		 * This is used so callers don't have to remember to call val()
+		 * The UI templates can call this safely, because any var marked as a secret
+		 * 		will throw an exception
+		 * @throws UnsupportedOperationException if called on a secured secret var
+		 */
+		@Override
+		public String toString() throws UnsupportedOperationException {
+			if (isSecuredSecret()) throw new UnsupportedOperationException("Cannnot call toString() on a secret environment var");
+			else return val();
 		}
 		
 		/** Gets the name of the environment variable as it was defined */

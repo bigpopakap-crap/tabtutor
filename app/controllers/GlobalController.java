@@ -25,7 +25,7 @@ public class GlobalController extends GlobalSettings {
 	public void onStart(Application app) {
 		//print environment vars and environment context
 		for (AppCtx.Var envVar : AppCtx.Var.values()) {
-			Logger.info("Environment variable: " + envVar + ":" + envVar.key() + " -> " + envVar.val());
+			Logger.info("Environment variable: " + envVar.name() + ":" + envVar.key() + " -> " + envVar.val());
 		}
 		Logger.info("App context: " + AppCtx.Mode.get());
 		Logger.info("App is starting...");
