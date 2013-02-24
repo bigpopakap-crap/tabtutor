@@ -4,12 +4,15 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.UUID;
 
 import play.Logger;
 import play.mvc.Action;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import play.mvc.With;
+
+import common.Globals;
 
 /**
  * This class defines actions and annotations used for authenticating users
@@ -30,9 +33,7 @@ public abstract class SecuredActions {
 	@With(SessionedAction.class)
 	@Target({ElementType.TYPE, ElementType.METHOD})
 	@Retention(RetentionPolicy.RUNTIME)
-	public @interface Sessioned {
-		//empty
-	}
+	public @interface Sessioned {}
 	
 	/**
 	 * Annotation for applying SessionedAction then FacebookAuthenticatedAction
@@ -44,9 +45,7 @@ public abstract class SecuredActions {
 	@With({SessionedAction.class, FacebookAuthenticatedAction.class})
 	@Target({ElementType.TYPE, ElementType.METHOD})
 	@Retention(RetentionPolicy.RUNTIME)
-	public @interface FacebookAuthenticated {
-		//empty
-	}
+	public @interface FacebookAuthenticated {}
 	
 	/**
 	 * Annotation for applying SessionedAction, FacebookAuthenticatedAction then InternalAuthenticatedAction
@@ -58,9 +57,12 @@ public abstract class SecuredActions {
 	@With({SessionedAction.class, FacebookAuthenticatedAction.class, InternalAuthenticatedAction.class})
 	@Target({ElementType.TYPE, ElementType.METHOD})
 	@Retention(RetentionPolicy.RUNTIME)
-	public @interface InternalAuthenticated {
-		//empty
-	}
+	public @interface InternalAuthenticated {}
+	
+	
+	/* ********************************************************************************
+	 * 								BEGIN ACTION CLASSES						      *
+	 ******************************************************************************** */
 	
 	/**
 	 * This Action will add a session cookie to the browser, and create
@@ -75,6 +77,17 @@ public abstract class SecuredActions {
 		@Override
 		public Result call(Context ctx) throws Throwable {
 			Logger.debug("Calling into SessionedAction");
+			
+			if (!ctx.session().containsKey(Globals.SESSION_ID_COOKIE_KEY) /* TODO validate the session key exists */) {
+				//there is no session ID set, so create the session
+				//TODO create the session
+				UUID pk = UUID.randomUUID();
+				
+				//add the ID to the session
+				ctx.session().put(Globals.SESSION_ID_COOKIE_KEY, pk.toString());
+				Logger.info("Created session " + pk);
+			}
+			
 			return delegate.call(ctx);
 		}
 		

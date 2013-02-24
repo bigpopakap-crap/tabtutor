@@ -1,6 +1,7 @@
 package models;
 
 import java.util.Date;
+import java.util.UUID;
 
 import javax.persistence.Entity;
 
@@ -19,11 +20,11 @@ import com.avaje.ebean.annotation.Formula;
 public class Session extends Model {
 	
 	//TODO figure out how to clean up old sessions
-
+	
 	private static final long serialVersionUID = -6111608082703517322L;
 	
-	public String pk;
-	public String userPk;
+	public UUID pk;
+	public UUID userPk;
 	public String fbtoken;
 	public Date fbtokenExpireTime;
 	@Formula(select = "select FALSE from dual") public boolean isFbtokenExpired; //TODO actually do this

@@ -1,6 +1,7 @@
 package models;
 
 import java.util.Date;
+import java.util.UUID;
 
 import javax.persistence.Entity;
 
@@ -20,7 +21,7 @@ public class User extends Model {
 
 	private static final long serialVersionUID = 5854422586239724109L;
 	
-	public String pk;
+	public UUID pk;
 	public String username;
 	public String fbid;
 	public boolean fbIsAuthed;
