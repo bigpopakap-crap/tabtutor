@@ -42,28 +42,28 @@ public class GlobalController extends GlobalSettings {
 	@Override
 	public Result onError(RequestHeader req, Throwable t) {
 		//TODO add session information to log line
-		Logger.error("Error handling " + req + ": " + t + "(IP: " + req.remoteAddress() + ")");
+		Logger.error("Error handling " + req + ": " + t + " (IP: " + req.remoteAddress() + ")");
 		return super.onError(req, t);
 	}
 	
 	@Override
 	public Result onHandlerNotFound(RequestHeader req) {
 		//TODO add session information to log line
-		Logger.warn("Handler not found " + req + "(IP: " + req.remoteAddress() + ")");
+		Logger.warn("Handler not found " + req + " (IP: " + req.remoteAddress() + ")");
 		return super.onHandlerNotFound(req);
 	}
 	
 	@Override
 	public Result onBadRequest(RequestHeader req, String err) {
 		//TODO add session information to log line
-		Logger.warn("Bad request " + req + "(IP: " + req.remoteAddress() + ")");
+		Logger.warn("Bad request " + req + " (IP: " + req.remoteAddress() + ")");
 		return super.onBadRequest(req, err);
 	}
 	
 	@Override
 	public Action<?> onRequest(Request req, Method method) {
 		//TODO add session information to log line
-		Logger.info("Handling " + req + "(IP: " + req.remoteAddress() + ")");
+		Logger.info("Handling " + req + " (IP: " + req.remoteAddress() + ")");
 		return super.onRequest(req, method);
 	}
 	
