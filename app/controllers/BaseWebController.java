@@ -15,11 +15,6 @@ import play.mvc.Result;
 @Sessioned //this is important to make sure all web requests enforce the creation of a session
 public class BaseWebController extends Controller {
 	
-	/** Redirect to the favicon */
-	public static Result favicon() {
-		return redirect(routes.Assets.at("/public/images/favicon.png"));
-	}
-	
 	/** Show the landing page */
 	public static Result landing() {
 		return ok(views.html.landing.render());
