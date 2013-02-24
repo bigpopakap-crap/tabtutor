@@ -1,5 +1,6 @@
 package controllers;
 
+import controllers.SecuredActions.Sessioned;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -11,6 +12,7 @@ import play.mvc.Result;
  * @since 2013-02-17
  *
  */
+@Sessioned //this is important to make sure all web requests enforce the creation of a session
 public class BaseWebController extends Controller {
 	
 	/** Redirect to the favicon */

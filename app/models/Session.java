@@ -29,5 +29,6 @@ public class Session extends Model {
 	@Formula(select = "select FALSE from dual") public boolean isFbtokenExpired; //TODO actually do this
 	public Date startTime;
 	public Date updateTime;
+	public Date expireTime;
 	
 }

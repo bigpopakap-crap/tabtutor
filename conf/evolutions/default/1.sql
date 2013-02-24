@@ -26,6 +26,7 @@ CREATE TABLE Session (
 	fbtokenExpireTime timestamp,
 	startTime timestamp NOT NULL,
 	updateTime timestamp NOT NULL,
+	expireTime timestamp NOT NULL,
 	CHECK ( -- both are null or both are not null
 		(fbtoken IS NULL AND fbtokenExpireTime IS NULL)
 		OR (fbtoken IS NOT NULL AND fbtokenExpireTime IS NOT NULL)
