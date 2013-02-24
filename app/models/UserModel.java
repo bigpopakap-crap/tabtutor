@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import play.db.ebean.Model;
 
@@ -17,7 +18,8 @@ import com.avaje.ebean.annotation.Formula;
 *
 */
 @Entity
-public class User extends Model {
+@Table(name = "User")
+public class UserModel extends Model {
 
 	private static final long serialVersionUID = 5854422586239724109L;
 	

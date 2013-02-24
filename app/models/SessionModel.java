@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import play.db.ebean.Model;
 
@@ -17,7 +18,8 @@ import com.avaje.ebean.annotation.Formula;
  *
  */
 @Entity
-public class Session extends Model {
+@Table(name = "Session")
+public class SessionModel extends Model {
 	
 	//TODO figure out how to clean up old sessions
 	

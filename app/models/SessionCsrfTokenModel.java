@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import play.db.ebean.Model;
 
@@ -17,7 +18,8 @@ import com.avaje.ebean.annotation.Formula;
 *
 */
 @Entity
-public class SessionCsrfToken extends Model {
+@Table(name = "SessionCsrfToken")
+public class SessionCsrfTokenModel extends Model {
 	
 	//TODO figure out how to clean up expired tokens
 
