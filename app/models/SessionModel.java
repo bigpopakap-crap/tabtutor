@@ -3,7 +3,9 @@ package models;
 import java.util.Date;
 import java.util.UUID;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 import play.db.ebean.Model;
@@ -11,7 +13,7 @@ import play.db.ebean.Model;
 import com.avaje.ebean.annotation.Formula;
 
 /**
- * This ebean maps to the Session table, and represents the active sessions
+ * This Ebean maps to the Session table, and represents the active sessions
  * 
  * @author bigpopakap@gmail.com
  * @since 2013-02-10
@@ -25,14 +27,32 @@ public class SessionModel extends Model {
 	
 	private static final long serialVersionUID = -6111608082703517322L;
 	
-	public UUID pk;
-	public UUID userPk;
-	public String fbtoken;
-	public Date fbtokenExpireTime;
-	@Formula(select = "select FALSE from dual") public boolean isFbtokenExpired; //TODO actually do this
-	public Date startTime;
-	public Date updateTime;
-	public Date expireTime;
+	public SessionModel() {
+		this(null, null, null);
+	}
+	public SessionModel(UUID userPk, String fbtoken, Date fbtokenExpireTime) {
+		//TODO actually implement the expireTime
+		this(UUID.randomUUID(), userPk, fbtoken, fbtokenExpireTime, new Date(), new Date(), new Date());
+	}
+	public SessionModel(UUID pk, UUID userPk, String fbtoken, Date fbtokenExpireTime,
+						Date startTime, Date updateTime, Date expireTime) {
+		this.pk = pk;
+		this.userPk = userPk;
+		this.fbtoken = fbtoken;
+		this.fbtokenExpireTime = fbtokenExpireTime;
+		this.startTime = startTime;
+		this.updateTime = updateTime;
+		this.expireTime = expireTime;
+	}
+	
+	@Column(name = "pk") @Id public UUID pk;
+	@Column(name = "userPk") public UUID userPk;
+	@Column(name = "fbtoken") public String fbtoken;
+	@Column(name = "fbtokenExpireTime") public Date fbtokenExpireTime;
+	@Formula(select = "FALSE") public boolean isFbtokenExpired; //TODO actually do this
+	@Column(name = "startTime") public Date startTime;
+	@Column(name = "updateTime") public Date updateTime;
+	@Column(name = "expireTime") public Date expireTime;
 	
 	public static final Finder<UUID, SessionModel> FINDER = new Finder<UUID, SessionModel>(
 		UUID.class, SessionModel.class

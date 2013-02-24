@@ -4,8 +4,8 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.util.UUID;
 
+import models.SessionModel;
 import play.Logger;
 import play.mvc.Action;
 import play.mvc.Http.Context;
@@ -13,6 +13,8 @@ import play.mvc.Result;
 import play.mvc.With;
 
 import common.Globals;
+
+import doer.SessionDoer;
 
 /**
  * This class defines actions and annotations used for authenticating users
@@ -78,14 +80,12 @@ public abstract class SecuredActions {
 		public Result call(Context ctx) throws Throwable {
 			Logger.debug("Calling into SessionedAction");
 			
-			if (!ctx.session().containsKey(Globals.SESSION_ID_COOKIE_KEY) /* TODO validate the session key exists */) {
-				//there is no session ID set, so create the session
-				//TODO create the session
-				UUID pk = UUID.randomUUID();
-				
-				//add the ID to the session
-				ctx.session().put(Globals.SESSION_ID_COOKIE_KEY, pk.toString());
-				Logger.info("Created session " + pk);
+			if (!ctx.session().containsKey(Globals.SESSION_ID_COOKIE_KEY)
+					|| !SessionDoer.isValidSessionId(ctx.session().get(Globals.SESSION_ID_COOKIE_KEY))) {
+				//there is no session ID set, so create it and add it to the cookie
+				SessionModel newSession = SessionDoer.createNewSession();
+				ctx.session().put(Globals.SESSION_ID_COOKIE_KEY, newSession.pk.toString());
+				Logger.info("Created session " + newSession.pk);
 			}
 			
 			return delegate.call(ctx);

@@ -7,6 +7,6 @@ package doer;
  * @since 2013-02-18
  *
  */
-public class FbAuthDoer extends BaseDoer {
+public abstract class FbAuthDoer extends BaseDoer {
 	
 }
