@@ -50,15 +50,18 @@ public class FbAuthWebController extends BaseWebController {
 	 * @param code the code returned from Facebook. If null, redirect the user to the login dialogue
 	 * @return
 	 */
-	public static Result fblogin(String code) {
+	public static Result fblogin(String code, String state) {
 		if (code == null) {
 			//the login flow has started, redirect to the Facebook login dialogue
 			String redirectUrl = "https://www.facebook.com/dialog/oauth" +
 								"?client_id=" + AppCtx.Var.FB_APP_ID.val() +
-								"&redirect_uri=" + getFbloginUrlEncoded();
+								"&redirect_uri=" + getFbloginUrlEncoded() +
+								"&state=" + ""; //TODO csrf generate
 			return redirect(redirectUrl);
 		}
 		else {
+			//TODO csrf validate
+			
 			final String tokenUrl = "https://graph.facebook.com/oauth/access_token";
 			final String tokenParams = "client_id=" + AppCtx.Var.FB_APP_ID.val() +
 								"&redirect_uri=" + getFbloginUrlEncoded() +
@@ -81,7 +84,7 @@ public class FbAuthWebController extends BaseWebController {
 	/** Gets the absolute url to the fblogin() action, URL-escaped */
 	private static String getFbloginUrlEncoded() {
 		return SecurityEscapingUtil.escape(
-					routes.FbAuthWebController.fblogin(null).absoluteURL(request()),
+					routes.FbAuthWebController.fblogin(null, null).absoluteURL(request()),
 					Escaper.URL
 				);
 	}

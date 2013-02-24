@@ -1,43 +1,53 @@
 # --- !Ups
-CREATE TYPE pk_t AS UUID;
-CREATE TYPE user_username_t AS VARCHAR(80);
-CREATE TYPE user_name_t AS VARCHAR(80);
-CREATE TYPE email_t AS VARCHAR(255);
-CREATE TYPE facebook_id_t AS VARCHAR(80);
-CREATE TYPE facebook_token_t AS VARCHAR(80);
+CREATE TYPE t_pk AS UUID;
+CREATE TYPE t_userUsername AS VARCHAR(80);
+CREATE TYPE t_userName AS VARCHAR(80);
+CREATE TYPE t_email AS VARCHAR(255);
+CREATE TYPE t_facebookId AS VARCHAR(80);
+CREATE TYPE t_facebookToken AS VARCHAR(80);
+CREATE TYPE t_csrfToken AS UUID;
 
 CREATE TABLE User (
-	pk pk_t PRIMARY KEY,
-	username user_username_t NOT NULL UNIQUE,
-	fbid facebook_id_t NOT NULL UNIQUE,
+	pk t_pk PRIMARY KEY,
+	username t_userUsername NOT NULL UNIQUE,
+	fbid t_facebookId NOT NULL UNIQUE,
 	fbIsAuthed BOOLEAN NOT NULL,
-	firstName user_name_t NOT NULL,
-	lastName user_name_t NOT NULL,
-	email email_t NOT NULL,
+	firstName t_userName NOT NULL,
+	lastName t_userName NOT NULL,
+	email t_email NOT NULL,
 	registerTime timestamp NOT NULL,
 	lastLoginTime timestamp NOT NULL
 );
 
 CREATE TABLE Session (
-	pk pk_t PRIMARY KEY,
-	user_pk pk_t REFERENCES User(pk),
-	fbtoken facebook_token_t,
-	fbtokenExpiryTime timestamp,
+	pk t_pk PRIMARY KEY,
+	userPk t_pk REFERENCES User(pk),
+	fbtoken t_facebookToken,
+	fbtokenExpireTime timestamp,
 	startTime timestamp NOT NULL,
 	updateTime timestamp NOT NULL,
-	CHECK ( -- both are null or not null
-		(fbtoken IS NULL AND fbtokenExpiryTime IS NULL)
-		OR (fbtoken IS NOT NULL AND fbtokenExpiryTime IS NOT NULL)
+	CHECK ( -- both are null or both are not null
+		(fbtoken IS NULL AND fbtokenExpireTime IS NULL)
+		OR (fbtoken IS NOT NULL AND fbtokenExpireTime IS NOT NULL)
 	)
 );
 
-# --- !Downs
-DROP TYPE IF EXISTS pk_t;
-DROP TYPE IF EXISTS user_username_t;
-DROP TYPE IF EXISTS user_name_t;
-DROP TYPE IF EXISTS email_t;
-DROP TYPE IF EXISTS facebook_id_t;
-DROP TYPE IF EXISTS facebook_token_t;
+CREATE TABLE SessionCsrfToken (
+	sessionPk t_pk PRIMARY KEY,
+	csrfToken t_csrfToken NOT NULL UNIQUE,
+	createTime timestamp NOT NULL,
+	expireTime timestamp NOT NULL
+);
 
-DROP TABLE IF EXISTS Session;
+# --- !Downs
+DROP TYPE IF EXISTS t_pk;
+DROP TYPE IF EXISTS t_userUsername;
+DROP TYPE IF EXISTS t_userName;
+DROP TYPE IF EXISTS t_email;
+DROP TYPE IF EXISTS t_facebookId;
+DROP TYPE IF EXISTS t_facebookToken;
+DROP TYPE IF EXISTS t_csrfToken;
+
 DROP TABLE IF EXISTS User;
+DROP TABLE IF EXISTS Session;
+DROP TABLE IF EXISTS SessionCsrfToken;
