@@ -1,4 +1,4 @@
-package actions;
+package doer;
 
 /**
  * This class should parent all classes that actually perform actions on the site.
@@ -10,6 +10,6 @@ package actions;
  * @since 2013-02-17
  *
  */
-public abstract class BaseAction {
+public abstract class BaseDoer {
 
 }

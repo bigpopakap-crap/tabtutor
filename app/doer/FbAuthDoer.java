@@ -1,4 +1,4 @@
-package actions;
+package doer;
 
 /**
  * This class performs all actions related to Facebook authentication (registration and login)
@@ -7,8 +7,6 @@ package actions;
  * @since 2013-02-18
  *
  */
-public class FbAuthAction extends BaseAction {
+public class FbAuthDoer extends BaseDoer {
 	
-	
-
 }
