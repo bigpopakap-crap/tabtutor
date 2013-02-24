@@ -30,5 +30,9 @@ public class SessionCsrfTokenModel extends Model {
 	public Date createTime;
 	public Date expireTime;
 	@Formula(select = "select FALSE from dual") public boolean isExpired; //TODO actually implement this
+	
+	public static final Finder<UUID, SessionCsrfTokenModel> FINDER = new Finder<UUID, SessionCsrfTokenModel>(
+		UUID.class, SessionCsrfTokenModel.class
+	);
 
 }

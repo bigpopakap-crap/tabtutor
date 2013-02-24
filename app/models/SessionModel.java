@@ -34,4 +34,8 @@ public class SessionModel extends Model {
 	public Date updateTime;
 	public Date expireTime;
 	
+	public static final Finder<UUID, SessionModel> FINDER = new Finder<UUID, SessionModel>(
+		UUID.class, SessionModel.class
+	);
+	
 }

@@ -34,4 +34,8 @@ public class UserModel extends Model {
 	public Date registerTime;
 	public Date lastLoginTime;
 	
+	public static final Finder<UUID, UserModel> FINDER = new Finder<UUID, UserModel>(
+		UUID.class, UserModel.class
+	);
+	
 }
