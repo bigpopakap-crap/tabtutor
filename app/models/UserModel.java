@@ -27,7 +27,7 @@ public class UserModel extends Model {
 	
 	@Column(name = "pk") @Id public UUID pk;
 	@Column(name = "username") public String username;
-	@Column(name = "fbid") public String fbid;
+	@Column(name = "fbId") public String fbId;
 	@Column(name = "fbIsAuthed") public boolean fbIsAuthed;
 	@Column(name = "firstName") public String firstName;
 	@Column(name = "lastName") public String lastName;

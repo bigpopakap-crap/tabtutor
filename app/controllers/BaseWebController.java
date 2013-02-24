@@ -1,5 +1,6 @@
 package controllers;
 
+import controllers.SecuredActions.FacebookAuthenticated;
 import controllers.SecuredActions.Sessioned;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -16,6 +17,7 @@ import play.mvc.Result;
 public class BaseWebController extends Controller {
 	
 	/** Show the landing page */
+	@FacebookAuthenticated
 	public static Result landing() {
 		return ok(views.html.landing.render());
 	}

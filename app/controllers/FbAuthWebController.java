@@ -33,14 +33,6 @@ public class FbAuthWebController extends BaseWebController {
 	//TODO move as much logic to an Action class as possible
 	//TODO handle the case that the user deauthorizes the app
 	
-	/*
-	 * TODO add this flow to a top-level place where we can deal with:
-	 * 		- re-authenticating timed-out sessions
-	 * 		- refreshing expired fb tokens
-	 * 		- authenticating for pages that need it
-	 * 		- re-authenticating for pages that want to force it
-	 */
-	
 	private static final Pattern FB_TOKEN_PATTERN = Pattern.compile("^access_token=(.+)&");
 	private static final Pattern FB_TOKEN_EXPIRY_PATTERN = Pattern.compile("&expires=(\\d+)$");
 	
@@ -72,6 +64,7 @@ public class FbAuthWebController extends BaseWebController {
 					new Function<WS.Response, Result>() {
 						@Override
 						public Result apply(WS.Response resp) {
+							//TODO add the token and exireTime to the session in the DB
 							//TODO do something with the response from here
 							return ok("token: " + parseToken(resp) + "\nexpires: " + parseTokenExpiry(resp));
 						}

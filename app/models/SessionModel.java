@@ -38,8 +38,8 @@ public class SessionModel extends Model {
 						Date startTime, Date updateTime, Date expireTime) {
 		this.pk = pk;
 		this.userPk = userPk;
-		this.fbtoken = fbtoken;
-		this.fbtokenExpireTime = fbtokenExpireTime;
+		this.fbToken = fbtoken;
+		this.fbTokenExpireTime = fbtokenExpireTime;
 		this.startTime = startTime;
 		this.updateTime = updateTime;
 		this.expireTime = expireTime;
@@ -47,8 +47,8 @@ public class SessionModel extends Model {
 	
 	@Column(name = "pk") @Id public UUID pk;
 	@Column(name = "userPk") public UUID userPk;
-	@Column(name = "fbtoken") public String fbtoken;
-	@Column(name = "fbtokenExpireTime") public Date fbtokenExpireTime;
+	@Column(name = "fbToken") public String fbToken;
+	@Column(name = "fbTokenExpireTime") public Date fbTokenExpireTime;
 	@Formula(select = "FALSE") public boolean isFbtokenExpired; //TODO actually do this
 	@Column(name = "startTime") public Date startTime;
 	@Column(name = "updateTime") public Date updateTime;

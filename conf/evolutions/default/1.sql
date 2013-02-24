@@ -10,7 +10,7 @@ CREATE TYPE t_csrfToken AS UUID;
 CREATE TABLE User (
 	pk t_pk PRIMARY KEY,
 	username t_userUsername NOT NULL UNIQUE,
-	fbid t_facebookId NOT NULL UNIQUE,
+	fbId t_facebookId NOT NULL UNIQUE,
 	fbIsAuthed BOOLEAN NOT NULL,
 	firstName t_userName NOT NULL,
 	lastName t_userName NOT NULL,
@@ -22,8 +22,8 @@ CREATE TABLE User (
 CREATE TABLE Session (
 	pk t_pk PRIMARY KEY,
 	userPk t_pk REFERENCES User(pk),
-	fbtoken t_facebookToken,
-	fbtokenExpireTime timestamp,
+	fbToken t_facebookToken,
+	fbTokenExpireTime timestamp,
 	startTime timestamp NOT NULL,
 	updateTime timestamp NOT NULL,
 	expireTime timestamp NOT NULL,
