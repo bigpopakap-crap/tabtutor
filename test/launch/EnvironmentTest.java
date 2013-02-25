@@ -1,9 +1,14 @@
 package launch;
 
+import static play.test.Helpers.fakeApplication;
+import static play.test.Helpers.running;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.TimeZone;
+
 import org.junit.Assert;
 import org.junit.Test;
-
-import static play.test.Helpers.*; 
 
 import base.BaseFuncTest;
 
@@ -26,7 +31,7 @@ public class EnvironmentTest extends BaseFuncTest {
 	/** Test that the environment variables necessary for the app are present */
 	@Test
 	public void testExpectedAppEnvironmentVariables() {
-		LaunchPackageHelpers.helpTestExpectedEnvironmentVariables(new String [] { "WTF_APP_TITLE", "WTF_MODE" });
+		LaunchPackageHelpers.helpTestExpectedEnvironmentVariables(new String [] { "WTF_APP_TITLE", "WTF_MODE", "WTF_SYSTEM_TIMEZONE_CODE" });
 	}
 	
 	/** Tests that the AppCtx class has no null values */
@@ -71,6 +76,13 @@ public class EnvironmentTest extends BaseFuncTest {
 	
 	private void helpTestAppCtxEnvMatches(boolean shouldBeTrue) {
 		Assert.assertTrue("App mode is " + AppCtx.Mode.get() + " but boolean doesn't match", shouldBeTrue);
+	}
+	
+	/** Tests that the environment Timezone code is valid */
+	@Test
+	public void testAppCtxTimezoneCode() {
+		List<String> availableIds = Arrays.asList(TimeZone.getAvailableIDs());
+		Assert.assertTrue(availableIds.contains(AppCtx.Var.SYSTEM_TIMEZONE_CODE.val()));
 	}
 	
 	//TODO write a static analysis test to make sure nobody references the Play class directly

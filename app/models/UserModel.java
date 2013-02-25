@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import play.db.ebean.Model;
 
@@ -31,7 +32,7 @@ public class UserModel extends Model {
 	@Column(name = "fbIsAuthed") public boolean fbIsAuthed;
 	@Column(name = "firstName") public String firstName;
 	@Column(name = "lastName") public String lastName;
-	@Formula(select = "firstName || ' ' || lastName") public String fullName;
+	@Transient @Formula(select = "firstName || ' ' || lastName") public String fullName;
 	@Column(name = "email") public String email;
 	@Column(name = "registerTime") public Date registerTime;
 	@Column(name = "lastLoginTime") public Date lastLoginTime;

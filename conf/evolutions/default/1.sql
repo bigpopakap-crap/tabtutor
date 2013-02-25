@@ -4,7 +4,7 @@ CREATE TYPE t_userUsername AS VARCHAR(80);
 CREATE TYPE t_userName AS VARCHAR(80);
 CREATE TYPE t_email AS VARCHAR(255);
 CREATE TYPE t_facebookId AS VARCHAR(80);
-CREATE TYPE t_facebookToken AS VARCHAR(80);
+CREATE TYPE t_facebookToken AS VARCHAR(255);
 CREATE TYPE t_csrfToken AS UUID;
 
 CREATE TABLE User (
@@ -25,8 +25,7 @@ CREATE TABLE Session (
 	fbToken t_facebookToken,
 	fbTokenExpireTime timestamp,
 	startTime timestamp NOT NULL,
-	updateTime timestamp NOT NULL,
-	expireTime timestamp NOT NULL,
+	lastAccessTime timestamp NOT NULL,
 	CHECK ( -- both are null or both are not null
 		(fbtoken IS NULL AND fbtokenExpireTime IS NULL)
 		OR (fbtoken IS NOT NULL AND fbtokenExpireTime IS NOT NULL)

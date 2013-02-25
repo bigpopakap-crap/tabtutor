@@ -8,7 +8,7 @@ package common;
  * @since 2013-02-23
  *
  */
-public class Globals {
+public abstract class Globals {
 	
 	/** Any variables or methods defined in a global namespace in Javascript
 	 	should be declared under this variable */
@@ -16,5 +16,5 @@ public class Globals {
 	
 	/** The key to use in the cookie for the session ID */
 	public static final String SESSION_ID_COOKIE_KEY = "wtfspk";
-
+	
 }

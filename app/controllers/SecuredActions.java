@@ -79,14 +79,14 @@ public abstract class SecuredActions {
 
 		@Override
 		public Result call(Context ctx) throws Throwable {
-			Logger.debug("Calling into SessionedAction");
+			Logger.debug("Calling into " + this.getClass().getName());
 			
 			if (!ctx.session().containsKey(Globals.SESSION_ID_COOKIE_KEY)
 					|| !SessionDoer.isValidExistingSessionId(ctx.session().get(Globals.SESSION_ID_COOKIE_KEY))) {
 				//there is no session ID set, so create it and add it to the cookie
 				SessionModel newSession = SessionDoer.createNewSession();
 				ctx.session().put(Globals.SESSION_ID_COOKIE_KEY, newSession.pk.toString());
-				Logger.info("Created session " + newSession.pk);
+				Logger.info("Put session " + newSession.pk + " in cookie");
 			}
 			
 			return delegate.call(ctx);
@@ -107,7 +107,7 @@ public abstract class SecuredActions {
 
 		@Override
 		public Result call(Context ctx) throws Throwable {
-			Logger.debug("Calling into FacebookAuthenticatedAction");
+			Logger.debug("Calling into " + this.getClass().getName());
 			
 			//ensure that the session is set and exists
 			String sessionIdStr = ctx.session().get(Globals.SESSION_ID_COOKIE_KEY);
@@ -157,7 +157,7 @@ public abstract class SecuredActions {
 
 		@Override
 		public Result call(Context ctx) throws Throwable {
-			Logger.debug("Calling into InternalAuthenticatedAction");
+			Logger.debug("Calling into " + this.getClass().getName());
 			//TODO implement this
 			return delegate.call(ctx);
 		}

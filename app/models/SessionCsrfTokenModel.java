@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import play.db.ebean.Model;
 
@@ -31,7 +32,7 @@ public class SessionCsrfTokenModel extends Model {
 	@Column(name = "csrfToken") public UUID csrfToken;
 	@Column(name = "createTime") public Date createTime;
 	@Column(name = "expireTime") public Date expireTime;
-	@Formula(select = "FALSE") public boolean isExpired; //TODO actually implement this
+	@Transient @Formula(select = "FALSE") public boolean isExpired; //TODO actually implement this
 	
 	public static final Finder<UUID, SessionCsrfTokenModel> FINDER = new Finder<UUID, SessionCsrfTokenModel>(
 		UUID.class, SessionCsrfTokenModel.class

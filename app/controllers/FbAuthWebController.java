@@ -1,15 +1,20 @@
 package controllers;
 
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import models.SessionModel;
 import play.libs.F.Function;
 import play.libs.WS;
 import play.mvc.Result;
 
 import common.AppCtx;
+import common.Globals;
 import common.SecurityEscapingUtil;
 import common.SecurityEscapingUtil.Escaper;
+
+import doer.SessionDoer;
 
 /**
  * This class handles all API requests related to Facebook authentication
@@ -64,9 +69,19 @@ public class FbAuthWebController extends BaseWebController {
 					new Function<WS.Response, Result>() {
 						@Override
 						public Result apply(WS.Response resp) {
-							//TODO add the token and exireTime to the session in the DB
-							//TODO do something with the response from here
-							return ok("token: " + parseToken(resp) + "\nexpires: " + parseTokenExpiry(resp));
+							//parse the response for the token and expiry
+							String token = parseToken(resp);
+							int tokenExpiry = parseTokenExpiry(resp);
+							
+							//add this information to the session
+							SessionModel session = SessionModel.FINDER.byId(
+														UUID.fromString(session(Globals.SESSION_ID_COOKIE_KEY))
+													);
+							SessionDoer.setFbAuthInfo(session, token, tokenExpiry);
+							
+							//don't get the associated user, that will be taken care of in SecuredActions
+							//redirect to the given redirect url, or to the landing page
+							return redirect("/");
 						}
 					}
 				)

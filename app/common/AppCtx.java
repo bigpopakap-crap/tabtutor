@@ -25,6 +25,7 @@ public abstract class AppCtx {
 	public static enum Var {
 		
 		APP_TITLE("WTF_APP_TITLE"),
+		SYSTEM_TIMEZONE_CODE("WTF_SYSTEM_TIMEZONE_CODE"),
 		HTTP_PORT("WTF_HTTP_PORT"),
 		FB_SITE_URL("WTF_FB_SITE_URL"),
 		FB_APP_ID("WTF_FB_APP_ID"),

@@ -1,9 +1,14 @@
 package controllers;
 
-import controllers.SecuredActions.FacebookAuthenticated;
-import controllers.SecuredActions.Sessioned;
+import java.util.UUID;
+
+import models.SessionModel;
 import play.mvc.Controller;
 import play.mvc.Result;
+
+import common.Globals;
+
+import controllers.SecuredActions.Sessioned;
 
 /**
  * This class will route all pages that the user will see as they navigate through the site,
@@ -17,9 +22,11 @@ import play.mvc.Result;
 public class BaseWebController extends Controller {
 	
 	/** Show the landing page */
-	@FacebookAuthenticated
 	public static Result landing() {
-		return ok(views.html.landing.render());
+		String sessionIdStr = session(Globals.SESSION_ID_COOKIE_KEY);
+		UUID sessionId = UUID.fromString(sessionIdStr);
+		SessionModel session = SessionModel.FINDER.byId(sessionId);
+		return ok(views.html.landing.render(session));
 	}
 
 }

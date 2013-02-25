@@ -1,6 +1,7 @@
 package controllers;
 
 import java.lang.reflect.Method;
+import java.util.TimeZone;
 
 import play.Application;
 import play.GlobalSettings;
@@ -23,13 +24,17 @@ public class GlobalController extends GlobalSettings {
 	
 	@Override
 	public void onStart(Application app) {
+		//set the system timezone
+		TimeZone.setDefault(TimeZone.getTimeZone(AppCtx.Var.SYSTEM_TIMEZONE_CODE.val()));
+		Logger.info("Set system timezone to " + TimeZone.getDefault().getID() + ": " + TimeZone.getDefault());
+		
 		//print environment vars and environment context
 		for (AppCtx.Var envVar : AppCtx.Var.values()) {
 			Logger.info("Environment variable: " + envVar.name() + ":" + envVar.key() + " -> " + envVar.val());
 		}
 		Logger.info("App context: " + AppCtx.Mode.get());
-		Logger.info("App is starting...");
 		
+		Logger.info("App is starting...");
 		super.onStart(app);
 	}
 	

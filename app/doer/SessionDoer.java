@@ -2,11 +2,10 @@ package doer;
 
 import java.util.UUID;
 
+import models.SessionModel;
 import play.Logger;
 
-import models.SessionModel;
-
-import com.avaje.ebean.Ebean;
+import common.DbTypesUtil;
 
 /**
  * Performs all actions concerning Sessions and related data. Except for simple select queries that do not
@@ -39,7 +38,8 @@ public abstract class SessionDoer extends BaseDoer {
 	 */
 	public static SessionModel createNewSession() {
 		SessionModel newSession = new SessionModel();
-		Ebean.save(newSession);
+		newSession.save();
+		Logger.info("Created session " + newSession.pk);
 		return newSession;
 	}
 	
@@ -59,6 +59,10 @@ public abstract class SessionDoer extends BaseDoer {
 		}
 	}
 	
+	/**
+	 * @param session the session to check
+	 * @return true if the session needs a reference to a user
+	 */
 	public static boolean needsUserReference(SessionModel session) {
 		if (session == null) {
 			//this is a weird case, but forcing auth may solve it
@@ -69,5 +73,18 @@ public abstract class SessionDoer extends BaseDoer {
 			return session.userPk == null;
 		}
 	}
-
+	
+	/**
+	 * Sets the auth token and expiry time to the session
+	 * @param session the session to alter
+	 * @param token the auth token
+	 * @param seconds number of seconds until the token expires
+	 */
+	public static void setFbAuthInfo(SessionModel session, String token, int seconds) {
+		session.fbToken = token;
+		session.fbTokenExpireTime = DbTypesUtil.add(DbTypesUtil.now(), seconds);
+		session.update();
+		Logger.info("Session " + session.pk + " updated with Facebook auth info");
+	}
+	
 }
