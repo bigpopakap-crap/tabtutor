@@ -1,7 +1,14 @@
 package controllers;
 
+import java.util.UUID;
+
+import models.SessionModel;
 import play.mvc.Controller;
 import play.mvc.Result;
+
+import common.Globals;
+
+import controllers.SecuredActions.Sessioned;
 
 /**
  * This class will route all pages that the user will see as they navigate through the site,
@@ -11,16 +18,15 @@ import play.mvc.Result;
  * @since 2013-02-17
  *
  */
+@Sessioned //this is important to make sure all web requests enforce the creation of a session
 public class BaseWebController extends Controller {
-	
-	/** Redirect to the favicon */
-	public static Result favicon() {
-		return redirect(routes.Assets.at("/public/images/favicon.png"));
-	}
 	
 	/** Show the landing page */
 	public static Result landing() {
-		return ok(views.html.landing.render());
+		String sessionIdStr = session(Globals.SESSION_ID_COOKIE_KEY);
+		UUID sessionId = UUID.fromString(sessionIdStr);
+		SessionModel session = SessionModel.FINDER.byId(sessionId);
+		return ok(views.html.landing.render(session));
 	}
 
 }
