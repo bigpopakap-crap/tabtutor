@@ -19,7 +19,7 @@
 		// If logged in, redirect to the Facebook login handler
 		FB.getLoginStatus(function (response) {
 			if (response.status === 'connected') {
-				window.location = '@(routes.FbAuthWebController.fblogin(null))';
+				window.location = '@(routes.FbAuthWebController.fblogin(null, null))';
 			}
 		});
 	}
