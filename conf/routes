@@ -13,7 +13,7 @@
 GET     /                           controllers.BaseWebController.landing()
 
 # Facebook login entry point
-GET		/fblogin					controllers.FbAuthWebController.fblogin(code ?= null)
+GET		/fblogin					controllers.FbAuthWebController.fblogin(code ?= null, state ?= null)
 
 # ---------------- BEGIN INTERNAL/DEVTOOLS PAGE ROUTING -------------- #
 # TODO these will be implemented as and when we find a need
@@ -25,5 +25,5 @@ GET		/fblogin					controllers.FbAuthWebController.fblogin(code ?= null)
 # TODO this will be implemented later
 
 # ---------------- BEGIN STATIC FILE ROUTING ------------------------- #
-GET		/favicon.ico				controllers.BaseWebController.favicon()
+GET		/favicon.ico				controllers.Assets.at(path="/public", file="images/favicon.png")
 GET     /public/*file               controllers.Assets.at(path="/public", file)

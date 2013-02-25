@@ -1,8 +1,7 @@
 package controllers;
 
 import java.lang.reflect.Method;
-
-import common.AppCtx;
+import java.util.TimeZone;
 
 import play.Application;
 import play.GlobalSettings;
@@ -11,6 +10,8 @@ import play.mvc.Action;
 import play.mvc.Http.Request;
 import play.mvc.Http.RequestHeader;
 import play.mvc.Result;
+
+import common.AppCtx;
 
 /**
  * This the global controller, that implements hooks in the app's lifecycle
@@ -23,13 +24,17 @@ public class GlobalController extends GlobalSettings {
 	
 	@Override
 	public void onStart(Application app) {
+		//set the system timezone
+		TimeZone.setDefault(TimeZone.getTimeZone(AppCtx.Var.SYSTEM_TIMEZONE_CODE.val()));
+		Logger.info("Set system timezone to " + TimeZone.getDefault().getID() + ": " + TimeZone.getDefault());
+		
 		//print environment vars and environment context
 		for (AppCtx.Var envVar : AppCtx.Var.values()) {
-			Logger.info("Environment variable: " + envVar + ":" + envVar.key() + " -> " + envVar.val());
+			Logger.info("Environment variable: " + envVar.name() + ":" + envVar.key() + " -> " + envVar.val());
 		}
 		Logger.info("App context: " + AppCtx.Mode.get());
-		Logger.info("App is starting...");
 		
+		Logger.info("App is starting...");
 		super.onStart(app);
 	}
 	
@@ -41,25 +46,29 @@ public class GlobalController extends GlobalSettings {
 	
 	@Override
 	public Result onError(RequestHeader req, Throwable t) {
-		Logger.error("Error handling " + req + ": " + t);
+		//TODO add session information to log line
+		Logger.error("Error handling " + req + ": " + t + " (IP: " + req.remoteAddress() + ")");
 		return super.onError(req, t);
 	}
 	
 	@Override
 	public Result onHandlerNotFound(RequestHeader req) {
-		Logger.warn("Handler not found " + req);
+		//TODO add session information to log line
+		Logger.warn("Handler not found " + req + " (IP: " + req.remoteAddress() + ")");
 		return super.onHandlerNotFound(req);
 	}
 	
 	@Override
 	public Result onBadRequest(RequestHeader req, String err) {
-		Logger.warn("Bad request " + req);
+		//TODO add session information to log line
+		Logger.warn("Bad request " + req + " (IP: " + req.remoteAddress() + ")");
 		return super.onBadRequest(req, err);
 	}
 	
 	@Override
 	public Action<?> onRequest(Request req, Method method) {
-		Logger.info("Handling " + req);
+		//TODO add session information to log line
+		Logger.info("Handling " + req + " (IP: " + req.remoteAddress() + ")");
 		return super.onRequest(req, method);
 	}
 	

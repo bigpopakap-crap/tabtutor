@@ -9,7 +9,7 @@ import java.net.URLEncoder;
  * @since 2013-02-19
  *
  */
-public class SecurityEscapingUtil {
+public abstract class SecurityEscapingUtil {
 	
 	//TODO unit test this class
 	

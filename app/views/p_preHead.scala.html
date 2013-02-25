@@ -1,0 +1,16 @@
+@(session: SessionModel, subTitle: String = "")
+@import common.Globals
+@import common.AppCtx
+@import common.AppCtx.Var
+@import doer.SessionDoer
+<title>@(AppCtx.Var.APP_TITLE)@(subTitle)</title>
+<script>
+	//Initialize the app's Javascript namespace
+	if (!@(Globals.JS_APP_NAMESPACE)) {
+		@(Globals.JS_APP_NAMESPACE) = {};
+	}
+	else {
+		//TODO detect this error
+	}
+</script>
+@p_fbJsSdk(SessionDoer.needsFacebookAuth(session))
