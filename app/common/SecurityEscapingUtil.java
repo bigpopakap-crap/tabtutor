@@ -19,8 +19,10 @@ public abstract class SecurityEscapingUtil {
 	 * @param escapers the Escapers to apply, in order
 	 * @return a String resulting from escaping the input string with each Escaper in order
 	 */
-	public static String escape(String str, Escaper...escapers) {
+	public static String escape(String str, Escaper... escapers) {
 		if (str == null) return null;
+		
+		str = new String(str); //make *sure* we are returning a new object
 		for (Escaper e : escapers) {
 			str = e.escape(str);
 		}
@@ -38,12 +40,15 @@ public abstract class SecurityEscapingUtil {
 	 *
 	 */
 	public static enum Escaper {
+		/** Identity escaper, which does nothing */
 		NONE {
 			@Override
 			protected String escape(String str) {
 				return str;
 			}
 		},
+		
+		/** URL escaper, for url-encoding */
 		URL {
 			@Override
 			protected String escape(String str) {
@@ -51,11 +56,21 @@ public abstract class SecurityEscapingUtil {
 				return URLEncoder.encode(str);
 			}
 		},
+		/** HTML attribute escaper */
 		HTML_ATTR {},
+		
+		/** Escaper for values used as text in the UI
+		 *  Strings are escaped by default in Play templates, but this may be useful */
 		HTML_TEXT {},
-		JS {},
+		
+		/** Escaper for values used as strings in Javascript */
+		JS_STRING {},
+		
+		/** Escaper for SQL parameters. Ebean ORM uses parameterized queries by deafult,
+		 * 	and even raw SQL should always use parameterized queries and therefore never need this escaper S*/
 		SQL {};
 
+		/** Default implementation throws an exception */
 		protected String escape(String str) {
 			throw new UnsupportedOperationException("The following esaper is yet undefined: " + this.name());
 		}

@@ -32,13 +32,17 @@ public abstract class AppCtx {
 		FB_APP_SECRET("WTF_FB_APP_SECRET", true);
 		
 		private final boolean isSecuredSecret;	//indicates that this should never be surfaced in the UI
-		private final String key;
-		private final String val;
+		private final String key; //name of the environment variable as it was defined
+		private final String val; //value of the variable
 		
+		/** Creates a non-secret value from the environment variable with the given name */
 		private Var(String key) {
 			this(key, false);
 		}
 		
+		/** Creates a value from the environment variable with the given name.
+		 *  Can be set to be a secret, in which case it should never be surfaced in the UI
+		 *  @param isSecret if true, this should not be surfaced in the UI */
 		private Var(String key, boolean isSecret) {
 			this.key = key;
 			this.val = System.getenv(this.key);
@@ -53,7 +57,9 @@ public abstract class AppCtx {
 		 */
 		@Override
 		public String toString() throws UnsupportedOperationException {
-			if (isSecuredSecret()) throw new UnsupportedOperationException("Cannnot call toString() on a secret environment var");
+			if (isSecuredSecret()) {
+				throw new UnsupportedOperationException("Tried to call toString() on secret environment var " + name());
+			}
 			else return val();
 		}
 		

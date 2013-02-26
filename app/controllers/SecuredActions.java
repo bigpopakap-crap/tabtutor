@@ -86,7 +86,7 @@ public abstract class SecuredActions {
 				//there is no session ID set, so create it and add it to the cookie
 				SessionModel newSession = SessionDoer.createNewSession();
 				ctx.session().put(Globals.SESSION_ID_COOKIE_KEY, newSession.pk.toString());
-				Logger.info("Put session " + newSession.pk + " in cookie");
+				Logger.info("Put session " + newSession.pk + " in cookie for IP " + ctx.request().remoteAddress());
 			}
 			
 			return delegate.call(ctx);
@@ -128,7 +128,7 @@ public abstract class SecuredActions {
 			}
 			//ensure that a user is referenced by the session
 			else if (SessionDoer.needsUserReference(session)) {
-				Logger.debug("Session needs a user reference. Fetching Facebook ID to look up user ID");
+				Logger.debug("Session needs a user reference. Fetching Facebook ID and looking up user object");
 				//TODO get the user's Facebook ID from the Facebook API
 				
 				//TODO get the user ID associated with this Facebook ID, or create one
