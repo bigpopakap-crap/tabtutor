@@ -9,8 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import play.db.ebean.Model;
-
 import com.avaje.ebean.annotation.Formula;
 
 /**
@@ -22,7 +20,7 @@ import com.avaje.ebean.annotation.Formula;
 */
 @Entity
 @Table(name = "User")
-public class UserModel extends Model {
+public class UserModel extends BaseModel {
 
 	private static final long serialVersionUID = 5854422586239724109L;
 	
@@ -39,8 +37,17 @@ public class UserModel extends Model {
 	@Column(name = "secondToLastLoginTime") public Date secondToLastLoginTime;
 	@Transient @Formula(select = "secondToLastLoginTime IS NULL") public boolean isFirstLogin;
 	
-	public static final Finder<UUID, UserModel> FINDER = new Finder<UUID, UserModel>(
+	/** Private helper for DB interaction implementation */
+	private static final Finder<UUID, UserModel> FINDER = new Finder<UUID, UserModel>(
 		UUID.class, UserModel.class
 	);
+	
+	public static class Factory extends BaseFactory {}
+	
+	public static class Selector extends BaseSelector {}
+	
+	public static class Updater extends BaseUpdater {}
+	
+	public static class Validator extends BaseValidator {}
 	
 }
