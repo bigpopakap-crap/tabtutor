@@ -32,7 +32,7 @@ public class SessionCsrfTokenModel extends Model {
 	@Column(name = "csrfToken") public UUID csrfToken;
 	@Column(name = "createTime") public Date createTime;
 	@Column(name = "expireTime") public Date expireTime;
-	@Transient @Formula(select = "FALSE") public boolean isExpired; //TODO actually implement this
+	@Transient @Formula(select = "NOW() > expireTime") public boolean isExpired;
 	
 	public static final Finder<UUID, SessionCsrfTokenModel> FINDER = new Finder<UUID, SessionCsrfTokenModel>(
 		UUID.class, SessionCsrfTokenModel.class

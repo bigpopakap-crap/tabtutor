@@ -50,7 +50,7 @@ public class SessionModel extends Model {
 	@Column(name = "userPk") public UUID userPk;
 	@Column(name = "fbToken") public String fbToken;
 	@Column(name = "fbTokenExpireTime") public Date fbTokenExpireTime;
-	@Transient @Formula(select = "FALSE") public boolean isFbtokenExpired; //TODO actually do this
+	@Transient @Formula(select = "NOW() > fbTokenExpireTime") public boolean isFbtokenExpired;
 	@Column(name = "startTime") public Date startTime;
 	@Column(name = "lastAccessTime") public Date lastAccessTime;
 	

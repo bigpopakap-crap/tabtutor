@@ -36,6 +36,8 @@ public class UserModel extends Model {
 	@Column(name = "email") public String email;
 	@Column(name = "registerTime") public Date registerTime;
 	@Column(name = "lastLoginTime") public Date lastLoginTime;
+	@Column(name = "secondToLastLoginTime") public Date secondToLastLoginTime;
+	@Transient @Formula(select = "secondToLastLoginTime IS NULL") public boolean isFirstLogin;
 	
 	public static final Finder<UUID, UserModel> FINDER = new Finder<UUID, UserModel>(
 		UUID.class, UserModel.class

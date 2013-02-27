@@ -16,7 +16,10 @@ CREATE TABLE User (
 	lastName t_userName NOT NULL,
 	email t_email NOT NULL,
 	registerTime timestamp NOT NULL,
-	lastLoginTime timestamp NOT NULL
+	lastLoginTime timestamp NOT NULL,
+	secondToLastLoginTime timestamp,
+	CHECK (lastLoginTime >= registerTime),
+	CHECK ((secondToLastLoginTime IS NULL) OR (lastLoginTime >= secondToLastLoginTime))
 );
 
 CREATE TABLE Session (
@@ -29,14 +32,16 @@ CREATE TABLE Session (
 	CHECK ( -- both are null or both are not null
 		(fbtoken IS NULL AND fbtokenExpireTime IS NULL)
 		OR (fbtoken IS NOT NULL AND fbtokenExpireTime IS NOT NULL)
-	)
+	),
+	CHECK (lastAccessTime >= startTime)
 );
 
 CREATE TABLE SessionCsrfToken (
 	sessionPk t_pk PRIMARY KEY,
 	csrfToken t_csrfToken NOT NULL UNIQUE,
 	createTime timestamp NOT NULL,
-	expireTime timestamp NOT NULL
+	expireTime timestamp NOT NULL,
+	CHECK (expireTime >= createTime)
 );
 
 # --- !Downs
