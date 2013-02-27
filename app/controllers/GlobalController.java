@@ -36,7 +36,7 @@ public class GlobalController extends GlobalSettings {
 		}
 		Logger.info("App context: " + AppCtx.Mode.get());
 		
-		Logger.info("App is starting...");
+		Logger.info("App is starting");
 		super.onStart(app);
 	}
 	
@@ -50,6 +50,12 @@ public class GlobalController extends GlobalSettings {
 	public Result onError(RequestHeader req, Throwable t) {
 		//TODO add session information to log line
 		Logger.error("Error handling " + req + ": " + t + " (IP: " + req.remoteAddress() + ")");
+		
+		//if in production mode, show some error page
+		if (AppCtx.Mode.isProduction()) {
+			//TODO
+		}
+		
 		return super.onError(req, t);
 	}
 	
@@ -57,6 +63,12 @@ public class GlobalController extends GlobalSettings {
 	public Result onHandlerNotFound(RequestHeader req) {
 		//TODO add session information to log line
 		Logger.warn("Handler not found " + req + " (IP: " + req.remoteAddress() + ")");
+		
+		//if in production mode, show some error page
+		if (AppCtx.Mode.isProduction()) {
+			//TODO
+		}
+		
 		return super.onHandlerNotFound(req);
 	}
 	
@@ -64,6 +76,12 @@ public class GlobalController extends GlobalSettings {
 	public Result onBadRequest(RequestHeader req, String err) {
 		//TODO add session information to log line
 		Logger.warn("Bad request " + req + " (IP: " + req.remoteAddress() + ")");
+		
+		//if in production mode, show some error page
+		if (AppCtx.Mode.isProduction()) {
+			//TODO
+		}
+		
 		return super.onBadRequest(req, err);
 	}
 	
