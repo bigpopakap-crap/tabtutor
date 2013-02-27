@@ -1,5 +1,7 @@
 package common;
 
+import java.util.TimeZone;
+
 import play.Play;
 
 /**
@@ -24,9 +26,29 @@ public abstract class AppCtx {
 	 */
 	public static enum Var {
 		
+		//TODO figure out how to make the extra methods on each enum accessible from outside
+		
 		APP_TITLE("WTF_APP_TITLE"),
-		SYSTEM_TIMEZONE_CODE("WTF_SYSTEM_TIMEZONE_CODE"),
-		HTTP_PORT("WTF_HTTP_PORT"),
+		SYSTEM_TIMEZONE_CODE("WTF_SYSTEM_TIMEZONE_CODE") {
+			private TimeZone tz = null;
+			
+			@Override
+			public TimeZone valAsTimezone() {
+				//TODO unit test this to make sure there are no exceptions or nulls
+				//store the value upon the first request
+				if (tz == null) {
+					tz = TimeZone.getTimeZone(val());
+				}
+				return (TimeZone) tz.clone(); //defensive copy
+			}
+		},
+		HTTP_PORT("WTF_HTTP_PORT") {
+			@Override
+			public int valAsInt() {
+				//TODO unit test this to make sure we never get null or a NumberFormatException
+				return Integer.parseInt(val());
+			}
+		},
 		FB_SITE_URL("WTF_FB_SITE_URL"),
 		FB_APP_ID("WTF_FB_APP_ID"),
 		FB_APP_SECRET("WTF_FB_APP_SECRET", true);
@@ -76,6 +98,28 @@ public abstract class AppCtx {
 		/** Returns true if this is a guarded secret */
 		public boolean isSecuredSecret() {
 			return isSecuredSecret;
+		}
+		
+		/* **************************************************
+		 * 	BEGIN METHODS NOT SUPPORTED BY ALL ENUM MEMBERS
+		 ************************************************** */
+		
+		/** 
+		 * Returns the timezone as an object
+		 * This should only be supported by the timezone code var, so be careful when you call it
+		 * @throws UnsupportedOperationException if this is called on an enum member that does not support it
+		 */
+		public TimeZone valAsTimezone() throws UnsupportedOperationException {
+			throw new UnsupportedOperationException("This method is not valid for enum member " + name());
+		}
+		
+		/**
+		 * Returns the port as an int
+		 * This should only be supported by the port var, so be careful when you call it
+		 * @throws UnsupportedOperationException if this is called on an enum member that does not support it
+		 */
+		public int valAsInt() {
+			throw new UnsupportedOperationException("This method is not valid for enum member " + name());
 		}
 		
 	}

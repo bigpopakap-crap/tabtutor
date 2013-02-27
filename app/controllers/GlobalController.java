@@ -25,7 +25,7 @@ public class GlobalController extends GlobalSettings {
 	@Override
 	public void onStart(Application app) {
 		//set the system timezone
-		TimeZone tz = TimeZone.getTimeZone(AppCtx.Var.SYSTEM_TIMEZONE_CODE.val());
+		TimeZone tz = AppCtx.Var.SYSTEM_TIMEZONE_CODE.valAsTimezone();
 		TimeZone.setDefault(tz); //server
 		//TODO set the database timezone as well, and indicate that is was set in the log line below
 		Logger.info("Set system timezone to " + tz.getID() + ": " + tz);

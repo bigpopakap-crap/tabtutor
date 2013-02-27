@@ -3,8 +3,6 @@ package launch;
 import static play.test.Helpers.fakeApplication;
 import static play.test.Helpers.running;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.TimeZone;
 
 import org.junit.Assert;
@@ -49,6 +47,19 @@ public class EnvironmentTest extends BaseFuncTest {
 		});
 	}
 	
+	/** Tests the special methods in AppCtx.Var that are not implemented by all enum members */
+	@Test
+	public void testAppCtxVarSpecialMethods() {
+		//if any of these throws an exception, that'll make the test fail
+		//call these a few times to make sure they work each time
+		for (int i = 0; i < 3; i++) {
+			TimeZone tz = AppCtx.Var.SYSTEM_TIMEZONE_CODE.valAsTimezone();
+			int port = AppCtx.Var.HTTP_PORT.valAsInt();
+			Assert.assertNotNull("Timezone object is null" , tz);
+			Assert.assertFalse("Port cannot be negative", port < 0); //this is really here just so the port variable is used
+		}
+	}
+	
 	/** Tests that the mode returned by AppCtx matches the boolean state-querier methods */
 	@Test
 	public void testAppCtxMode() {
@@ -76,13 +87,6 @@ public class EnvironmentTest extends BaseFuncTest {
 	
 	private void helpTestAppCtxEnvMatches(boolean shouldBeTrue) {
 		Assert.assertTrue("App mode is " + AppCtx.Mode.get() + " but boolean doesn't match", shouldBeTrue);
-	}
-	
-	/** Tests that the environment Timezone code is valid */
-	@Test
-	public void testAppCtxTimezoneCode() {
-		List<String> availableIds = Arrays.asList(TimeZone.getAvailableIDs());
-		Assert.assertTrue(availableIds.contains(AppCtx.Var.SYSTEM_TIMEZONE_CODE.val()));
 	}
 	
 	//TODO write a static analysis test to make sure nobody references the Play class directly
