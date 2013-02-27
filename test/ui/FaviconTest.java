@@ -10,6 +10,13 @@ import org.junit.Test;
 import play.mvc.Result;
 import base.BaseFuncTest;
 
+/**
+ * Tests the Facebook authentication flows
+ * 
+ * @author bigpopakap@gmail.com
+ * @since 2013-02-26
+ *
+ */
 public class FaviconTest extends BaseFuncTest {
 	
 	/** Tests that the AppCtx class has no null values */

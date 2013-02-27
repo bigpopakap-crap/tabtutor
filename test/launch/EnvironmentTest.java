@@ -12,6 +12,13 @@ import base.BaseFuncTest;
 
 import common.AppCtx;
 
+/**
+ * Test packages for those concerning the environment/app configuration
+ * 
+ * @author bigpopakap@gmail.com
+ * @since 2013-02-26
+ *
+ */
 public class EnvironmentTest extends BaseFuncTest {
 	
 	/** Test that the environment variables necessary for Heroku are present */

@@ -4,6 +4,13 @@ import org.junit.Test;
 
 import base.BaseFuncTest;
 
+/**
+ * Test package for the Facebook authentication flows
+ * 
+ * @author bigpopakap@gmail.com
+ * @since 2013-02-26
+ *
+ */
 public class FbAuthTest extends BaseFuncTest {
 	
 	/** Test that the environment variables necessary for Facebook are present */
