@@ -1,7 +1,5 @@
 package controllers;
 
-import java.util.UUID;
-
 import models.SessionModel;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -23,9 +21,7 @@ public class BaseWebController extends Controller {
 	
 	/** Show the landing page */
 	public static Result landing() {
-		String sessionIdStr = session(Globals.SESSION_ID_COOKIE_KEY);
-		UUID sessionId = UUID.fromString(sessionIdStr);
-		SessionModel session = SessionModel.FINDER.byId(sessionId);
+		SessionModel session = SessionModel.Selector.getById(session(Globals.SESSION_ID_COOKIE_KEY));
 		return ok(views.html.landing.render(session));
 	}
 
