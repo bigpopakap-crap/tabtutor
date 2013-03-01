@@ -50,5 +50,59 @@ public abstract class BaseModel extends Model {
 	 * @since 2013-02-26
 	 */
 	protected static abstract class BaseValidator {}
+	
+	
+	/* ***********************************************************************
+	 *  BEGIN INVALIDATION OF DIRECT METHODS
+	 *  this will help stop others from making direct modifications to models
+	 *  equivalent protected methods are provided for use by the model subclasses
+	 ************************************************************************* */
+	
+	private static final String BLOCKED_REASON = "This operation has been blocked. " +
+												 "Use the methods in each model class to modify the model";
+	
+	@Override
+	public void save() { throw new UnsupportedOperationException(BLOCKED_REASON); }
+	protected void _save() { super.save(); }
+	
+	@Override
+	public void save(String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
+	protected void _save(String str) { super.save(str); }
+	
+	@Override
+	public void saveManyToManyAssociations(String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
+	protected void _saveManyToManyAssociations(String str) { super.saveManyToManyAssociations(str); }
+	
+	@Override
+	public void saveManyToManyAssociations(String str1, String str2) { throw new UnsupportedOperationException(BLOCKED_REASON); }
+	protected void _saveManyToManyAssociations(String str1, String str2) { super.saveManyToManyAssociations(str1, str2); }
+	
+	@Override
+	public void update() { throw new UnsupportedOperationException(BLOCKED_REASON); }
+	protected void _update() { super.update(); }
+	
+	@Override
+	public void update(Object obj) { throw new UnsupportedOperationException(BLOCKED_REASON); }
+	protected void _update(Object obj) { super.update(obj); }
+	
+	@Override
+	public void update(Object obj, String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
+	protected void _update(Object obj, String str) { super.update(obj, str); }
+	
+	@Override
+	public void update(String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
+	protected void _update(String str) { super.update(str); }
+	
+	@Override
+	public void delete() { throw new UnsupportedOperationException(BLOCKED_REASON); }
+	protected void _delete() { super.delete(); }
+	
+	@Override
+	public void delete(String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
+	protected void _delete(String str) { super.delete(str); }
+	
+	@Override
+	public void deleteManyToManyAssociations(String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
+	protected void _deleteManyToManyAssociations(String str) { super.deleteManyToManyAssociations(str); }
 
 }
