@@ -21,7 +21,7 @@ import common.DbTypesUtil;
  * @since 2013-02-26
  *
  */
-public class AppTimezoneTest extends BaseFuncTest {
+public class TimezoneTest extends BaseFuncTest {
 	
 	/** Tests that the environment Timezone code is valid */
 	@Test
