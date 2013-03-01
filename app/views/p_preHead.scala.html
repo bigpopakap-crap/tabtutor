@@ -1,12 +1,11 @@
 @(session: SessionModel, subTitle: String = "")
 @import common.AppCtx
 @import common.AppCtx.Var
-@import common.AppCtx.Mode
-@import doer.SessionDoer
+@import models.SessionModel
 <title>@(AppCtx.Var.APP_TITLE)@(subTitle)</title>
 <script type="text/javascript" src="/public/javascripts/initNamespace.js"></script>
 <script type="text/javascript" src="/public/javascripts/initLogger.js"></script>
 <script type="text/javascript">
 	window.WTF.get('Logger').init(@(AppCtx.Mode.isProduction()));
 </script>
-@p_fbJsSdk(SessionDoer.needsFacebookAuth(session))
+@p_fbJsSdk(!SessionModel.Validator.hasValidFbAuthInfo(session))

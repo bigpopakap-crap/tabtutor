@@ -1,5 +1,7 @@
 package launch;
 
+import models.BaseModel;
+
 import org.junit.Test;
 
 import base.BaseFuncTest;
@@ -15,8 +17,7 @@ public class SchemaTest extends BaseFuncTest {
 	
 	/** Helper for testing that a database table matches the model */
 	@Test
-	public void doTestModelMatchesTable() {
-		//TODO add model as a parameter after it is created
+	public void doTestModelMatchesTable(Class<? extends BaseModel> model) {
 		//TODO make sure the various Ebean modules match the database tables
 	}
 

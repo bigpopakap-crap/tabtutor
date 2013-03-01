@@ -9,8 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import play.db.ebean.Model;
-
 import com.avaje.ebean.annotation.Formula;
 
 /**
@@ -22,7 +20,7 @@ import com.avaje.ebean.annotation.Formula;
 */
 @Entity
 @Table(name = "SessionCsrfToken")
-public class SessionCsrfTokenModel extends Model {
+public class SessionCsrfTokenModel extends BaseModel {
 	
 	//TODO figure out how to clean up expired tokens
 
@@ -34,8 +32,17 @@ public class SessionCsrfTokenModel extends Model {
 	@Column(name = "expireTime") public Date expireTime;
 	@Transient @Formula(select = "NOW() > expireTime") public boolean isExpired;
 	
-	public static final Finder<UUID, SessionCsrfTokenModel> FINDER = new Finder<UUID, SessionCsrfTokenModel>(
+	/** Private helper for DB interaction implementation */
+	private static final Finder<UUID, SessionCsrfTokenModel> FINDER = new Finder<UUID, SessionCsrfTokenModel>(
 		UUID.class, SessionCsrfTokenModel.class
 	);
-
+	
+	public static class Factory extends BaseFactory {}
+	
+	public static class Selector extends BaseSelector {}
+	
+	public static class Updater extends BaseUpdater {}
+	
+	public static class Validator extends BaseValidator {}
+	
 }
