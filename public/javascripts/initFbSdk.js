@@ -6,7 +6,7 @@
 	 * redirectIfConnected - true if the site should automatically log the user in if they're connected
 	 * loginUrl - the URL to redirect to if the user is connect through Facebook
 	 */
-	window.WTF.initFbSdk = function (appId, redirectIfConnected, loginUrl) {
+	window.WTF.set('initFbSdk', function (appId, redirectIfConnected, loginUrl) {
 		//Initialize the FB object after it is loaded
 		FB.init({
 			appId      : appId,
@@ -24,6 +24,6 @@
 				}
 			});
 		}
-	}
+	});
 	
 })();

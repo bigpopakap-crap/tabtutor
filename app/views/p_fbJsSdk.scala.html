@@ -6,7 +6,7 @@
 <script type="text/javascript" src="http://connect.facebook.net/en_us/all.js"></script>
 <script type="text/javascript" src="/public/javascripts/initFbSdk.js"></script>
 <script>
-	window.WTF.initFbSdk(
+	window.WTF.get('initFbSdk')(
 		'@(AppCtx.Var.FB_APP_ID)',
 		@detectLogin,
 		'@(routes.FbAuthWebController.fblogin(null, null))'

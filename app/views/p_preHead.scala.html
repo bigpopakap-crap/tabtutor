@@ -7,6 +7,6 @@
 <script type="text/javascript" src="/public/javascripts/initNamespace.js"></script>
 <script type="text/javascript" src="/public/javascripts/initLogger.js"></script>
 <script type="text/javascript">
-	window.WTF.initLogger(@(AppCtx.Mode.isProduction()));
+	window.WTF.get('Logger').init(@(AppCtx.Mode.isProduction()));
 </script>
 @p_fbJsSdk(SessionDoer.needsFacebookAuth(session))

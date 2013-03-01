@@ -1,49 +1,89 @@
 //Define the Javascript logger
 (function() {
 	
-	//Defines the logging levels
-	var _Level = {
-		DEBUG: { pri: 1, name: 'DEBUG' },
-		INFO: { pri: 2, name: 'INFO' },
-		WARNING: { pri: 3, name: 'WARNING' },
-		SEVERE: { pri: 4, name: 'SEVERE' },
-		NONE: { pri: -1000, name: 'NONE' }
-	};
-	
-	//Creates a function to take a level and message, and either logs it or alerts it,
-	//if the logger level allows it and alerts are allowed
-	var createLogOrAlertFn = function (isAlert) {
-		return function (level, message) {
-			//test whether we can print the message based on configuration of the logger
-			if (this.curLevel.pri >= 0 && (!isAlert || this.allowAlerts) && level.pri >= this.curLevel.pri) {
-				var output = 'Logger [' + level.name + ']: ' + message;
-				
-				//either log or alert the message
-				if (isAlert) alert(output);
-				else console.log(output);
-			}
-		}
-	};
-
-	window.WTF.initLogger = function (isProduction) {
-		window.WTF.Logger = {
-				//configure the Logger
-				Level: _Level,
-				curLevel: isProduction ? _Level.NONE : _Level.DEBUG,
-				allowAlerts: !isProduction,
-				
-				//define functions to log or alert messages
-				log: createLogOrAlertFn(false),
-				alert: createLogOrAlertFn(true),
-				
-				//define shortcut methods for logging at specific levels
-				debug: function (message) { this.log(_Level.DEBUG, message); },
-				info: function (message) { this.log(_Level.INFO, message); },
-				warning: function (message) { this.log(_Level.WARNING, message); },
-				sever: function (message) { this.log(_Level.SEVERE, message); }
+	//define the Logger object type
+	//This can be moved to it's own file later if necessary, but for now it's only used here
+	function Logger() {
+		
+		//Public constants for each object
+		this.Level = {
+			NONE: { pri: -1000, name: 'NONE' },
+			DEBUG: { pri: 1, name: 'DEBUG' },
+			INFO: { pri: 2, name: 'INFO' },
+			WARN: { pri: 3, name: 'WARN' },
+			ERROR: { pri: 4, name: 'ERROR' }
 		};
 		
-		window.WTF.Logger.info("Logger initialized, set to level " + window.WTF.Logger.curLevel.name);
-	}
+		//Private constants for each object
+		var DEFAULT_PRODCUTION_LOG_LEVEL = this.Level.NONE;
+		var DEFAULT_NON_PRODUCTION_LOG_LEVEL = this.Level.DEBUG;
+		
+		//Member variables
+		var isInitialized = false;
+		var curLevel = null;		//can only be set during initialization
+		var allowAlerts = null;
+		
+		//Creates a function to take a level and message, and either logs it or alerts it,
+		//if the logger level allows it and alerts are allowed
+		var createLogOrAlertFn = function (isAlert) {
+			return function (level, message) {
+				//test whether we can print the message based on configuration of the logger
+				if (isInitialized && curLevel.pri >= 0 && level.pri >= curLevel.pri) {
+					var output = 'Logger [' + level.name + ']: ' + message;
+					
+					//either log or alert the message
+					if (isAlert && allowAlerts) alert(output);
+					else console.log(output + (isAlert ? ' (alert suppressed)' : ''));
+				}
+			}
+		};
+		
+		//Initialization method
+		this.init = function(isProduction) {
+			if (!this.isInitialized) {
+				curLevel = isProduction ? DEFAULT_PRODCUTION_LOG_LEVEL : DEFAULT_NON_PRODUCTION_LOG_LEVEL;
+				allowAlerts = !isProduction;
+				isInitialized = true;
+				
+				//Log that this has been initialized
+				this.info('Logger initialized at level ' + this.getLevel().name);
+			}
+			else {
+				//this has already been initialized, log an error
+				this.warn('Logger has already been initialized');
+			}
+		}
+		
+		//Gets the current logging level
+		this.getLevel = function() {
+			if (isInitialized) {
+				return curLevel;
+			}
+			else {
+				//log an error
+				console.log('Error: this Logger has not yet been initialized');
+				return null;
+			}
+		}
+
+		//Methods to log or alert messages
+		this.log = createLogOrAlertFn(false),
+		this.alert = createLogOrAlertFn(true),
+		
+		//Shortcut methods for logging at specific levels
+		this.debug = function (message) { this.log(this.Level.DEBUG, message); };
+		this.info = function (message) { this.log(this.Level.INFO, message); };
+		this.warn = function (message) { this.log(this.Level.WARN, message); };
+		this.error = function (message) { this.log(this.Level.ERROR, message); };
+		
+		//Shortcut methods for alerting at specific levels
+		this.debugAlert = function (message) { this.alert(this.Level.DEBUG, message); };
+		this.infoAlert = function (message) { this.alert(this.Level.INFO, message); };
+		this.warnAlert = function (message) { this.alert(this.Level.WARN, message); };
+		this.errorAlert = function (message) { this.alert(this.Level.ERROR, message); };
+	};
+	
+	//define the logger in the namespace
+	window.WTF.set('Logger', new Logger());
 	
 })();
