@@ -68,7 +68,7 @@ public class SessionModel extends BaseModel {
 			session.lastAccessTime = lastAccessTime;
 			
 			if (save) {
-				session.save();
+				session._save();
 				Logger.debug("Saved session " + session.pk + " to database");
 			}
 			
@@ -102,7 +102,7 @@ public class SessionModel extends BaseModel {
 		public static void setFbAuthInfoAndUpdate(SessionModel session, String token, int seconds) {
 			session.fbToken = token;
 			session.fbTokenExpireTime = DbTypesUtil.add(DbTypesUtil.now(), seconds);
-			session.update();
+			session._update();
 			Logger.debug("Session " + session.pk + " updated with Facebook auth info");
 		}
 		

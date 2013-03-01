@@ -1,5 +1,7 @@
 package models;
 
+import javax.persistence.MappedSuperclass;
+
 import play.db.ebean.Model;
 
 /**
@@ -13,6 +15,7 @@ import play.db.ebean.Model;
  *
  */
 @SuppressWarnings("serial")
+@MappedSuperclass
 public abstract class BaseModel extends Model {
 	
 	/**
