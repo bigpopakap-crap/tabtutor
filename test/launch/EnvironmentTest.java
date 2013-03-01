@@ -24,19 +24,23 @@ public class EnvironmentTest extends BaseFuncTest {
 	/** Test that the environment variables necessary for Heroku are present */
 	@Test
 	public void testExpectedHerokuEnvironmentVariables() {
-		LaunchPackageHelpers.helpTestExpectedEnvironmentVariables(new String [] { "WTF_HTTP_PORT" });
+		LaunchPackageHelpers.helpTestExpectedEnvironmentVariables("WTF_HTTP_PORT");
 	}
 	
 	/** Test that the environment variables necessary for Play are present */
 	@Test
 	public void testExpectedPlayEnvironmentVariables() {
-		LaunchPackageHelpers.helpTestExpectedEnvironmentVariables(new String [] { "WTF_PLAY_MODE", "WTF_CRYPTO_SECRET" });
+		LaunchPackageHelpers.helpTestExpectedEnvironmentVariables("WTF_PLAY_MODE", "WTF_CRYPTO_SECRET");
 	}
 	
 	/** Test that the environment variables necessary for the app are present */
 	@Test
 	public void testExpectedAppEnvironmentVariables() {
-		LaunchPackageHelpers.helpTestExpectedEnvironmentVariables(new String [] { "WTF_APP_TITLE", "WTF_MODE", "WTF_SYSTEM_TIMEZONE_CODE" });
+		LaunchPackageHelpers.helpTestExpectedEnvironmentVariables("WTF_APP_TITLE", "WTF_MODE", "WTF_SYSTEM_TIMEZONE_CODE");
+	}
+	
+	public void testLoggerLevelEnvironmentVariables() {
+		
 	}
 	
 	/** Tests that the AppCtx class has no null values */

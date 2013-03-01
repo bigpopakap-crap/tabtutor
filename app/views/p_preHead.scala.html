@@ -1,16 +1,11 @@
 @(session: SessionModel, subTitle: String = "")
-@import common.Globals
 @import common.AppCtx
 @import common.AppCtx.Var
 @import models.SessionModel
 <title>@(AppCtx.Var.APP_TITLE)@(subTitle)</title>
-<script>
-	//Initialize the app's Javascript namespace
-	if (!@(Globals.JS_APP_NAMESPACE)) {
-		@(Globals.JS_APP_NAMESPACE) = {};
-	}
-	else {
-		//TODO detect this error
-	}
+<script type="text/javascript" src="/public/javascripts/initNamespace.js"></script>
+<script type="text/javascript" src="/public/javascripts/initLogger.js"></script>
+<script type="text/javascript">
+	window.WTF.get('Logger').init(@(AppCtx.Mode.isProduction()));
 </script>
 @p_fbJsSdk(!SessionModel.Validator.hasValidFbAuthInfo(session))

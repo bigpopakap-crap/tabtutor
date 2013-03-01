@@ -3,10 +3,10 @@ package controllers;
 import models.SessionModel;
 import play.mvc.Controller;
 import play.mvc.Result;
+import actions.SessionAction.Sessioned;
 
 import common.Globals;
 
-import controllers.SecuredActions.Sessioned;
 
 /**
  * This class will route all pages that the user will see as they navigate through the site,

@@ -10,8 +10,8 @@ import play.mvc.Result;
 
 import common.AppCtx;
 import common.Globals;
-import common.SecurityEscapingUtil;
-import common.SecurityEscapingUtil.Escaper;
+import common.EscapingUtil;
+import common.EscapingUtil.Escaper;
 
 /**
  * This class handles all API requests related to Facebook authentication
@@ -86,7 +86,7 @@ public class FbAuthWebController extends BaseWebController {
 	
 	/** Gets the absolute url to the fblogin() action, URL-escaped */
 	private static String getFbloginUrlEncoded() {
-		return SecurityEscapingUtil.escape(
+		return EscapingUtil.escape(
 					routes.FbAuthWebController.fblogin(null, null).absoluteURL(request()),
 					Escaper.URL
 				);
