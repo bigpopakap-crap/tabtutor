@@ -39,8 +39,16 @@ public class EnvironmentTest extends BaseFuncTest {
 		LaunchPackageHelpers.helpTestExpectedEnvironmentVariables("WTF_APP_TITLE", "WTF_MODE", "WTF_SYSTEM_TIMEZONE_CODE");
 	}
 	
+	/** Test that the environment variables necessary for the logger are present */
+	@Test
 	public void testLoggerLevelEnvironmentVariables() {
-		
+		LaunchPackageHelpers.helpTestExpectedEnvironmentVariables("WTF_ROOT_LOGGER_LEVEL", "WTF_PLAY_LOGGER_LEVEL", "WTF_APP_LOGGER_LEVEL");
+	}
+	
+	/** Test that the environment variables necessary for the db are present */
+	@Test
+	public void testDatabaseLevelEnvironmentVariables() {
+		LaunchPackageHelpers.helpTestExpectedEnvironmentVariables("WTF_DB_DRIVER", "WTF_DB_URL", "WTF_DB_USERNAME", "WTF_DB_PASSWORD");
 	}
 	
 	/** Tests that the AppCtx class has no null values */
