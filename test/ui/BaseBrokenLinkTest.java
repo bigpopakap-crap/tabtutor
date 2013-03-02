@@ -21,8 +21,6 @@ import common.AppCtx;
  */
 public class BaseBrokenLinkTest extends BaseFuncTest {
 	
-	//TODO write a test class to test <script> and <link> tags as well
-	
 	/**
 	 * A class that can be overridden and passed in to implement the details of a test run
 	 * See {@link #BaseBrokenLinkTest.doTestLinksNotBroken()} as an example of how to use this class
@@ -46,7 +44,7 @@ public class BaseBrokenLinkTest extends BaseFuncTest {
 		
 		/** Get all the urls on the page that should be tested */
 		public List<String> locate() {
-			//TODO get all <a href=""> strings on the page
+			//TODO get all <a href="">, <script src=""> or <link href=""> strings on the page
 			return new LinkedList<String>();
 		}
 		

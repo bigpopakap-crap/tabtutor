@@ -26,8 +26,6 @@ public abstract class AppCtx {
 	 */
 	public static enum Var {
 		
-		//TODO figure out how to make the extra methods on each enum accessible from outside
-		
 		APP_TITLE("WTF_APP_TITLE"),
 		SYSTEM_TIMEZONE_CODE("WTF_SYSTEM_TIMEZONE_CODE") {
 			private TimeZone tz = null;

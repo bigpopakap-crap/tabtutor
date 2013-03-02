@@ -16,7 +16,7 @@ import common.AppCtx;
  * Base test for ensuring that non-dynamic strings use the messages framework, and can
  * therefore be translated easily
  * 
- * TODO this should work by providing some protected helper methods to do the test, and each
+ * This workSs by providing some protected helper methods to do the test, and each
  * test can override hooks to navigate to pages, and select which strings should be tested
  * 
  * @author bigpopakap@gmail.com
