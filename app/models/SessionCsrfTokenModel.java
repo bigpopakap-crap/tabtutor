@@ -26,11 +26,11 @@ public class SessionCsrfTokenModel extends BaseModel {
 
 	private static final long serialVersionUID = 1065279771090088334L;
 	
-	@Column(name = "sessionPk") @Id public UUID sessionPk;
-	@Column(name = "csrfToken") public UUID csrfToken;
-	@Column(name = "createTime") public Date createTime;
-	@Column(name = "expireTime") public Date expireTime;
-	@Transient @Formula(select = "NOW() > expireTime") public boolean isExpired;
+	@Column(name = "sessionPk") @Id private UUID sessionPk;
+	@Column(name = "csrfToken") private UUID csrfToken;
+	@Column(name = "createTime") private Date createTime;
+	@Column(name = "expireTime") private Date expireTime;
+	@Transient @Formula(select = "NOW() > expireTime") private boolean isExpired;
 	
 	/** Private helper for DB interaction implementation */
 	private static final Finder<UUID, SessionCsrfTokenModel> FINDER = new Finder<UUID, SessionCsrfTokenModel>(
@@ -38,6 +38,16 @@ public class SessionCsrfTokenModel extends BaseModel {
 	);
 	
 	public static class Factory extends BaseFactory {}
+	
+	public class Getter extends BaseGetter {
+		
+		public UUID sessionPk() { return UUID.fromString(sessionPk.toString()); } //defensive copy
+		public UUID csrfToken() { return UUID.fromString(csrfToken.toString()); } //defensive copy
+		public Date createTime() { return (Date) createTime.clone(); } //defensive copy
+		public Date expireTime() { return (Date) expireTime.clone(); } //defensive copy
+		public boolean isExpired() { return isExpired; }
+		
+	}
 	
 	public static class Selector extends BaseSelector {}
 	

@@ -29,6 +29,27 @@ public abstract class BaseModel extends Model {
 	
 	/**
 	 * This class should be extended by the implementing model class, providing all
+	 * methods to access fields of an object
+	 * 
+	 * Fields should be declared private and only accessible through methods in this class
+	 * This is done to prevent outside classes from modifying model objects
+	 * 
+	 * Classes should be careful to make defensive copies of returned objects. Except for other
+	 * BaseModel objects, which are not immutable, but have limited interaction with outside classes
+	 * 
+	 * Note that Play generates getters and setters at runtime for classes to conform to the
+	 * JavaBean structure that is expected by frameworks like the Ebean ORM. This is ok because
+	 * our code cannot reference these methods. So using this getter class is still an effective
+	 * way to limit outside access
+	 * 
+	 * @author bigpopakap@gmail.com
+	 * @since 2013-03-02
+	 *
+	 */
+	protected abstract class BaseGetter {}
+	
+	/**
+	 * This class should be extended by the implementing model class, providing all
 	 * methods to read data from the table
 	 * 
 	 * @author bigpopakap@gmail.com

@@ -29,13 +29,13 @@ public class SessionModel extends BaseModel {
 	
 	private static final long serialVersionUID = -6111608082703517322L;
 	
-	@Column(name = "pk") @Id public UUID pk;
-	@Column(name = "userPk") public UUID userPk; //TODO how to populate this as the user object reference?
-	@Column(name = "fbToken") public String fbToken;
-	@Column(name = "fbTokenExpireTime") public Date fbTokenExpireTime;
-	@Transient @Formula(select = "NOW() > fbTokenExpireTime") public boolean isFbtokenExpired;
-	@Column(name = "startTime") public Date startTime;
-	@Column(name = "lastAccessTime") public Date lastAccessTime;
+	@Column(name = "pk") @Id private UUID pk;
+	@Column(name = "userPk") private UUID userPk; //TODO how to populate this as the user object reference?
+	@Column(name = "fbToken") private String fbToken;
+	@Column(name = "fbTokenExpireTime") private Date fbTokenExpireTime;
+	@Transient @Formula(select = "NOW() > fbTokenExpireTime") private boolean isFbtokenExpired;
+	@Column(name = "startTime") private Date startTime;
+	@Column(name = "lastAccessTime") private Date lastAccessTime;
 	
 	/** Private helper for DB interaction implementation */
 	private static final Finder<UUID, SessionModel> FINDER = new Finder<UUID, SessionModel>(
@@ -76,6 +76,19 @@ public class SessionModel extends BaseModel {
 		}
 
 	}
+	
+	public class Getter extends BaseGetter {
+		
+		public UUID pk() { return UUID.fromString(pk.toString()); } //defensive copy
+		public UUID userPk() { return UUID.fromString(userPk.toString()); }
+		public String fbToken() { return fbToken; }
+		public Date fbTokenExpireTime() { return (Date) fbTokenExpireTime.clone(); } //defensive copy
+		public boolean isFbtokenExpired() { return isFbtokenExpired; }
+		public Date startTime() { return (Date) startTime.clone(); } //defensive copy
+		public Date lastAccessTime() { return (Date) lastAccessTime.clone(); } //defensive copy
+		
+	}
+	public Getter GETTER = new Getter();
 	
 	public static class Selector extends BaseSelector {
 		

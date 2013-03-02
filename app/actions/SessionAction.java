@@ -45,8 +45,8 @@ public class SessionAction extends Action.Simple {
 				|| !SessionModel.Validator.isValidExistingId(ctx.session().get(Globals.SESSION_ID_COOKIE_KEY))) {
 			//there is no session ID set, so create it and add it to the cookie
 			SessionModel newSession = SessionModel.Factory.createAndSave();
-			ctx.session().put(Globals.SESSION_ID_COOKIE_KEY, newSession.pk.toString());
-			Logger.info("Put session " + newSession.pk + " in cookie for IP " + ctx.request().remoteAddress());
+			ctx.session().put(Globals.SESSION_ID_COOKIE_KEY, newSession.GETTER.pk().toString());
+			Logger.info("Put session " + newSession.GETTER.pk() + " in cookie for IP " + ctx.request().remoteAddress());
 		}
 		
 		return delegate.call(ctx);
