@@ -65,6 +65,7 @@ public class FbAuthAction extends Action.Simple {
 			Logger.debug("Session needs a user reference. Fetching Facebook ID and looking up user object");
 			
 			//get the user's Facebook ID from the Facebook API
+			//TODO make sure this works
 			String fbId = fbApi.me().get().fbId();
 			fbId = fbId + fbId; //TODO remove
 			

@@ -193,7 +193,11 @@ public abstract class AppCtx {
 		public static FbApi fbApi() {
 			FbApi fbApi = (FbApi) Context.current().args.get(FbApi.FBAPI_OBJ_CONTEXT_KEY);
 			if (fbApi == null) {
-				//TODO fetch it and save it to the context
+				SessionModel session = get();
+				if (session != null) {
+					fbApi = new FbApi(session.GETTER.fbToken());
+					Context.current().args.put(FbApi.FBAPI_OBJ_CONTEXT_KEY, fbApi);
+				}
 			}
 			return fbApi;
 		}
