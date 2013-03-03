@@ -26,11 +26,11 @@ public class SessionCsrfTokenModel extends BaseModel {
 
 	private static final long serialVersionUID = 1065279771090088334L;
 	
-	@Column(name = "sessionPk") @Id private UUID sessionPk;
-	@Column(name = "csrfToken") private UUID csrfToken;
-	@Column(name = "createTime") private Date createTime;
-	@Column(name = "expireTime") private Date expireTime;
-	@Transient @Formula(select = "NOW() > expireTime") private boolean isExpired;
+	@Column(name = "sessionPk") @Id public UUID sessionPk;
+	@Column(name = "csrfToken") public UUID csrfToken;
+	@Column(name = "createTime") public Date createTime;
+	@Column(name = "expireTime") public Date expireTime;
+	@Transient @Formula(select = "NOW() > expireTime") public boolean isExpired;
 	
 	/** Private helper for DB interaction implementation */
 	private static final Finder<UUID, SessionCsrfTokenModel> FINDER = new Finder<UUID, SessionCsrfTokenModel>(

@@ -37,13 +37,21 @@ public class SessionModel extends BaseModel {
 	
 	private static final long serialVersionUID = -6111608082703517322L;
 	
-	@Column(name = "pk") @Id private UUID pk;
-	@Column(name = "userPk") private UUID userPk; //TODO how to populate this as the user object reference?
-	@Column(name = "fbToken") private String fbToken;
-	@Column(name = "fbTokenExpireTime") private Date fbTokenExpireTime;
-	@Transient @Formula(select = "NOW() > fbTokenExpireTime") private boolean isFbtokenExpired;
-	@Column(name = "startTime") private Date startTime;
-	@Column(name = "lastAccessTime") private Date lastAccessTime;
+	@Column(name = "pk") @Id public UUID pk;
+	@Column(name = "userPk") public UUID userPk; //TODO how to populate this as the user object reference?
+	@Column(name = "fbToken") public String fbToken;
+	@Column(name = "fbTokenExpireTime") public Date fbTokenExpireTime;
+	@Transient @Formula(select = "NOW() > fbTokenExpireTime") public boolean isFbtokenExpired;
+	@Column(name = "startTime") public Date startTime;
+	@Column(name = "lastAccessTime") public Date lastAccessTime;
+	
+	@Override
+	protected void postOp(DmlOpType opType) {
+		//refresh the app context
+		//TODO add caching here
+		super.postOp(opType);
+		AppCtx.Session.refresh();
+	}
 	
 	/** Private helper for DB interaction implementation */
 	private static final Finder<UUID, SessionModel> FINDER = new Finder<UUID, SessionModel>(
@@ -125,7 +133,6 @@ public class SessionModel extends BaseModel {
 			session.fbToken = token;
 			session.fbTokenExpireTime = DbTypesUtil.add(DbTypesUtil.now(), seconds);
 			session._update();
-			AppCtx.Session.refresh();
 			Logger.debug("Session " + session.pk + " updated with Facebook auth info");
 		}
 		

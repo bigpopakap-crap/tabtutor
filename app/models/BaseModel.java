@@ -18,6 +18,9 @@ import play.db.ebean.Model;
 @MappedSuperclass
 public abstract class BaseModel extends Model {
 	
+	//TODO static analysis test that nobody calls Ebean.save(), update(), etc. directly
+	//TODO static analysis test that nobody reads or modifies columns in a model directly
+	
 	/**
 	 * This class should be extended by the implementing model class, providing all
 	 * methods to create objects
@@ -75,6 +78,26 @@ public abstract class BaseModel extends Model {
 	 */
 	protected static abstract class BaseValidator {}
 	
+	/* ******************************************
+	 *  HOOKS FOR SAVE AND UPDATE
+	 ****************************************** */
+	
+	/**
+	 * Enum for types of SQL operations
+	 * 
+	 * @author bigpopakap@gmail.com
+	 * @since 2013-03-02
+	 *
+	 */
+	protected static enum DmlOpType {
+		INSERT, UPDATE, DELETE
+	}
+	
+	/** Called after any save() or update() */
+	protected void postOp(DmlOpType opType) {
+		//do nothing
+	}
+	
 	
 	/* ***********************************************************************
 	 *  BEGIN INVALIDATION OF DIRECT METHODS
@@ -87,46 +110,70 @@ public abstract class BaseModel extends Model {
 	
 	@Override
 	public void save() { throw new UnsupportedOperationException(BLOCKED_REASON); }
-	protected void _save() { super.save(); }
+	protected void _save() {
+		super.save();
+		postOp(DmlOpType.INSERT);
+	}
 	
 	@Override
 	public void save(String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
-	protected void _save(String str) { super.save(str); }
+	protected void _save(String str) {
+		super.save(str);
+		postOp(DmlOpType.INSERT);
+	}
 	
 	@Override
 	public void saveManyToManyAssociations(String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
-	protected void _saveManyToManyAssociations(String str) { super.saveManyToManyAssociations(str); }
+	protected void _saveManyToManyAssociations(String str) { throw new UnsupportedOperationException(); }
 	
 	@Override
 	public void saveManyToManyAssociations(String str1, String str2) { throw new UnsupportedOperationException(BLOCKED_REASON); }
-	protected void _saveManyToManyAssociations(String str1, String str2) { super.saveManyToManyAssociations(str1, str2); }
+	protected void _saveManyToManyAssociations(String str1, String str2) { throw new UnsupportedOperationException(); }
 	
 	@Override
 	public void update() { throw new UnsupportedOperationException(BLOCKED_REASON); }
-	protected void _update() { super.update(); }
+	protected void _update() {
+		super.update();
+		postOp(DmlOpType.UPDATE);
+	}
 	
 	@Override
 	public void update(Object obj) { throw new UnsupportedOperationException(BLOCKED_REASON); }
-	protected void _update(Object obj) { super.update(obj); }
+	protected void _update(Object obj) {
+		super.update(obj);
+		postOp(DmlOpType.UPDATE);
+	}
 	
 	@Override
 	public void update(Object obj, String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
-	protected void _update(Object obj, String str) { super.update(obj, str); }
+	protected void _update(Object obj, String str) {
+		super.update(obj, str);
+		postOp(DmlOpType.UPDATE);
+	}
 	
 	@Override
 	public void update(String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
-	protected void _update(String str) { super.update(str); }
+	protected void _update(String str) {
+		super.update(str);
+		postOp(DmlOpType.UPDATE);
+	}
 	
 	@Override
 	public void delete() { throw new UnsupportedOperationException(BLOCKED_REASON); }
-	protected void _delete() { super.delete(); }
+	protected void _delete() {
+		super.delete();
+		postOp(DmlOpType.DELETE);
+	}
 	
 	@Override
 	public void delete(String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
-	protected void _delete(String str) { super.delete(str); }
+	protected void _delete(String str) {
+		super.delete(str);
+		postOp(DmlOpType.DELETE);
+	}
 	
 	@Override
 	public void deleteManyToManyAssociations(String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
-	protected void _deleteManyToManyAssociations(String str) { super.deleteManyToManyAssociations(str); }
+	protected void _deleteManyToManyAssociations(String str) { throw new UnsupportedOperationException(); }
 
 }

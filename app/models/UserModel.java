@@ -24,18 +24,18 @@ public class UserModel extends BaseModel {
 
 	private static final long serialVersionUID = 5854422586239724109L;
 	
-	@Column(name = "pk") @Id private UUID pk;
-	@Column(name = "username") private String username;
-	@Column(name = "fbId") private String fbId;
-	@Column(name = "fbIsAuthed") private boolean fbIsAuthed;
-	@Column(name = "firstName") private String firstName;
-	@Column(name = "lastName") private String lastName;
-	@Transient @Formula(select = "firstName || ' ' || lastName") private String fullName;
-	@Column(name = "email") private String email;
-	@Column(name = "registerTime") private Date registerTime;
-	@Column(name = "lastLoginTime") private Date lastLoginTime;
-	@Column(name = "secondToLastLoginTime") private Date secondToLastLoginTime;
-	@Transient @Formula(select = "secondToLastLoginTime IS NULL") private boolean isFirstLogin;
+	@Column(name = "pk") @Id public UUID pk;
+	@Column(name = "username") public String username;
+	@Column(name = "fbId") public String fbId;
+	@Column(name = "fbIsAuthed") public boolean fbIsAuthed;
+	@Column(name = "firstName") public String firstName;
+	@Column(name = "lastName") public String lastName;
+	@Transient @Formula(select = "firstName || ' ' || lastName") public String fullName;
+	@Column(name = "email") public String email;
+	@Column(name = "registerTime") public Date registerTime;
+	@Column(name = "lastLoginTime") public Date lastLoginTime;
+	@Column(name = "secondToLastLoginTime") public Date secondToLastLoginTime;
+	@Transient @Formula(select = "secondToLastLoginTime IS NULL") public boolean isFirstLogin;
 	
 	/** Private helper for DB interaction implementation */
 	private static final Finder<UUID, UserModel> FINDER = new Finder<UUID, UserModel>(
