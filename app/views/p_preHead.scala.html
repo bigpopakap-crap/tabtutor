@@ -1,4 +1,4 @@
-@(subTitle: String = "")
+@(subTitle: String = "", forceNoDetectLogin: Boolean = false)
 @import common.AppCtx
 @import common.AppCtx.Var
 @import common.AppCtx.Session
@@ -11,5 +11,5 @@
 	window.WTF.get('Logger').init(@(AppCtx.Mode.isProduction()));
 </script>
 @p_fbJsSdk(
-	!SessionModel.Validator.hasValidFbAuthInfo(AppCtx.Session.get())
+	!forceNoDetectLogin && !SessionModel.Validator.hasValidFbAuthInfo(AppCtx.Session.get())
 )
