@@ -63,6 +63,7 @@ public class FbAuthAction extends Action.Simple {
 		//ensure that a user is referenced by the session
 		else if (!SessionModel.Validator.hasValidUserReference(session)) {
 			Logger.debug("Session needs a user reference. Fetching Facebook ID and looking up user object");
+			
 			//TODO get the user's Facebook ID from the Facebook API
 			
 			//TODO get the user ID associated with this Facebook ID, or create one
