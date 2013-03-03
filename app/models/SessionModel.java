@@ -12,6 +12,8 @@ import javax.persistence.Transient;
 import play.Logger;
 
 import com.avaje.ebean.annotation.Formula;
+
+import common.AppCtx;
 import common.DbTypesUtil;
 
 /**
@@ -26,6 +28,12 @@ import common.DbTypesUtil;
 public class SessionModel extends BaseModel {
 	
 	//TODO figure out how to clean up old sessions
+	
+	/** The key to use in the cookie for the session ID */
+	public static final String SESSION_ID_COOKIE_KEY = "wtfspk";
+	
+	/** The key to use to store the session model object in the session context */
+	public static final String SESSION_OBJ_CONTEXT_KEY = "sessionObjectContextKey";
 	
 	private static final long serialVersionUID = -6111608082703517322L;
 	
@@ -80,6 +88,7 @@ public class SessionModel extends BaseModel {
 	public class Getter extends BaseGetter {
 		
 		public UUID pk() { return UUID.fromString(pk.toString()); } //defensive copy
+		public String pk_String() { return pk().toString(); }
 		public UUID userPk() { return UUID.fromString(userPk.toString()); }
 		public String fbToken() { return fbToken; }
 		public Date fbTokenExpireTime() { return (Date) fbTokenExpireTime.clone(); } //defensive copy
@@ -116,6 +125,7 @@ public class SessionModel extends BaseModel {
 			session.fbToken = token;
 			session.fbTokenExpireTime = DbTypesUtil.add(DbTypesUtil.now(), seconds);
 			session._update();
+			AppCtx.Session.refresh();
 			Logger.debug("Session " + session.pk + " updated with Facebook auth info");
 		}
 		
@@ -161,7 +171,7 @@ public class SessionModel extends BaseModel {
 				return true;
 			}
 			else {
-				return session.userPk != null;
+				return session.userPk != null; //TODO and verify the user ID is valid with UserModel.isValidExistingId()
 			}
 		}
 		

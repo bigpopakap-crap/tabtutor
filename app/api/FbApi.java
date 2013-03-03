@@ -16,7 +16,10 @@ import play.libs.WS.WSRequestHolder;
  * @since 2013-03-02
  *
  */
-public abstract class FbApi {
+public class FbApi {
+	
+	/** The key to use to store the session model object in the session context */
+	public static final String FBAPI_OBJ_CONTEXT_KEY = "fbApiObjectContextKey";
 	
 	private static final String GRAPH_API_DOMAIN = "https://graph.facebook.com";
 	private static final String PATH_ME = "/me";

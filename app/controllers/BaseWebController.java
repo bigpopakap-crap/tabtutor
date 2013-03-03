@@ -1,11 +1,8 @@
 package controllers;
 
-import models.SessionModel;
 import play.mvc.Controller;
 import play.mvc.Result;
 import actions.SessionAction.Sessioned;
-
-import common.Globals;
 
 
 /**
@@ -21,8 +18,7 @@ public class BaseWebController extends Controller {
 	
 	/** Show the landing page */
 	public static Result landing() {
-		SessionModel session = SessionModel.Selector.getById(session(Globals.SESSION_ID_COOKIE_KEY));
-		return ok(views.html.landing.render(session));
+		return ok(views.html.landing.render());
 	}
 
 }

@@ -12,8 +12,6 @@ import play.mvc.Http.Context;
 import play.mvc.Result;
 import play.mvc.With;
 
-import common.Globals;
-
 /**
  * This Action will add a session cookie to the browser, and create
  * any session-related database entries
@@ -41,11 +39,12 @@ public class SessionAction extends Action.Simple {
 	public Result call(Context ctx) throws Throwable {
 		Logger.debug("Calling into " + this.getClass().getName());
 		
-		if (!ctx.session().containsKey(Globals.SESSION_ID_COOKIE_KEY)
-				|| !SessionModel.Validator.isValidExistingId(ctx.session().get(Globals.SESSION_ID_COOKIE_KEY))) {
-			//there is no session ID set, so create it and add it to the cookie
+		if (!ctx.session().containsKey(SessionModel.SESSION_ID_COOKIE_KEY)
+				|| !SessionModel.Validator.isValidExistingId(ctx.session().get(SessionModel.SESSION_ID_COOKIE_KEY))) {
+			//there is no session ID set, so create it, store the object, and add it to the cookie
 			SessionModel newSession = SessionModel.Factory.createAndSave();
-			ctx.session().put(Globals.SESSION_ID_COOKIE_KEY, newSession.GETTER.pk().toString());
+			ctx.session().put(SessionModel.SESSION_ID_COOKIE_KEY, newSession.GETTER.pk().toString());
+			
 			Logger.info("Put session " + newSession.GETTER.pk() + " in cookie for IP " + ctx.request().remoteAddress());
 		}
 		

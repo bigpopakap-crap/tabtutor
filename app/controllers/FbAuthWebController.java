@@ -9,7 +9,6 @@ import play.libs.WS;
 import play.mvc.Result;
 
 import common.AppCtx;
-import common.Globals;
 import common.EscapingUtil;
 import common.EscapingUtil.Escaper;
 
@@ -71,7 +70,7 @@ public class FbAuthWebController extends BaseWebController {
 							int tokenExpiry = parseTokenExpiry(resp);
 							
 							//add this information to the session
-							SessionModel session = SessionModel.Selector.getById(session(Globals.SESSION_ID_COOKIE_KEY));
+							SessionModel session = AppCtx.Session.get();
 							SessionModel.Updater.setFbAuthInfoAndUpdate(session, token, tokenExpiry);
 							
 							//don't get the associated user, that will be taken care of in SecuredActions

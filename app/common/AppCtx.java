@@ -2,7 +2,10 @@ package common;
 
 import java.util.TimeZone;
 
+import models.SessionModel;
 import play.Play;
+import play.mvc.Http.Context;
+import api.FbApi;
 
 /**
  * This class holds system environment information (the app context), which includes
@@ -157,7 +160,49 @@ public abstract class AppCtx {
 		
 		/** An extra method to determine whether the app is currently running tests */
 		public static synchronized boolean isRunningTests() {
+			//TODO need to test this to make sure it's doing what it's supposed to
 			return Play.isTest();
+		}
+		
+	}
+	
+	/**
+	 * This class holds methods to query the current session for important objects,
+	 * like the session model itself or the FbApi object
+	 * 
+	 * @author bigpopakap@gmail.com
+	 * @since 2013-03-02
+	 *
+	 */
+	public static class Session {
+		
+		/** Get the session model object for the current session */
+		public static SessionModel get() {
+			SessionModel session = (SessionModel) Context.current().args.get(SessionModel.SESSION_OBJ_CONTEXT_KEY);
+			if (session == null) {
+				String sessionId = Context.current().session().get(SessionModel.SESSION_ID_COOKIE_KEY);
+				if (sessionId != null) {
+					session = SessionModel.Selector.getById(sessionId);
+					Context.current().args.put(SessionModel.SESSION_OBJ_CONTEXT_KEY, session);
+				}
+			}
+			return session;
+		}
+		
+		/** Get the FbApi object for the the current session */
+		public static FbApi fbApi() {
+			FbApi fbApi = (FbApi) Context.current().args.get(FbApi.FBAPI_OBJ_CONTEXT_KEY);
+			if (fbApi == null) {
+				//TODO fetch it and save it to the context
+			}
+			return fbApi;
+		}
+		
+		/** Refreshes the context to make sure the values are current */
+		public static void refresh() {
+			//just delete them from the context, and they will be loaded next time
+			Context.current().args.put(SessionModel.SESSION_OBJ_CONTEXT_KEY, null);
+			Context.current().args.put(FbApi.FBAPI_OBJ_CONTEXT_KEY, null);
 		}
 		
 	}

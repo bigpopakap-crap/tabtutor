@@ -2,13 +2,20 @@
 @import common.AppCtx;
 @import common.AppCtx.Var;
 @import routes.FbAuthWebController;
-<div id="fb-root"></div>
 <script type="text/javascript" src="http://connect.facebook.net/en_us/all.js"></script>
 <script type="text/javascript" src="/public/javascripts/initFbSdk.js"></script>
 <script>
-	window.WTF.get('initFbSdk')(
-		'@(AppCtx.Var.FB_APP_ID)',
-		@detectLogin,
-		'@(routes.FbAuthWebController.fblogin(null, null))'
-	);
+	$(window).load(function () {
+		
+		//put the fb root div in the body
+		$('<body>').prepend('<div id="fb-root"></div>');
+		
+		//initialize the SDK
+		window.WTF.get('initFbSdk')(
+			'@(AppCtx.Var.FB_APP_ID)',
+			@detectLogin,
+			'@(routes.FbAuthWebController.fblogin(null, null))'
+		);
+		
+	});
 </script>
