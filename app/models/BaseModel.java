@@ -79,7 +79,7 @@ public abstract class BaseModel extends Model {
 	protected static abstract class BaseValidator {}
 	
 	/* ******************************************
-	 *  HOOKS FOR SAVE AND UPDATE
+	 *  HOOKS FOR DML OPERATIONS
 	 ****************************************** */
 	
 	/**
@@ -95,7 +95,7 @@ public abstract class BaseModel extends Model {
 	
 	/** Called after any save() or update() */
 	protected void postOp(DmlOpType opType) {
-		//do nothing
+		//do nothing. models can override this if they want to do something
 	}
 	
 	

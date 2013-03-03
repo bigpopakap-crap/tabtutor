@@ -16,8 +16,7 @@ public abstract class DbTypesUtil {
 		return new Date();
 	}
 	
-	/** Returns a new Date, which is the given number of seconds after the given Date
-	 */
+	/** Returns a new Date, which is the given number of seconds after the given Date */
 	public static Date add(Date date, int seconds) {
 		return new Date(date.getTime() + (seconds * 1000));
 	}

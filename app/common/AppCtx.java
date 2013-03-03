@@ -136,6 +136,7 @@ public abstract class AppCtx {
 	public static enum Mode {
 		DEVELOPMENT, STAGING, PRODUCTION;
 		
+		/** The current mode of the app */
 		private static final Mode WTF_MODE = Mode.valueOf(System.getenv("WTF_MODE"));
 		
 		/** Gets the current mode in which the app is running */
@@ -180,6 +181,7 @@ public abstract class AppCtx {
 		public static SessionModel get() {
 			SessionModel session = (SessionModel) Context.current().args.get(SessionModel.SESSION_OBJ_CONTEXT_KEY);
 			if (session == null) {
+				//load the session into the context
 				String sessionId = Context.current().session().get(SessionModel.SESSION_ID_COOKIE_KEY);
 				if (sessionId != null) {
 					session = SessionModel.Selector.getById(sessionId);
@@ -193,6 +195,7 @@ public abstract class AppCtx {
 		public static FbApi fbApi() {
 			FbApi fbApi = (FbApi) Context.current().args.get(FbApi.FBAPI_OBJ_CONTEXT_KEY);
 			if (fbApi == null) {
+				//load the fb api into the context
 				SessionModel session = get();
 				if (session != null) {
 					fbApi = new FbApi(session.GETTER.fbToken());

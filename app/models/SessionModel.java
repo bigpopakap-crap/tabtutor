@@ -109,14 +109,20 @@ public class SessionModel extends BaseModel {
 	
 	public static class Selector extends BaseSelector {
 		
+		/** Gets a Session by ID, converts the string to a UUID internally */
 		public static SessionModel getById(String id) {
-			//TODO do null checking, invalid id checking, etc
-			return getById(UUID.fromString(id));
+			try {
+				return getById(UUID.fromString(id));
+			}
+			catch (IllegalArgumentException ex) {
+				//the string was not a valid UUID
+				return null;
+			}
 		}
 		
+		/** Gets a Session by ID */
 		public static SessionModel getById(UUID id) {
-			//TODO do null checking, etc
-			return FINDER.byId(id);
+			return id != null ? FINDER.byId(id) : null;
 		}
 		
 	}

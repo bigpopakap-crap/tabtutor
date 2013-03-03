@@ -16,6 +16,11 @@ import play.mvc.With;
  * This Action will add a session cookie to the browser, and create
  * any session-related database entries
  * 
+ * This is the only class that should directly interact with the session cookie.
+ * All other classes should refer directly to the AppCtx.Session object. With
+ * the exception of this class, the term "session" refers to the AppCtx.Session,
+ * not the browser cookie
+ * 
  * @author bigpopakap@gmail.com
  * @since 2013-02-24
  *
@@ -39,12 +44,13 @@ public class SessionAction extends Action.Simple {
 	public Result call(Context ctx) throws Throwable {
 		Logger.debug("Calling into " + this.getClass().getName());
 		
-		if (!ctx.session().containsKey(SessionModel.SESSION_ID_COOKIE_KEY)
-				|| !SessionModel.Validator.isValidExistingId(ctx.session().get(SessionModel.SESSION_ID_COOKIE_KEY))) {
-			//there is no session ID set, so create it, store the object, and add it to the cookie
+		//this is the same as testing that AppCtx.Session.get() is non-null, but this is a better lower-level way to go
+		//because AppCtx should not be a dependency of this session-creation flow
+		String sessionId = ctx.session().get(SessionModel.SESSION_ID_COOKIE_KEY);
+		if (!SessionModel.Validator.isValidExistingId(sessionId)) {
+			//there is no session ID set, so create it and add it to the cookie
 			SessionModel newSession = SessionModel.Factory.createAndSave();
 			ctx.session().put(SessionModel.SESSION_ID_COOKIE_KEY, newSession.GETTER.pk().toString());
-			
 			Logger.info("Put session " + newSession.GETTER.pk() + " in cookie for IP " + ctx.request().remoteAddress());
 		}
 		
