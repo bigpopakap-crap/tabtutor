@@ -6,6 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import models.SessionModel;
+import models.UserModel;
 import play.Logger;
 import play.libs.F.Function;
 import play.mvc.Action;
@@ -48,7 +49,7 @@ public class FbAuthAction extends Action.Simple {
 		Logger.debug("Calling into " + this.getClass().getName());
 		
 		//get the session object
-		SessionModel session = AppCtx.Session.get();
+		final SessionModel session = AppCtx.Session.get();
 		if (session == null) throw new IllegalStateException("Session should have been populated by now");
 		
 		//if there is no Facebook authToken associated, or it has expired start the Facebook login flow
@@ -63,7 +64,7 @@ public class FbAuthAction extends Action.Simple {
 		if (fbApi == null) throw new IllegalStateException("FbApi should have been populated by now");
 
 		//ensure that a user is referenced by the session
-		if (!SessionModel.Validator.hasValidUserReference(session)) {
+		if (!SessionModel.Validator.hasValidUserPk(session)) {
 			Logger.debug("Session needs a user reference. Fetching Facebook ID and looking up user object");
 			
 			//start by getting the user's Facebook ID from the Facebook API
@@ -73,19 +74,28 @@ public class FbAuthAction extends Action.Simple {
 				public Result apply(FbJsonResponse fbJson) throws Throwable {
 					//TODO handle error
 					String fbId = fbJson.fbId();
+					String firstName = fbJson.firstName();
+					String lastName = fbJson.lastName();
+					String email = fbJson.email();
 					
-					//TODO get the user ID associated with this Facebook ID, or create one
+					//get the user associated with this Facebook ID, or create one
+					UserModel user = UserModel.Selector.getByFbId(fbId);
+					if (user == null) {
+						user = UserModel.Factory.createAndSave(fbId, firstName, lastName, email);
+					}
 					
-					//TODO add this user ID to the session object
-					
+					//add this user ID to the session object
+					SessionModel.Updater.setUserPkAndUpdate(session, user.pk);
+	
 					return delegate.call(ctx);
 				}
 				
 			}));
 		}
-		
-		//all checks passed, pass control to the delegate action
-		return delegate.call(ctx);
+		else {
+			//update the login time and delegate
+			return delegate.call(ctx);
+		}
 	}
 	
 }

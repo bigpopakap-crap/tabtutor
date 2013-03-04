@@ -3,6 +3,8 @@ package common;
 import java.util.TimeZone;
 
 import models.SessionModel;
+import models.UserModel;
+import play.Logger;
 import play.Play;
 import play.mvc.Http.Context;
 import api.FbApi;
@@ -191,13 +193,26 @@ public abstract class AppCtx {
 			return session;
 		}
 		
+		/** Get the current logged-in user */
+		public static UserModel user() {
+			UserModel user = (UserModel) Context.current().args.get(UserModel.USER_OBJ_CONTEXT_KEY);
+			if (user == null) {
+				SessionModel session = get();
+				if (session != null && SessionModel.Validator.hasValidUserPk(session)) {
+					user = SessionModel.Selector.getUser(session);
+					Context.current().args.put(UserModel.USER_OBJ_CONTEXT_KEY, user);
+				}
+			}
+			return user;
+		}
+		
 		/** Get the FbApi object for the the current session */
 		public static FbApi fbApi() {
 			FbApi fbApi = (FbApi) Context.current().args.get(FbApi.FBAPI_OBJ_CONTEXT_KEY);
 			if (fbApi == null) {
 				//load the fb api into the context
 				SessionModel session = get();
-				if (session != null) {
+				if (session != null && SessionModel.Validator.hasValidFbAuthInfo(session)) {
 					fbApi = new FbApi(session.GETTER.fbToken());
 					Context.current().args.put(FbApi.FBAPI_OBJ_CONTEXT_KEY, fbApi);
 				}
@@ -209,7 +224,9 @@ public abstract class AppCtx {
 		public static void refresh() {
 			//just delete them from the context, and they will be loaded next time
 			Context.current().args.put(SessionModel.SESSION_OBJ_CONTEXT_KEY, null);
+			Context.current().args.put(UserModel.USER_OBJ_CONTEXT_KEY, null);
 			Context.current().args.put(FbApi.FBAPI_OBJ_CONTEXT_KEY, null);
+			Logger.debug(Session.class + " refreshed");
 		}
 		
 	}

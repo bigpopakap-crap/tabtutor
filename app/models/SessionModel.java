@@ -125,6 +125,13 @@ public class SessionModel extends BaseModel {
 			return id != null ? FINDER.byId(id) : null;
 		}
 		
+		/** Gets the user associated with this session, or null if no user has been associated yet */
+		public static UserModel getUser(SessionModel session) {
+			return session != null && Validator.hasValidUserPk(session)
+						? UserModel.Selector.getById(session.userPk)
+						: null;
+		}
+		
 	}
 	
 	public static class Updater extends BaseUpdater {
@@ -136,10 +143,27 @@ public class SessionModel extends BaseModel {
 		 * @param seconds number of seconds until the token expires
 		 */
 		public static void setFbAuthInfoAndUpdate(SessionModel session, String token, int seconds) {
+			if (session == null) {
+				Logger.debug("setFbAuthInfoAndUpdate called on null session");
+				return;
+			}
+			
 			session.fbToken = token;
 			session.fbTokenExpireTime = DbTypesUtil.add(DbTypesUtil.now(), seconds);
 			session._update();
-			Logger.debug("Session " + session.pk + " updated with Facebook auth info");
+			Logger.debug("Session " + session.pk + " updated with Facebook token " + session.fbToken);
+		}
+		
+		/** Adds the user pk to the session. Assumes that the given userPk is valid */
+		public static void setUserPkAndUpdate(SessionModel session, UUID userPk) {
+			if (session == null) {
+				Logger.debug("setUserPkAndUpdate called on null session");
+				return;
+			}
+			
+			session.userPk = userPk;
+			session._update();
+			Logger.debug("Session " + session.pk + " updated with User reference " + session.userPk);
 		}
 		
 	}
@@ -148,14 +172,7 @@ public class SessionModel extends BaseModel {
 		
 		/** Determines if the given ID is valid and it exists in the database */
 		public static boolean isValidExistingId(String id) {
-			if (id == null) return false;
-			try {
-				UUID pk = UUID.fromString(id);
-				return FINDER.byId(pk) != null;
-			}
-			catch (IllegalArgumentException ex) {
-				return false;
-			}
+			return Selector.getById(id) != null;
 		}
 		
 		/**
@@ -177,14 +194,14 @@ public class SessionModel extends BaseModel {
 		 * @param session the session to check
 		 * @return true if the session has a reference to a user
 		 */
-		public static boolean hasValidUserReference(SessionModel session) {
+		public static boolean hasValidUserPk(SessionModel session) {
 			if (session == null) {
 				//this is a weird case, but forcing auth may solve it
 				Logger.warn("Null passed to hasValidUserReference method");
 				return true;
 			}
 			else {
-				return session.userPk != null; //TODO and verify the user ID is valid with UserModel.isValidExistingId()
+				return session.userPk != null && UserModel.Validator.isValidExistingId(session.userPk);
 			}
 		}
 		

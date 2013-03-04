@@ -163,6 +163,21 @@ public class FbApi {
 			return find("id", PATH_ME).asText();
 		}
 		
+		/** Get the first name if this response came from the /me path */
+		public String firstName() {
+			return find("first_name", PATH_ME).asText();
+		}
+		
+		/** Get the first name if this response came from the /me path */
+		public String lastName() {
+			return find("last_name", PATH_ME).asText();
+		}
+		
+		/** Get the first name if this response came from the /me path */
+		public String email() {
+			return find("email", PATH_ME).asText();
+		}
+		
 	} //end response class
 	
 	/**
