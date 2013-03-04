@@ -44,7 +44,7 @@ public class FbAuthAction extends Action.Simple {
 
 	/** Implements the action */
 	@Override
-	public Result call(Context ctx) throws Throwable {
+	public Result call(final Context ctx) throws Throwable {
 		Logger.debug("Calling into " + this.getClass().getName());
 		
 		//get the session object
@@ -66,23 +66,22 @@ public class FbAuthAction extends Action.Simple {
 		if (!SessionModel.Validator.hasValidUserReference(session)) {
 			Logger.debug("Session needs a user reference. Fetching Facebook ID and looking up user object");
 			
-			//get the user's Facebook ID from the Facebook API
-			//TODO make sure this works
-			fbApi.me().map(new Function<FbJsonResponse, String>() {
+			//start by getting the user's Facebook ID from the Facebook API
+			return async(fbApi.me().map(new Function<FbJsonResponse, Result>() {
 
 				@Override
-				public String apply(FbJsonResponse fbJson) throws Throwable {
-					// TODO Auto-generated method stub
+				public Result apply(FbJsonResponse fbJson) throws Throwable {
+					//TODO handle error
 					String fbId = fbJson.fbId();
-					return fbId;
+					
+					//TODO get the user ID associated with this Facebook ID, or create one
+					
+					//TODO add this user ID to the session object
+					
+					return delegate.call(ctx);
 				}
 				
-			});
-			
-			//TODO get the user ID associated with this Facebook ID, or create one
-			
-			//TODO add this user ID to the session object
-			
+			}));
 		}
 		
 		//all checks passed, pass control to the delegate action

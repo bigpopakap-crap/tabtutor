@@ -1,5 +1,8 @@
 package api;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.JsonNodeFactory;
 
@@ -8,6 +11,8 @@ import play.libs.F.Promise;
 import play.libs.WS;
 import play.libs.WS.Response;
 import play.libs.WS.WSRequestHolder;
+
+import common.QueryParamsUtil;
 
 /**
  * This class implements interactions with the Facebook REST API
@@ -122,8 +127,7 @@ public class FbApi {
 		
 		/** Returns true if this response represents an error */
 		public boolean isError() {
-			//TODO make sure this returns false on non-errors
-			return json.findPath("error") != null;
+			return !json.path("error").isMissingNode();
 		}
 		
 		/** Gets the error code. Throws an exception if this is called and it
@@ -150,7 +154,7 @@ public class FbApi {
 				return JsonNodeFactory.instance.nullNode();
 			}
 			else {
-				return json.findPath(jsonPath);
+				return json.path(jsonPath);
 			}
 		}
 		
@@ -170,23 +174,35 @@ public class FbApi {
 	 * @param params the parameters to pass. This string cannot start with an ampersand and cannot
 	 * 			start with a question mark
 	 */
-	private Promise<FbJsonResponse> queryApi(final boolean usePost, final String path, String inParams) {
+	private Promise<FbJsonResponse> queryApi(final boolean usePost, final String path, Map<String, String> params) {
 		//generate the path and params
 		String url = GRAPH_API_DOMAIN + path;
-		final String params = "method=" + (usePost ? "POST" : "GET") +
-				 "&access_token=" + getToken() +
-				 ((inParams != null && !inParams.isEmpty()) ? "&" + inParams : "");
+		
+		//generate the parameter map
+		if (params == null) params = new HashMap<String, String>();
+		params.put("method", usePost ? "POST" : "GET");
+		params.put("access_token", getToken());
+		final String paramStr = QueryParamsUtil.mapToQueryString(params);
 		
 		//generate the request promise depending on whether we're using POST or GET
-		WSRequestHolder reqHolder = usePost ? WS.url(url) : WS.url(url + "?" + params);
-		Promise<Response> promise = usePost ? reqHolder.post(params) : reqHolder.get();
+		WSRequestHolder reqHolder = WS.url(url);
+		Promise<Response> promise;
+		if (usePost) {
+			promise = reqHolder.post(paramStr);
+		}
+		else {
+			for (String key : params.keySet()) {
+				reqHolder.setQueryParameter(key, params.get(key));
+			}
+			promise = reqHolder.get();
+		}
 		
 		//convert the promise to one for a wrapped JSON result
 		return promise.map(new Function<Response, FbJsonResponse>() {
 
 			@Override
 			public FbJsonResponse apply(Response resp) throws Throwable {
-				return new FbJsonResponse(getToken(), usePost, path, params, resp.asJson());
+				return new FbJsonResponse(getToken(), usePost, path, paramStr, resp.asJson());
 			}
 			
 		});
