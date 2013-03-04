@@ -2,7 +2,12 @@ package common;
 
 import java.util.TimeZone;
 
+import models.SessionModel;
+import models.UserModel;
+import play.Logger;
 import play.Play;
+import play.mvc.Http.Context;
+import api.FbApi;
 
 /**
  * This class holds system environment information (the app context), which includes
@@ -133,6 +138,7 @@ public abstract class AppCtx {
 	public static enum Mode {
 		DEVELOPMENT, STAGING, PRODUCTION;
 		
+		/** The current mode of the app */
 		private static final Mode WTF_MODE = Mode.valueOf(System.getenv("WTF_MODE"));
 		
 		/** Gets the current mode in which the app is running */
@@ -157,7 +163,70 @@ public abstract class AppCtx {
 		
 		/** An extra method to determine whether the app is currently running tests */
 		public static synchronized boolean isRunningTests() {
+			//TODO need to test this to make sure it's doing what it's supposed to
 			return Play.isTest();
+		}
+		
+	}
+	
+	/**
+	 * This class holds methods to query the current session for important objects,
+	 * like the session model itself or the FbApi object
+	 * 
+	 * @author bigpopakap@gmail.com
+	 * @since 2013-03-02
+	 *
+	 */
+	public static class Session {
+		
+		/** Get the session model object for the current session */
+		public static SessionModel get() {
+			SessionModel session = (SessionModel) Context.current().args.get(SessionModel.SESSION_OBJ_CONTEXT_KEY);
+			if (session == null) {
+				//load the session into the context
+				String sessionId = Context.current().session().get(SessionModel.SESSION_ID_COOKIE_KEY);
+				if (sessionId != null) {
+					session = SessionModel.Selector.getById(sessionId);
+					Context.current().args.put(SessionModel.SESSION_OBJ_CONTEXT_KEY, session);
+				}
+			}
+			return session;
+		}
+		
+		/** Get the current logged-in user */
+		public static UserModel user() {
+			UserModel user = (UserModel) Context.current().args.get(UserModel.USER_OBJ_CONTEXT_KEY);
+			if (user == null) {
+				SessionModel session = get();
+				if (session != null && SessionModel.Validator.hasValidUserPk(session)) {
+					user = SessionModel.Selector.getUser(session);
+					Context.current().args.put(UserModel.USER_OBJ_CONTEXT_KEY, user);
+				}
+			}
+			return user;
+		}
+		
+		/** Get the FbApi object for the the current session */
+		public static FbApi fbApi() {
+			FbApi fbApi = (FbApi) Context.current().args.get(FbApi.FBAPI_OBJ_CONTEXT_KEY);
+			if (fbApi == null) {
+				//load the fb api into the context
+				SessionModel session = get();
+				if (session != null && SessionModel.Validator.hasValidFbAuthInfo(session)) {
+					fbApi = new FbApi(session.GETTER.fbToken());
+					Context.current().args.put(FbApi.FBAPI_OBJ_CONTEXT_KEY, fbApi);
+				}
+			}
+			return fbApi;
+		}
+		
+		/** Refreshes the context to make sure the values are current */
+		public static void refresh() {
+			//just delete them from the context, and they will be loaded next time
+			Context.current().args.put(SessionModel.SESSION_OBJ_CONTEXT_KEY, null);
+			Context.current().args.put(UserModel.USER_OBJ_CONTEXT_KEY, null);
+			Context.current().args.put(FbApi.FBAPI_OBJ_CONTEXT_KEY, null);
+			Logger.debug(Session.class + " refreshed");
 		}
 		
 	}

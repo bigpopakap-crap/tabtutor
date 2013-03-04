@@ -10,7 +10,4 @@ package common;
  */
 public abstract class Globals {
 	
-	/** The key to use in the cookie for the session ID */
-	public static final String SESSION_ID_COOKIE_KEY = "wtfspk";
-	
 }

@@ -4,12 +4,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import models.SessionModel;
+import models.UserModel;
 import play.libs.F.Function;
 import play.libs.WS;
 import play.mvc.Result;
 
 import common.AppCtx;
-import common.Globals;
 import common.EscapingUtil;
 import common.EscapingUtil.Escaper;
 
@@ -26,13 +26,10 @@ import common.EscapingUtil.Escaper;
  */
 public class FbAuthWebController extends BaseWebController {
 	
-	//TODO test the registration/login flow
 	//TODO add a redirectUrl parameter so that a user gets back to whatever page they were viewing
 	//TODO use a pop-up instead of redirecting the whole browser to Facebook
 	//TODO add CSRF protection
 	//TODO handle the case that they did not authorize the app
-	
-	//TODO move as much logic to an Action class as possible
 	//TODO handle the case that the user deauthorizes the app
 	
 	private static final Pattern FB_TOKEN_PATTERN = Pattern.compile("^access_token=(.+)&");
@@ -50,12 +47,10 @@ public class FbAuthWebController extends BaseWebController {
 			String redirectUrl = "https://www.facebook.com/dialog/oauth" +
 								"?client_id=" + AppCtx.Var.FB_APP_ID.val() +
 								"&redirect_uri=" + getFbloginUrlEncoded() +
-								"&state=" + ""; //TODO csrf generate
+								"&scope=email";
 			return redirect(redirectUrl);
 		}
 		else {
-			//TODO csrf validate
-			
 			final String tokenUrl = "https://graph.facebook.com/oauth/access_token";
 			final String tokenParams = "client_id=" + AppCtx.Var.FB_APP_ID.val() +
 								"&redirect_uri=" + getFbloginUrlEncoded() +
@@ -71,8 +66,12 @@ public class FbAuthWebController extends BaseWebController {
 							int tokenExpiry = parseTokenExpiry(resp);
 							
 							//add this information to the session
-							SessionModel session = SessionModel.Selector.getById(session(Globals.SESSION_ID_COOKIE_KEY));
+							SessionModel session = AppCtx.Session.get();
 							SessionModel.Updater.setFbAuthInfoAndUpdate(session, token, tokenExpiry);
+							
+							//if there is an associated user, update the login time
+							UserModel user = AppCtx.Session.user();
+							UserModel.Updater.setLoginTimeAndUpdate(user);
 							
 							//don't get the associated user, that will be taken care of in SecuredActions
 							//redirect to the given redirect url, or to the landing page
