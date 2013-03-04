@@ -7,11 +7,13 @@ import java.lang.annotation.Target;
 
 import models.SessionModel;
 import play.Logger;
+import play.libs.F.Function;
 import play.mvc.Action;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import play.mvc.With;
 import api.FbApi;
+import api.FbApi.FbJsonResponse;
 
 import common.AppCtx;
 
@@ -66,8 +68,16 @@ public class FbAuthAction extends Action.Simple {
 			
 			//get the user's Facebook ID from the Facebook API
 			//TODO make sure this works
-			String fbId = fbApi.me().get().fbId();
-			fbId = fbId + fbId; //TODO remove
+			fbApi.me().map(new Function<FbJsonResponse, String>() {
+
+				@Override
+				public String apply(FbJsonResponse fbJson) throws Throwable {
+					// TODO Auto-generated method stub
+					String fbId = fbJson.fbId();
+					return fbId;
+				}
+				
+			});
 			
 			//TODO get the user ID associated with this Facebook ID, or create one
 			

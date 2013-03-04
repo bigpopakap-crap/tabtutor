@@ -2,6 +2,7 @@ package controllers;
 
 import play.mvc.Controller;
 import play.mvc.Result;
+import actions.FbAuthAction.FbAuthed;
 import actions.SessionAction.Sessioned;
 
 
@@ -17,6 +18,7 @@ import actions.SessionAction.Sessioned;
 public class BaseWebController extends Controller {
 	
 	/** Show the landing page */
+	@FbAuthed //TODO remove this. this is only here to test that Action
 	public static Result landing() {
 		return ok(views.html.landing.render());
 	}
