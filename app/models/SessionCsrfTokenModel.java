@@ -39,6 +39,16 @@ public class SessionCsrfTokenModel extends BaseModel {
 	
 	public static class Factory extends BaseFactory {}
 	
+	public class Getter extends BaseGetter {
+		
+		public UUID sessionPk() { return UUID.fromString(sessionPk.toString()); } //defensive copy
+		public UUID csrfToken() { return UUID.fromString(csrfToken.toString()); } //defensive copy
+		public Date createTime() { return (Date) createTime.clone(); } //defensive copy
+		public Date expireTime() { return (Date) expireTime.clone(); } //defensive copy
+		public boolean isExpired() { return isExpired; }
+		
+	}
+	
 	public static class Selector extends BaseSelector {}
 	
 	public static class Updater extends BaseUpdater {}
