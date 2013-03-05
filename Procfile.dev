@@ -1,1 +1,1 @@
-web: play debug "run $WTF_HTTP_PORT"
+web: play "run $WTF_HTTP_PORT"

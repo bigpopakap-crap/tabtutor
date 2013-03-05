@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import base.BaseFuncTest;
 
-import common.AppCtx;
+import common.AppContext;
 import common.DbTypesUtil;
 
 /**
@@ -25,20 +25,20 @@ public class TimezoneTest extends BaseFuncTest {
 	
 	/** Tests that the environment Timezone code is valid */
 	@Test
-	public void testAppCtxTimezoneCode() {
-		String tzCode = AppCtx.Var.SYSTEM_TIMEZONE_CODE.val();
+	public void testAppContextTimezoneCode() {
+		String tzCode = AppContext.Var.SYSTEM_TIMEZONE_CODE.val();
 		Assert.assertNotNull(tzCode);
 		
 		List<String> availableIds = Arrays.asList(TimeZone.getAvailableIDs());
 		Assert.assertTrue(availableIds.contains(tzCode));
 	}
 	
-	/** Tests that the timezone returned has the same ID as returned by AppCtx */
+	/** Tests that the timezone returned has the same ID as returned by AppContext */
 	@Test
-	public void testAppCtxTimezoneMatches() {
-		TimeZone tz = AppCtx.Var.SYSTEM_TIMEZONE_CODE.valAsTimezone();
+	public void testAppContextTimezoneMatches() {
+		TimeZone tz = AppContext.Var.SYSTEM_TIMEZONE_CODE.valAsTimezone();
 		Assert.assertNotNull(tz);
-		Assert.assertTrue(tz.getID().equals(AppCtx.Var.SYSTEM_TIMEZONE_CODE));
+		Assert.assertTrue(tz.getID().equals(AppContext.Var.SYSTEM_TIMEZONE_CODE));
 	}
 	
 	/** Tests that the server time is returned in the environment timezone */
@@ -46,7 +46,7 @@ public class TimezoneTest extends BaseFuncTest {
 	public void testServerTimezone() {
 		Date date1 = new Date();
 		Date date2 = DbTypesUtil.now();
-		TimeZone tz = AppCtx.Var.SYSTEM_TIMEZONE_CODE.valAsTimezone();
+		TimeZone tz = AppContext.Var.SYSTEM_TIMEZONE_CODE.valAsTimezone();
 		//TODO complete this. make sure both dates are in the correct timezone
 	}
 	

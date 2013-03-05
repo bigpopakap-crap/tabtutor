@@ -10,7 +10,7 @@ import org.junit.Assert;
 
 import base.BaseFuncTest;
 
-import common.AppCtx;
+import common.AppContext;
 
 /**
  * This class is a base class for tests that make sure links are not broken
@@ -20,8 +20,6 @@ import common.AppCtx;
  *
  */
 public class BaseBrokenLinkTest extends BaseFuncTest {
-	
-	//TODO write a test class to test <script> and <link> tags as well
 	
 	/**
 	 * A class that can be overridden and passed in to implement the details of a test run
@@ -46,7 +44,7 @@ public class BaseBrokenLinkTest extends BaseFuncTest {
 		
 		/** Get all the urls on the page that should be tested */
 		public List<String> locate() {
-			//TODO get all <a href=""> strings on the page
+			//TODO get all <a href="">, <script src=""> or <link href=""> strings on the page
 			return new LinkedList<String>();
 		}
 		
@@ -65,7 +63,7 @@ public class BaseBrokenLinkTest extends BaseFuncTest {
 	protected void doTestLinksNotBroken(TestCaseHooks hooks) {
 		final TestCaseHooks nonNullHooks = hooks != null ? hooks : new TestCaseHooks();
 		
-		running(testServer(AppCtx.Var.HTTP_PORT.valAsInt()), new Runnable() {
+		running(testServer(AppContext.Var.HTTP_PORT.valAsInt()), new Runnable() {
 
 			@Override
 			public void run() {

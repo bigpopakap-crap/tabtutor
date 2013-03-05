@@ -1,29 +1,33 @@
 # Routing definitions
 # 
 # - page routes can be any path, except for reserved ones below
-# - /api/* is reserved for API calls. Everything should utilize these to do the actual work
 # - /internal/* is reserved for developer or admin pages
 # - /internal/devtools/* is reserved for pages that will not be available in production
 # - /internal/admin/* is reserved for pages that will be available, even in production
+# - /internal/test/* is reserver for pages that will only be accessible by tests
+# - /api/* is reserved for API calls. Everything should utilize these to do the actual work
 # - /public/* is reserved for static files and resources
 #
 
-# ---------------- BEGIN PAGE ROUTING -------------------------------- #
+# ---------------- BEGIN PAGE ROUTING --------------------------------- #
 # Landing page
 GET     /                           controllers.BaseWebController.landing()
 
 # Facebook login entry point
 GET		/fblogin					controllers.FbAuthWebController.fblogin(code ?= null, state ?= null)
 
-# ---------------- BEGIN INTERNAL/DEVTOOLS PAGE ROUTING -------------- #
+# ---------------- BEGIN /INTERNAL/DEVTOOLS PAGE ROUTING -------------- #
 # TODO these will be implemented as and when we find a need
 
-# ---------------- BEGIN INTERNAL/ADMIN PAGE ROUTING ----------------- #
+# ---------------- BEGIN /INTERNAL/ADMIN PAGE ROUTING ----------------- #
 # TODO these will be implemented as and when we find a need
 
-# ---------------- BEGIN API ROUTING --------------------------------- #
+# ---------------- BEGIN /INTERNAL/TEST PAGE ROUTING ------------------ #
+# TODO these will be implemented as and when we fine a need
+
+# ---------------- BEGIN /API ROUTING --------------------------------- #
 # TODO this will be implemented later
 
-# ---------------- BEGIN STATIC FILE ROUTING ------------------------- #
+# ---------------- BEGIN STATIC FILE ROUTING -------------------------- #
 GET		/favicon.ico				controllers.Assets.at(path="/public", file="images/favicon.png")
 GET     /public/*file               controllers.Assets.at(path="/public", file)

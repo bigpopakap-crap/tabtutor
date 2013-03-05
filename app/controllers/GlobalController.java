@@ -11,7 +11,7 @@ import play.mvc.Http.Request;
 import play.mvc.Http.RequestHeader;
 import play.mvc.Result;
 
-import common.AppCtx;
+import common.AppContext;
 
 /**
  * This the global controller, that implements hooks in the app's lifecycle
@@ -25,16 +25,16 @@ public class GlobalController extends GlobalSettings {
 	@Override
 	public void onStart(Application app) {
 		//set the system timezone
-		TimeZone tz = AppCtx.Var.SYSTEM_TIMEZONE_CODE.valAsTimezone();
+		TimeZone tz = AppContext.Var.SYSTEM_TIMEZONE_CODE.valAsTimezone();
 		TimeZone.setDefault(tz); //server
 		//TODO set the database timezone as well, and indicate that is was set in the log line below
 		Logger.info("Set system timezone to " + tz.getID() + ": " + tz);
 		
 		//print environment vars and environment context
-		for (AppCtx.Var envVar : AppCtx.Var.values()) {
-			Logger.info("Environment variable: " + envVar.name() + ":" + envVar.key() + " -> " + envVar.val());
+		for (AppContext.Var envVar : AppContext.Var.values()) {
+			Logger.info("Environment variable: " + envVar.name() + " (" + envVar.key() + ") -> " + envVar.val());
 		}
-		Logger.info("App context: " + AppCtx.Mode.get());
+		Logger.info("App context: " + AppContext.Mode.get());
 		
 		Logger.info("App is starting");
 		super.onStart(app);
@@ -48,46 +48,24 @@ public class GlobalController extends GlobalSettings {
 	
 	@Override
 	public Result onError(RequestHeader req, Throwable t) {
-		//TODO add session information to log line
 		Logger.error("Error handling " + req + ": " + t + " (IP: " + req.remoteAddress() + ")");
-		
-		//if in production mode, show some error page
-		if (AppCtx.Mode.isProduction()) {
-			//TODO
-		}
-		
 		return super.onError(req, t);
 	}
 	
 	@Override
 	public Result onHandlerNotFound(RequestHeader req) {
-		//TODO add session information to log line
 		Logger.warn("Handler not found " + req + " (IP: " + req.remoteAddress() + ")");
-		
-		//if in production mode, show some error page
-		if (AppCtx.Mode.isProduction()) {
-			//TODO
-		}
-		
 		return super.onHandlerNotFound(req);
 	}
 	
 	@Override
 	public Result onBadRequest(RequestHeader req, String err) {
-		//TODO add session information to log line
 		Logger.warn("Bad request " + req + " (IP: " + req.remoteAddress() + ")");
-		
-		//if in production mode, show some error page
-		if (AppCtx.Mode.isProduction()) {
-			//TODO
-		}
-		
 		return super.onBadRequest(req, err);
 	}
 	
 	@Override
 	public Action<?> onRequest(Request req, Method method) {
-		//TODO add session information to log line
 		Logger.info("Handling " + req + " (IP: " + req.remoteAddress() + ")");
 		return super.onRequest(req, method);
 	}

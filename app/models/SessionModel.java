@@ -13,6 +13,7 @@ import play.Logger;
 
 import com.avaje.ebean.annotation.Formula;
 import common.DbTypesUtil;
+import common.SessionContext;
 
 /**
  * This Ebean maps to the Session table, and represents the active sessions
@@ -27,6 +28,12 @@ public class SessionModel extends BaseModel {
 	
 	//TODO figure out how to clean up old sessions
 	
+	/** The key to use in the cookie for the session ID */
+	public static final String SESSION_ID_COOKIE_KEY = "wtfspk";
+	
+	/** The key to use to store the session model object in the session context */
+	public static final String SESSION_OBJ_CONTEXT_KEY = "sessionObjectContextKey";
+	
 	private static final long serialVersionUID = -6111608082703517322L;
 	
 	@Column(name = "pk") @Id public UUID pk;
@@ -36,6 +43,14 @@ public class SessionModel extends BaseModel {
 	@Transient @Formula(select = "NOW() > fbTokenExpireTime") public boolean isFbtokenExpired;
 	@Column(name = "startTime") public Date startTime;
 	@Column(name = "lastAccessTime") public Date lastAccessTime;
+	
+	@Override
+	protected void postOp(DmlOpType opType) {
+		//refresh the app context
+		//TODO add caching here
+		super.postOp(opType);
+		SessionContext.refresh();
+	}
 	
 	/** Private helper for DB interaction implementation */
 	private static final Finder<UUID, SessionModel> FINDER = new Finder<UUID, SessionModel>(
@@ -77,16 +92,43 @@ public class SessionModel extends BaseModel {
 
 	}
 	
+	public class Getter extends BaseGetter {
+		
+		public UUID pk() { return UUID.fromString(pk.toString()); } //defensive copy
+		public String pk_String() { return pk().toString(); }
+		public UUID userPk() { return UUID.fromString(userPk.toString()); }
+		public String fbToken() { return fbToken; }
+		public Date fbTokenExpireTime() { return (Date) fbTokenExpireTime.clone(); } //defensive copy
+		public boolean isFbtokenExpired() { return isFbtokenExpired; }
+		public Date startTime() { return (Date) startTime.clone(); } //defensive copy
+		public Date lastAccessTime() { return (Date) lastAccessTime.clone(); } //defensive copy
+		
+	}
+	public Getter GETTER = new Getter();
+	
 	public static class Selector extends BaseSelector {
 		
+		/** Gets a Session by ID, converts the string to a UUID internally */
 		public static SessionModel getById(String id) {
-			//TODO do null checking, invalid id checking, etc
-			return getById(UUID.fromString(id));
+			try {
+				return getById(UUID.fromString(id));
+			}
+			catch (IllegalArgumentException ex) {
+				//the string was not a valid UUID
+				return null;
+			}
 		}
 		
+		/** Gets a Session by ID */
 		public static SessionModel getById(UUID id) {
-			//TODO do null checking, etc
-			return FINDER.byId(id);
+			return id != null ? FINDER.byId(id) : null;
+		}
+		
+		/** Gets the user associated with this session, or null if no user has been associated yet */
+		public static UserModel getUser(SessionModel session) {
+			return session != null && Validator.hasValidUserPk(session)
+						? UserModel.Selector.getById(session.userPk)
+						: null;
 		}
 		
 	}
@@ -100,10 +142,27 @@ public class SessionModel extends BaseModel {
 		 * @param seconds number of seconds until the token expires
 		 */
 		public static void setFbAuthInfoAndUpdate(SessionModel session, String token, int seconds) {
+			if (session == null) {
+				Logger.debug("setFbAuthInfoAndUpdate called on null session");
+				return;
+			}
+			
 			session.fbToken = token;
 			session.fbTokenExpireTime = DbTypesUtil.add(DbTypesUtil.now(), seconds);
 			session._update();
-			Logger.debug("Session " + session.pk + " updated with Facebook auth info");
+			Logger.debug("Session " + session.pk + " updated with Facebook token " + session.fbToken);
+		}
+		
+		/** Adds the user pk to the session. Assumes that the given userPk is valid */
+		public static void setUserPkAndUpdate(SessionModel session, UUID userPk) {
+			if (session == null) {
+				Logger.debug("setUserPkAndUpdate called on null session");
+				return;
+			}
+			
+			session.userPk = userPk;
+			session._update();
+			Logger.debug("Session " + session.pk + " updated with User reference " + session.userPk);
 		}
 		
 	}
@@ -112,14 +171,7 @@ public class SessionModel extends BaseModel {
 		
 		/** Determines if the given ID is valid and it exists in the database */
 		public static boolean isValidExistingId(String id) {
-			if (id == null) return false;
-			try {
-				UUID pk = UUID.fromString(id);
-				return FINDER.byId(pk) != null;
-			}
-			catch (IllegalArgumentException ex) {
-				return false;
-			}
+			return Selector.getById(id) != null;
 		}
 		
 		/**
@@ -141,14 +193,14 @@ public class SessionModel extends BaseModel {
 		 * @param session the session to check
 		 * @return true if the session has a reference to a user
 		 */
-		public static boolean hasValidUserReference(SessionModel session) {
+		public static boolean hasValidUserPk(SessionModel session) {
 			if (session == null) {
 				//this is a weird case, but forcing auth may solve it
 				Logger.warn("Null passed to hasValidUserReference method");
 				return true;
 			}
 			else {
-				return session.userPk != null;
+				return session.userPk != null && UserModel.Validator.isValidExistingId(session.userPk);
 			}
 		}
 		

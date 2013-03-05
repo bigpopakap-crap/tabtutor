@@ -18,6 +18,9 @@ import play.db.ebean.Model;
 @MappedSuperclass
 public abstract class BaseModel extends Model {
 	
+	//TODO static analysis test that nobody calls Ebean.save(), update(), etc. directly
+	//TODO static analysis test that nobody reads or modifies columns in a model directly
+	
 	/**
 	 * This class should be extended by the implementing model class, providing all
 	 * methods to create objects
@@ -26,6 +29,27 @@ public abstract class BaseModel extends Model {
 	 * @since 2013-02-26
 	 */
 	protected static abstract class BaseFactory {}
+	
+	/**
+	 * This class should be extended by the implementing model class, providing all
+	 * methods to access fields of an object
+	 * 
+	 * Fields should be declared private and only accessible through methods in this class
+	 * This is done to prevent outside classes from modifying model objects
+	 * 
+	 * Classes should be careful to make defensive copies of returned objects. Except for other
+	 * BaseModel objects, which are not immutable, but have limited interaction with outside classes
+	 * 
+	 * Note that Play generates getters and setters at runtime for classes to conform to the
+	 * JavaBean structure that is expected by frameworks like the Ebean ORM. This is ok because
+	 * our code cannot reference these methods. So using this getter class is still an effective
+	 * way to limit outside access
+	 * 
+	 * @author bigpopakap@gmail.com
+	 * @since 2013-03-02
+	 *
+	 */
+	protected abstract class BaseGetter {}
 	
 	/**
 	 * This class should be extended by the implementing model class, providing all
@@ -54,6 +78,26 @@ public abstract class BaseModel extends Model {
 	 */
 	protected static abstract class BaseValidator {}
 	
+	/* ******************************************
+	 *  HOOKS FOR DML OPERATIONS
+	 ****************************************** */
+	
+	/**
+	 * Enum for types of SQL operations
+	 * 
+	 * @author bigpopakap@gmail.com
+	 * @since 2013-03-02
+	 *
+	 */
+	protected static enum DmlOpType {
+		INSERT, UPDATE, DELETE
+	}
+	
+	/** Called after any save() or update() */
+	protected void postOp(DmlOpType opType) {
+		//do nothing. models can override this if they want to do something
+	}
+	
 	
 	/* ***********************************************************************
 	 *  BEGIN INVALIDATION OF DIRECT METHODS
@@ -66,46 +110,70 @@ public abstract class BaseModel extends Model {
 	
 	@Override
 	public void save() { throw new UnsupportedOperationException(BLOCKED_REASON); }
-	protected void _save() { super.save(); }
+	protected void _save() {
+		super.save();
+		postOp(DmlOpType.INSERT);
+	}
 	
 	@Override
 	public void save(String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
-	protected void _save(String str) { super.save(str); }
+	protected void _save(String str) {
+		super.save(str);
+		postOp(DmlOpType.INSERT);
+	}
 	
 	@Override
 	public void saveManyToManyAssociations(String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
-	protected void _saveManyToManyAssociations(String str) { super.saveManyToManyAssociations(str); }
+	protected void _saveManyToManyAssociations(String str) { throw new UnsupportedOperationException(); }
 	
 	@Override
 	public void saveManyToManyAssociations(String str1, String str2) { throw new UnsupportedOperationException(BLOCKED_REASON); }
-	protected void _saveManyToManyAssociations(String str1, String str2) { super.saveManyToManyAssociations(str1, str2); }
+	protected void _saveManyToManyAssociations(String str1, String str2) { throw new UnsupportedOperationException(); }
 	
 	@Override
 	public void update() { throw new UnsupportedOperationException(BLOCKED_REASON); }
-	protected void _update() { super.update(); }
+	protected void _update() {
+		super.update();
+		postOp(DmlOpType.UPDATE);
+	}
 	
 	@Override
 	public void update(Object obj) { throw new UnsupportedOperationException(BLOCKED_REASON); }
-	protected void _update(Object obj) { super.update(obj); }
+	protected void _update(Object obj) {
+		super.update(obj);
+		postOp(DmlOpType.UPDATE);
+	}
 	
 	@Override
 	public void update(Object obj, String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
-	protected void _update(Object obj, String str) { super.update(obj, str); }
+	protected void _update(Object obj, String str) {
+		super.update(obj, str);
+		postOp(DmlOpType.UPDATE);
+	}
 	
 	@Override
 	public void update(String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
-	protected void _update(String str) { super.update(str); }
+	protected void _update(String str) {
+		super.update(str);
+		postOp(DmlOpType.UPDATE);
+	}
 	
 	@Override
 	public void delete() { throw new UnsupportedOperationException(BLOCKED_REASON); }
-	protected void _delete() { super.delete(); }
+	protected void _delete() {
+		super.delete();
+		postOp(DmlOpType.DELETE);
+	}
 	
 	@Override
 	public void delete(String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
-	protected void _delete(String str) { super.delete(str); }
+	protected void _delete(String str) {
+		super.delete(str);
+		postOp(DmlOpType.DELETE);
+	}
 	
 	@Override
 	public void deleteManyToManyAssociations(String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
-	protected void _deleteManyToManyAssociations(String str) { super.deleteManyToManyAssociations(str); }
+	protected void _deleteManyToManyAssociations(String str) { throw new UnsupportedOperationException(); }
 
 }

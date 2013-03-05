@@ -15,7 +15,7 @@ import play.Play;
  * @since 2013-02-16
  *
  */
-public abstract class AppCtx {
+public abstract class AppContext {
 
 	/**
 	 * This enum holds all config/environment vars that the app should access
@@ -25,8 +25,6 @@ public abstract class AppCtx {
 	 *
 	 */
 	public static enum Var {
-		
-		//TODO figure out how to make the extra methods on each enum accessible from outside
 		
 		APP_TITLE("WTF_APP_TITLE"),
 		SYSTEM_TIMEZONE_CODE("WTF_SYSTEM_TIMEZONE_CODE") {
@@ -135,6 +133,7 @@ public abstract class AppCtx {
 	public static enum Mode {
 		DEVELOPMENT, STAGING, PRODUCTION;
 		
+		/** The current mode of the app */
 		private static final Mode WTF_MODE = Mode.valueOf(System.getenv("WTF_MODE"));
 		
 		/** Gets the current mode in which the app is running */
@@ -159,9 +158,10 @@ public abstract class AppCtx {
 		
 		/** An extra method to determine whether the app is currently running tests */
 		public static synchronized boolean isRunningTests() {
+			//TODO need to test this to make sure it's doing what it's supposed to
 			return Play.isTest();
 		}
 		
 	}
-
+	
 }
