@@ -12,9 +12,8 @@ import javax.persistence.Transient;
 import play.Logger;
 
 import com.avaje.ebean.annotation.Formula;
-
-import common.AppCtx;
 import common.DbTypesUtil;
+import common.SessionContext;
 
 /**
  * This Ebean maps to the Session table, and represents the active sessions
@@ -50,7 +49,7 @@ public class SessionModel extends BaseModel {
 		//refresh the app context
 		//TODO add caching here
 		super.postOp(opType);
-		AppCtx.Session.refresh();
+		SessionContext.refresh();
 	}
 	
 	/** Private helper for DB interaction implementation */

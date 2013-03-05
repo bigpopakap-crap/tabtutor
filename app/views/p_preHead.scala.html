@@ -1,15 +1,14 @@
 @(subTitle: String = "", forceNoDetectLogin: Boolean = false)
-@import common.AppCtx
-@import common.AppCtx.Var
-@import common.AppCtx.Session
+@import common.AppContext
+@import common.SessionContext
 @import models.SessionModel
-<title>@(AppCtx.Var.APP_TITLE)@(subTitle)</title>
+<title>@(AppContext.Var.APP_TITLE)@(subTitle)</title>
 <script type="text/javascript" src="/public/javascripts/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="/public/javascripts/initNamespace.js"></script>
 <script type="text/javascript" src="/public/javascripts/initLogger.js"></script>
 <script type="text/javascript">
-	window.WTF.get('Logger').init(@(AppCtx.Mode.isProduction()));
+	window.WTF.get('Logger').init(@(AppContext.Mode.isProduction()));
 </script>
 @p_fbJsSdk(
-	!forceNoDetectLogin && !SessionModel.Validator.hasValidFbAuthInfo(AppCtx.Session.get())
+	!forceNoDetectLogin && !SessionModel.Validator.hasValidFbAuthInfo(SessionContext.get())
 )

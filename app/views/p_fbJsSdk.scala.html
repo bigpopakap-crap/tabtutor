@@ -1,13 +1,12 @@
 @(detectLogin: Boolean = false)
-@import common.AppCtx;
-@import common.AppCtx.Var;
+@import common.AppContext;
 @import routes.FbAuthWebController;
 <script type="text/javascript" src="http://connect.facebook.net/en_us/all.js"></script>
 <script type="text/javascript" src="/public/javascripts/initFbSdk.js"></script>
 <script type="text/javascript">
 	//initialize the SDK. the fb-root element hasn't been created, but it will be by the SDK
 	window.WTF.get('initFbSdk')(
-		'@(AppCtx.Var.FB_APP_ID)',
+		'@(AppContext.Var.FB_APP_ID)',
 		@detectLogin,
 		'@(routes.FbAuthWebController.fblogin(null, null))'
 	);

@@ -19,7 +19,7 @@ import base.BaseFuncTest;
  */
 public class FaviconTest extends BaseFuncTest {
 	
-	/** Tests that the AppCtx class has no null values */
+	/** Tests that the favicon path exists */
 	@Test
 	public void testFaviconExists() {
 		//TODO change this to something not deprecated

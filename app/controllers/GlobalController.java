@@ -11,7 +11,7 @@ import play.mvc.Http.Request;
 import play.mvc.Http.RequestHeader;
 import play.mvc.Result;
 
-import common.AppCtx;
+import common.AppContext;
 
 /**
  * This the global controller, that implements hooks in the app's lifecycle
@@ -25,16 +25,16 @@ public class GlobalController extends GlobalSettings {
 	@Override
 	public void onStart(Application app) {
 		//set the system timezone
-		TimeZone tz = AppCtx.Var.SYSTEM_TIMEZONE_CODE.valAsTimezone();
+		TimeZone tz = AppContext.Var.SYSTEM_TIMEZONE_CODE.valAsTimezone();
 		TimeZone.setDefault(tz); //server
 		//TODO set the database timezone as well, and indicate that is was set in the log line below
 		Logger.info("Set system timezone to " + tz.getID() + ": " + tz);
 		
 		//print environment vars and environment context
-		for (AppCtx.Var envVar : AppCtx.Var.values()) {
+		for (AppContext.Var envVar : AppContext.Var.values()) {
 			Logger.info("Environment variable: " + envVar.name() + " (" + envVar.key() + ") -> " + envVar.val());
 		}
-		Logger.info("App context: " + AppCtx.Mode.get());
+		Logger.info("App context: " + AppContext.Mode.get());
 		
 		Logger.info("App is starting");
 		super.onStart(app);

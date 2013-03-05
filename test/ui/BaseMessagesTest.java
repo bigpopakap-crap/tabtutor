@@ -10,7 +10,7 @@ import org.junit.Assert;
 
 import base.BaseFuncTest;
 
-import common.AppCtx;
+import common.AppContext;
 
 /**
  * Base test for ensuring that non-dynamic strings use the messages framework, and can
@@ -66,7 +66,7 @@ public abstract class BaseMessagesTest extends BaseFuncTest {
 	protected void doTestHardcodedStrings(TestCaseHooks hooks) {
 		final TestCaseHooks nonNullHooks = hooks != null ? hooks : new TestCaseHooks();
 		
-		running(testServer(AppCtx.Var.HTTP_PORT.valAsInt()), new Runnable() {
+		running(testServer(AppContext.Var.HTTP_PORT.valAsInt()), new Runnable() {
 
 			@Override
 			public void run() {

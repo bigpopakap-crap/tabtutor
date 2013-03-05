@@ -10,7 +10,7 @@ import org.junit.Assert;
 
 import base.BaseFuncTest;
 
-import common.AppCtx;
+import common.AppContext;
 
 /**
  * This class is a base class for tests that make sure links are not broken
@@ -63,7 +63,7 @@ public class BaseBrokenLinkTest extends BaseFuncTest {
 	protected void doTestLinksNotBroken(TestCaseHooks hooks) {
 		final TestCaseHooks nonNullHooks = hooks != null ? hooks : new TestCaseHooks();
 		
-		running(testServer(AppCtx.Var.HTTP_PORT.valAsInt()), new Runnable() {
+		running(testServer(AppContext.Var.HTTP_PORT.valAsInt()), new Runnable() {
 
 			@Override
 			public void run() {

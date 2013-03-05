@@ -17,8 +17,8 @@ import play.mvc.With;
  * any session-related database entries
  * 
  * This is the only class that should directly interact with the session cookie.
- * All other classes should refer directly to the AppCtx.Session object. With
- * the exception of this class, the term "session" refers to the AppCtx.Session,
+ * All other classes should refer directly to the AppContext.Session object. With
+ * the exception of this class, the term "session" refers to the AppContext.Session,
  * not the browser cookie
  * 
  * @author bigpopakap@gmail.com
@@ -44,8 +44,8 @@ public class SessionAction extends Action.Simple {
 	public Result call(Context ctx) throws Throwable {
 		Logger.debug("Calling into " + this.getClass().getName());
 		
-		//this is the same as testing that AppCtx.Session.get() is non-null, but this is a better lower-level way to go
-		//because AppCtx should not be a dependency of this session-creation flow
+		//this is the same as testing that SessionContext.get() is non-null, but this is a better lower-level way to go
+		//because SessionContext should not be a dependency of this session-creation flow
 		String sessionId = ctx.session().get(SessionModel.SESSION_ID_COOKIE_KEY);
 		if (!SessionModel.Validator.isValidExistingId(sessionId)) {
 			//there is no session ID set, so create it and add it to the cookie

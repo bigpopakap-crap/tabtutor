@@ -6,7 +6,7 @@ import static play.test.Helpers.testServer;
 import java.util.LinkedList;
 import java.util.List;
 
-import common.AppCtx;
+import common.AppContext;
 
 /**
  * Base class to execute DOS attacks on the server
@@ -42,7 +42,7 @@ public class BaseDOSAttackTest extends BaseSecurityTest {
 	public void doTestDosAttack(TestCaseHooks hooks) {
 		final TestCaseHooks nonNullHooks = hooks != null ? hooks : new TestCaseHooks();
 		
-		running(testServer(AppCtx.Var.HTTP_PORT.valAsInt()), new Runnable() {
+		running(testServer(AppContext.Var.HTTP_PORT.valAsInt()), new Runnable() {
 
 			@Override
 			public void run() {

@@ -16,7 +16,7 @@ import play.mvc.With;
 import api.FbApi;
 import api.FbApi.FbJsonResponse;
 
-import common.AppCtx;
+import common.SessionContext;
 
 import controllers.FbAuthWebController;
 
@@ -49,7 +49,7 @@ public class FbAuthAction extends Action.Simple {
 		Logger.debug("Calling into " + this.getClass().getName());
 		
 		//get the session object
-		final SessionModel session = AppCtx.Session.get();
+		final SessionModel session = SessionContext.get();
 		if (session == null) throw new IllegalStateException("Session should have been populated by now");
 		
 		//if there is no Facebook authToken associated, or it has expired start the Facebook login flow
@@ -60,7 +60,7 @@ public class FbAuthAction extends Action.Simple {
 		}
 		
 		//get the FbApi object, which must be valid by now
-		FbApi fbApi = AppCtx.Session.fbApi();
+		FbApi fbApi = SessionContext.fbApi();
 		if (fbApi == null) throw new IllegalStateException("FbApi should have been populated by now");
 
 		//ensure that a user is referenced by the session

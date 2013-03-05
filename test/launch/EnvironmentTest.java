@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import base.BaseFuncTest;
 
-import common.AppCtx;
+import common.AppContext;
 
 /**
  * Test packages for those concerning the environment/app configuration
@@ -39,33 +39,40 @@ public class EnvironmentTest extends BaseFuncTest {
 		LaunchPackageHelpers.helpTestExpectedEnvironmentVariables("WTF_APP_TITLE", "WTF_MODE", "WTF_SYSTEM_TIMEZONE_CODE");
 	}
 	
+	/** Test that the environment variables necessary for the logging levels are present */
+	@Test
 	public void testLoggerLevelEnvironmentVariables() {
-		
+		LaunchPackageHelpers.helpTestExpectedEnvironmentVariables("WTF_ROOT_LOGGER_LEVEL", "WTF_PLAY_LOGGER_LEVEL", "WTF_APP_LOGGER_LEVEL");
 	}
 	
-	/** Tests that the AppCtx class has no null values */
+	/** Tests the running tests boolean in AppContext */
 	@Test
-	public void testAppCtxVars() {
+	public void testAppContextIsRunningTests() {
 		running(fakeApplication(), new Runnable() {
 			@Override
 			public void run() {
-				//in the fake application, assert each environment var has no nulls
-				for (AppCtx.Var envVar : AppCtx.Var.values()) {
-					Assert.assertNotNull("AppCtx key has null key: " + envVar.name(), envVar.key());
-					Assert.assertNotNull("AppCtx key has null value: " + envVar.name(), envVar.val());
-				}
+				Assert.assertTrue(AppContext.Mode.isRunningTests());
 			}
 		});
 	}
 	
-	/** Tests the special methods in AppCtx.Var that are not implemented by all enum members */
+	/** Tests that the AppContext class has no null values */
 	@Test
-	public void testAppCtxVarSpecialMethods() {
+	public void testAppContextVars() {
+		for (AppContext.Var envVar : AppContext.Var.values()) {
+			Assert.assertNotNull("AppContext key has null key: " + envVar.name(), envVar.key());
+			Assert.assertNotNull("AppContext key has null value: " + envVar.name(), envVar.val());
+		}
+	}
+	
+	/** Tests the special methods in AppContext.Var that are not implemented by all enum members */
+	@Test
+	public void testAppContextVarSpecialMethods() {
 		//if any of these throws an exception, that'll make the test fail
 		//call these a few times to make sure they work each time
 		for (int i = 0; i < 3; i++) {
-			TimeZone tz = AppCtx.Var.SYSTEM_TIMEZONE_CODE.valAsTimezone();
-			int port = AppCtx.Var.HTTP_PORT.valAsInt();
+			TimeZone tz = AppContext.Var.SYSTEM_TIMEZONE_CODE.valAsTimezone();
+			int port = AppContext.Var.HTTP_PORT.valAsInt();
 			Assert.assertNotNull("Timezone object is null" , tz);
 			Assert.assertFalse("Port cannot be negative", port < 0); //this is really here just so the port variable is used
 		}
@@ -73,36 +80,31 @@ public class EnvironmentTest extends BaseFuncTest {
 	
 	/** Tests that the mode returned by AppCtx matches the boolean state-querier methods */
 	@Test
-	public void testAppCtxMode() {
-		running(fakeApplication(), new Runnable() {
-			@Override
-			public void run() {
-				//ensure that the mode is non-null
-				Assert.assertNotNull("App mode cannot be null", AppCtx.Mode.get());
-				
-				//in the fake application, assert that the context matches
-				switch (AppCtx.Mode.get()) {
-					case DEVELOPMENT:	
-						helpTestAppCtxEnvMatches(AppCtx.Mode.isDevelopment());
-						break;
-					case STAGING: 
-						helpTestAppCtxEnvMatches(AppCtx.Mode.isStaging());
-						break;
-					case PRODUCTION:
-						helpTestAppCtxEnvMatches(AppCtx.Mode.isProduction());
-						break;
-				}
-			}
-		});
+	public void testAppContextMode() {
+		//ensure that the mode is non-null
+		Assert.assertNotNull("App mode cannot be null", AppContext.Mode.get());
+		
+		//in the fake application, assert that the context matches
+		switch (AppContext.Mode.get()) {
+			case DEVELOPMENT:	
+				helpTestAppContextEnvMatches(AppContext.Mode.isDevelopment());
+				break;
+			case STAGING: 
+				helpTestAppContextEnvMatches(AppContext.Mode.isStaging());
+				break;
+			case PRODUCTION:
+				helpTestAppContextEnvMatches(AppContext.Mode.isProduction());
+				break;
+		}
 	}
 	
-	private void helpTestAppCtxEnvMatches(boolean shouldBeTrue) {
-		Assert.assertTrue("App mode is " + AppCtx.Mode.get() + " but boolean doesn't match", shouldBeTrue);
+	private void helpTestAppContextEnvMatches(boolean shouldBeTrue) {
+		Assert.assertTrue("App mode is " + AppContext.Mode.get() + " but boolean doesn't match", shouldBeTrue);
 	}
 	
 	//TODO write a static analysis test to make sure nobody references the Play class directly
 	//TODO write a static analysis test to make sure nobody references System.getenv(..) directly
-	//TODO write a static analysis test to make sure nobody uses private AppCtx.Vars in the UI
+	//TODO write a static analysis test to make sure nobody uses private AppContext.Vars in the UI
 	//TODO write a static analysis test to make sure nobody is using System.out.println directly, but instead Logger
 	
 }
