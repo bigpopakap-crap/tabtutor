@@ -7,11 +7,11 @@ import models.UserModel;
 import play.libs.F.Function;
 import play.libs.WS;
 import play.mvc.Result;
+import utils.EscapingUtil;
+import utils.EscapingUtil.Escaper;
+import utils.QueryParamsUtil;
 
 import common.AppContext;
-import common.EscapingUtil;
-import common.EscapingUtil.Escaper;
-import common.QueryParamsUtil;
 import common.SessionContext;
 
 /**

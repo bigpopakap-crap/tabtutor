@@ -1,4 +1,4 @@
-package common;
+package types;
 
 /**
  * This interface holds two enums of SQL commands, one for modifying commands

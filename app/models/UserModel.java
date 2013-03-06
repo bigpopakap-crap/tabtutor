@@ -10,9 +10,9 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import play.Logger;
+import utils.DbTypesUtil;
 
 import com.avaje.ebean.annotation.Formula;
-import common.DbTypesUtil;
 
 /**
 * This Ebean maps to the User table, and represents user metadata

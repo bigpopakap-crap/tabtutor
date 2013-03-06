@@ -8,10 +8,10 @@ import java.util.TimeZone;
 import org.junit.Assert;
 import org.junit.Test;
 
+import utils.DbTypesUtil;
 import base.BaseFuncTest;
 
 import common.AppContext;
-import common.DbTypesUtil;
 
 /**
  * Tests for app timing (time zones, converting to a user's timezone, making sure the database

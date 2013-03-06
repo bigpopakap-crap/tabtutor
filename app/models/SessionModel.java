@@ -10,11 +10,11 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import play.Logger;
+import types.SqlCommandType.BasicDmlModifyingType;
+import utils.DbTypesUtil;
 
 import com.avaje.ebean.annotation.Formula;
-import common.DbTypesUtil;
 import common.SessionContext;
-import common.SqlCommandType.BasicDmlModifyingType;
 
 /**
  * This Ebean maps to the Session table, and represents the active sessions

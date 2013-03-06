@@ -2,9 +2,8 @@ package models;
 
 import javax.persistence.MappedSuperclass;
 
-import common.SqlCommandType.BasicDmlModifyingType;
-
 import play.db.ebean.Model;
+import types.SqlCommandType.BasicDmlModifyingType;
 
 /**
  * Base class for all models. All models should extend this class

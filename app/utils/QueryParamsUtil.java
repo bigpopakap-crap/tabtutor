@@ -1,10 +1,10 @@
-package common;
+package utils;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-import common.EscapingUtil.Escaper;
+import utils.EscapingUtil.Escaper;
 
 /**
  * Utility methods for dealing with query strings
