@@ -14,6 +14,7 @@ import play.Logger;
 import com.avaje.ebean.annotation.Formula;
 import common.DbTypesUtil;
 import common.SessionContext;
+import common.SqlCommandType.BasicDmlModifyingType;
 
 /**
  * This Ebean maps to the Session table, and represents the active sessions
@@ -45,7 +46,7 @@ public class SessionModel extends BaseModel {
 	@Column(name = "lastAccessTime") public Date lastAccessTime;
 	
 	@Override
-	protected void postOp(DmlOpType opType) {
+	protected void postOp(BasicDmlModifyingType opType) {
 		//refresh the app context
 		//TODO add caching here
 		super.postOp(opType);
