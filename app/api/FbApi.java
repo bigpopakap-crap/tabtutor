@@ -11,8 +11,7 @@ import play.libs.F.Promise;
 import play.libs.WS;
 import play.libs.WS.Response;
 import play.libs.WS.WSRequestHolder;
-
-import common.QueryParamsUtil;
+import utils.QueryParamsUtil;
 
 /**
  * This class implements interactions with the Facebook REST API

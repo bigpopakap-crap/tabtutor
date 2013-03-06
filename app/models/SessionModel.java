@@ -10,9 +10,10 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import play.Logger;
+import types.SqlCommandType.BasicDmlModifyingType;
+import utils.DbTypesUtil;
 
 import com.avaje.ebean.annotation.Formula;
-import common.DbTypesUtil;
 import common.SessionContext;
 
 /**
@@ -45,7 +46,7 @@ public class SessionModel extends BaseModel {
 	@Column(name = "lastAccessTime") public Date lastAccessTime;
 	
 	@Override
-	protected void postOp(DmlOpType opType) {
+	protected void postOp(BasicDmlModifyingType opType) {
 		//refresh the app context
 		//TODO add caching here
 		super.postOp(opType);
