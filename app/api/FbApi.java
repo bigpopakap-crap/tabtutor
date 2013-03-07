@@ -6,6 +6,8 @@ import java.util.Map;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.JsonNodeFactory;
 
+import common.AppContext;
+
 import play.libs.F.Function;
 import play.libs.F.Promise;
 import play.libs.WS;
@@ -77,7 +79,9 @@ public class FbApi {
 			this.apiPath = apiPath;
 			this.apiParams = apiParams;
 			this.json = json;
-			stackTraceWhenCreated = Thread.currentThread().getStackTrace();
+			stackTraceWhenCreated = AppContext.Mode.isProduction()
+										? new StackTraceElement[0]
+										: Thread.currentThread().getStackTrace();
 		}
 		
 		/** Gets the JSON response itself */
