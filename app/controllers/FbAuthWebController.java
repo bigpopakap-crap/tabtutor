@@ -69,8 +69,10 @@ public class FbAuthWebController extends BaseWebController {
 							SessionModel.Updater.setFbAuthInfoAndUpdate(session, token, tokenExpiry);
 							
 							//if there is an associated user, update the login time
-							UserModel user = SessionContext.user();
-							UserModel.Updater.setLoginTimeAndUpdate(user);
+							if (SessionContext.hasUser()) {
+								UserModel user = SessionContext.user();
+								UserModel.Updater.setLoginTimeAndUpdate(user);
+							}
 							
 							//don't get the associated user, that will be taken care of in SecuredActions
 							//redirect to the given redirect url, or to the landing page
