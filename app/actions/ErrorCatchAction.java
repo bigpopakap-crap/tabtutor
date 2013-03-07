@@ -5,6 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import play.Logger;
 import play.mvc.Action;
 import play.mvc.Http.Context;
 import play.mvc.Result;
@@ -39,6 +40,7 @@ public class ErrorCatchAction extends Action.Simple {
 	/** Implements the action */
 	@Override
 	public Result call(Context ctx) throws Throwable {
+		Logger.debug("Calling into " + this.getClass());
 		try {
 			return delegate.call(ctx);
 		}
@@ -46,7 +48,7 @@ public class ErrorCatchAction extends Action.Simple {
 			return ex.result();
 		}
 		catch (Exception ex) {
-			///TODO allow the action to take a default ErrorException parameter
+			//TODO figure out which default error to display to the user
 			if (AppContext.Mode.isProduction()) return BaseExposedException.Factory.internalServerError().result();
 			else throw ex;
 		}

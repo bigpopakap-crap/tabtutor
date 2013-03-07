@@ -5,6 +5,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import common.SessionContext;
+
 import models.SessionModel;
 import play.Logger;
 import play.mvc.Action;
@@ -44,10 +46,8 @@ public class SessionAction extends Action.Simple {
 	public Result call(Context ctx) throws Throwable {
 		Logger.debug("Calling into " + this.getClass().getName());
 		
-		//this is the same as testing that SessionContext.get() is non-null, but this is a better lower-level way to go
-		//because SessionContext should not be a dependency of this session-creation flow
-		String sessionId = ctx.session().get(SessionModel.SESSION_ID_COOKIE_KEY);
-		if (!SessionModel.Validator.isValidExistingId(sessionId)) {
+		SessionModel session = SessionContext.get(); //use this method because it is cached
+		if (session == null) {
 			//there is no session ID set, so create it and add it to the cookie
 			SessionModel newSession = SessionModel.Factory.createAndSave();
 			ctx.session().put(SessionModel.SESSION_ID_COOKIE_KEY, newSession.GETTER.pk().toString());

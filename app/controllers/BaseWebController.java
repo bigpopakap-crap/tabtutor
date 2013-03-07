@@ -3,6 +3,7 @@ package controllers;
 import play.api.templates.Html;
 import play.mvc.Controller;
 import play.mvc.Result;
+import actions.ErrorCatchAction.ErrorCaught;
 import actions.SessionAction.Sessioned;
 import exeptions.BaseExposedException;
 
@@ -14,6 +15,7 @@ import exeptions.BaseExposedException;
  * @since 2013-02-17
  *
  */
+@ErrorCaught //top level action to catch all unhandled exceptions
 @Sessioned //this is important to make sure all web requests enforce the creation of a session
 public class BaseWebController extends Controller {
 	
