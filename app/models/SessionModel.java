@@ -112,7 +112,7 @@ public class SessionModel extends BaseModel {
 		/** Gets a Session by ID, converts the string to a UUID internally */
 		public static SessionModel getById(String id) {
 			try {
-				return getById(UUID.fromString(id));
+				return getById(id != null ? UUID.fromString(id) : null);
 			}
 			catch (IllegalArgumentException ex) {
 				//the string was not a valid UUID
