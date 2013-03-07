@@ -40,7 +40,7 @@ public class BaseWebController extends Controller {
 			/** Returns a basic error page with a statement that an error occurred, and the given
 			 *  short description of what happened */
 			public static ErrorPageException simplePage(String description) {
-				return null; //TODO
+				return custom(views.html.errorSimple.render(description));
 			}
 			
 			/** Returns an error page with a link to go back to the previous page */
@@ -50,20 +50,37 @@ public class BaseWebController extends Controller {
 			
 			/** Returns an error page with the given short description of the error a link to go back to the previous page */
 			public static ErrorPageException goBackPage(String description) {
-				return null; //TODO
+				return custom(views.html.errorGoBack.render(description));
 			}
 			
+			/** 
+			 * Returns an error page with a link
+			 * 
+			 * @param url the location for the link to go
+			 * @param toMessage the message to be used after the link to explain where it goes
+			 * 					"Click <a>here</a> *toMessage*
+			 */
 			public static ErrorPageException goToPage(String url, String toMessage) {
 				return goToPage(null, url, toMessage);
 			}
 			
+			/** 
+			 * Returns an error page with a short description of the error a link
+			 * 
+			 * @param description the description of the error
+			 * @param url the location for the link to go
+			 * @param toMessage the message to be used after the link to explain where it goes
+			 * 					"Click <a>here</a> *toMessage*
+			 */
 			public static ErrorPageException goToPage(String description, String url, String toMessage) {
-				return null; //TODO
+				return custom(views.html.errorGoTo.render(description, url, toMessage));
 			}
 			
 			/** Returns a custom error page that will return the given HTML */
 			public static ErrorPageException custom(final Html page) {
 				return new ErrorPageException() {
+
+					private static final long serialVersionUID = -3927537673541009374L;
 
 					@Override
 					public Result result() {

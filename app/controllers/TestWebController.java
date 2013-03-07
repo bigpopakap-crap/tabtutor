@@ -9,7 +9,7 @@ package controllers;
  */
 public class TestWebController extends BaseWebController {
 	
-	//TODO figure out how to expose these paths only when running tests in DEV mode
+	//TODO figure out how to expose these paths only when running tests or in DEV mode
 	//TODO write a test to make sure that if an exception is thrown during routing, the database transaction is rolled back
 
 }

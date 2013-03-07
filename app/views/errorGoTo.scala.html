@@ -1,0 +1,12 @@
+@(description: String = "", url: String = "/", toMessage: String = "")
+<!DOCTYPE html>
+<html>
+<head>
+	@p_preHead()
+</head>
+<body>
+	<h1>Oops! An error occurred</h1>
+	<p>@description</p>
+	<p>Click <a href="@url">here</a> @toMessage</p>
+</body>
+</html>
