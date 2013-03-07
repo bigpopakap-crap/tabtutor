@@ -11,7 +11,7 @@
 
 # ---------------- BEGIN PAGE ROUTING --------------------------------- #
 # Landing page
-GET     /                           controllers.BaseWebController.landing()
+GET     /                           controllers.SimpleWebController.landing()
 
 # Facebook login entry point
 GET		/fblogin					controllers.FbAuthWebController.fblogin(code ?= null, state ?= null)
