@@ -32,6 +32,8 @@ public class BaseWebController extends Controller {
 		/** Provides static methods for creating instances of this class */
 		public static class Factory {
 			
+			//TODO append the stack trace to the page except in production mode
+			
 			/** Returns a basic error page with nothing but a statement that an error has occured */
 			public static ErrorPageException simplePage() {
 				return simplePage(null);

@@ -43,8 +43,7 @@ public class ErrorCatchAction extends Action.Simple {
 			return delegate.call(ctx);
 		}
 		catch (BaseExposedException ex) {
-			if (AppContext.Mode.isProduction()) return ex.result();
-			else throw ex;
+			return ex.result();
 		}
 		catch (Exception ex) {
 			///TODO allow the action to take a default ErrorException parameter
