@@ -11,7 +11,7 @@
 
 # ---------------- BEGIN PAGE ROUTING --------------------------------- #
 # Landing page
-GET     /                           controllers.BaseWebController.landing()
+GET     /                           controllers.SimpleWebController.landing()
 
 # Facebook login entry point
 GET		/fblogin					controllers.FbAuthWebController.fblogin(code ?= null, state ?= null)
@@ -23,7 +23,9 @@ GET		/fblogin					controllers.FbAuthWebController.fblogin(code ?= null, state ?=
 # TODO these will be implemented as and when we find a need
 
 # ---------------- BEGIN /INTERNAL/TEST PAGE ROUTING ------------------ #
-# TODO these will be implemented as and when we fine a need
+GET		/internal/test/errorpageexception/notfoundpage	controllers.TestErrorPageExceptionController.notFoundPage()
+GET		/internal/test/errorpageexception/gobackpage	controllers.TestErrorPageExceptionController.goBackPage()
+GET		/internal/test/errorpageexception/gotopage		controllers.TestErrorPageExceptionController.goToPage()
 
 # ---------------- BEGIN /API ROUTING --------------------------------- #
 # TODO this will be implemented later
@@ -31,3 +33,6 @@ GET		/fblogin					controllers.FbAuthWebController.fblogin(code ?= null, state ?=
 # ---------------- BEGIN STATIC FILE ROUTING -------------------------- #
 GET		/favicon.ico				controllers.Assets.at(path="/public", file="images/favicon.png")
 GET     /public/*file               controllers.Assets.at(path="/public", file)
+
+# ---------------- CATCH-ALL NOT FOUND PAGE --------------------------- #
+GET		/*path						controllers.SimpleWebController.pageNotFound(path)

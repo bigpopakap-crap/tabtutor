@@ -95,9 +95,6 @@ public class EnvironmentTest extends BaseFuncTest {
 			case DEVELOPMENT:	
 				helpTestAppContextEnvMatches(AppContext.Mode.isDevelopment());
 				break;
-			case STAGING: 
-				helpTestAppContextEnvMatches(AppContext.Mode.isStaging());
-				break;
 			case PRODUCTION:
 				helpTestAppContextEnvMatches(AppContext.Mode.isProduction());
 				break;

@@ -131,7 +131,7 @@ public abstract class AppContext {
 	 *
 	 */
 	public static enum Mode {
-		DEVELOPMENT, STAGING, PRODUCTION;
+		DEVELOPMENT, PRODUCTION;
 		
 		/** The current mode of the app */
 		private static final Mode WTF_MODE = Mode.valueOf(System.getenv("WTF_MODE"));
@@ -144,11 +144,6 @@ public abstract class AppContext {
 		/** Returns true if the app is in development mode */
 		public static synchronized boolean isDevelopment() {
 			return get() == DEVELOPMENT;
-		}
-		
-		/** Returns true if the app is in staging mode */
-		public static synchronized boolean isStaging() {
-			return get() == STAGING;
 		}
 		
 		/** Returns true if the app is in production mode */
