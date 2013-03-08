@@ -4,8 +4,8 @@ import play.mvc.Result;
 
 public class TestErrorPageExceptionController extends TestWebController {
 	
-	public static Result simplePage() {
-		throw ErrorPageException.Factory.simplePage("This is the description");
+	public static Result notFoundPage() {
+		throw ErrorPageException.Factory.notFoundPage();
 	}
 	
 	public static Result goBackPage() {

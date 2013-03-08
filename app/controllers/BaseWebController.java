@@ -35,16 +35,11 @@ public class BaseWebController extends Controller {
 		public static class Factory {
 			
 			//TODO append the stack trace to the page except in production mode
+			//TODO add ability to specify page title
 			
-			/** Returns a basic error page with nothing but a statement that an error has occured */
-			public static ErrorPageException simplePage() {
-				return simplePage(null);
-			}
-			
-			/** Returns a basic error page with a statement that an error occurred, and the given
-			 *  short description of what happened */
-			public static ErrorPageException simplePage(String description) {
-				return custom(views.html.errorSimple.render(description));
+			public static ErrorPageException notFoundPage() {
+				//TODO use translation for this
+				return goBackPage("We couldn't find the page you were looking for");
 			}
 			
 			/** Returns an error page with a link to go back to the previous page */
@@ -54,7 +49,8 @@ public class BaseWebController extends Controller {
 			
 			/** Returns an error page with the given short description of the error a link to go back to the previous page */
 			public static ErrorPageException goBackPage(String description) {
-				return custom(views.html.errorGoBack.render(description));
+				//TODO use translation for this
+				return goToPage(description, "javascript:history.back()", "to go back");
 			}
 			
 			/** 
@@ -71,13 +67,18 @@ public class BaseWebController extends Controller {
 			/** 
 			 * Returns an error page with a short description of the error a link
 			 * 
-			 * @param description the description of the error
-			 * @param url the location for the link to go
+			 * @param description the description of the error. This can be null
+			 * @param url the location for the link to go. Cannot be null
 			 * @param toMessage the message to be used after the link to explain where it goes
 			 * 					"Click <a>here</a> *toMessage*
+			 * 					This cannot be null
+			 * @throws IllegalArgumentException if either the url of the toMessage is null
 			 */
 			public static ErrorPageException goToPage(String description, String url, String toMessage) {
-				return custom(views.html.errorGoTo.render(description, url, toMessage));
+				//TODO style the page
+				if (url == null) throw new IllegalArgumentException("Url cannot be null in error page");
+				if (toMessage == null) throw new IllegalArgumentException("toMessage cannot be null in error page");
+				return custom(views.html.errorPage.render(description, url, toMessage));
 			}
 			
 			/** Returns a custom error page that will return the given HTML */
