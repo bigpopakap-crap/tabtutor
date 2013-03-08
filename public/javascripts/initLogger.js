@@ -52,7 +52,7 @@
 				//this has already been initialized, log an error
 				this.warn('Logger has already been initialized');
 			}
-		}
+		};
 		
 		//Gets the current logging level
 		this.getLevel = function() {
@@ -64,11 +64,11 @@
 				console.log('Error: this Logger has not yet been initialized');
 				return null;
 			}
-		}
+		};
 
 		//Methods to log or alert messages
-		this.log = createLogOrAlertFn(false),
-		this.alert = createLogOrAlertFn(true),
+		this.log = createLogOrAlertFn(false);
+		this.alert = createLogOrAlertFn(true);
 		
 		//Shortcut methods for logging at specific levels
 		this.debug = function (message) { this.log(this.Level.DEBUG, message); };
