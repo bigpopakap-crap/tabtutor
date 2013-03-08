@@ -3,6 +3,7 @@ package controllers;
 import play.api.templates.Html;
 import play.mvc.Controller;
 import play.mvc.Result;
+import utils.MessagesEnum;
 import actions.ErrorCatchAction.ErrorCaught;
 import actions.SessionAction.Sessioned;
 import exeptions.BaseExposedException;
@@ -38,8 +39,7 @@ public class BaseWebController extends Controller {
 			//TODO add ability to specify page title
 			
 			public static ErrorPageException notFoundPage() {
-				//TODO use translation for this
-				return goBackPage("We couldn't find the page you were looking for");
+				return goBackPage(MessagesEnum.errorPage_pageNotFoundDescription.get());
 			}
 			
 			/** Returns an error page with a link to go back to the previous page */
@@ -49,8 +49,7 @@ public class BaseWebController extends Controller {
 			
 			/** Returns an error page with the given short description of the error a link to go back to the previous page */
 			public static ErrorPageException goBackPage(String description) {
-				//TODO use translation for this
-				return goToPage(description, "javascript:history.back()", "to go back");
+				return goToPage(description, "javascript:history.back()", MessagesEnum.errorPage_toGoBack.get());
 			}
 			
 			/** 
