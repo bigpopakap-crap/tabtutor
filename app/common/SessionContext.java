@@ -28,6 +28,11 @@ public abstract class SessionContext {
 		return getOrLoad(UserModel.USER_OBJ_CONTEXT_KEY, USER_LOADER);
 	}
 	
+	/** Determines if there is a logged-in user */
+	public static boolean hasUser() {
+		return user() != null;
+	}
+	
 	/** Get the FbApi object for the the current session */
 	public static FbApi fbApi() {
 		return getOrLoad(FbApi.FBAPI_OBJ_CONTEXT_KEY, FBAPI_LOADER);
