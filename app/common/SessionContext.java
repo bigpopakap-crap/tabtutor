@@ -5,6 +5,7 @@ import java.util.concurrent.Callable;
 import models.SessionModel;
 import models.UserModel;
 import play.Logger;
+import play.i18n.Lang;
 import play.mvc.Http.Context;
 import api.FbApi;
 
@@ -17,6 +18,11 @@ import api.FbApi;
  *
  */
 public abstract class SessionContext {
+	
+	/** Get the language of the current session context. Useful for templates */
+	public static Lang lang() {
+		return Context.current().lang();
+	}
 	
 	/** Get the session model object for the current session */
 	public static SessionModel get() {
