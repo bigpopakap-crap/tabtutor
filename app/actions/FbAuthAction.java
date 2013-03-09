@@ -15,9 +15,7 @@ import play.mvc.Result;
 import play.mvc.With;
 import api.FbApi;
 import api.FbApi.FbJsonResponse;
-
-import common.SessionContext;
-
+import contexts.SessionContext;
 import controllers.FbAuthWebController;
 
 /**

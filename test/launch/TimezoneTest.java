@@ -10,8 +10,7 @@ import org.junit.Test;
 
 import utils.DbTypesUtil;
 import base.BaseFuncTest;
-
-import common.AppContext;
+import contexts.AppContext;
 
 /**
  * Tests for app timing (time zones, converting to a user's timezone, making sure the database

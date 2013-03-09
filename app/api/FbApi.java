@@ -6,14 +6,13 @@ import java.util.Map;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.JsonNodeFactory;
 
-import common.AppContext;
-
 import play.libs.F.Function;
 import play.libs.F.Promise;
 import play.libs.WS;
 import play.libs.WS.Response;
 import play.libs.WS.WSRequestHolder;
 import utils.QueryParamsUtil;
+import contexts.AppContext;
 
 /**
  * This class implements interactions with the Facebook REST API
