@@ -13,8 +13,8 @@ import play.mvc.Action;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import play.mvc.With;
-import api.FbApi;
-import api.FbApi.FbJsonResponse;
+import api.fb.FbApi;
+import api.fb.FbJsonResponse;
 
 import common.SessionContext;
 
