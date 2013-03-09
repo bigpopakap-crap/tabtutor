@@ -3,11 +3,15 @@ package api.fb;
 import java.util.HashMap;
 import java.util.Map;
 
+import exeptions.ApiErrorCodeException;
+import exeptions.ApiNoResponseException;
+
 import play.libs.F.Function;
 import play.libs.F.Promise;
 import play.libs.WS;
 import play.libs.WS.Response;
 import play.libs.WS.WSRequestHolder;
+import play.mvc.Http.Status;
 import utils.QueryParamsUtil;
 
 /**
@@ -77,7 +81,17 @@ public class FbApi {
 
 			@Override
 			public FbJsonResponse apply(Response resp) throws Throwable {
-				return new FbJsonResponse(getToken(), usePost, path, paramStr, resp.asJson());
+				if (resp == null) {
+					return new FbJsonResponse(new ApiNoResponseException());
+				}
+				else if (resp.getStatus() != Status.OK) {
+					return new FbJsonResponse(new ApiErrorCodeException(resp.getStatus()));
+				}
+				else {
+					FbJsonResponse fbJson = new FbJsonResponse(getToken(), usePost, path, paramStr, resp.asJson());
+					if (fbJson.isError()) fbJson.setError(new FbErrorResponseException(fbJson));
+					return fbJson;
+				}
 			}
 			
 		});
@@ -87,7 +101,10 @@ public class FbApi {
 	 *  BEGIN THE PUBLIC API CALL METHODS
 	 ***************************************************** */
 	
-	/** Calls the Facebook /me path and return the result as JSON */
+	/** Calls the Facebook /me path and return the result as JSON 
+	 * @throws FbErrorResponseException 
+	 * @throws ApiErrorCodeException 
+	 * @throws ApiNoResponseException */
 	public Promise<FbJsonResponse> me() {
 		return queryApi(false, PATH_ME, null);
 	}

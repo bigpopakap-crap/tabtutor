@@ -19,6 +19,7 @@ import api.fb.FbJsonResponse;
 import common.SessionContext;
 
 import controllers.FbAuthWebController;
+import exeptions.BaseApiException;
 
 /**
  * This Action will log the user in through Facebook, and ensure that the authentication
@@ -72,20 +73,25 @@ public class FbAuthAction extends Action.Simple {
 
 				@Override
 				public Result apply(FbJsonResponse fbJson) throws Throwable {
-					//TODO handle error
-					String fbId = fbJson.fbId();
-					String firstName = fbJson.firstName();
-					String lastName = fbJson.lastName();
-					String email = fbJson.email();
-					
-					//get the user associated with this Facebook ID, or create one
-					UserModel user = UserModel.Selector.getByFbId(fbId);
-					if (user == null) {
-						user = UserModel.Factory.createAndSave(fbId, firstName, lastName, email);
+					try {
+						fbJson.throwIfErroneous();
+						
+						String fbId = fbJson.fbId();
+						String firstName = fbJson.firstName();
+						String lastName = fbJson.lastName();
+						String email = fbJson.email();
+						
+						//get the user associated with this Facebook ID, or create one
+						UserModel user = UserModel.Selector.getByFbId(fbId);
+						if (user == null) {
+							user = UserModel.Factory.createAndSave(fbId, firstName, lastName, email);
+						}
+						
+						//add this user ID to the session object
+						SessionModel.Updater.setUserPkAndUpdate(session, user.pk);
+					} catch (BaseApiException e) {
+						//TODO handle this error
 					}
-					
-					//add this user ID to the session object
-					SessionModel.Updater.setUserPkAndUpdate(session, user.pk);
 	
 					return delegate.call(ctx);
 				}

@@ -3,7 +3,10 @@ package api.fb;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.JsonNodeFactory;
 
+import api.BaseApiResponse;
+
 import common.AppContext;
+import exeptions.BaseApiException;
 
 /**
  * Wraps a JSON response from Facebook and provides some helper methods to access
@@ -13,14 +16,24 @@ import common.AppContext;
  * @since 2013-03-02
  *
  */
-public class FbJsonResponse {
+public class FbJsonResponse extends BaseApiResponse {
 	
-	private final JsonNode json; //the actual JSON response
-	private final String accessToken; //the access token used for the API call
-	private final boolean usedPost; //true if the method used for the query was POST, false if GET
-	private final String apiPath; //the API path queries to get this response
-	private final String apiParams; //the params passed with the query
-	private final StackTraceElement[] stackTraceWhenCreated; //the stack trace when the object was created
+	private JsonNode json; //the actual JSON response
+	private String accessToken; //the access token used for the API call
+	private boolean usedPost; //true if the method used for the query was POST, false if GET
+	private String apiPath; //the API path queries to get this response
+	private String apiParams; //the params passed with the query
+	private StackTraceElement[] stackTraceWhenCreated; //the stack trace when the object was created
+	
+	/** Returns a new erroneous response that will throw an exception */
+	public FbJsonResponse(BaseApiException error) {
+		super(error);
+	}
+	
+	/** TODO doc */
+	FbJsonResponse(String accessToken, boolean usedPost, String apiPath, String apiParams, JsonNode json) {
+		this(accessToken, usedPost, apiPath, apiParams, json, null);
+	}
 	
 	/**
 	 * Creates a new response object
@@ -28,7 +41,9 @@ public class FbJsonResponse {
 	 * @param apiPath the path queried to get this response
 	 * @param json the response that came back
 	 */
-	FbJsonResponse(String accessToken, boolean usedPost, String apiPath, String apiParams, JsonNode json) {
+	FbJsonResponse(String accessToken, boolean usedPost, String apiPath, String apiParams, JsonNode json, BaseApiException error) {
+		super(error);
+		
 		if (accessToken == null) throw new IllegalArgumentException("Access token cannot be null");
 		if (apiPath == null) throw new IllegalArgumentException("API path cannot be null");
 		if (apiParams == null) throw new IllegalArgumentException("Params cannot be null");
@@ -96,6 +111,22 @@ public class FbJsonResponse {
 	/** Gets the error code. Throws an exception if this is called and it
 	 *  is not an error response */
 	public int getErrorCode() {
+		//TODO implement this
+		if (!isError()) throw new IllegalStateException("This is not an error response");
+		throw new UnsupportedOperationException("This is not implemented yet");
+	}
+	
+	/** Gets the error message. Throws an exception if this is called and it is
+	 * 	not an error response */
+	public String getErrorMessage() {
+		//TODO implement this
+		if (!isError()) throw new IllegalStateException("This is not an error response");
+		throw new UnsupportedOperationException("This is not implemented yet");
+	}
+	
+	/** Gets the error type. Throws an exception if this is called and it is
+	 * 	not an error response */
+	public String getErrorType() {
 		//TODO implement this
 		if (!isError()) throw new IllegalStateException("This is not an error response");
 		throw new UnsupportedOperationException("This is not implemented yet");
