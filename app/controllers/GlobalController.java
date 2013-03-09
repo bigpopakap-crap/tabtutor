@@ -10,8 +10,7 @@ import play.mvc.Action;
 import play.mvc.Http.Request;
 import play.mvc.Http.RequestHeader;
 import play.mvc.Result;
-
-import common.AppContext;
+import contexts.AppContext;
 
 /**
  * This the global controller, that implements hooks in the app's lifecycle

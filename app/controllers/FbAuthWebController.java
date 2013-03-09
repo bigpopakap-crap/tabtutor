@@ -10,9 +10,8 @@ import play.mvc.Result;
 import utils.EscapingUtil;
 import utils.EscapingUtil.Escaper;
 import utils.QueryParamsUtil;
-
-import common.AppContext;
-import common.SessionContext;
+import contexts.AppContext;
+import contexts.SessionContext;
 
 /**
  * This class handles all API requests related to Facebook authentication

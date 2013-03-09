@@ -4,8 +4,7 @@ import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.JsonNodeFactory;
 
 import api.BaseApiResponse;
-
-import common.AppContext;
+import contexts.AppContext;
 import exeptions.BaseApiException;
 
 /**

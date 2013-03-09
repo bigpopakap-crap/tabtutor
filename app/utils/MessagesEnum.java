@@ -2,8 +2,7 @@ package utils;
 
 import play.i18n.Lang;
 import play.i18n.Messages;
-
-import common.SessionContext;
+import contexts.SessionContext;
 
 /**
  * This class holds all strings that will be internationalized
