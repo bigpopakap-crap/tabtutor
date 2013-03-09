@@ -15,6 +15,7 @@ import play.mvc.Result;
 import play.mvc.With;
 import api.fb.FbApi;
 import api.fb.FbJsonResponse;
+import contexts.ErrorContext;
 import contexts.SessionContext;
 import controllers.FbAuthWebController;
 import exeptions.BaseApiException;
@@ -88,7 +89,8 @@ public class FbAuthAction extends Action.Simple {
 						//add this user ID to the session object
 						SessionModel.Updater.setUserPkAndUpdate(session, user.pk);
 					} catch (BaseApiException e) {
-						//TODO handle this error
+						ErrorContext.setFbConnectionError(true);
+						//TODO need to do anything else to handle this error?
 					}
 	
 					return delegate.call(ctx);
