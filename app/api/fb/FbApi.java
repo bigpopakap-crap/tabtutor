@@ -3,9 +3,6 @@ package api.fb;
 import java.util.HashMap;
 import java.util.Map;
 
-import exeptions.ApiErrorCodeException;
-import exeptions.ApiNoResponseException;
-
 import play.libs.F.Function;
 import play.libs.F.Promise;
 import play.libs.WS;
@@ -13,6 +10,9 @@ import play.libs.WS.Response;
 import play.libs.WS.WSRequestHolder;
 import play.mvc.Http.Status;
 import utils.QueryParamsUtil;
+import api.ApiResponseOption;
+import exeptions.ApiErrorCodeException;
+import exeptions.ApiNoResponseException;
 
 /**
  * This class implements interactions with the Facebook REST API
@@ -53,7 +53,7 @@ public class FbApi {
 	 * @param params the parameters to pass. This string cannot start with an ampersand and cannot
 	 * 			start with a question mark
 	 */
-	private Promise<FbJsonResponse> queryApi(final boolean usePost, final String path, Map<String, String> params) {
+	private Promise<ApiResponseOption<FbJsonResponse>> queryApi(final boolean usePost, final String path, Map<String, String> params) {
 		//generate the path and params
 		String url = GRAPH_API_DOMAIN + path;
 		
@@ -77,20 +77,24 @@ public class FbApi {
 		}
 		
 		//convert the promise to one for a wrapped JSON result
-		return promise.map(new Function<Response, FbJsonResponse>() {
+		return promise.map(new Function<Response, ApiResponseOption<FbJsonResponse>>() {
 
 			@Override
-			public FbJsonResponse apply(Response resp) throws Throwable {
+			public ApiResponseOption<FbJsonResponse> apply(Response resp) throws Throwable {
 				if (resp == null) {
-					return new FbJsonResponse(new ApiNoResponseException());
+					return new ApiResponseOption<FbJsonResponse>(
+						new ApiNoResponseException()
+					);
 				}
 				else if (resp.getStatus() != Status.OK) {
-					return new FbJsonResponse(new ApiErrorCodeException(resp.getStatus()));
+					return new ApiResponseOption<FbJsonResponse>(
+						new ApiErrorCodeException(resp.getStatus())
+					);
 				}
 				else {
-					FbJsonResponse fbJson = new FbJsonResponse(getToken(), usePost, path, paramStr, resp.asJson());
-					if (fbJson.isError()) fbJson.setError(new FbErrorResponseException(fbJson));
-					return fbJson;
+					return new ApiResponseOption<FbJsonResponse>(
+						new FbJsonResponse(getToken(), usePost, path, paramStr, resp.asJson())
+					);
 				}
 			}
 			
@@ -105,7 +109,7 @@ public class FbApi {
 	 * @throws FbErrorResponseException 
 	 * @throws ApiErrorCodeException 
 	 * @throws ApiNoResponseException */
-	public Promise<FbJsonResponse> me() {
+	public Promise<ApiResponseOption<FbJsonResponse>> me() {
 		return queryApi(false, PATH_ME, null);
 	}
 

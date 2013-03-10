@@ -13,6 +13,7 @@ import play.mvc.Action;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import play.mvc.With;
+import api.ApiResponseOption;
 import api.fb.FbApi;
 import api.fb.FbJsonResponse;
 import contexts.ErrorContext;
@@ -68,12 +69,12 @@ public class FbAuthAction extends Action.Simple {
 			Logger.debug("Session needs a user reference. Fetching Facebook ID and looking up user object");
 			
 			//start by getting the user's Facebook ID from the Facebook API
-			return async(fbApi.me().map(new Function<FbJsonResponse, Result>() {
+			return async(fbApi.me().map(new Function<ApiResponseOption<FbJsonResponse>, Result>() {
 
 				@Override
-				public Result apply(FbJsonResponse fbJson) throws Throwable {
+				public Result apply(ApiResponseOption<FbJsonResponse> respOption) throws Throwable {
 					try {
-						fbJson.throwIfErroneous();
+						FbJsonResponse fbJson = respOption.get();
 						
 						String fbId = fbJson.fbId();
 						String firstName = fbJson.firstName();

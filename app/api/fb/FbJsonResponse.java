@@ -15,7 +15,7 @@ import exeptions.BaseApiException;
  * @since 2013-03-02
  *
  */
-public class FbJsonResponse extends BaseApiResponse {
+public class FbJsonResponse extends BaseApiResponse<FbErrorResponseException> {
 	
 	private JsonNode json; //the actual JSON response
 	private String accessToken; //the access token used for the API call
@@ -23,11 +23,6 @@ public class FbJsonResponse extends BaseApiResponse {
 	private String apiPath; //the API path queries to get this response
 	private String apiParams; //the params passed with the query
 	private StackTraceElement[] stackTraceWhenCreated; //the stack trace when the object was created
-	
-	/** Returns a new erroneous response that will throw an exception */
-	public FbJsonResponse(BaseApiException error) {
-		super(error);
-	}
 	
 	/** TODO doc */
 	FbJsonResponse(String accessToken, boolean usedPost, String apiPath, String apiParams, JsonNode json) {
@@ -41,8 +36,6 @@ public class FbJsonResponse extends BaseApiResponse {
 	 * @param json the response that came back
 	 */
 	FbJsonResponse(String accessToken, boolean usedPost, String apiPath, String apiParams, JsonNode json, BaseApiException error) {
-		super(error);
-		
 		if (accessToken == null) throw new IllegalArgumentException("Access token cannot be null");
 		if (apiPath == null) throw new IllegalArgumentException("API path cannot be null");
 		if (apiParams == null) throw new IllegalArgumentException("Params cannot be null");
@@ -103,8 +96,14 @@ public class FbJsonResponse extends BaseApiResponse {
 	 ********************************************************* */
 	
 	/** Returns true if this response represents an error */
+	@Override
 	public boolean isError() {
 		return !json.path("error").isMissingNode();
+	}
+	
+	@Override
+	public FbErrorResponseException getException() {
+		return new FbErrorResponseException(this);
 	}
 	
 	/** Gets the error code. Throws an exception if this is called and it
