@@ -4,6 +4,13 @@ import java.util.concurrent.Callable;
 
 import play.mvc.Http.Context;
 
+/**
+ * Provides utils for the context package
+ * 
+ * @author bigpopakap@gmail.com
+ * @since 2013-03-10
+ *
+ */
 public abstract class ContextPackageUtils {
 	
 	//TODO test that there are no duplicate values used as keys
