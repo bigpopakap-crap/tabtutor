@@ -102,7 +102,7 @@ public class FbJsonResponse extends BaseApiResponse<FbErrorResponseException> {
 	}
 	
 	@Override
-	public FbErrorResponseException getException() {
+	public FbErrorResponseException getExceptionNoIsErrorCheck() {
 		return new FbErrorResponseException(this);
 	}
 	
