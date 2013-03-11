@@ -9,8 +9,7 @@ import java.util.List;
 import org.junit.Assert;
 
 import base.BaseFuncTest;
-
-import common.AppContext;
+import contexts.AppContext;
 
 /**
  * This class is a base class for tests that make sure links are not broken

@@ -3,7 +3,7 @@ package launch;
 import org.junit.Assert;
 
 /**
- * Provides helpers for the launch package tests
+ * Provides utils for the launch package tests
  * 
  * @author bigpopakap@gmail.com
  * @since 2013-02-26

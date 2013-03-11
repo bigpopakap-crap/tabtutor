@@ -10,8 +10,7 @@ import play.mvc.Action;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import play.mvc.With;
-
-import common.AppContext;
+import contexts.AppContext;
 import exeptions.BaseExposedException;
 
 /**
