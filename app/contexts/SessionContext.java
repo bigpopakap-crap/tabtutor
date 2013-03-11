@@ -7,7 +7,7 @@ import models.UserModel;
 import play.Logger;
 import play.i18n.Lang;
 import play.mvc.Http.Context;
-import api.FbApi;
+import api.fb.FbApi;
 
 /**
  * This class holds methods to query the current session for important objects,
