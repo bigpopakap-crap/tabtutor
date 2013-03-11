@@ -14,7 +14,8 @@ import types.SqlCommandType.BasicDmlModifyingType;
 import utils.DbTypesUtil;
 
 import com.avaje.ebean.annotation.Formula;
-import common.SessionContext;
+
+import contexts.SessionContext;
 
 /**
  * This Ebean maps to the Session table, and represents the active sessions

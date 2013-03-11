@@ -9,8 +9,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import base.BaseFuncTest;
-
-import common.AppContext;
+import contexts.AppContext;
 
 /**
  * Test packages for those concerning the environment/app configuration
