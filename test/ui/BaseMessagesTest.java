@@ -9,8 +9,7 @@ import java.util.List;
 import org.junit.Assert;
 
 import base.BaseFuncTest;
-
-import common.AppContext;
+import contexts.AppContext;
 
 /**
  * Base test for ensuring that non-dynamic strings use the messages framework, and can

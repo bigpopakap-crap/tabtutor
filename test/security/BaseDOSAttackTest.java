@@ -6,7 +6,7 @@ import static play.test.Helpers.testServer;
 import java.util.LinkedList;
 import java.util.List;
 
-import common.AppContext;
+import contexts.AppContext;
 
 /**
  * Base class to execute DOS attacks on the server

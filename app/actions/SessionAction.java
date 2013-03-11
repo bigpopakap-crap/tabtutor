@@ -5,14 +5,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import common.SessionContext;
-
 import models.SessionModel;
 import play.Logger;
 import play.mvc.Action;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import play.mvc.With;
+import contexts.SessionContext;
 
 /**
  * This Action will add a session cookie to the browser, and create
