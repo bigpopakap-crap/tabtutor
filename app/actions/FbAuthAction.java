@@ -13,10 +13,13 @@ import play.mvc.Action;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import play.mvc.With;
-import api.FbApi;
-import api.FbApi.FbJsonResponse;
+import api.ApiResponseOption;
+import api.fb.FbApi;
+import api.fb.FbJsonResponse;
+import contexts.ErrorContext;
 import contexts.SessionContext;
 import controllers.FbAuthWebController;
+import exeptions.BaseApiException;
 
 /**
  * This Action will log the user in through Facebook, and ensure that the authentication
@@ -66,24 +69,30 @@ public class FbAuthAction extends Action.Simple {
 			Logger.debug("Session needs a user reference. Fetching Facebook ID and looking up user object");
 			
 			//start by getting the user's Facebook ID from the Facebook API
-			return async(fbApi.me().map(new Function<FbJsonResponse, Result>() {
+			return async(fbApi.me().map(new Function<ApiResponseOption<FbJsonResponse>, Result>() {
 
 				@Override
-				public Result apply(FbJsonResponse fbJson) throws Throwable {
-					//TODO handle error
-					String fbId = fbJson.fbId();
-					String firstName = fbJson.firstName();
-					String lastName = fbJson.lastName();
-					String email = fbJson.email();
-					
-					//get the user associated with this Facebook ID, or create one
-					UserModel user = UserModel.Selector.getByFbId(fbId);
-					if (user == null) {
-						user = UserModel.Factory.createAndSave(fbId, firstName, lastName, email);
+				public Result apply(ApiResponseOption<FbJsonResponse> respOption) throws Throwable {
+					try {
+						FbJsonResponse fbJson = respOption.get();
+						
+						String fbId = fbJson.fbId();
+						String firstName = fbJson.firstName();
+						String lastName = fbJson.lastName();
+						String email = fbJson.email();
+						
+						//get the user associated with this Facebook ID, or create one
+						UserModel user = UserModel.Selector.getByFbId(fbId);
+						if (user == null) {
+							user = UserModel.Factory.createAndSave(fbId, firstName, lastName, email);
+						}
+						
+						//add this user ID to the session object
+						SessionModel.Updater.setUserPkAndUpdate(session, user.pk);
+					} catch (BaseApiException e) {
+						ErrorContext.setFbConnectionError(true);
+						//TODO need to do anything else to handle this error?
 					}
-					
-					//add this user ID to the session object
-					SessionModel.Updater.setUserPkAndUpdate(session, user.pk);
 	
 					return delegate.call(ctx);
 				}
