@@ -15,7 +15,7 @@ import play.mvc.With;
  * This Action will ensure the logged-in user has access to internal resources and pages
  * It is assumed that a user has already been logged in
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-02-24
  *
  */
@@ -24,7 +24,7 @@ public class InternalAuthAction extends Action.Simple {
 	/**
 	 * Annotation for applying SessionedAction, FacebookAuthenticatedAction then InternalAuthenticatedAction
 	 * 
-	 * @author bigpopakap@gmail.com
+	 * @author bigpopakap
 	 * @since 2013-02-24
 	 *
 	 */

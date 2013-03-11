@@ -12,7 +12,7 @@ import exeptions.BaseExposedException;
  * This class should be the parent of all classes that handle requests for the web interface
  * of this app
  *
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-02-17
  *
  */
@@ -24,7 +24,7 @@ public class BaseWebController extends Controller {
 	 * This class is an exposed error specific to the web interface, where every
 	 * result should be an HTML page that will be rendered and sent back to the user
 	 * 
-	 * @author bigpopakap@gmail.com
+	 * @author bigpopakap
 	 * @since 2013-03-06
 	 *
 	 */

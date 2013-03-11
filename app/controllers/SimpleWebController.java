@@ -6,7 +6,7 @@ import play.mvc.Result;
  * This class will route all pages that the user will see as they navigate through the site,
  * with minimal computation
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-03-06
  *
  */

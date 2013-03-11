@@ -17,7 +17,7 @@ import exeptions.ApiNoResponseException;
 /**
  * This class implements interactions with the Facebook REST API
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-03-02
  *
  */

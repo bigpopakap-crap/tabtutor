@@ -7,7 +7,7 @@ import contexts.SessionContext;
 /**
  * This class holds all strings that will be internationalized
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-03-07
  *
  */

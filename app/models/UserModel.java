@@ -17,7 +17,7 @@ import com.avaje.ebean.annotation.Formula;
 /**
 * This Ebean maps to the User table, and represents user metadata
 * 
-* @author bigpopakap@gmail.com
+* @author bigpopakap
 * @since 2013-02-23
 *
 */

@@ -8,7 +8,7 @@ package globals;
  * These global classes differ from AppContext because these are not meant to be used as environment vars.
  * They are not descriptive of the environment in which the app is running.
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-02-23
  *
  */

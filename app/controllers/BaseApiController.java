@@ -11,7 +11,7 @@ import play.mvc.Controller;
  * 		apiv - the version of the API they are using
  * 		apif - the format the result should be returned (json or xml)
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-02-17
  *
  */
@@ -23,7 +23,7 @@ public class BaseApiController extends Controller {
 	 * This class is an exposed error specific to the API interface, where every
 	 * result should be an API result describing the error
 	 * 
-	 * @author bigpopakap@gmail.com
+	 * @author bigpopakap
 	 * @since 2013-03-06
 	 *
 	 */

@@ -17,7 +17,7 @@ import exeptions.BaseExposedException;
  * This action will catch throw an exception if the app is not running in the
  * mode specified in the parameter
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-03-06
  *
  */
@@ -26,7 +26,7 @@ public class ModeProtectAction {
 	/**
 	 * Annotation for applying ModeProtectAction
 	 * 
-	 * @author bigpopakap@gmail.com
+	 * @author bigpopakap
 	 * @since 2013-03-06
 	 *
 	 */

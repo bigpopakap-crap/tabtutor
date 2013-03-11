@@ -8,7 +8,7 @@ import exeptions.BaseApiException;
  * so that the get() method that is used to get the actual response might throw
  * an exception that should be handled
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-03-10
  *
  * @param <R> the type of the response

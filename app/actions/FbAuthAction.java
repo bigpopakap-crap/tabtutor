@@ -26,7 +26,7 @@ import exeptions.BaseApiException;
  * token has not expired
  * It is assumed that the session has already been set up
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-02-24
  *
  */
@@ -35,7 +35,7 @@ public class FbAuthAction extends Action.Simple {
 	/**
 	 * Annotation for applying FacebookAuthenticatedAction
 	 * 
-	 * @author bigpopakap@gmail.com
+	 * @author bigpopakap
 	 * @since 2013-02-24
 	 *
 	 */

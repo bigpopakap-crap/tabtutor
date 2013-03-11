@@ -11,7 +11,7 @@ import exeptions.BaseApiException;
  * Wraps a JSON response from Facebook and provides some helper methods to access
  * the data, as well as metadata about when the object was created
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-03-02
  *
  */

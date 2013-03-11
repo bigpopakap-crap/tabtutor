@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Defines helpers pertaining to Database types
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-02-24
  *
  */

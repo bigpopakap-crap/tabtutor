@@ -5,7 +5,7 @@ import exeptions.BaseApiException;
 /**
  * Exception to be thrown representing an error response from Facebook
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-03-10
  *
  */

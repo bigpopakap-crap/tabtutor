@@ -20,7 +20,7 @@ import contexts.SessionContext;
  * https://developers.facebook.com/docs/concepts/login/login-architecture/
  * https://developers.facebook.com/docs/howtos/login/server-side-login/
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-02-17
  *
  */

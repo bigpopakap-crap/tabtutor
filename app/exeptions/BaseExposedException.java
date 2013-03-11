@@ -11,7 +11,7 @@ import play.mvc.Result;
  * and the result() method will generate the result that should be returned
  * to the client
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-03-06
  *
  */

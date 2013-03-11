@@ -8,7 +8,7 @@ package types;
  * The interface allows for accepting any type of command, while using a particular
  * enum will be useful to limit the scope of which commands will be accepted
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-03-05
  *
  */
@@ -27,7 +27,7 @@ public interface SqlCommandType {
 	/**
 	 * Enum of all SQL commands, including non-modifying ones
 	 * 
-	 * @author bigpopakap@gmail.com
+	 * @author bigpopakap
 	 * @since 2013-03-05
 	 *
 	 */
@@ -68,7 +68,7 @@ public interface SqlCommandType {
 	/**
 	 * Enum of only modifying SQL commands
 	 * 
-	 * @author bigpopakap@gmail.com
+	 * @author bigpopakap
 	 * @since 2013-03-05
 	 *
 	 */

@@ -5,7 +5,7 @@ import org.junit.Assert;
 /**
  * Provides utils for the launch package tests
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-02-26
  *
  */

@@ -15,7 +15,7 @@ import contexts.AppContext;
 /**
  * This the global controller, that implements hooks in the app's lifecycle
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013/02/10
  *
  */

@@ -9,7 +9,7 @@ import utils.EscapingUtil.Escaper;
 /**
  * Utility methods for dealing with query strings
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-03-03
  *
  */

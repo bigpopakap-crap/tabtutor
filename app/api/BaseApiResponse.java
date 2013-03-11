@@ -7,7 +7,7 @@ import exeptions.BaseApiException;
  * extend. It enforces two methods that determine if the response represents
  * an error, and what exception should be thrown to represent that error
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-03-08
  * 
  * @param <T> the type of the exception that is associated with an errorneous response

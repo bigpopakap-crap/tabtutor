@@ -22,7 +22,7 @@ import contexts.SessionContext;
  * the exception of this class, the term "session" refers to the AppContext.Session,
  * not the browser cookie
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-02-24
  *
  */
@@ -31,7 +31,7 @@ public class SessionAction extends Action.Simple {
 	/**
 	 * Annotation for applying SessionedAction
 	 * 
-	 * @author bigpopakap@gmail.com
+	 * @author bigpopakap
 	 * @since 2013-02-24
 	 *
 	 */

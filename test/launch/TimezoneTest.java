@@ -16,7 +16,7 @@ import contexts.AppContext;
  * Tests for app timing (time zones, converting to a user's timezone, making sure the database
  * time matches the server time, etc.)
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-02-26
  *
  */

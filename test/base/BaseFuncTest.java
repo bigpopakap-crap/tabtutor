@@ -3,7 +3,7 @@ package base;
 /**
  * Base class for functional tests. All functional tests should extend this
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-02-26
  *
  */

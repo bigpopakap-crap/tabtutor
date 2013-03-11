@@ -5,7 +5,7 @@ import java.net.URLEncoder;
 /**
  * This class contains utility methods for escaping strings for various environments
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-02-19
  *
  */
@@ -35,7 +35,7 @@ public abstract class EscapingUtil {
 	 * is protected so that outside classes cannot call them directly. They must instead use
 	 * the escape() method provided in SecurityEscapingUtil to escape strings
 	 * 
-	 * @author bigpopakap@gmail.com
+	 * @author bigpopakap
 	 * @since 2013-02-19
 	 *
 	 */

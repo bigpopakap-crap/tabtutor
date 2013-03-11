@@ -20,7 +20,7 @@ import contexts.SessionContext;
 /**
  * This Ebean maps to the Session table, and represents the active sessions
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-02-10
  *
  */
