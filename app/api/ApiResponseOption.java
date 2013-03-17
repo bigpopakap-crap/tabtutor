@@ -1,5 +1,6 @@
 package api;
 
+import exeptions.ApiNoResponseException;
 import exeptions.BaseApiException;
 
 /**
@@ -18,11 +19,6 @@ public class ApiResponseOption<R extends BaseApiResponse<?>> {
 	private final R resp;
 	private final BaseApiException ex;
 	
-	/** Creates a response option that will throw the given exception */
-	public ApiResponseOption(BaseApiException ex) {
-		this(null, ex);
-	}
-	
 	/** Creates a response options that will return the given response successfully
 	 *  (unless the object is an error response, in which case an exception will be
 	 *  thrown for that)
@@ -32,6 +28,11 @@ public class ApiResponseOption<R extends BaseApiResponse<?>> {
 	 */
 	public ApiResponseOption(R resp) {
 		this(resp, null);
+	}
+	
+	/** Creates a response option that will throw the given exception */
+	public ApiResponseOption(BaseApiException ex) {
+		this(null, ex);
 	}
 	
 	/**
@@ -48,18 +49,29 @@ public class ApiResponseOption<R extends BaseApiResponse<?>> {
 	 * @see #ApiResponseOption(BaseApiResponse)
 	 */
 	private ApiResponseOption(R resp, BaseApiException ex) {
-		//make sure exactly one is non-null
-		if (ex == null && resp == null) throw new IllegalArgumentException("Both of these cannot be null");
-		if (ex != null && resp != null) throw new IllegalArgumentException("One of these must be null");
-		
-		//check whether the response object is an error, and set fields accordingly
-		if (resp != null && resp.isError()) {
-			this.ex = resp.getExceptionNoIsErrorCheck();
-			this.resp = null;
+		//make sure they're not both non-null
+		if (resp != null && ex != null) {
+			throw new IllegalArgumentException("One of these must be null");
 		}
+		//if both are null, treat it as a no response exception
+		else if (resp == null && ex == null) {
+			this.resp = null;
+			this.ex = new ApiNoResponseException();
+		}
+		//check whether the response object is specified and an error
+		else if (resp != null && resp.isError()) {
+			this.resp = null;
+			this.ex = resp.getException();
+		}
+		//check whether the response object is specified
+		else if (resp != null) {
+			this.resp = resp;
+			this.ex = null;
+		}
+		//otherwise, just set the exception to the one given
 		else {
-			this.ex = ex;
 			this.resp = null; //since resp is null, explicity set it here
+			this.ex = ex;
 		}
 	}
 	
