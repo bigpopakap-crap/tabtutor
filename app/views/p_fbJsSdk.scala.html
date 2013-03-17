@@ -19,4 +19,9 @@
 		@detectLogin,
 		'@(routes.FbAuthWebController.fblogin(null, null))'
 	);
+	
+	//remove the weird hash that the Facebook login adds
+	if (window.location.hash == '#_=_') {
+		window.location.hash = '';
+	}
 </script>
