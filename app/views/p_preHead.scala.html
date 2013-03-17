@@ -1,3 +1,13 @@
+@*
+	Author: bigpopakap
+	Since: 2013-03-17
+	
+	Partial template that defines some standard things to put at the beginning of the head of the HTML page
+	
+	Params:
+		subTitle: the string to include after the app title as the title of the page
+		forceNoDetectLogin: if true, will not redirect to the login url if the user is connected with Facebook
+*@
 @(subTitle: String = "", forceNoDetectLogin: Boolean = false)
 @import contexts.AppContext
 @import contexts.SessionContext

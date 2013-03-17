@@ -1,3 +1,12 @@
+@*
+	Author: bigpopakap
+	Since: 2013-03-17
+	
+	Partial template for including the Facebook SDK, to be used in the head of the HTML page
+	
+	Params:
+		detectLogin: if true, will check whether the user is logged in and redirects to the login url
+*@
 @(detectLogin: Boolean = false)
 @import contexts.AppContext;
 @import routes.FbAuthWebController;
