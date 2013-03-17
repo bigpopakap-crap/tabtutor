@@ -1,6 +1,5 @@
 package controllers;
 
-import play.mvc.Controller;
 import controllers.exceptions.BaseExposedException;
 
 /**
@@ -15,9 +14,15 @@ import controllers.exceptions.BaseExposedException;
  * @since 2013-02-17
  *
  */
-public class BaseApiController extends Controller {
+public class BaseApiController extends BaseController {
 	
 	//add exposed API paths when we want to start exposing an API
+	
+	@Override
+	public BaseExposedException getDefaultExposedException() {
+		//TODO implement
+		return null;
+	}
 	
 	/**
 	 * This class is an exposed error specific to the API interface, where every

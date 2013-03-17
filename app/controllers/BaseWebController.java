@@ -1,11 +1,11 @@
 package controllers;
 
 import play.api.templates.Html;
-import play.mvc.Controller;
 import play.mvc.Result;
 import utils.MessagesEnum;
 import actions.ErrorCatchAction.ErrorCaught;
 import actions.SessionAction.Sessioned;
+import controllers.BaseWebController.ErrorPageException.Factory;
 import controllers.exceptions.BaseExposedException;
 
 /**
@@ -18,7 +18,12 @@ import controllers.exceptions.BaseExposedException;
  */
 @ErrorCaught //top level action to catch all unhandled exceptions
 @Sessioned //this is important to make sure all web requests enforce the creation of a session
-public class BaseWebController extends Controller {
+public class BaseWebController extends BaseController {
+	
+	@Override
+	public BaseExposedException getDefaultExposedException() {
+		return Factory.internalServerErrorPage();
+	}
 	
 	/**
 	 * This class is an exposed error specific to the web interface, where every
@@ -37,6 +42,11 @@ public class BaseWebController extends Controller {
 			
 			//TODO append the stack trace to the page except in production mode
 			//TODO add ability to specify page title
+			
+			public static ErrorPageException internalServerErrorPage() {
+				//TODO provide a link to the feedback page
+				return goBackPage(MessagesEnum.errorPage_internalServerErrorDescription.get());
+			}
 			
 			public static ErrorPageException notFoundPage() {
 				return goBackPage(MessagesEnum.errorPage_pageNotFoundDescription.get());

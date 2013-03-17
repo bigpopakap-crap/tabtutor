@@ -43,12 +43,18 @@ public class ErrorCatchAction extends Action.Simple {
 			return delegate.call(ctx);
 		}
 		catch (BaseExposedException ex) {
+			Logger.error("Exposed exception caught in " + this.getClass(), ex);
 			return ex.result();
 		}
 		catch (Exception ex) {
+			Logger.error("Exception caught in " + this.getClass(), ex);
 			//TODO figure out which default error to display to the user
-			if (AppContext.Mode.isProduction()) return BaseExposedException.Factory.internalServerError().result();
-			else throw ex;
+			if (AppContext.Mode.isProduction()) {
+				return BaseExposedException.Factory.internalServerError().result();
+			}
+			else {
+				throw ex;
+			}
 		}
 	}
 
