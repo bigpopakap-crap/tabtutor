@@ -23,3 +23,9 @@
 @p_fbJsSdk(
 	!forceNoDetectLogin && !SessionModel.Validator.hasValidFbAuthInfo(SessionContext.get())
 )
+<script type="text/javascript">
+	//remove the weird hash that the Facebook login adds
+	if (window.location.hash == '#_=_') {
+		window.location.hash = '';
+	}
+</script>
