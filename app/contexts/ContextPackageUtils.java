@@ -7,7 +7,7 @@ import play.mvc.Http.Context;
 /**
  * Provides utils for the context package
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-03-10
  *
  */

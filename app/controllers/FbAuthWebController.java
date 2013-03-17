@@ -4,8 +4,8 @@ import java.util.Map;
 
 import models.SessionModel;
 import models.UserModel;
-import play.libs.F.Function;
 import play.libs.WS;
+import play.libs.WS.Response;
 import play.mvc.Result;
 import utils.EscapingUtil;
 import utils.EscapingUtil.Escaper;
@@ -20,7 +20,7 @@ import contexts.SessionContext;
  * https://developers.facebook.com/docs/concepts/login/login-architecture/
  * https://developers.facebook.com/docs/howtos/login/server-side-login/
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-02-17
  *
  */
@@ -48,38 +48,32 @@ public class FbAuthWebController extends BaseWebController {
 			return redirect(redirectUrl);
 		}
 		else {
-			final String tokenUrl = "https://graph.facebook.com/oauth/access_token";
-			final String tokenParams = "client_id=" + AppContext.Var.FB_APP_ID.val() +
+			String tokenUrl = "https://graph.facebook.com/oauth/access_token";
+			String tokenParams = "client_id=" + AppContext.Var.FB_APP_ID.val() +
 								"&redirect_uri=" + getFbloginUrlEncoded() +
 								"&client_secret=" + AppContext.Var.FB_APP_SECRET.val() +
 								"&code=" + code;
-			return async(
-				WS.url(tokenUrl).post(tokenParams).map(
-					new Function<WS.Response, Result>() {
-						@Override
-						public Result apply(WS.Response resp) {
-							//parse the response for the token and expiry
-							Map<String, String> paramMap = QueryParamsUtil.queryStringToMap(resp.getBody());
-							String token = paramMap.get("access_token");
-							int tokenExpiry = Integer.parseInt(paramMap.get("expires"));
-							
-							//add this information to the session
-							SessionModel session = SessionContext.get();
-							SessionModel.Updater.setFbAuthInfoAndUpdate(session, token, tokenExpiry);
-							
-							//if there is an associated user, update the login time
-							if (SessionContext.hasUser()) {
-								UserModel user = SessionContext.user();
-								UserModel.Updater.setLoginTimeAndUpdate(user);
-							}
-							
-							//don't get the associated user, that will be taken care of in SecuredActions
-							//redirect to the given redirect url, or to the landing page
-							return redirect("/");
-						}
-					}
-				)
-			);
+			
+			Response resp = WS.url(tokenUrl).post(tokenParams).get();
+			
+			//parse the response for the token and expiry
+			Map<String, String> paramMap = QueryParamsUtil.queryStringToMap(resp.getBody());
+			String token = paramMap.get("access_token");
+			int tokenExpiry = Integer.parseInt(paramMap.get("expires"));
+			
+			//add this information to the session
+			SessionModel session = SessionContext.get();
+			SessionModel.Updater.setFbAuthInfoAndUpdate(session, token, tokenExpiry);
+			
+			//if there is an associated user, update the login time
+			if (SessionContext.hasUser()) {
+				UserModel user = SessionContext.user();
+				UserModel.Updater.setLoginTimeAndUpdate(user);
+			}
+			
+			//don't get the associated user, that will be taken care of in SecuredActions
+			//redirect to the given redirect url, or to the landing page
+			return redirect("/");
 		}
 	}
 	

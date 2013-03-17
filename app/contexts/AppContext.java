@@ -11,7 +11,7 @@ import play.Play;
  * The rest of the code should never directly access System.getenv() or the Play class, because
  * all environment variables will be loaded into this classS
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-02-16
  *
  */
@@ -20,7 +20,7 @@ public abstract class AppContext {
 	/**
 	 * This enum holds all config/environment vars that the app should access
 	 * 
-	 * @author bigpopakap@gmail.com
+	 * @author bigpopakap
 	 * @since 2013-02-16
 	 *
 	 */
@@ -126,7 +126,7 @@ public abstract class AppContext {
 	 * This enum holds the possible app modes, as well as methods to query the current
 	 * mode the app is running
 	 * 
-	 * @author bigpopakap@gmail.com
+	 * @author bigpopakap
 	 * @since 2013-02-16
 	 *
 	 */

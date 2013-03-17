@@ -14,7 +14,7 @@ import com.avaje.ebean.annotation.Formula;
 /**
 * This Ebean maps to the SessionCsrfToken table, mapping session IDs to active CSRF tokens
 * 
-* @author bigpopakap@gmail.com
+* @author bigpopakap
 * @since 2013-02-23
 *
 */

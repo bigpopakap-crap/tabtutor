@@ -3,7 +3,7 @@ package exeptions;
 /**
  * Base exception that all exceptions related to 3rd party API calls should extend
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-03-08
  *
  */

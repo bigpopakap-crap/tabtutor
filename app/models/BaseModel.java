@@ -11,7 +11,7 @@ import types.SqlCommandType.BasicDmlModifyingType;
  * Models must provide an extension of the Factor, Interactor and Validator classes, which will preferably be
  * statically defined in the implementing class
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-02-26
  *
  */
@@ -26,7 +26,7 @@ public abstract class BaseModel extends Model {
 	 * This class should be extended by the implementing model class, providing all
 	 * methods to create objects
 	 * 
-	 * @author bigpopakap@gmail.com
+	 * @author bigpopakap
 	 * @since 2013-02-26
 	 */
 	protected static abstract class BaseFactory {}
@@ -46,7 +46,7 @@ public abstract class BaseModel extends Model {
 	 * our code cannot reference these methods. So using this getter class is still an effective
 	 * way to limit outside access
 	 * 
-	 * @author bigpopakap@gmail.com
+	 * @author bigpopakap
 	 * @since 2013-03-02
 	 *
 	 */
@@ -56,7 +56,7 @@ public abstract class BaseModel extends Model {
 	 * This class should be extended by the implementing model class, providing all
 	 * methods to read data from the table
 	 * 
-	 * @author bigpopakap@gmail.com
+	 * @author bigpopakap
 	 * @since 2013-02-26
 	 */
 	protected static abstract class BaseSelector {}
@@ -65,7 +65,7 @@ public abstract class BaseModel extends Model {
 	 * This class should be extended by the implementing model class, providing all
 	 * methods to modify data in the table
 	 * 
-	 * @author bigpopakap@gmail.com
+	 * @author bigpopakap
 	 * @since 2013-02-26
 	 */
 	protected static abstract class BaseUpdater {}
@@ -74,7 +74,7 @@ public abstract class BaseModel extends Model {
 	 * This class should be extended by the implementing model class, providing methods
 	 * to validate the model
 	 * 
-	 * @author bigpopakap@gmail.com
+	 * @author bigpopakap
 	 * @since 2013-02-26
 	 */
 	protected static abstract class BaseValidator {}

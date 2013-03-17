@@ -3,7 +3,7 @@ package base;
 /**
  * Base test class. All tests should extend this class
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-02-26
  *
  */

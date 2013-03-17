@@ -11,7 +11,7 @@ import play.mvc.Http.Context;
  * needed). After validation, errors associated with each field can be stored in this class
  * and retrieved from the template
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-03-10
  *
  */

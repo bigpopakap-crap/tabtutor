@@ -14,7 +14,7 @@ import contexts.AppContext;
 /**
  * This class is a base class for tests that make sure links are not broken
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-02-26
  *
  */
@@ -24,7 +24,7 @@ public class BaseBrokenLinkTest extends BaseFuncTest {
 	 * A class that can be overridden and passed in to implement the details of a test run
 	 * See {@link #BaseBrokenLinkTest.doTestLinksNotBroken()} as an example of how to use this class
 	 * 
-	 * @author bigpopakap@gmail.com
+	 * @author bigpopakap
 	 * @since 2013-02-26
 	 *
 	 */

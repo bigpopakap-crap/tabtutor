@@ -6,7 +6,7 @@ import actions.ModeProtectAction.ModeProtected;
  * This class handles routes that can be used by tests for various purposes
  * It is protected to only be available in DEVELOPMENT mode
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-03-04
  *
  */

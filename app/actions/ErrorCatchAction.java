@@ -17,7 +17,7 @@ import exeptions.BaseExposedException;
  * This action will catch any exceptions in the delegated action, and
  * returns the corresponding result to the user
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-03-06
  *
  */
@@ -26,7 +26,7 @@ public class ErrorCatchAction extends Action.Simple {
 	/**
 	 * Annotation for applying ErrorCatchAction
 	 * 
-	 * @author bigpopakap@gmail.com
+	 * @author bigpopakap
 	 * @since 2013-03-06
 	 *
 	 */

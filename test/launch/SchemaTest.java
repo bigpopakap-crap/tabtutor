@@ -6,7 +6,7 @@ import base.BaseFuncTest;
 /**
  * Test class for making sure that database models match the database schema
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-02-26
  *
  */

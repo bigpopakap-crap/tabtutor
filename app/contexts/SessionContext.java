@@ -13,7 +13,7 @@ import api.fb.FbApi;
  * This class holds methods to query the current session for important objects,
  * like the session model itself or the FbApi object
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-03-02
  *
  */

@@ -4,7 +4,7 @@ package exeptions;
  * General API exception for when the service does responds with an
  * error code and possible a message
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-03-08
  *
  */

@@ -7,7 +7,7 @@ import base.BaseFuncTest;
 /**
  * Test package for the Facebook authentication flows
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-02-26
  *
  */

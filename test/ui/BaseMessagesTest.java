@@ -18,7 +18,7 @@ import contexts.AppContext;
  * This workSs by providing some protected helper methods to do the test, and each
  * test can override hooks to navigate to pages, and select which strings should be tested
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-02-26
  *
  */
@@ -28,7 +28,7 @@ public abstract class BaseMessagesTest extends BaseFuncTest {
 	 * A class that can be overridden and passed in to implement the details of a test run
 	 * See {@link #BasicMessagesTest.doTestHardcodedStrings()} as an example of how to use this class
 	 * 
-	 * @author bigpopakap@gmail.com
+	 * @author bigpopakap
 	 * @since 2013-02-26
 	 *
 	 */

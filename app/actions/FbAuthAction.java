@@ -8,12 +8,10 @@ import java.lang.annotation.Target;
 import models.SessionModel;
 import models.UserModel;
 import play.Logger;
-import play.libs.F.Function;
 import play.mvc.Action;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import play.mvc.With;
-import api.ApiResponseOption;
 import api.fb.FbApi;
 import api.fb.FbJsonResponse;
 import contexts.ErrorContext;
@@ -26,7 +24,7 @@ import exeptions.BaseApiException;
  * token has not expired
  * It is assumed that the session has already been set up
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-02-24
  *
  */
@@ -35,7 +33,7 @@ public class FbAuthAction extends Action.Simple {
 	/**
 	 * Annotation for applying FacebookAuthenticatedAction
 	 * 
-	 * @author bigpopakap@gmail.com
+	 * @author bigpopakap
 	 * @since 2013-02-24
 	 *
 	 */
@@ -46,7 +44,7 @@ public class FbAuthAction extends Action.Simple {
 
 	/** Implements the action */
 	@Override
-	public Result call(final Context ctx) throws Throwable {
+	public Result call(Context ctx) throws Throwable {
 		Logger.debug("Calling into " + this.getClass().getName());
 		
 		//get the session object
@@ -69,40 +67,30 @@ public class FbAuthAction extends Action.Simple {
 			Logger.debug("Session needs a user reference. Fetching Facebook ID and looking up user object");
 			
 			//start by getting the user's Facebook ID from the Facebook API
-			return async(fbApi.me().map(new Function<ApiResponseOption<FbJsonResponse>, Result>() {
-
-				@Override
-				public Result apply(ApiResponseOption<FbJsonResponse> respOption) throws Throwable {
-					try {
-						FbJsonResponse fbJson = respOption.get();
-						
-						String fbId = fbJson.fbId();
-						String firstName = fbJson.firstName();
-						String lastName = fbJson.lastName();
-						String email = fbJson.email();
-						
-						//get the user associated with this Facebook ID, or create one
-						UserModel user = UserModel.Selector.getByFbId(fbId);
-						if (user == null) {
-							user = UserModel.Factory.createAndSave(fbId, firstName, lastName, email);
-						}
-						
-						//add this user ID to the session object
-						SessionModel.Updater.setUserPkAndUpdate(session, user.pk);
-					} catch (BaseApiException e) {
-						ErrorContext.setFbConnectionError(true);
-						//TODO need to do anything else to handle this error?
-					}
-	
-					return delegate.call(ctx);
+			try {
+				FbJsonResponse fbJson = fbApi.me().get().get();
+				
+				String fbId = fbJson.fbId();
+				String firstName = fbJson.firstName();
+				String lastName = fbJson.lastName();
+				String email = fbJson.email();
+				
+				//get the user associated with this Facebook ID, or create one
+				UserModel user = UserModel.Selector.getByFbId(fbId);
+				if (user == null) {
+					user = UserModel.Factory.createAndSave(fbId, firstName, lastName, email);
 				}
 				
-			}));
+				//add this user ID to the session object
+				SessionModel.Updater.setUserPkAndUpdate(session, user.pk);
+			} catch (BaseApiException e) {
+				ErrorContext.setFbConnectionError(true);
+				//TODO need to do anything else to handle this error?
+			}
 		}
-		else {
-			//update the login time and delegate
-			return delegate.call(ctx);
-		}
+		
+		//all checks passed, return the delegate
+		return delegate.call(ctx);
 	}
 	
 }

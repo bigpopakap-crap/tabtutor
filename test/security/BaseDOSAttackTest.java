@@ -11,7 +11,7 @@ import contexts.AppContext;
 /**
  * Base class to execute DOS attacks on the server
  * 
- * @author bigpopakap@gmail.com
+ * @author bigpopakap
  * @since 2013-02-26
  *
  */
@@ -20,7 +20,7 @@ public class BaseDOSAttackTest extends BaseSecurityTest {
 	/**
 	 * Class for providing hooks to control the test execution
 	 * 
-	 * @author bigpopakap@gmail.com
+	 * @author bigpopakap
 	 * @since 2013-02-26
 	 *
 	 */
