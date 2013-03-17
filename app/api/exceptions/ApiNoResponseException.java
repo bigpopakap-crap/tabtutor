@@ -1,4 +1,4 @@
-package exeptions;
+package api.exceptions;
 
 /**
  * General API exception for when the service does not respond (i.e. the request
@@ -10,9 +10,6 @@ package exeptions;
  */
 public class ApiNoResponseException extends BaseApiException {
 	
-	/** Default constructor */
-	public ApiNoResponseException() {
-		super();
-	}
+	private static final long serialVersionUID = -4920976263519573529L;
 
 }

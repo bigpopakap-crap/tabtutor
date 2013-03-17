@@ -11,7 +11,7 @@ import play.mvc.Http.Context;
  * @since 2013-03-10
  *
  */
-public abstract class ContextPackageUtils {
+abstract class ContextPackageUtils {
 	
 	//TODO test that there are no duplicate values used as keys
 	

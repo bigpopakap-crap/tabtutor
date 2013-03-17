@@ -11,7 +11,7 @@ import play.mvc.Http.Context;
 import play.mvc.Result;
 import play.mvc.With;
 import contexts.AppContext;
-import exeptions.BaseExposedException;
+import controllers.exceptions.BaseExposedException;
 
 /**
  * This action will catch any exceptions in the delegated action, and
@@ -43,12 +43,18 @@ public class ErrorCatchAction extends Action.Simple {
 			return delegate.call(ctx);
 		}
 		catch (BaseExposedException ex) {
+			Logger.error("Exposed exception caught in " + this.getClass(), ex);
 			return ex.result();
 		}
 		catch (Exception ex) {
+			Logger.error("Exception caught in " + this.getClass(), ex);
 			//TODO figure out which default error to display to the user
-			if (AppContext.Mode.isProduction()) return BaseExposedException.Factory.internalServerError().result();
-			else throw ex;
+			if (AppContext.Mode.isProduction()) {
+				return BaseExposedException.Factory.internalServerError().result();
+			}
+			else {
+				throw ex;
+			}
 		}
 	}
 

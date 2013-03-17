@@ -11,7 +11,7 @@ import play.mvc.Http.Context;
 import play.mvc.Result;
 import play.mvc.With;
 import contexts.AppContext;
-import exeptions.BaseExposedException;
+import controllers.exceptions.BaseExposedException;
 
 /**
  * This action will catch throw an exception if the app is not running in the

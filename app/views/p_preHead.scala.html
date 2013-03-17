@@ -1,11 +1,24 @@
+@*
+	Author: bigpopakap
+	Since: 2013-03-17
+	
+	Partial template that defines some standard things to put at the beginning of the head of the HTML page
+	
+	Params:
+		subTitle: the string to include after the app title as the title of the page
+		forceNoDetectLogin: if true, will not redirect to the login url if the user is connected with Facebook
+*@
 @(subTitle: String = "", forceNoDetectLogin: Boolean = false)
 @import contexts.AppContext
 @import contexts.SessionContext
 @import models.SessionModel
 <title>@(AppContext.Var.APP_TITLE)@(subTitle)</title>
-<script type="text/javascript" src="/public/javascripts/jquery-1.9.1.min.js"></script>
-<script type="text/javascript" src="/public/javascripts/initNamespace.js"></script>
-<script type="text/javascript" src="/public/javascripts/initLogger.js"></script>
+<meta http-equiv="Content-Language" Content="@(SessionContext.lang().code())">
+@p_staticResource(Array(
+	"/public/javascripts/jquery-1.9.1.min.js",
+	"/public/javascripts/initNamespace.js",
+	"/public/javascripts/initLogger.js"
+))
 <script type="text/javascript">
 	window.WTF.get('Logger').init(@(AppContext.Mode.isProduction()));
 </script>

@@ -11,8 +11,8 @@ import play.libs.WS.WSRequestHolder;
 import play.mvc.Http.Status;
 import types.HttpMethodType;
 import utils.QueryParamsUtil;
-import exeptions.ApiErrorCodeException;
-import exeptions.ApiNoResponseException;
+import api.exceptions.ApiErrorCodeException;
+import api.exceptions.ApiNoResponseException;
 
 /**
  * The base class for classes implementing interactions with 3rd party APIs.

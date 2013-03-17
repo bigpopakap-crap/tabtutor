@@ -1,7 +1,6 @@
 package controllers;
 
-import exeptions.BaseExposedException;
-import play.mvc.Controller;
+import controllers.exceptions.BaseExposedException;
 
 /**
  * This class should be the parent of all classes that route API calls. Api calls should always
@@ -15,9 +14,15 @@ import play.mvc.Controller;
  * @since 2013-02-17
  *
  */
-public class BaseApiController extends Controller {
+public abstract class BaseApiController extends BaseController {
 	
 	//add exposed API paths when we want to start exposing an API
+	
+	@Override
+	public BaseExposedException getDefaultExposedException() {
+		//TODO implement
+		return null;
+	}
 	
 	/**
 	 * This class is an exposed error specific to the API interface, where every
@@ -32,5 +37,5 @@ public class BaseApiController extends Controller {
 		private static final long serialVersionUID = 6385621008097532663L;
 		
 	}
-
+	
 }

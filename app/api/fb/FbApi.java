@@ -7,8 +7,8 @@ import play.libs.WS.Response;
 import types.HttpMethodType;
 import api.ApiResponseOption;
 import api.BaseApi;
-import exeptions.ApiErrorCodeException;
-import exeptions.ApiNoResponseException;
+import api.exceptions.ApiErrorCodeException;
+import api.exceptions.ApiNoResponseException;
 
 /**
  * This class implements interactions with the Facebook REST API

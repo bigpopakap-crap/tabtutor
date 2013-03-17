@@ -1,4 +1,5 @@
 errorPage_title=Oops! An error occurred
+errorPage_internalServerErrorDescription=Please try again later, or submit an error report if the problem persists
 errorPage_pageNotFoundDescription=We couldn't find the page you were looking for
 errorPage_toGoBack=to go back
 errorPage_toGoHome=to go home

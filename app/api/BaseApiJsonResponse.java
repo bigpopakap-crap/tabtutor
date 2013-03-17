@@ -7,7 +7,7 @@ import org.codehaus.jackson.node.JsonNodeFactory;
 
 import play.libs.WS.Response;
 import types.HttpMethodType;
-import exeptions.BaseApiException;
+import api.exceptions.BaseApiException;
 
 /**
  * Base response object that expect the raw response to be in JSON format
