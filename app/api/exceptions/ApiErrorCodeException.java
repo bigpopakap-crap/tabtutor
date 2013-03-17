@@ -1,4 +1,4 @@
-package exeptions;
+package api.exceptions;
 
 /**
  * General API exception for when the service does responds with an
@@ -9,6 +9,8 @@ package exeptions;
  *
  */
 public class ApiErrorCodeException extends BaseApiException {
+	
+	private static final long serialVersionUID = -2953732413793485446L;
 	
 	private int code;
 	private String body;

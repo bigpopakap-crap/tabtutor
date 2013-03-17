@@ -4,8 +4,8 @@ import java.util.Map;
 
 import play.libs.WS.Response;
 import types.HttpMethodType;
+import api.exceptions.BaseApiException;
 import contexts.AppContext;
-import exeptions.BaseApiException;
 
 /**
  * Base response object that all responses objects from 3rd party API calls should

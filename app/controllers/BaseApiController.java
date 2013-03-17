@@ -1,7 +1,7 @@
 package controllers;
 
-import exeptions.BaseExposedException;
 import play.mvc.Controller;
+import controllers.exceptions.BaseExposedException;
 
 /**
  * This class should be the parent of all classes that route API calls. Api calls should always

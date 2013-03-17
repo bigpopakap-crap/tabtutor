@@ -6,7 +6,7 @@ import play.mvc.Result;
 import utils.MessagesEnum;
 import actions.ErrorCatchAction.ErrorCaught;
 import actions.SessionAction.Sessioned;
-import exeptions.BaseExposedException;
+import controllers.exceptions.BaseExposedException;
 
 /**
  * This class should be the parent of all classes that handle requests for the web interface

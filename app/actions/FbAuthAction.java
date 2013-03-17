@@ -12,12 +12,12 @@ import play.mvc.Action;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import play.mvc.With;
+import api.exceptions.BaseApiException;
 import api.fb.FbApi;
 import api.fb.FbJsonResponse;
 import contexts.ErrorContext;
 import contexts.SessionContext;
 import controllers.FbAuthWebController;
-import exeptions.BaseApiException;
 
 /**
  * This Action will log the user in through Facebook, and ensure that the authentication

@@ -1,4 +1,4 @@
-package exeptions;
+package controllers.exceptions;
 
 import play.mvc.Result;
 

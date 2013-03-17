@@ -1,4 +1,4 @@
-package exeptions;
+package api.exceptions;
 
 /**
  * Base exception that all exceptions related to 3rd party API calls should extend
