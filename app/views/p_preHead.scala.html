@@ -13,6 +13,7 @@
 @import contexts.SessionContext
 @import models.SessionModel
 <title>@(AppContext.Var.APP_TITLE)@(subTitle)</title>
+<meta http-equiv="Content-Language" Content="@(SessionContext.lang().code())">
 <script type="text/javascript" src="/public/javascripts/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="/public/javascripts/initNamespace.js"></script>
 <script type="text/javascript" src="/public/javascripts/initLogger.js"></script>
