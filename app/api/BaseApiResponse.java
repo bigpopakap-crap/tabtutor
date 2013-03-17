@@ -45,27 +45,33 @@ public abstract class BaseApiResponse<T extends BaseApiException> {
 									: Thread.currentThread().getStackTrace();
 	}
 	
+	/** Gets the method used in the request to get this response */
 	public HttpMethodType getMethod() {
 		return method;
 	}
 	
+	/** Gets the url domain queried in the request to get this response */
 	public String getUrlDomain() {
 		return urlDomain;
 	}
 	
+	/** Gets the url path queried in the request to get this response */
 	public String getUrlPath() {
 		return urlPath;
 	}
 	
+	/** Gets the params used in the request to get this response */
 	public Map<String, String> getParams() {
 		//TODO make a defensive copy?
 		return params;
 	}
 	
+	/** Gets the raw response */
 	public Response getRawResponse() {
 		return response;
 	}
 	
+	/** Gets the stack trace when this object was created */
 	public StackTraceElement[] getStackTraceWhenCreated() {
 		return stackTraceWhenCreated;
 	}
