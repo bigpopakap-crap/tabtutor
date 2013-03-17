@@ -1,5 +1,6 @@
 package api;
 
+import exeptions.ApiNoResponseException;
 import exeptions.BaseApiException;
 
 /**
@@ -48,15 +49,21 @@ public class ApiResponseOption<R extends BaseApiResponse<?>> {
 	 * @see #ApiResponseOption(BaseApiResponse)
 	 */
 	private ApiResponseOption(R resp, BaseApiException ex) {
-		//make sure exactly one is non-null
-		if (ex == null && resp == null) throw new IllegalArgumentException("Both of these cannot be null");
-		if (ex != null && resp != null) throw new IllegalArgumentException("One of these must be null");
-		
+		//make sure they're not both non-null
+		if (resp != null && ex != null) {
+			throw new IllegalArgumentException("One of these must be null");
+		}
+		//if both are null, treat it as a no respose exception
+		else if (resp == null && ex == null) {
+			this.ex = new ApiNoResponseException();
+			this.resp = null;
+		}
 		//check whether the response object is an error, and set fields accordingly
-		if (resp != null && resp.isError()) {
+		else if (resp != null && resp.isError()) {
 			this.ex = resp.getExceptionNoIsErrorCheck();
 			this.resp = null;
 		}
+		//otherwise, just set the exception to the one given
 		else {
 			this.ex = ex;
 			this.resp = null; //since resp is null, explicity set it here
