@@ -1,0 +1,34 @@
+@*
+	Author: bigpopakap
+	Since: 2013-03-17
+	
+	Partial template that gets a static resource unless it was already included in the HTML page
+	
+	Params:
+		urls: The array of urls to include. This partial will automatically determine what type of
+				resoruce they are
+*@
+@(urls: Array[String])
+@import contexts.StaticResourcesContext;
+@import types.StaticResourceType;
+@for(url <- urls) {
+	@if(StaticResourcesContext.contains(url)) {
+		<script type="text/javascript">
+			window.WTF.get('Logger').info('Skipping already-included resource at @(url)');
+		</script>
+	} else {
+		@if(StaticResourceType.JS.isType(url)) {
+			<script type="text/javascript" src="@(StaticResourcesContext.add(url))"></script>
+		}
+		
+		@if(StaticResourceType.CSS.isType(url)) {
+			<link rel="stylesheet" type="text/css" href="@(StaticResourcesContext.add(url))"/>
+		}
+		
+		@if(StaticResourceType.getTypeOf(url) == null) {
+			<script type="text/javascript">
+				window.WTF.get('Logger').error('Unhandled static resource type for url @(StaticResourcesContext.add(url))');
+			</script>
+		}
+	}
+}

@@ -33,7 +33,7 @@ public class BaseWebController extends BaseController {
 	 * @since 2013-03-06
 	 *
 	 */
-	protected static abstract class ErrorPageException extends BaseExposedException {
+	protected static abstract class ErrorPageException extends controllers.exceptions.BaseExposedException {
 
 		private static final long serialVersionUID = -8551848133552601737L;
 		

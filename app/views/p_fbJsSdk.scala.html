@@ -10,8 +10,10 @@
 @(detectLogin: Boolean = false)
 @import contexts.AppContext;
 @import routes.FbAuthWebController;
-<script type="text/javascript" src="http://connect.facebook.net/en_us/all.js"></script>
-<script type="text/javascript" src="/public/javascripts/initFbSdk.js"></script>
+@p_staticResource(Array(
+	"http://connect.facebook.net/en_us/all.js",
+	"/public/javascripts/initFbSdk.js"
+))
 <script type="text/javascript">
 	//initialize the SDK. the fb-root element hasn't been created, but it will be by the SDK
 	window.WTF.get('initFbSdk')(

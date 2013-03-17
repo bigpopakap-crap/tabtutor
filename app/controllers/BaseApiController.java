@@ -14,7 +14,7 @@ import controllers.exceptions.BaseExposedException;
  * @since 2013-02-17
  *
  */
-public class BaseApiController extends BaseController {
+public abstract class BaseApiController extends BaseController {
 	
 	//add exposed API paths when we want to start exposing an API
 	
@@ -37,5 +37,5 @@ public class BaseApiController extends BaseController {
 		private static final long serialVersionUID = 6385621008097532663L;
 		
 	}
-
+	
 }
