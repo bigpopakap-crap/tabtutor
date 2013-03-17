@@ -27,7 +27,6 @@ public class ApiErrorCodeException extends BaseApiException {
 	 * @param message the body of the response, or null if there was no body
 	 */
 	public ApiErrorCodeException(int code, String body) {
-		super();
 		this.code = code;
 		this.body = body;
 	}

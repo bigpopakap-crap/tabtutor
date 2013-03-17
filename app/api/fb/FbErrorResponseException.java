@@ -22,7 +22,6 @@ public class FbErrorResponseException extends BaseApiException {
 	 * @param fbJson must be non-null and must represent an error
 	 */
 	public FbErrorResponseException(FbJsonResponse fbJson) {
-		super();
 		if (fbJson == null) throw new IllegalArgumentException("fbJson cannot be null");
 		if (!fbJson.isError()) throw new IllegalArgumentException("fbJson must represent an error");
 		this.fbJson = fbJson;
