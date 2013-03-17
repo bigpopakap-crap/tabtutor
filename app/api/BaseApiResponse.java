@@ -1,5 +1,10 @@
 package api;
 
+import java.util.Map;
+
+import play.libs.WS.Response;
+import types.HttpMethodType;
+import contexts.AppContext;
 import exeptions.BaseApiException;
 
 /**
@@ -10,9 +15,60 @@ import exeptions.BaseApiException;
  * @author bigpopakap
  * @since 2013-03-08
  * 
- * @param <T> the type of the exception that is associated with an errorneous response
+ * @param <T> the type of the exception that is associated with an erroneous response
  */
 public abstract class BaseApiResponse<T extends BaseApiException> {
+	
+	private final HttpMethodType method; //true if the method used for the query was POST, false if GET
+	private final String urlDomain; //the base domain of the url queried, NOT including the trailing slash
+	private final String urlPath; //the path of the url queried to get this response
+	private final Map<String, String> params; //the params passed with the query
+	private final Response response; //the raw response
+	private final StackTraceElement[] stackTraceWhenCreated; //the stack trace when the object was created
+	
+	protected BaseApiResponse(HttpMethodType method, String urlDomain, String urlPath, Map<String, String> params, Response response) {
+		//make sure none of them are null, except response which might be null
+		if (method == null) throw new IllegalArgumentException("Method cannot be null");
+		if (urlDomain == null) throw new IllegalArgumentException("UrlDomain cannot be null");
+		if (urlPath == null) throw new IllegalArgumentException("UrlPath cannot be null");
+		if (params == null) throw new IllegalArgumentException("Params cannot be null");
+		
+		this.method = method;
+		this.urlDomain = urlDomain;
+		this.urlPath = urlPath;
+		this.params = params;
+		this.response = response;
+		
+		//create the stack trace unless we are in production mode
+		stackTraceWhenCreated = AppContext.Mode.isProduction()
+									? new StackTraceElement[0]
+									: Thread.currentThread().getStackTrace();
+	}
+	
+	public HttpMethodType getMethod() {
+		return method;
+	}
+	
+	public String getUrlDomain() {
+		return urlDomain;
+	}
+	
+	public String getUrlPath() {
+		return urlPath;
+	}
+	
+	public Map<String, String> getParams() {
+		//TODO make a defensive copy?
+		return params;
+	}
+	
+	public Response getRawResponse() {
+		return response;
+	}
+	
+	public StackTraceElement[] getStackTraceWhenCreated() {
+		return stackTraceWhenCreated;
+	}
 	
 	/** Determines if this response represents an error */
 	public abstract boolean isError();

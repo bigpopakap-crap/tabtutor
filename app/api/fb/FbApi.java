@@ -45,16 +45,15 @@ public class FbApi extends BaseApi<FbJsonResponse> {
 	 ***************************************************** */
 	
 	@Override
-	protected void hook_modifyParams(HttpMethodType method, String url,
-			Map<String, String> params) {
-		super.hook_modifyParams(method, url, params);
+	protected void hook_modifyParams(HttpMethodType method, String urlDomain, String urlPath, Map<String, String> params) {
+		super.hook_modifyParams(method, urlDomain, urlPath, params);
 		params.put("method", method.name());
 		params.put("access_token", getToken());
 	}
 	
 	@Override
-	protected FbJsonResponse hook_mapResponse(HttpMethodType method, String url, Map<String, String> params, Response resp) {
-		return new FbJsonResponse(getToken(), method, url, params, resp.asJson());
+	protected FbJsonResponse hook_mapResponse(HttpMethodType method, String urlDomain, String urlPath, Map<String, String> params, Response resp) {
+		return new FbJsonResponse(method, urlDomain, urlPath, params, resp, getToken());
 	}
 	
 	/* *****************************************************
@@ -66,7 +65,7 @@ public class FbApi extends BaseApi<FbJsonResponse> {
 	 * @throws ApiErrorCodeException 
 	 * @throws ApiNoResponseException */
 	public Promise<ApiResponseOption<FbJsonResponse>> me() {
-		return query(HttpMethodType.GET, PATH_ME, null);
+		return query(HttpMethodType.GET, GRAPH_API_DOMAIN, PATH_ME, null);
 	}
 
 }

@@ -14,6 +14,15 @@ import utils.QueryParamsUtil;
 import exeptions.ApiErrorCodeException;
 import exeptions.ApiNoResponseException;
 
+/**
+ * The base class for classes implementing interactions with 3rd party APIs.
+ * Provides some utility methods for making queries
+ * 
+ * @author bigpopakap
+ * @since 2013-03-17
+ *
+ * @param <R> the response type specific to the API class
+ */
 public abstract class BaseApi<R extends BaseApiResponse<?>> {
 	
 	/**
@@ -25,18 +34,19 @@ public abstract class BaseApi<R extends BaseApiResponse<?>> {
 	 * @param params the parameters to pass. If null or empty, no parameters will be used (except those
 	 * 				added by the hook method to add common params)
 	 */
-	protected final Promise<ApiResponseOption<R>> query(HttpMethodType method, String url, Map<String, String> params) {
+	protected final Promise<ApiResponseOption<R>> query(HttpMethodType method, String urlDomain, String urlPath, Map<String, String> params) {
 		//default or throw exception on nulls
 		if (method == null) method = HttpMethodType.GET;
-		if (url == null) throw new IllegalArgumentException("Url cannot be null");
+		if (urlDomain == null) throw new IllegalArgumentException("UrlDomain cannot be null");
+		if (urlPath == null) throw new IllegalArgumentException("UrlPath cannot be null");
 		
 		//generate the parameter map, add common params, and convert them to a query string
 		if (params == null) params = new HashMap<String, String>();
-		hook_modifyParams(method, url, params);
+		hook_modifyParams(method, urlDomain, urlPath, params);
 		String paramStr = QueryParamsUtil.mapToQueryString(params);
 		
 		//generate the request promise depending on whether we're using POST or GET
-		WSRequestHolder reqHolder = WS.url(url);
+		WSRequestHolder reqHolder = WS.url(urlDomain + urlPath);
 		Promise<Response> promise;
 		switch (method) {
 			case GET:
@@ -54,7 +64,8 @@ public abstract class BaseApi<R extends BaseApiResponse<?>> {
 		
 		//create final versions of variables
 		final HttpMethodType fMethod = method;
-		final String fUrl = url;
+		final String fUrlDomain = urlDomain;
+		final String fUrlPath = urlPath;
 		final Map<String, String> fParams = params;
 		
 		//map the response to a response object
@@ -73,7 +84,7 @@ public abstract class BaseApi<R extends BaseApiResponse<?>> {
 					);
 				}
 				else {
-					return new ApiResponseOption<R>(hook_mapResponse(fMethod, fUrl, fParams, resp));
+					return new ApiResponseOption<R>(hook_mapResponse(fMethod, fUrlDomain, fUrlPath, fParams, resp));
 				}
 			}
 			
@@ -92,7 +103,7 @@ public abstract class BaseApi<R extends BaseApiResponse<?>> {
 	 * @param url the url that will be queried
 	 * @param params the parameter map to modify. This is guaranteed to be non-null
 	 */
-	protected void hook_modifyParams(HttpMethodType method, String url, Map<String, String> params) {
+	protected void hook_modifyParams(HttpMethodType method, String urlDomain, String urlPath, Map<String, String> params) {
 		//do nothing. subclasses can override this
 	}
 	
@@ -100,6 +111,6 @@ public abstract class BaseApi<R extends BaseApiResponse<?>> {
 	 * Hook to map a successfull HTTP response to the response type of the API class
 	 * Should not return null
 	 */
-	protected abstract R hook_mapResponse(HttpMethodType method, String url, Map<String, String> params, Response resp);
+	protected abstract R hook_mapResponse(HttpMethodType method, String urlDomain, String urlPath, Map<String, String> params, Response resp);
 
 }

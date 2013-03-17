@@ -1,11 +1,13 @@
 package api.fb;
 
+import java.util.Map;
+
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.JsonNodeFactory;
 
+import play.libs.WS.Response;
+import types.HttpMethodType;
 import api.BaseApiResponse;
-import contexts.AppContext;
-import exeptions.BaseApiException;
 
 /**
  * Wraps a JSON response from Facebook and provides some helper methods to access
@@ -17,43 +19,16 @@ import exeptions.BaseApiException;
  */
 public class FbJsonResponse extends BaseApiResponse<FbErrorResponseException> {
 	
-	private JsonNode json; //the actual JSON response
-	private String accessToken; //the access token used for the API call
-	private boolean usedPost; //true if the method used for the query was POST, false if GET
-	private String apiPath; //the API path queries to get this response
-	private String apiParams; //the params passed with the query
-	private StackTraceElement[] stackTraceWhenCreated; //the stack trace when the object was created
+	private final String accessToken; //the access token used for the API call
+	private final JsonNode json; //the actual JSON response
 	
-	/** TODO doc */
-	FbJsonResponse(String accessToken, boolean usedPost, String apiPath, String apiParams, JsonNode json) {
-		this(accessToken, usedPost, apiPath, apiParams, json, null);
-	}
-	
-	/**
-	 * Creates a new response object
-	 * 
-	 * @param apiPath the path queried to get this response
-	 * @param json the response that came back
-	 */
-	FbJsonResponse(String accessToken, boolean usedPost, String apiPath, String apiParams, JsonNode json, BaseApiException error) {
-		if (accessToken == null) throw new IllegalArgumentException("Access token cannot be null");
-		if (apiPath == null) throw new IllegalArgumentException("API path cannot be null");
-		if (apiParams == null) throw new IllegalArgumentException("Params cannot be null");
-		if (json == null) throw new IllegalArgumentException("Json node cannot be null");
+	public FbJsonResponse(HttpMethodType method, String urlDomain, String urlPath, Map<String, String> params, Response resp, String accessToken) {
+		super(method, urlDomain, urlPath, params, resp);
 		
+		if (accessToken == null) throw new IllegalArgumentException("AccessToken cannot be null");
+		
+		this.json = resp.asJson();
 		this.accessToken = accessToken;
-		this.usedPost = usedPost;
-		this.apiPath = apiPath;
-		this.apiParams = apiParams;
-		this.json = json;
-		stackTraceWhenCreated = AppContext.Mode.isProduction()
-									? new StackTraceElement[0]
-									: Thread.currentThread().getStackTrace();
-	}
-	
-	/** Gets the JSON response itself */
-	public JsonNode getJson() {
-		return json;
 	}
 	
 	/** Gets the access token used in the request that produced this result */
@@ -61,19 +36,9 @@ public class FbJsonResponse extends BaseApiResponse<FbErrorResponseException> {
 		return accessToken;
 	}
 	
-	/** Gets the method used in the query. True if POST, false if GET */
-	public boolean isPost() {
-		return usedPost;
-	}
-	
-	/** Gets the Facebook API path called to generate this result */
-	public String getPath() {
-		return apiPath;
-	}
-	
-	/** Gets the params passed with the query */
-	public String getParams() {
-		return apiParams;
+	/** Gets the JSON response itself */
+	public JsonNode getJson() {
+		return json;
 	}
 	
 	/** Sugar method for testing whether this response was returned from any
@@ -81,14 +46,9 @@ public class FbJsonResponse extends BaseApiResponse<FbErrorResponseException> {
 	public boolean is(String... paths) {
 		if (paths == null) throw new IllegalArgumentException("Paths cannot be null");
 		for (String path : paths) {
-			if (getPath().equals(path)) return true;
+			if (getUrlPath().equals(path)) return true;
 		}
 		return false;
-	}
-	
-	/** Gets the stack trace when this response object was created */
-	public StackTraceElement[] getStackTraceWhenCreated() {
-		return stackTraceWhenCreated;
 	}
 	
 	/* *********************************************************
