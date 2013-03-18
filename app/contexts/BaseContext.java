@@ -5,20 +5,21 @@ import java.util.concurrent.Callable;
 import play.mvc.Http.Context;
 
 /**
- * Provides utils for the context package
+ * Parent class of all context classes
+ * Provides some helper methods
  * 
  * @author bigpopakap
- * @since 2013-03-10
+ * @since 2013-03-18
  *
  */
-abstract class ContextPackageUtils {
+public abstract class BaseContext {
 	
 	//TODO test that there are no duplicate values used as keys
 	
 	/** Helper to either get the value from the context (given the key), or
 	 *  load it and save it to the context */
 	@SuppressWarnings("unchecked")
-	static <T> T getOrLoad(String contextKey, Callable<T> loader) {
+	protected static final <T> T getOrLoad(String contextKey, Callable<T> loader) {
 		//try getting the object from the context
 		T t = (T) Context.current().args.get(contextKey);
 		

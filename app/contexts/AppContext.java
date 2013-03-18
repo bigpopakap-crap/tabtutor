@@ -15,7 +15,7 @@ import play.Play;
  * @since 2013-02-16
  *
  */
-public abstract class AppContext {
+public abstract class AppContext extends BaseContext {
 
 	/**
 	 * This enum holds all config/environment vars that the app should access

@@ -2,6 +2,7 @@ package api;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import play.libs.F.Function;
 import play.libs.F.Promise;
@@ -10,13 +11,18 @@ import play.libs.WS.Response;
 import play.libs.WS.WSRequestHolder;
 import play.mvc.Http.Status;
 import types.HttpMethodType;
-import utils.QueryParamsUtil;
+import utils.EscapingUtil;
+import utils.EscapingUtil.Escaper;
 import api.exceptions.ApiErrorCodeException;
 import api.exceptions.ApiNoResponseException;
 
 /**
  * The base class for classes implementing interactions with 3rd party APIs.
  * Provides some utility methods for making queries
+ * 
+ * The utility methods for making queries are kept protected in this class to
+ * help enforce that any requests made to third party APIs are done so
+ * by subclassing this class
  * 
  * @author bigpopakap
  * @since 2013-03-17
@@ -25,71 +31,7 @@ import api.exceptions.ApiNoResponseException;
  */
 public abstract class BaseApi<R extends BaseApiResponse<?>> {
 	
-	/**
-	 * Performs a request to the given API path and returns the wrapped JSON response
-	 * (appends the access token on behalf of the caller)
-	 * 
-	 * @param method the HTTP method to use for the request
-	 * @param path the full url to query
-	 * @param params the parameters to pass. If null or empty, no parameters will be used (except those
-	 * 				added by the hook method to add common params)
-	 */
-	protected final Promise<ApiResponseOption<R>> query(HttpMethodType method, String urlDomain, String urlPath, Map<String, String> params) {
-		//default or throw exception on nulls
-		if (method == null) method = HttpMethodType.GET;
-		if (urlDomain == null) throw new IllegalArgumentException("UrlDomain cannot be null");
-		if (urlPath == null) throw new IllegalArgumentException("UrlPath cannot be null");
-		
-		//generate the parameter map, add common params, and convert them to a query string
-		if (params == null) params = new HashMap<String, String>();
-		hook_modifyParams(method, urlDomain, urlPath, params);
-		String paramStr = QueryParamsUtil.mapToQueryString(params);
-		
-		//generate the request promise depending on whether we're using POST or GET
-		WSRequestHolder reqHolder = WS.url(urlDomain + urlPath);
-		Promise<Response> promise;
-		switch (method) {
-			case GET:
-				for (String key : params.keySet()) {
-					reqHolder.setQueryParameter(key, params.get(key));
-				}
-				promise = reqHolder.get();
-				break;
-			case POST:
-				promise = reqHolder.post(paramStr);
-				break;
-			default:
-				throw new IllegalStateException("Unhandled HTTP method type: " + method);
-		}
-		
-		//create final versions of variables
-		final HttpMethodType fMethod = method;
-		final String fUrlDomain = urlDomain;
-		final String fUrlPath = urlPath;
-		final Map<String, String> fParams = params;
-		
-		//map the response to a response object
-		return promise.map(new Function<Response, ApiResponseOption<R>>() {
-
-			@Override
-			public ApiResponseOption<R> apply(Response resp) throws Throwable {
-				if (resp == null) {
-					return new ApiResponseOption<R>(
-						new ApiNoResponseException()
-					);
-				}
-				else if (resp.getStatus() != Status.OK) {
-					return new ApiResponseOption<R>(
-						new ApiErrorCodeException(resp.getStatus())
-					);
-				}
-				else {
-					return new ApiResponseOption<R>(hook_mapResponse(fMethod, fUrlDomain, fUrlPath, fParams, resp));
-				}
-			}
-			
-		});
-	}
+	//TODO ensure that only subclasses of this class make third-party requests
 	
 	/**
 	 * Hook that each API subclass can override that will add common parameters to every
@@ -112,5 +54,128 @@ public abstract class BaseApi<R extends BaseApiResponse<?>> {
 	 * Should not return null
 	 */
 	protected abstract R hook_mapResponse(HttpMethodType method, String urlDomain, String urlPath, Map<String, String> params, Response resp);
+	
+	/**
+	 * Performs a request to the given API path and returns the wrapped JSON response
+	 * (appends the access token on behalf of the caller)
+	 * 
+	 * @param method the HTTP method to use for the request
+	 * @param path the full url to query
+	 * @param params the parameters to pass. If null or empty, no parameters will be used (except those
+	 * 				added by the hook method to add common params)
+	 */
+	protected final Promise<ApiResponseOption<R>> query(HttpMethodType method, String urlDomain, String urlPath, Map<String, String> params) {
+		//default or throw exception on nulls
+		if (method == null) method = HttpMethodType.GET;
+		if (urlDomain == null) throw new IllegalArgumentException("UrlDomain cannot be null");
+		if (urlPath == null) throw new IllegalArgumentException("UrlPath cannot be null");
+		
+		//generate the parameter map, add common params, and convert them to a query string
+		if (params == null) params = new HashMap<String, String>();
+		hook_modifyParams(method, urlDomain, urlPath, params);
+		
+		//create final versions of variables
+		final HttpMethodType fMethod = method;
+		final String fUrlDomain = urlDomain;
+		final String fUrlPath = urlPath;
+		final Map<String, String> fParams = params;
+		
+		//map the response to a response object
+		return rawQuery(method, urlDomain + urlPath, params).map(new Function<Response, ApiResponseOption<R>>() {
 
+			@Override
+			public ApiResponseOption<R> apply(Response resp) throws Throwable {
+				if (resp == null) {
+					return new ApiResponseOption<R>(
+						new ApiNoResponseException()
+					);
+				}
+				else if (resp.getStatus() != Status.OK) {
+					return new ApiResponseOption<R>(
+						new ApiErrorCodeException(resp.getStatus())
+					);
+				}
+				else {
+					return new ApiResponseOption<R>(hook_mapResponse(fMethod, fUrlDomain, fUrlPath, fParams, resp));
+				}
+			}
+			
+		});
+	}
+	
+	/**
+	 * Creates a promise to query the given url, with the given HTTP method and the given params
+	 * Url must be non-null
+	 * Note that only GET and POST are supported currently
+	 */
+	protected static final Promise<Response> rawQuery(HttpMethodType method, String url, Map<String, String> params) {
+		//default or throw exception on nulls
+		if (method == null) method = HttpMethodType.GET;
+		if (url == null) throw new IllegalArgumentException("Url cannot be null");
+		
+		//generate the parameter map, and convert them to a query string
+		if (params == null) params = new HashMap<String, String>();
+		String paramStr = mapToQueryString(params);
+		
+		//generate the request promise depending on whether we're using POST or GET
+		WSRequestHolder reqHolder = WS.url(url);
+		switch (method) {
+			case GET:
+				for (String key : params.keySet()) {
+					reqHolder.setQueryParameter(key, params.get(key));
+				}
+				return reqHolder.get();
+			case POST:
+				return reqHolder.post(paramStr);
+			default:
+				throw new IllegalStateException("Unhandled HTTP method type: " + method);
+		}
+	}
+	
+	/** Converts a map of key-value pairs to a query string */
+	protected static final String mapToQueryString(Map<String, String> map) {
+		StringBuilder str = new StringBuilder();
+		for (String key : map.keySet()) {
+			str.append(str.length() > 0 ? "&" : "")
+			   .append(EscapingUtil.escape(key, Escaper.URL))
+			   .append("=")
+			   .append(EscapingUtil.escape(map.get(key), Escaper.URL));
+		}
+		return str.toString();
+	}
+	
+	/** Converts a query string to a map of key-value pairs
+	 *  The input can be a full URL, or just the params, and may start with a ? or not
+	 *  
+	 *  DOES NOT do url-decoding
+	 *  
+	 *  Note that keys are overwritten as they are found, so if there are multiple
+	 *  of the same key in the query string, the first value is the one that will be kept
+	 *  
+	 *  */
+	protected static final Map<String, String> queryStringToMap(String params) {
+		if (params == null || params.isEmpty()) {
+			return new TreeMap<String, String>();
+		}
+		
+		Map<String, String> map = new HashMap<String, String>();
+		
+		//TODO make this more efficient by using regex
+		//start after the question mark, or at the beginning of the string
+		int startIndex = params.indexOf('?') + 1;
+		if (startIndex >= params.length()) {
+			//there is not more of the string remaining
+			return map;
+		}
+		
+		//split the string by ampersands
+		String[] pairs = params.substring(startIndex).split("&");
+		for (String pair : pairs) {
+			String[] keyValue = pair.split("=");
+			map.put(keyValue[0], keyValue[1]);
+		}
+		
+		return map;
+	}
+	
 }

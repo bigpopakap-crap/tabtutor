@@ -3,7 +3,18 @@ package controllers;
 import play.mvc.Result;
 import utils.MessagesEnum;
 
-public class TestErrorPageExceptionController extends TestWebController {
+/**
+ * Test pages for throwing exposed exceptions
+ * 
+ * @author bigpopakap
+ * @since 2013-03-18
+ *
+ */
+public class TestErrorPageExceptionWebController extends TestWebController {
+	
+	public static Result internalServerErrorPage() {
+		throw ErrorPageException.Factory.internalServerErrorPage();
+	}
 	
 	public static Result notFoundPage() {
 		throw ErrorPageException.Factory.notFoundPage();

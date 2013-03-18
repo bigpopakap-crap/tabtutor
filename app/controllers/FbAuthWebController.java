@@ -1,16 +1,9 @@
 package controllers;
 
-import java.util.Map;
-
 import models.SessionModel;
 import models.UserModel;
-import play.libs.WS;
-import play.libs.WS.Response;
 import play.mvc.Result;
-import utils.EscapingUtil;
-import utils.EscapingUtil.Escaper;
-import utils.QueryParamsUtil;
-import contexts.AppContext;
+import api.fb.FbApi;
 import contexts.SessionContext;
 
 /**
@@ -38,32 +31,18 @@ public class FbAuthWebController extends BaseWebController {
 	 * @param code the code returned from Facebook. If null, redirect the user to the login dialogue
 	 * @return
 	 */
-	public static Result fblogin(String code, String state) {
+	public static Result fblogin(final String code, String state) {
 		if (code == null) {
 			//the login flow has started, redirect to the Facebook login dialogue
-			String redirectUrl = "https://www.facebook.com/dialog/oauth" +
-								"?client_id=" + AppContext.Var.FB_APP_ID.val() +
-								"&redirect_uri=" + getFbloginUrlEncoded() +
-								"&scope=email";
-			return redirect(redirectUrl);
+			return redirect(FbApi.loginRedirect());
 		}
 		else {
-			String tokenUrl = "https://graph.facebook.com/oauth/access_token";
-			String tokenParams = "client_id=" + AppContext.Var.FB_APP_ID.val() +
-								"&redirect_uri=" + getFbloginUrlEncoded() +
-								"&client_secret=" + AppContext.Var.FB_APP_SECRET.val() +
-								"&code=" + code;
-			
-			Response resp = WS.url(tokenUrl).post(tokenParams).get();
-			
-			//parse the response for the token and expiry
-			Map<String, String> paramMap = QueryParamsUtil.queryStringToMap(resp.getBody());
-			String token = paramMap.get("access_token");
-			int tokenExpiry = Integer.parseInt(paramMap.get("expires"));
+			//Fetch the access token and expiry time
+			FbApi fbApi = FbApi.accessToken(code);
 			
 			//add this information to the session
 			SessionModel session = SessionContext.get();
-			SessionModel.Updater.setFbAuthInfoAndUpdate(session, token, tokenExpiry);
+			SessionModel.Updater.setFbAuthInfoAndUpdate(session, fbApi.getToken(), fbApi.getTokenExpiry());
 			
 			//if there is an associated user, update the login time
 			if (SessionContext.hasUser()) {
@@ -75,14 +54,6 @@ public class FbAuthWebController extends BaseWebController {
 			//redirect to the given redirect url, or to the landing page
 			return redirect("/");
 		}
-	}
-	
-	/** Gets the absolute url to the fblogin() action, URL-escaped */
-	private static String getFbloginUrlEncoded() {
-		return EscapingUtil.escape(
-			routes.FbAuthWebController.fblogin(null, null).absoluteURL(request()),
-			Escaper.URL
-		);
 	}
 	
 }

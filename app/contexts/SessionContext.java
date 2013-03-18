@@ -17,7 +17,7 @@ import api.fb.FbApi;
  * @since 2013-03-02
  *
  */
-public abstract class SessionContext {
+public abstract class SessionContext extends BaseContext {
 	
 	/** Get the language of the current session context. Useful for templates */
 	public static Lang lang() {
@@ -26,12 +26,12 @@ public abstract class SessionContext {
 	
 	/** Get the session model object for the current session */
 	public static SessionModel get() {
-		return ContextPackageUtils.getOrLoad(SessionModel.SESSION_OBJ_CONTEXT_KEY, SESSION_LOADER);
+		return getOrLoad(SessionModel.SESSION_OBJ_CONTEXT_KEY, SESSION_LOADER);
 	}
 	
 	/** Get the current logged-in user */
 	public static UserModel user() {
-		return ContextPackageUtils.getOrLoad(UserModel.USER_OBJ_CONTEXT_KEY, USER_LOADER);
+		return getOrLoad(UserModel.USER_OBJ_CONTEXT_KEY, USER_LOADER);
 	}
 	
 	/** Determines if there is a logged-in user */
@@ -41,7 +41,7 @@ public abstract class SessionContext {
 	
 	/** Get the FbApi object for the the current session */
 	public static FbApi fbApi() {
-		return ContextPackageUtils.getOrLoad(FbApi.FBAPI_OBJ_CONTEXT_KEY, FBAPI_LOADER);
+		return getOrLoad(FbApi.FBAPI_OBJ_CONTEXT_KEY, FBAPI_LOADER);
 	}
 	
 	/** Refreshes the context to make sure the values are current */

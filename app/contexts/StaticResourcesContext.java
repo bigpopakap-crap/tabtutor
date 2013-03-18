@@ -13,14 +13,14 @@ import java.util.concurrent.Callable;
  * @since 2013-03-17
  *
  */
-public class StaticResourcesContext {
+public class StaticResourcesContext extends BaseContext {
 	
 	/** The key used to store the set of resources for the request context */
 	private static final String PAGE_RESOURCE_CONTEXT_KEY = "pageResourceContextKey";
 	
 	/** Gets the set of resources for the request context */
 	public static Set<String> get() {
-		return ContextPackageUtils.getOrLoad(PAGE_RESOURCE_CONTEXT_KEY, RESOURCE_URL_LOADER);
+		return getOrLoad(PAGE_RESOURCE_CONTEXT_KEY, RESOURCE_URL_LOADER);
 	}
 	
 	/** Determines if the given static resource url has already been included in this request context */
