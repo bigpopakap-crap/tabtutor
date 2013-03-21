@@ -47,10 +47,10 @@ public class SessionModel extends BaseModel {
 	@Column(name = "lastAccessTime") public Date lastAccessTime;
 	
 	@Override
-	protected void postOp(BasicDmlModifyingType opType) {
+	protected void hook_postModifyingOperation(BasicDmlModifyingType opType) {
 		//refresh the app context
 		//TODO add caching here
-		super.postOp(opType);
+		super.hook_postModifyingOperation(opType);
 		SessionContext.refresh();
 	}
 	

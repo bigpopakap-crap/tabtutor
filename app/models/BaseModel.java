@@ -84,7 +84,7 @@ public abstract class BaseModel extends Model {
 	 ****************************************** */
 	
 	/** Called after any save() or update() */
-	protected void postOp(BasicDmlModifyingType opType) {
+	protected void hook_postModifyingOperation(BasicDmlModifyingType opType) {
 		//do nothing. models can override this if they want to do something
 	}
 	
@@ -102,14 +102,14 @@ public abstract class BaseModel extends Model {
 	public void save() { throw new UnsupportedOperationException(BLOCKED_REASON); }
 	protected void _save() {
 		super.save();
-		postOp(BasicDmlModifyingType.INSERT);
+		hook_postModifyingOperation(BasicDmlModifyingType.INSERT);
 	}
 	
 	@Override
 	public void save(String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
 	protected void _save(String str) {
 		super.save(str);
-		postOp(BasicDmlModifyingType.INSERT);
+		hook_postModifyingOperation(BasicDmlModifyingType.INSERT);
 	}
 	
 	@Override
@@ -124,42 +124,42 @@ public abstract class BaseModel extends Model {
 	public void update() { throw new UnsupportedOperationException(BLOCKED_REASON); }
 	protected void _update() {
 		super.update();
-		postOp(BasicDmlModifyingType.UPDATE);
+		hook_postModifyingOperation(BasicDmlModifyingType.UPDATE);
 	}
 	
 	@Override
 	public void update(Object obj) { throw new UnsupportedOperationException(BLOCKED_REASON); }
 	protected void _update(Object obj) {
 		super.update(obj);
-		postOp(BasicDmlModifyingType.UPDATE);
+		hook_postModifyingOperation(BasicDmlModifyingType.UPDATE);
 	}
 	
 	@Override
 	public void update(Object obj, String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
 	protected void _update(Object obj, String str) {
 		super.update(obj, str);
-		postOp(BasicDmlModifyingType.UPDATE);
+		hook_postModifyingOperation(BasicDmlModifyingType.UPDATE);
 	}
 	
 	@Override
 	public void update(String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
 	protected void _update(String str) {
 		super.update(str);
-		postOp(BasicDmlModifyingType.UPDATE);
+		hook_postModifyingOperation(BasicDmlModifyingType.UPDATE);
 	}
 	
 	@Override
 	public void delete() { throw new UnsupportedOperationException(BLOCKED_REASON); }
 	protected void _delete() {
 		super.delete();
-		postOp(BasicDmlModifyingType.DELETE);
+		hook_postModifyingOperation(BasicDmlModifyingType.DELETE);
 	}
 	
 	@Override
 	public void delete(String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
 	protected void _delete(String str) {
 		super.delete(str);
-		postOp(BasicDmlModifyingType.DELETE);
+		hook_postModifyingOperation(BasicDmlModifyingType.DELETE);
 	}
 	
 	@Override
