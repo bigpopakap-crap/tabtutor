@@ -19,7 +19,7 @@ import contexts.AppContext;
  */
 public abstract class BaseApiResponse<T extends BaseApiException> {
 	
-	private final HttpMethodType method; //true if the method used for the query was POST, false if GET
+	private final HttpMethodType method; //the method used for the query
 	private final String urlDomain; //the base domain of the url queried, NOT including the trailing slash
 	private final String urlPath; //the path of the url queried to get this response
 	private final Map<String, String> params; //the params passed with the query
@@ -95,5 +95,15 @@ public abstract class BaseApiResponse<T extends BaseApiException> {
 	 *  represent an error response
 	 */
 	protected abstract T getExceptionNoIsErrorCheck();
+	
+	/** Sugar method for testing whether this response was returned from any
+	 *  one of a given set of API paths */
+	public boolean is(String... paths) {
+		if (paths == null) throw new IllegalArgumentException("Paths cannot be null");
+		for (String path : paths) {
+			if (getUrlPath().equals(path)) return true;
+		}
+		return false;
+	}
 
 }

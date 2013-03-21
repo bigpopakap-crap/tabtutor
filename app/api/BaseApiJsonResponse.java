@@ -32,16 +32,6 @@ public abstract class BaseApiJsonResponse<T extends BaseApiException> extends Ba
 		return json;
 	}
 	
-	/** Sugar method for testing whether this response was returned from any
-	 *  one of a given set of API paths */
-	public boolean is(String... paths) {
-		if (paths == null) throw new IllegalArgumentException("Paths cannot be null");
-		for (String path : paths) {
-			if (getUrlPath().equals(path)) return true;
-		}
-		return false;
-	}
-	
 	/** Helper to find a value from the JSON if it originated from one of the
 	 *  given API paths, or throw an error if it did not come from one of those paths */
 	protected JsonNode find(String jsonPath, String... acceptableUrlPaths) {

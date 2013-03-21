@@ -23,7 +23,7 @@ import types.SqlOperationType.BasicDmlModifyingType;
 @MappedSuperclass
 public abstract class BaseModel extends Model {
 	
-	private static int NUM_DML_RETRIES = 5;
+	private static int NUM_OPERATION_RETRIES = 5;
 	
 	//TODO static analysis test that nobody calls Ebean.save(), update(), etc. directly
 	//TODO static analysis test that nobody reads or modifies columns in a model directly
@@ -104,7 +104,7 @@ public abstract class BaseModel extends Model {
 	 *********************************************************************** */
 	
 	private void doOperationAndRetry(BasicDmlModifyingType opType, Callable<Void> doOperation) {
-		for (int i = 1; i <= NUM_DML_RETRIES; i++) {
+		for (int i = 1; i <= NUM_OPERATION_RETRIES; i++) {
 			try {
 				doOperation.call();
 				
