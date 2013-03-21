@@ -48,11 +48,13 @@ public class SessionModel extends BaseModel {
 	@Column(name = "lastAccessTime") public Date lastAccessTime;
 	
 	@Override
-	protected void hook_postSuccessfulModifyingOperation(BasicDmlModifyingType opType) {
+	protected void hook_postModifyingOperation(BasicDmlModifyingType opType, boolean wasSuccessful) {
+		super.hook_postModifyingOperation(opType, wasSuccessful);
+		
 		//refresh the app context
-		//TODO add caching here
-		super.hook_postSuccessfulModifyingOperation(opType);
 		SessionContext.refresh();
+		
+		//TODO add caching here
 	}
 	
 	/** Private helper for DB interaction implementation */

@@ -89,15 +89,14 @@ public abstract class BaseModel extends Model {
 	/* ******************************************
 	 *  HOOKS FOR DML OPERATIONS
 	 ****************************************** */
-	
-	/** Called after any DML operation that fails with an OptimisticLockException
-	 *  This method should use this time to redo any calculations necessary for this operation */
-	protected void hook_postFailedModifyingOperation(BasicDmlModifyingType opType) {
-		//do nothing. models can override this if they want to do something
-	}
-	
-	/** Called after any DML operation that succeeds */
-	protected void hook_postSuccessfulModifyingOperation(BasicDmlModifyingType opType) {
+
+	/**
+	 * Called after every DML operation, whether it succeeded or not
+	 * @param opType the type of the operation
+	 * @param wasSuccessful true if the operation succeeded, false if it failed because of a
+	 * 						OptimisticLockException
+	 */
+	protected void hook_postModifyingOperation(BasicDmlModifyingType opType, boolean wasSuccessful) {
 		//do nothing. models can override this if they want to do something
 	}
 	
@@ -111,13 +110,13 @@ public abstract class BaseModel extends Model {
 				doOperation.call();
 				
 				//if the operation was successful, call the post-op and stop retrying
-				hook_postSuccessfulModifyingOperation(opType);
+				hook_postModifyingOperation(opType, true);
 				break;
 			}
 			catch (OptimisticLockException ex) {
 				//call the post-op and retry the operation
 				Logger.debug(opType + " operation for " + this.getClass() + " failed, retrying...");
-				hook_postFailedModifyingOperation(opType);
+				hook_postModifyingOperation(opType, false);
 			}
 			catch (Exception ex) {
 				//TODO should this be thrown like this?
