@@ -76,7 +76,7 @@ public abstract class AppContext extends BaseContext {
 		 * @throws UnsupportedOperationException if called on a secured secret var
 		 */
 		@Override
-		public String toString() throws UnsupportedOperationException {
+		public synchronized String toString() throws UnsupportedOperationException {
 			if (isSecuredSecret()) {
 				throw new UnsupportedOperationException("Tried to call toString() on secret environment var " + name());
 			}
@@ -94,7 +94,7 @@ public abstract class AppContext extends BaseContext {
 		}
 		
 		/** Returns true if this is a guarded secret */
-		public boolean isSecuredSecret() {
+		public synchronized boolean isSecuredSecret() {
 			return isSecuredSecret;
 		}
 		
@@ -107,7 +107,7 @@ public abstract class AppContext extends BaseContext {
 		 * This should only be supported by the timezone code var, so be careful when you call it
 		 * @throws UnsupportedOperationException if this is called on an enum member that does not support it
 		 */
-		public TimeZone valAsTimezone() throws UnsupportedOperationException {
+		public synchronized TimeZone valAsTimezone() throws UnsupportedOperationException {
 			throw new UnsupportedOperationException("This method is not valid for enum member " + name());
 		}
 		
@@ -116,7 +116,7 @@ public abstract class AppContext extends BaseContext {
 		 * This should only be supported by the port var, so be careful when you call it
 		 * @throws UnsupportedOperationException if this is called on an enum member that does not support it
 		 */
-		public int valAsInt() {
+		public synchronized int valAsInt() {
 			throw new UnsupportedOperationException("This method is not valid for enum member " + name());
 		}
 		

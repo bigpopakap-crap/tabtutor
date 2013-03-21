@@ -19,18 +19,18 @@ public class StaticResourcesContext extends BaseContext {
 	private static final ContextKey PAGE_RESOURCE_CONTEXT_KEY = ContextKey.register("pageResourceContextKey");
 	
 	/** Gets the set of resources for the request context */
-	public static Set<String> get() {
+	public static synchronized Set<String> get() {
 		return getOrLoad(PAGE_RESOURCE_CONTEXT_KEY, RESOURCE_URL_LOADER);
 	}
 	
 	/** Determines if the given static resource url has already been included in this request context */
-	public static boolean contains(String url) {
+	public static synchronized boolean contains(String url) {
 		return get().contains(url);
 	}
 	
 	/** Adds the given static resource url to the request context
 	 *  @return the given url for convenience */
-	public static String add(String url) {
+	public static synchronized String add(String url) {
 		get().add(url);
 		return url;
 	}

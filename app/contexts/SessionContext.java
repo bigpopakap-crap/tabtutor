@@ -20,32 +20,32 @@ import api.fb.FbApi;
 public abstract class SessionContext extends BaseContext {
 	
 	/** Get the language of the current session context. Useful for templates */
-	public static Lang lang() {
+	public static synchronized Lang lang() {
 		return Context.current().lang();
 	}
 	
 	/** Get the session model object for the current session */
-	public static SessionModel get() {
+	public static synchronized SessionModel get() {
 		return getOrLoad(SessionModel.SESSION_OBJ_CONTEXT_KEY, SESSION_LOADER);
 	}
 	
 	/** Get the current logged-in user */
-	public static UserModel user() {
+	public static synchronized UserModel user() {
 		return getOrLoad(UserModel.USER_OBJ_CONTEXT_KEY, USER_LOADER);
 	}
 	
 	/** Determines if there is a logged-in user */
-	public static boolean hasUser() {
+	public static synchronized boolean hasUser() {
 		return user() != null;
 	}
 	
 	/** Get the FbApi object for the the current session */
-	public static FbApi fbApi() {
+	public static synchronized FbApi fbApi() {
 		return getOrLoad(FbApi.FBAPI_OBJ_CONTEXT_KEY, FBAPI_LOADER);
 	}
 	
 	/** Refreshes the context to make sure the values are current */
-	public static void refresh() {
+	public static synchronized void refresh() {
 		//just delete them from the context, and they will be loaded next time
 		refresh(
 			SessionModel.SESSION_OBJ_CONTEXT_KEY,
