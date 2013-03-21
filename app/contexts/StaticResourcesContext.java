@@ -16,7 +16,7 @@ import java.util.concurrent.Callable;
 public class StaticResourcesContext extends BaseContext {
 	
 	/** The key used to store the set of resources for the request context */
-	private static final String PAGE_RESOURCE_CONTEXT_KEY = "pageResourceContextKey";
+	private static final ContextKey PAGE_RESOURCE_CONTEXT_KEY = ContextKey.register("pageResourceContextKey");
 	
 	/** Gets the set of resources for the request context */
 	public static Set<String> get() {

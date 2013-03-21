@@ -55,13 +55,6 @@ public abstract class SessionContext extends BaseContext {
 		Logger.debug(SessionContext.class + " refreshed");
 	}
 	
-	/** Helper to clear set all the values to null for the given keys */
-	private static void refresh(String... keys) {
-		for (String key : keys) {
-			Context.current().args.put(key, null);
-		}
-	}
-	
 	/* *****************************************************
 	 *  BEGIN CALLABLE HELPERS
 	 ***************************************************** */

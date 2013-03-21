@@ -13,6 +13,7 @@ import api.BaseApi;
 import api.exceptions.ApiErrorCodeException;
 import api.exceptions.ApiNoResponseException;
 import contexts.AppContext;
+import contexts.BaseContext.ContextKey;
 
 /**
  * This class implements interactions with the Facebook REST API
@@ -24,7 +25,7 @@ import contexts.AppContext;
 public class FbApi extends BaseApi<FbJsonResponse> {
 	
 	/** The key to use to store the session model object in the session context */
-	public static final String FBAPI_OBJ_CONTEXT_KEY = "fbApiObjectContextKey";
+	public static final ContextKey FBAPI_OBJ_CONTEXT_KEY = ContextKey.register("fbApiObjectContextKey");
 	private static final int FB_TOKEN_EXPIRY_INVALID = -1;
 	
 	// String variables representing the API domain and supported paths
