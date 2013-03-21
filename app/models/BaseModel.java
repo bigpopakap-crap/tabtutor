@@ -6,6 +6,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.OptimisticLockException;
 
 import models.exceptions.FailedOperationException;
+import play.Logger;
 import play.db.ebean.Model;
 import types.SqlOperationType.BasicDmlModifyingType;
 
@@ -89,7 +90,8 @@ public abstract class BaseModel extends Model {
 	 *  HOOKS FOR DML OPERATIONS
 	 ****************************************** */
 	
-	/** Called after any DML operation that fails with an OptimisticLockException */
+	/** Called after any DML operation that fails with an OptimisticLockException
+	 *  This method should use this time to redo any calculations necessary for this operation */
 	protected void hook_postFailedModifyingOperation(BasicDmlModifyingType opType) {
 		//do nothing. models can override this if they want to do something
 	}
@@ -114,6 +116,7 @@ public abstract class BaseModel extends Model {
 			}
 			catch (OptimisticLockException ex) {
 				//call the post-op and retry the operation
+				Logger.debug(opType + " operation for " + this.getClass() + " failed, retrying...");
 				hook_postFailedModifyingOperation(opType);
 			}
 			catch (Exception ex) {
