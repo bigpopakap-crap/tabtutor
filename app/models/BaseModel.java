@@ -1,9 +1,13 @@
 package models;
 
-import javax.persistence.MappedSuperclass;
+import java.util.concurrent.Callable;
 
+import javax.persistence.MappedSuperclass;
+import javax.persistence.OptimisticLockException;
+
+import models.exceptions.FailedOperationException;
 import play.db.ebean.Model;
-import types.SqlCommandType.BasicDmlModifyingType;
+import types.SqlOperationType.BasicDmlModifyingType;
 
 /**
  * Base class for all models. All models should extend this class
@@ -18,6 +22,8 @@ import types.SqlCommandType.BasicDmlModifyingType;
 @SuppressWarnings("serial")
 @MappedSuperclass
 public abstract class BaseModel extends Model {
+	
+	private static int NUM_DML_RETRIES = 5;
 	
 	//TODO static analysis test that nobody calls Ebean.save(), update(), etc. directly
 	//TODO static analysis test that nobody reads or modifies columns in a model directly
@@ -83,11 +89,39 @@ public abstract class BaseModel extends Model {
 	 *  HOOKS FOR DML OPERATIONS
 	 ****************************************** */
 	
-	/** Called after any save() or update() */
-	protected void hook_postModifyingOperation(BasicDmlModifyingType opType) {
+	/** Called after any DML operation that fails with an OptimisticLockException */
+	protected void hook_postFailedModifyingOperation(BasicDmlModifyingType opType) {
 		//do nothing. models can override this if they want to do something
 	}
 	
+	/** Called after any DML operation that succeeds */
+	protected void hook_postSuccessfulModifyingOperation(BasicDmlModifyingType opType) {
+		//do nothing. models can override this if they want to do something
+	}
+	
+	/* ***********************************************************************
+	 * BEGIN PRIVATE HELPERS
+	 *********************************************************************** */
+	
+	private void doOperationAndRetry(BasicDmlModifyingType opType, Callable<Void> doOperation) {
+		for (int i = 1; i <= NUM_DML_RETRIES; i++) {
+			try {
+				doOperation.call();
+				
+				//if the operation was successful, call the post-op and stop retrying
+				hook_postSuccessfulModifyingOperation(opType);
+				break;
+			}
+			catch (OptimisticLockException ex) {
+				//call the post-op and retry the operation
+				hook_postFailedModifyingOperation(opType);
+			}
+			catch (Exception ex) {
+				//TODO should this be thrown like this?
+				throw new FailedOperationException(this, opType, ex);
+			}
+		}
+	}
 	
 	/* ***********************************************************************
 	 *  BEGIN INVALIDATION OF DIRECT METHODS
@@ -98,72 +132,125 @@ public abstract class BaseModel extends Model {
 	private static final String BLOCKED_REASON = "This operation has been blocked. " +
 												 "Use the methods in each model class to modify the model";
 	
-	@Override
-	public void save() { throw new UnsupportedOperationException(BLOCKED_REASON); }
-	protected void _save() {
-		super.save();
-		hook_postModifyingOperation(BasicDmlModifyingType.INSERT);
+	@Override public void save() { throw new UnsupportedOperationException(BLOCKED_REASON); }
+	private void _save() { super.save(); }
+	protected void doSaveAndRetry() {
+		doOperationAndRetry(BasicDmlModifyingType.INSERT, new Callable<Void>() {
+
+			@Override
+			public Void call() throws Exception {
+				_save();
+				return null;
+			}
+			
+		});
 	}
 	
-	@Override
-	public void save(String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
-	protected void _save(String str) {
-		super.save(str);
-		hook_postModifyingOperation(BasicDmlModifyingType.INSERT);
+	@Override public void save(String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
+	private void _save(String str) { super.save(str); }
+	protected void doSaveAndRetry(final String str) {
+		doOperationAndRetry(BasicDmlModifyingType.INSERT, new Callable<Void>() {
+
+			@Override
+			public Void call() throws Exception {
+				_save(str);
+				return null;
+			}
+			
+		});
 	}
 	
 	@Override
 	public void saveManyToManyAssociations(String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
-	protected void _saveManyToManyAssociations(String str) { throw new UnsupportedOperationException(); }
 	
 	@Override
 	public void saveManyToManyAssociations(String str1, String str2) { throw new UnsupportedOperationException(BLOCKED_REASON); }
-	protected void _saveManyToManyAssociations(String str1, String str2) { throw new UnsupportedOperationException(); }
 	
-	@Override
-	public void update() { throw new UnsupportedOperationException(BLOCKED_REASON); }
-	protected void _update() {
-		super.update();
-		hook_postModifyingOperation(BasicDmlModifyingType.UPDATE);
+	@Override public void update() { throw new UnsupportedOperationException(BLOCKED_REASON); }
+	private void _update() { super.update(); }
+	protected void doUpdateAndRetry() {
+		doOperationAndRetry(BasicDmlModifyingType.UPDATE, new Callable<Void>() {
+
+			@Override
+			public Void call() throws Exception {
+				_update();
+				return null;
+			}
+			
+		});
 	}
 	
-	@Override
-	public void update(Object obj) { throw new UnsupportedOperationException(BLOCKED_REASON); }
-	protected void _update(Object obj) {
-		super.update(obj);
-		hook_postModifyingOperation(BasicDmlModifyingType.UPDATE);
+	@Override public void update(Object obj) { throw new UnsupportedOperationException(BLOCKED_REASON); }
+	private void _update(Object obj) { super.update(obj); }
+	protected void doUpdateAndRetry(final Object obj) {
+		doOperationAndRetry(BasicDmlModifyingType.UPDATE, new Callable<Void>() {
+
+			@Override
+			public Void call() throws Exception {
+				_update(obj);
+				return null;
+			}
+			
+		});
 	}
 	
-	@Override
-	public void update(Object obj, String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
-	protected void _update(Object obj, String str) {
-		super.update(obj, str);
-		hook_postModifyingOperation(BasicDmlModifyingType.UPDATE);
+	@Override public void update(Object obj, String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
+	private void _update(Object obj, String str) { super.update(obj, str); }
+	protected void doUpdateAndRetry(final Object obj, final String str) {
+		doOperationAndRetry(BasicDmlModifyingType.UPDATE, new Callable<Void>() {
+
+			@Override
+			public Void call() throws Exception {
+				_update(obj, str);
+				return null;
+			}
+			
+		});
 	}
 	
-	@Override
-	public void update(String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
-	protected void _update(String str) {
-		super.update(str);
-		hook_postModifyingOperation(BasicDmlModifyingType.UPDATE);
+	@Override public void update(String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
+	private void _update(String str) { super.update(str); }
+	protected void doUpdateAndRetry(final String str) {
+		doOperationAndRetry(BasicDmlModifyingType.UPDATE, new Callable<Void>() {
+
+			@Override
+			public Void call() throws Exception {
+				_update(str);
+				return null;
+			}
+			
+		});
 	}
 	
-	@Override
-	public void delete() { throw new UnsupportedOperationException(BLOCKED_REASON); }
-	protected void _delete() {
-		super.delete();
-		hook_postModifyingOperation(BasicDmlModifyingType.DELETE);
+	@Override public void delete() { throw new UnsupportedOperationException(BLOCKED_REASON); }
+	private void _delete() { super.delete(); }
+	protected void doDeleteAndRetry() {
+		doOperationAndRetry(BasicDmlModifyingType.DELETE, new Callable<Void>() {
+
+			@Override
+			public Void call() throws Exception {
+				_delete();
+				return null;
+			}
+			
+		});
 	}
 	
-	@Override
-	public void delete(String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
-	protected void _delete(String str) {
-		super.delete(str);
-		hook_postModifyingOperation(BasicDmlModifyingType.DELETE);
+	@Override public void delete(String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
+	private void _delete(String str) { super.delete(str); }
+	protected void doDeleteAndRetry(final String str) {
+		doOperationAndRetry(BasicDmlModifyingType.DELETE, new Callable<Void>() {
+
+			@Override
+			public Void call() throws Exception {
+				_delete(str);
+				return null;
+			}
+			
+		});
 	}
 	
 	@Override
 	public void deleteManyToManyAssociations(String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
-	protected void _deleteManyToManyAssociations(String str) { throw new UnsupportedOperationException(); }
-
+	
 }
