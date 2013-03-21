@@ -3,7 +3,7 @@ package controllers;
 import actions.ModeProtectAction.ModeProtected;
 
 /**
- * This class handles routes that can be used by tests for various purposes
+ * This class handles routes (or parents classes that handle routes) which are used by tests for various purposes
  * It is protected to only be available in DEVELOPMENT mode
  * 
  * @author bigpopakap
