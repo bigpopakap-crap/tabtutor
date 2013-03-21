@@ -71,7 +71,7 @@ public class UserModel extends BaseModel {
 			user.secondToLastLoginTime = secondToLastLoginTime;
 			
 			if (save) {
-				user._save();
+				user.doSaveAndRetry();
 				Logger.debug("Saved user " + user.pk + " to database");
 			}
 			
@@ -131,7 +131,7 @@ public class UserModel extends BaseModel {
 			
 			user.secondToLastLoginTime = user.lastLoginTime;
 			user.lastLoginTime = DbTypesUtil.now();
-			user._update();
+			user.doUpdateAndRetry();
 			Logger.debug("User " + user.pk + " login time updated to " + user.lastLoginTime);
 		}
 		

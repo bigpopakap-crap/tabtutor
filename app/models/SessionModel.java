@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import play.Logger;
-import types.SqlCommandType.BasicDmlModifyingType;
+import types.SqlOperationType.BasicDmlModifyingType;
 import utils.DbTypesUtil;
 
 import com.avaje.ebean.annotation.Formula;
@@ -48,10 +48,10 @@ public class SessionModel extends BaseModel {
 	@Column(name = "lastAccessTime") public Date lastAccessTime;
 	
 	@Override
-	protected void hook_postModifyingOperation(BasicDmlModifyingType opType) {
+	protected void hook_postSuccessfulModifyingOperation(BasicDmlModifyingType opType) {
 		//refresh the app context
 		//TODO add caching here
-		super.hook_postModifyingOperation(opType);
+		super.hook_postSuccessfulModifyingOperation(opType);
 		SessionContext.refresh();
 	}
 	
@@ -86,7 +86,7 @@ public class SessionModel extends BaseModel {
 			session.lastAccessTime = lastAccessTime;
 			
 			if (save) {
-				session._save();
+				session.doSaveAndRetry();
 				Logger.debug("Saved session " + session.pk + " to database");
 			}
 			
@@ -152,7 +152,7 @@ public class SessionModel extends BaseModel {
 			
 			session.fbToken = token;
 			session.fbTokenExpireTime = DbTypesUtil.add(DbTypesUtil.now(), seconds);
-			session._update();
+			session.doUpdateAndRetry();
 			Logger.debug("Session " + session.pk + " updated with Facebook token " + session.fbToken);
 		}
 		
@@ -164,7 +164,7 @@ public class SessionModel extends BaseModel {
 			}
 			
 			session.userPk = userPk;
-			session._update();
+			session.doUpdateAndRetry();
 			Logger.debug("Session " + session.pk + " updated with User reference " + session.userPk);
 		}
 		

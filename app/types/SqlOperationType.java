@@ -12,7 +12,7 @@ package types;
  * @since 2013-03-05
  *
  */
-public interface SqlCommandType {
+public interface SqlOperationType {
 	
 	/** Returns true if this command type is one that can modify database data */
 	public boolean isModifying();
@@ -31,7 +31,7 @@ public interface SqlCommandType {
 	 * @since 2013-03-05
 	 *
 	 */
-	public static enum BasicDmlType implements SqlCommandType {
+	public static enum BasicDmlType implements SqlOperationType {
 		SELECT,
 		INSERT(BasicDmlModifyingType.INSERT),
 		UPDATE(BasicDmlModifyingType.UPDATE),
@@ -72,7 +72,7 @@ public interface SqlCommandType {
 	 * @since 2013-03-05
 	 *
 	 */
-	public static enum BasicDmlModifyingType implements SqlCommandType {
+	public static enum BasicDmlModifyingType implements SqlOperationType {
 		INSERT(BasicDmlType.INSERT),
 		UPDATE(BasicDmlType.UPDATE),
 		DELETE(BasicDmlType.DELETE);

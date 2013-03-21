@@ -19,7 +19,7 @@ public abstract class BaseContext {
 	/** Helper to either get the value from the context (given the key), or
 	 *  load it and save it to the context */
 	@SuppressWarnings("unchecked")
-	protected static final <T> T getOrLoad(ContextKey contextKey, Callable<T> loader) {
+	protected static synchronized final <T> T getOrLoad(ContextKey contextKey, Callable<T> loader) {
 		//try getting the object from the context
 		T t = (T) Context.current().args.get(contextKey);
 		
@@ -41,7 +41,7 @@ public abstract class BaseContext {
 	}
 	
 	/** Helper to clear set all the values to null for the given keys */
-	protected static void refresh(ContextKey... keys) {
+	protected static synchronized void refresh(ContextKey... keys) {
 		for (ContextKey key : keys) {
 			Context.current().args.put(key.get(), null);
 		}
@@ -70,7 +70,7 @@ public abstract class BaseContext {
 		}
 		
 		/** Gets the underlying string to use as the key */
-		private String get() {
+		private synchronized String get() {
 			return key;
 		}
 		
@@ -78,7 +78,7 @@ public abstract class BaseContext {
 		private static final Set<String> REGISTERED_KEYS = new HashSet<String>();
 		
 		/** Determines if the given string is already registered as a context key */
-		public static boolean isRegistered(String key) {
+		public static synchronized boolean isRegistered(String key) {
 			return REGISTERED_KEYS.contains(key);
 		}
 		
@@ -86,7 +86,7 @@ public abstract class BaseContext {
 		 * Registers a new context key and returns it
 		 * @throws IllegalArgumentException if the key is null or if it is already registered
 		 */
-		public static ContextKey register(String key) {
+		public static synchronized ContextKey register(String key) {
 			if (key == null) throw new IllegalArgumentException("Key cannot be null");
 			if (isRegistered(key)) throw new IllegalArgumentException("Key is already registered");
 			

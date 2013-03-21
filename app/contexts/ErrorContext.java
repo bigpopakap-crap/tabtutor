@@ -20,13 +20,13 @@ public abstract class ErrorContext extends BaseContext {
 	private static final String FB_CONNECTION_ERROR_CONTEXT_KEY = "fbConnectionErrorContextKey";
 	
 	/** Returns true if there was an error accessing Facebook for this session context */
-	public static boolean fbConnectionError() {
+	public static synchronized boolean fbConnectionError() {
 		//any value set is considered true
 		return Context.current().args.get(FB_CONNECTION_ERROR_CONTEXT_KEY) != null;
 	}
 	
 	/** Sets whether or not there was an FB connection error in the request context */
-	public static void setFbConnectionError(boolean b) {
+	public static synchronized void setFbConnectionError(boolean b) {
 		Context.current().args.put(FB_CONNECTION_ERROR_CONTEXT_KEY, b ? true : null);
 	}
 	
