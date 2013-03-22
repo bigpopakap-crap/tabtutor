@@ -11,6 +11,7 @@ import play.mvc.Action;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import play.mvc.With;
+import contexts.RequestActionContext;
 import contexts.SessionContext;
 
 /**
@@ -48,6 +49,7 @@ public class SessionAction {
 		@Override
 		public Result call(Context ctx) throws Throwable {
 			Logger.debug("Calling into " + this.getClass().getName());
+			RequestActionContext.put(this.getClass());
 
 			SessionModel session = SessionContext.get(); //use this method because it is cached
 			if (session == null || configuration.forceRefresh()) {
@@ -59,7 +61,6 @@ public class SessionAction {
 
 			return delegate.call(ctx);
 		}
-		
 	}
 
 }

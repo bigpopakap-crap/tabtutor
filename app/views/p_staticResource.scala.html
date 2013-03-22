@@ -9,25 +9,28 @@
 				resoruce they are
 *@
 @(urls: Array[String])
-@import contexts.StaticResourcesContext;
+@import contexts.RequestStaticResourceContext;
 @import types.StaticResourceType;
 @for(url <- urls) {
-	@if(StaticResourcesContext.contains(url)) {
+	@if(RequestStaticResourceContext.contains(url)) {
 		<script type="text/javascript">
 			window.WTF.get('Logger').info('Skipping already-included resource at @(url)');
 		</script>
 	} else {
+		@* Add this HTML comment so we can call the add() method *@
+		<!-- Including resource @(RequestStaticResourceContext.add(url)) -->
+		
 		@if(StaticResourceType.JS.isType(url)) {
-			<script type="text/javascript" src="@(StaticResourcesContext.add(url))"></script>
+			<script type="text/javascript" src="@url"></script>
 		}
 		
 		@if(StaticResourceType.CSS.isType(url)) {
-			<link rel="stylesheet" type="text/css" href="@(StaticResourcesContext.add(url))"/>
+			<link rel="stylesheet" type="text/css" href="@url"/>
 		}
 		
 		@if(StaticResourceType.getTypeOf(url) == null) {
 			<script type="text/javascript">
-				window.WTF.get('Logger').error('Unhandled static resource type for url @(StaticResourcesContext.add(url))');
+				window.WTF.get('Logger').error('Unhandled static resource type for url @url');
 			</script>
 		}
 	}

@@ -3,11 +3,8 @@ package api.fb;
 import java.util.HashMap;
 import java.util.Map;
 
-import play.libs.F.Promise;
 import play.libs.WS.Response;
 import types.HttpMethodType;
-import utils.EscapingUtil;
-import utils.EscapingUtil.Escaper;
 import api.ApiResponseOption;
 import api.BaseApi;
 import api.exceptions.ApiErrorCodeException;
@@ -43,7 +40,10 @@ public class FbApi extends BaseApi<FbJsonResponse> {
 	private static final String QUERY_KEY_ACCESS_TOKEN = "access_token";
 	private static final String QUERY_KEY_ACCESS_TOKEN_EXPIRY = "expires";
 	private static final String QUERY_KEY_OAUTH_CODE = "code";
-	private static final String QUERY_KEYVALUE_SCOPE = "scope=email";
+	private static final String QUERY_KEY_SCOPE = "scope";
+	
+	// Standard values for the above keys, where applicable
+	private static final String QUERY_VALUE_SCOPE = "email";
 	
 	/** The access token for this FbApi object, used to make API calls */
 	private final String accessToken;
@@ -103,16 +103,22 @@ public class FbApi extends BaseApi<FbJsonResponse> {
 	
 	/** Gets the URL to redirect the user for Facebook login */
 	public static String loginRedirect() {
+		@SuppressWarnings("serial") Map<String, String> params = new HashMap<String, String>() {{
+			put(QUERY_KEY_CLIENT_ID, AppContext.Var.FB_APP_ID.val());
+			put(QUERY_KEY_REDIRECT_URI, AppContext.Var.FB_SITE_URL.val());
+			put(QUERY_KEY_SCOPE, QUERY_VALUE_SCOPE);
+		}};
 		return new StringBuilder().append(DOMAIN_FB).append(PATH_LOGIN_REDIRECT)
-								.append("?").append(QUERY_KEY_CLIENT_ID).append("=").append(AppContext.Var.FB_APP_ID.val())
-								.append("&").append(QUERY_KEY_REDIRECT_URI).append("=").append(EscapingUtil.escape(AppContext.Var.FB_SITE_URL.val(), Escaper.URL))
-								.append("&").append(QUERY_KEYVALUE_SCOPE)
-								.toString();
+									.append("?").append(mapToQueryString(params))
+									.toString();
 	}
 	
-	/** Gets an access token, and creates an FbApi object with that token
-	 *  This should be the only way to create an object for which hasTokenExpiry() is true */
-	public static FbApi accessToken(final String code) {
+	/**
+	 * Gets an access token, and creates an FbApi object with that token
+	 * This should be the only way to create an object for which hasTokenExpiry() is true 
+	 * @throws ApiNoResponseException if there is an error communicating with Facebook
+	 */
+	public static FbApi accessToken(final String code) throws ApiNoResponseException {
 		if (code == null) throw new IllegalArgumentException("Code cannot be null");
 		
 		@SuppressWarnings("serial") Map<String, String> params = new HashMap<String, String>() {{
@@ -121,7 +127,7 @@ public class FbApi extends BaseApi<FbJsonResponse> {
 			put(QUERY_KEY_CLIENT_SECRET, AppContext.Var.FB_APP_SECRET.val());
 			put(QUERY_KEY_OAUTH_CODE, code);
 		}};
-		Response resp = rawQuery(HttpMethodType.POST, DOMAIN_GRAPH_API + PATH_OAUTH_ACCESSTOKEN, params).get();
+		Response resp = rawQuery(HttpMethodType.POST, DOMAIN_GRAPH_API + PATH_OAUTH_ACCESSTOKEN, params);
 		
 		//TODO throw an ApiInitializationError on error during this constructor
 		//if the response is an erroneous response
@@ -135,7 +141,7 @@ public class FbApi extends BaseApi<FbJsonResponse> {
 	 * @throws FbErrorResponseException 
 	 * @throws ApiErrorCodeException 
 	 * @throws ApiNoResponseException */
-	public Promise<ApiResponseOption<FbJsonResponse>> me() {
+	public ApiResponseOption<FbJsonResponse> me() {
 		return query(HttpMethodType.GET, DOMAIN_GRAPH_API, PATH_ME, null);
 	}
 	

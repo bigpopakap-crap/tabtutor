@@ -21,7 +21,7 @@ public abstract class BaseContext {
 	@SuppressWarnings("unchecked")
 	protected static synchronized final <T> T getOrLoad(ContextKey contextKey, Callable<T> loader) {
 		//try getting the object from the context
-		T t = (T) Context.current().args.get(contextKey);
+		T t = (T) Context.current().args.get(contextKey.get());
 		
 		//if not retrieved, load it and store it in the context
 		if (t == null) {

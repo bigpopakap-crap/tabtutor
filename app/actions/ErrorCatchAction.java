@@ -11,6 +11,7 @@ import play.mvc.Http.Context;
 import play.mvc.Result;
 import play.mvc.With;
 import contexts.AppContext;
+import contexts.RequestActionContext;
 import controllers.exceptions.BaseExposedException;
 
 /**
@@ -39,6 +40,8 @@ public class ErrorCatchAction extends Action.Simple {
 	@Override
 	public Result call(Context ctx) throws Throwable {
 		Logger.debug("Calling into " + this.getClass());
+		RequestActionContext.put(this.getClass());
+		
 		try {
 			return delegate.call(ctx);
 		}

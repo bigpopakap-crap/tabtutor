@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-import play.libs.F.Function;
 import play.libs.F.Promise;
 import play.libs.WS;
 import play.libs.WS.Response;
@@ -64,7 +63,7 @@ public abstract class BaseApi<R extends BaseApiResponse<?>> {
 	 * @param params the parameters to pass. If null or empty, no parameters will be used (except those
 	 * 				added by the hook method to add common params)
 	 */
-	protected final Promise<ApiResponseOption<R>> query(HttpMethodType method, String urlDomain, String urlPath, Map<String, String> params) {
+	protected final ApiResponseOption<R> query(HttpMethodType method, String urlDomain, String urlPath, Map<String, String> params) {
 		//default or throw exception on nulls
 		if (method == null) method = HttpMethodType.GET;
 		if (urlDomain == null) throw new IllegalArgumentException("UrlDomain cannot be null");
@@ -80,35 +79,40 @@ public abstract class BaseApi<R extends BaseApiResponse<?>> {
 		final String fUrlPath = urlPath;
 		final Map<String, String> fParams = params;
 		
-		//map the response to a response object
-		return rawQuery(method, urlDomain + urlPath, params).map(new Function<Response, ApiResponseOption<R>>() {
-
-			@Override
-			public ApiResponseOption<R> apply(Response resp) throws Throwable {
-				if (resp == null) {
-					return new ApiResponseOption<R>(
-						new ApiNoResponseException()
-					);
-				}
-				else if (resp.getStatus() != Status.OK) {
-					return new ApiResponseOption<R>(
-						new ApiErrorCodeException(resp.getStatus())
-					);
-				}
-				else {
-					return new ApiResponseOption<R>(hook_mapResponse(fMethod, fUrlDomain, fUrlPath, fParams, resp));
-				}
-			}
-			
-		});
+		//get the response object
+		Response resp = null;;
+		try {
+			resp = rawQuery(method, urlDomain + urlPath, params);
+		}
+		catch (ApiNoResponseException ex) {
+			return new ApiResponseOption<R>(
+				new ApiNoResponseException()
+			);
+		}
+		
+		//map the response object to a response option
+		if (resp == null) {
+			return new ApiResponseOption<R>(
+				new ApiNoResponseException()
+			);
+		}
+		else if (resp.getStatus() != Status.OK) {
+			return new ApiResponseOption<R>(
+				new ApiErrorCodeException(resp.getStatus())
+			);
+		}
+		else {
+			return new ApiResponseOption<R>(hook_mapResponse(fMethod, fUrlDomain, fUrlPath, fParams, resp));
+		}
 	}
 	
 	/**
 	 * Creates a promise to query the given url, with the given HTTP method and the given params
 	 * Url must be non-null
 	 * Note that only GET and POST are supported currently
+	 * @throws ApiNoResponseException if any exception is thrown while getting the promise
 	 */
-	protected static final Promise<Response> rawQuery(HttpMethodType method, String url, Map<String, String> params) {
+	protected static final Response rawQuery(HttpMethodType method, String url, Map<String, String> params) throws ApiNoResponseException {
 		//default or throw exception on nulls
 		if (method == null) method = HttpMethodType.GET;
 		if (url == null) throw new IllegalArgumentException("Url cannot be null");
@@ -119,16 +123,26 @@ public abstract class BaseApi<R extends BaseApiResponse<?>> {
 		
 		//generate the request promise depending on whether we're using POST or GET
 		WSRequestHolder reqHolder = WS.url(url);
+		Promise<Response> promise = null;
 		switch (method) {
 			case GET:
 				for (String key : params.keySet()) {
 					reqHolder.setQueryParameter(key, params.get(key));
 				}
-				return reqHolder.get();
+				promise = reqHolder.get();
+				break;
 			case POST:
-				return reqHolder.post(paramStr);
+				promise = reqHolder.post(paramStr);
+				break;
 			default:
 				throw new IllegalStateException("Unhandled HTTP method type: " + method);
+		}
+		
+		try {
+			return promise.get();
+		}
+		catch (Exception ex) {
+			throw new ApiNoResponseException();
 		}
 	}
 	
