@@ -10,6 +10,7 @@ import play.mvc.Action;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import play.mvc.With;
+import actions.FbAuthAction.FbAuthActionImpl;
 import contexts.RequestActionContext;
 
 /**
@@ -41,7 +42,7 @@ public class InternalAuthAction extends Action.Simple {
 		RequestActionContext.put(this.getClass());
 		
 		//make sure the prerequisite actions have been called
-		if (!RequestActionContext.has(FbAuthAction.class)) {
+		if (!RequestActionContext.has(FbAuthActionImpl.class)) {
 			throw new IllegalStateException("Requesite actions were not called");
 		}
 		
