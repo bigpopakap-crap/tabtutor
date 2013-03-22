@@ -12,7 +12,6 @@ import play.mvc.Action;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import play.mvc.With;
-import actions.SessionAction.SessionActionImpl;
 import api.exceptions.BaseApiException;
 import api.fb.FbApi;
 import api.fb.FbJsonResponse;
@@ -39,7 +38,7 @@ public class FbAuthAction extends Action.Simple {
 	 * @since 2013-02-24
 	 *
 	 */
-	@With({SessionActionImpl.class, FbAuthAction.class})
+	@With(FbAuthAction.class)
 	@Target({ElementType.TYPE, ElementType.METHOD})
 	@Retention(RetentionPolicy.RUNTIME)
 	public @interface FbAuthed {}
@@ -49,6 +48,11 @@ public class FbAuthAction extends Action.Simple {
 	public Result call(Context ctx) throws Throwable {
 		Logger.debug("Calling into " + this.getClass().getName());
 		RequestActionContext.put(this.getClass());
+		
+		//make sure the prerequisite actions have been called
+		if (!RequestActionContext.has(SessionAction.SessionActionImpl.class)) {
+			throw new IllegalStateException("Requesite actions were not called");
+		}
 		
 		//get the session object
 		final SessionModel session = SessionContext.get();
