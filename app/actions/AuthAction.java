@@ -29,7 +29,7 @@ import controllers.FbAuthWebController;
  * @since 2013-02-24
  *
  */
-public class FbAuthAction {
+public class AuthAction {
 	
 	/**
 	 * Annotation for applying FacebookAuthenticatedAction
@@ -38,12 +38,15 @@ public class FbAuthAction {
 	 * @since 2013-02-24
 	 *
 	 */
-	@With(FbAuthActionImpl.class)
+	@With(AuthActionImpl.class)
 	@Target({ElementType.TYPE, ElementType.METHOD})
 	@Retention(RetentionPolicy.RUNTIME)
-	public @interface FbAuthed {}
+	public @interface Authed {
+		boolean force() default false;
+		int accessLevel() default 0;
+	}
 	
-	public static class FbAuthActionImpl extends Action<FbAuthed> {
+	public static class AuthActionImpl extends Action<Authed> {
 		
 		/** Implements the action */
 		@Override

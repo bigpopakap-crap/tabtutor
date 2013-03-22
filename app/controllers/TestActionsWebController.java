@@ -1,7 +1,7 @@
 package controllers;
 
 import play.mvc.Result;
-import actions.FbAuthAction.FbAuthed;
+import actions.AuthAction.Authed;
 import actions.SessionAction.Sessioned;
 
 /**
@@ -18,7 +18,7 @@ public class TestActionsWebController extends TestWebController {
 		return ok("yay");
 	}
 	
-	@Sessioned @FbAuthed
+	@Sessioned @Authed
 	public static Result fbAuthAction() {
 		return ok("yay");
 	}
