@@ -1,5 +1,6 @@
 package contexts;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -26,8 +27,8 @@ public class RequestActionContext extends BaseContext {
 	}
 	
 	/** Determines if the given action was applied in this request */
-	public static synchronized boolean has(Class<? extends Action<?>> action) {
-		return get().contains(action);
+	public static synchronized boolean has(Class<? extends Action<?>>... actions) {
+		return get().containsAll(Arrays.asList(actions));
 	}
 	
 	/** Appends the action to the list of those applied during the request.
