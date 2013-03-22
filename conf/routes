@@ -1,36 +1,36 @@
-# ---------------------------------------------------------------------
-  ROUTING DEFINITIONS
+# --------------------------------------------------------------------- #
+#  ROUTING DEFINITIONS
+#
+# - page routes can be any path, except for reserved ones below
+# - /internal/* is reserved for developer or admin pages
+# - /internal/admin/* is reserved for pages that will be available, even in production
+# - /internal/devtools/* is reserved for pages that will not be available in production
+# - /internal/test/* is reserver for pages that will only be accessible by tests
+# - /api/* is reserved for API calls. Everything should utilize these to do the actual work
+# - /public/* is reserved for static files and resources
+# --------------------------------------------------------------------- #
 
-  - page routes can be any path, except for reserved ones below
-  - /internal/* is reserved for developer or admin pages
-  - /internal/admin/* is reserved for pages that will be available, even in production
-  - /internal/devtools/* is reserved for pages that will not be available in production
-  - /internal/test/* is reserver for pages that will only be accessible by tests
-  - /api/* is reserved for API calls. Everything should utilize these to do the actual work
-  - /public/* is reserved for static files and resources
-  --------------------------------------------------------------------- #
-
-# ---------------------------------------------------------------------
-	BEGIN PAGE ROUTING
-  --------------------------------------------------------------------- #
+# --------------------------------------------------------------------- #
+#	BEGIN PAGE ROUTING													#
+# --------------------------------------------------------------------- #
 GET     /                           controllers.SimpleWebController.landing()
 GET		/fblogin					controllers.FbAuthWebController.fblogin(code ?= null, state ?= null)
 
-# ---------------------------------------------------------------------
-	BEGIN /INTERNAL/ADMIN PAGE ROUTING
-  --------------------------------------------------------------------- #
+# --------------------------------------------------------------------- #
+#	BEGIN /INTERNAL/ADMIN PAGE ROUTING									#
+# --------------------------------------------------------------------- #
 # TODO these will be implemented as and when we find a need
 
-# ---------------------------------------------------------------------
-	BEGIN /INTERNAL/DEVTOOLS PAGE ROUTING
-  --------------------------------------------------------------------- #
+# --------------------------------------------------------------------- #
+#	BEGIN /INTERNAL/DEVTOOLS PAGE ROUTING								#
+# --------------------------------------------------------------------- #
 GET		/internal/devtools/testusers/list			controllers.DevtoolsTestUsersWebController.list()
 POST	/internal/devtools/testusers/create			controllers.DevtoolsTestUsersWebController.create(firstName, lastName)
 POST	/internal/devtools/testusers/login/:id		controllers.DevtoolsTestUsersWebController.login(id, redirect ?= "/")
 
-# ---------------------------------------------------------------------
-	BEGIN /INTERNAL/TEST PAGE ROUTING
-  --------------------------------------------------------------------- #
+# --------------------------------------------------------------------- #
+#	BEGIN /INTERNAL/TEST PAGE ROUTING									#
+# --------------------------------------------------------------------- #
 GET		/internal/test/errorpageexception/internalservererrorpage	controllers.TestErrorPageExceptionWebController.internalServerErrorPage()
 GET		/internal/test/errorpageexception/notfoundpage				controllers.TestErrorPageExceptionWebController.notFoundPage()
 GET		/internal/test/errorpageexception/gobackpage				controllers.TestErrorPageExceptionWebController.goBackPage()
@@ -38,18 +38,18 @@ GET		/internal/test/errorpageexception/gotopage					controllers.TestErrorPageExc
 GET		/internal/test/actions/sessionaction						controllers.TestActionsWebController.sessionAction()
 GET		/internal/test/actions/fbauthaction							controllers.TestActionsWebController.fbAuthAction()
 
-# ---------------------------------------------------------------------
-	BEGIN /API ROUTING
-  --------------------------------------------------------------------- #
+# --------------------------------------------------------------------- #
+#	BEGIN /API ROUTING													#
+# --------------------------------------------------------------------- #
 # TODO this will be implemented later
 
-# ---------------------------------------------------------------------
-	BEGIN STATIC FILE ROUTING
-  --------------------------------------------------------------------- #
+# --------------------------------------------------------------------- #
+#	BEGIN STATIC FILE ROUTING											#
+# --------------------------------------------------------------------- #
 GET		/favicon.ico				controllers.Assets.at(path="/public", file="images/favicon.png")
 GET     /public/*file               controllers.Assets.at(path="/public", file)
 
-# ---------------------------------------------------------------------
-	CATCH-ALL NOT FOUND PAGE
-  --------------------------------------------------------------------- #
+# --------------------------------------------------------------------- #
+#	CATCH-ALL NOT FOUND PAGE											#
+# --------------------------------------------------------------------- #
 GET		/*path						controllers.SimpleWebController.pageNotFound(path)

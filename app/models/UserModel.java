@@ -32,6 +32,7 @@ public class UserModel extends BaseModel {
 	private static final long serialVersionUID = 5854422586239724109L;
 	
 	@Column(name = "pk") @Id public UUID pk;
+	@Column(name = "isTestUser") public boolean isTestUser;
 	@Column(name = "fbId") public String fbId;
 	@Column(name = "fbIsAuthed") public boolean fbIsAuthed;
 	@Column(name = "firstName") public String firstName;
@@ -50,17 +51,26 @@ public class UserModel extends BaseModel {
 	
 	public static class Factory extends BaseFactory {
 		
-		public static UserModel createAndSave(String fbId, String firstName, String lastName, String email) {
-			Date now = DbTypesUtil.now();
-			return create(UUID.randomUUID(), fbId, true, firstName, lastName, email, now, now, null, true);
+		public static UserModel createNewTestUserAndSave(String fbId, String firstName, String lastName, String email) {
+			return createNewUserAndSave(true, fbId, firstName, lastName, email);
 		}
 		
-		private static UserModel create(UUID pk, String fbId, boolean fbIsAuthed,
+		public static UserModel createNewRealUserAndSave(String fbId, String firstName, String lastName, String email) {
+			return createNewUserAndSave(false, fbId, firstName, lastName, email);
+		}
+		
+		private static UserModel createNewUserAndSave(boolean isTestUser, String fbId, String firstName, String lastName, String email) {
+			Date now = DbTypesUtil.now();
+			return create(UUID.randomUUID(), isTestUser, fbId, true, firstName, lastName, email, now, now, null, true);
+		}
+		
+		private static UserModel create(UUID pk, boolean isTestUser, String fbId, boolean fbIsAuthed,
 										String firstName, String lastName,
 										String email, Date registerTime, Date lastLoginTime,
 										Date secondToLastLoginTime, boolean save) {
 			UserModel user = new UserModel();
 			user.pk = pk;
+			user.isTestUser = isTestUser;
 			user.fbId = fbId;
 			user.fbIsAuthed = fbIsAuthed;
 			user.firstName = firstName;
