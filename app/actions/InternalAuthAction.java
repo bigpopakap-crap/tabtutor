@@ -5,6 +5,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import contexts.RequestActionContext;
+
 import play.Logger;
 import play.mvc.Action;
 import play.mvc.Http.Context;
@@ -37,6 +39,8 @@ public class InternalAuthAction extends Action.Simple {
 	@Override
 	public Result call(Context ctx) throws Throwable {
 		Logger.debug("Calling into " + this.getClass().getName());
+		RequestActionContext.put(this.getClass());
+		
 		//TODO implement this
 		return delegate.call(ctx);
 	}

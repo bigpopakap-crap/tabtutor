@@ -13,7 +13,7 @@ import java.util.concurrent.Callable;
  * @since 2013-03-17
  *
  */
-public class StaticResourcesContext extends BaseContext {
+public class RequestStaticResourceContext extends BaseContext {
 	
 	/** The key used to store the set of resources for the request context */
 	private static final ContextKey PAGE_RESOURCE_CONTEXT_KEY = ContextKey.register("pageResourceContextKey");

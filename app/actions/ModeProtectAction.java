@@ -11,6 +11,7 @@ import play.mvc.Http.Context;
 import play.mvc.Result;
 import play.mvc.With;
 import contexts.AppContext;
+import contexts.RequestActionContext;
 import controllers.exceptions.BaseExposedException;
 
 /**
@@ -43,6 +44,8 @@ public class ModeProtectAction {
 		@Override
 		public Result call(Context ctx) throws Throwable {
 			Logger.debug("Calling into " + this.getClass() + " only allowing mode " + configuration.allowedMode());
+			RequestActionContext.put(this.getClass());
+			
 			if (AppContext.Mode.get() != configuration.allowedMode()) {
 				//TODO figure out which default error to show to the user
 				throw BaseExposedException.Factory.notFound();

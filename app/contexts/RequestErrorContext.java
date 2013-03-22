@@ -15,7 +15,7 @@ import play.mvc.Http.Context;
  * @since 2013-03-10
  *
  */
-public abstract class ErrorContext extends BaseContext {
+public abstract class RequestErrorContext extends BaseContext {
 	
 	private static final String FB_CONNECTION_ERROR_CONTEXT_KEY = "fbConnectionErrorContextKey";
 	

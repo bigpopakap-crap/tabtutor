@@ -15,7 +15,8 @@ import play.mvc.With;
 import api.exceptions.BaseApiException;
 import api.fb.FbApi;
 import api.fb.FbJsonResponse;
-import contexts.ErrorContext;
+import contexts.RequestActionContext;
+import contexts.RequestErrorContext;
 import contexts.SessionContext;
 import controllers.FbAuthWebController;
 
@@ -46,6 +47,7 @@ public class FbAuthAction extends Action.Simple {
 	@Override
 	public Result call(Context ctx) throws Throwable {
 		Logger.debug("Calling into " + this.getClass().getName());
+		RequestActionContext.put(this.getClass());
 		
 		//get the session object
 		final SessionModel session = SessionContext.get();
@@ -83,8 +85,9 @@ public class FbAuthAction extends Action.Simple {
 				
 				//add this user ID to the session object
 				SessionModel.Updater.setUserPkAndUpdate(session, user.pk);
-			} catch (BaseApiException e) {
-				ErrorContext.setFbConnectionError(true);
+			}
+			catch (BaseApiException e) {
+				RequestErrorContext.setFbConnectionError(true);
 				//TODO need to do anything else to handle this error?
 			}
 		}
