@@ -47,6 +47,7 @@ public class FbAuthWebController extends BaseWebController {
 				SessionModel.Updater.setFbAuthInfoAndUpdate(session, fbApi.getToken(), fbApi.getTokenExpiry());
 				
 				//if there is an associated user, update the login time
+				//TODO this shouldn't happen if the user is already logged in
 				if (SessionContext.hasUser()) {
 					UserModel user = SessionContext.user();
 					UserModel.Updater.setLoginTimeAndUpdate(user);

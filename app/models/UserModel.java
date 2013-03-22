@@ -32,16 +32,16 @@ public class UserModel extends BaseModel {
 	private static final long serialVersionUID = 5854422586239724109L;
 	
 	@Column(name = "pk") @Id public UUID pk;
-	@Column(name = "isTestUser") public boolean isTestUser;
 	@Column(name = "fbId") public String fbId;
 	@Column(name = "fbIsAuthed") public boolean fbIsAuthed;
 	@Column(name = "firstName") public String firstName;
 	@Column(name = "lastName") public String lastName;
-	@Transient @Formula(select = "firstName || ' ' || lastName") public String fullName;
 	@Column(name = "email") public String email;
 	@Column(name = "registerTime") public Date registerTime;
 	@Column(name = "lastLoginTime") public Date lastLoginTime;
 	@Column(name = "secondToLastLoginTime") public Date secondToLastLoginTime;
+	
+	@Transient @Formula(select = "firstName || ' ' || lastName") public String fullName;
 	@Transient @Formula(select = "secondToLastLoginTime IS NULL") public boolean isFirstLogin;
 	
 	/** Private helper for DB interaction implementation */
@@ -51,26 +51,27 @@ public class UserModel extends BaseModel {
 	
 	public static class Factory extends BaseFactory {
 		
-		public static UserModel createNewTestUserAndSave(String fbId, String firstName, String lastName, String email) {
-			return createNewUserAndSave(true, fbId, firstName, lastName, email);
-		}
-		
-		public static UserModel createNewRealUserAndSave(String fbId, String firstName, String lastName, String email) {
-			return createNewUserAndSave(false, fbId, firstName, lastName, email);
-		}
-		
-		private static UserModel createNewUserAndSave(boolean isTestUser, String fbId, String firstName, String lastName, String email) {
+		/**
+		 * Creates a new user object with the given Facebook auth information
+		 * @param isTestUser is this a test user who is not connected to Facebook
+		 * @param fbId the Facebook ID of the user
+		 * @param firstName
+		 * @param lastName
+		 * @param email
+		 * @return
+		 */
+		public static UserModel createNewUserAndSave(String fbId, String firstName, String lastName, String email) {
 			Date now = DbTypesUtil.now();
-			return create(UUID.randomUUID(), isTestUser, fbId, true, firstName, lastName, email, now, now, null, true);
+			return create(UUID.randomUUID(), fbId, true, firstName, lastName, email, now, now, null, true);
 		}
 		
-		private static UserModel create(UUID pk, boolean isTestUser, String fbId, boolean fbIsAuthed,
+		/** This should be the only method that touches the fields */
+		private static UserModel create(UUID pk, String fbId, boolean fbIsAuthed,
 										String firstName, String lastName,
 										String email, Date registerTime, Date lastLoginTime,
 										Date secondToLastLoginTime, boolean save) {
 			UserModel user = new UserModel();
 			user.pk = pk;
-			user.isTestUser = isTestUser;
 			user.fbId = fbId;
 			user.fbIsAuthed = fbIsAuthed;
 			user.firstName = firstName;

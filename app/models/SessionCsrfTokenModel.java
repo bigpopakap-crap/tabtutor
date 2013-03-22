@@ -30,6 +30,7 @@ public class SessionCsrfTokenModel extends BaseModel {
 	@Column(name = "csrfToken") public UUID csrfToken;
 	@Column(name = "createTime") public Date createTime;
 	@Column(name = "expireTime") public Date expireTime;
+	
 	@Transient @Formula(select = "NOW() > expireTime") public boolean isExpired;
 	
 	/** Private helper for DB interaction implementation */

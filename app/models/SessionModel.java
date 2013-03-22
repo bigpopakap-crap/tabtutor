@@ -43,9 +43,10 @@ public class SessionModel extends BaseModel {
 	@Column(name = "userPk") public UUID userPk; //TODO how to populate this as the user object reference?
 	@Column(name = "fbToken") public String fbToken;
 	@Column(name = "fbTokenExpireTime") public Date fbTokenExpireTime;
-	@Transient @Formula(select = "NOW() > fbTokenExpireTime") public boolean isFbtokenExpired;
 	@Column(name = "startTime") public Date startTime;
 	@Column(name = "lastAccessTime") public Date lastAccessTime;
+	
+	@Transient @Formula(select = "NOW() > fbTokenExpireTime") public boolean isFbtokenExpired;
 	
 	@Override
 	protected void hook_postModifyingOperation(BasicDmlModifyingType opType, boolean wasSuccessful) {
@@ -67,13 +68,15 @@ public class SessionModel extends BaseModel {
 		/**
 		 * Creates a default new session with a random ID, no associated user,
 		 * no Facebook auth information, and the current start and update times
+		 * @param isTest whether this is a test session or not
 		 * @return the new model after it is saved
 		 */
-		public static SessionModel createAndSave() {
+		public static SessionModel createNewSessionAndSave() {
 			Date now = DbTypesUtil.now();
 			return create(UUID.randomUUID(), null, null, null, now, now, true);
 		}
 		
+		/** This should be the only method that touches the fields */
 		private static SessionModel create(UUID pk, UUID userPk,
 									String fbtoken, Date fbtokenExpireTime,
 									Date startTime, Date lastAccessTime,

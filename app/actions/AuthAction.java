@@ -90,7 +90,7 @@ public class AuthAction {
 					//get the user associated with this Facebook ID, or create one
 					UserModel user = UserModel.Selector.getByFbId(fbId);
 					if (user == null) {
-						user = UserModel.Factory.createNewRealUserAndSave(fbId, firstName, lastName, email);
+						user = UserModel.Factory.createNewUserAndSave(fbId, firstName, lastName, email);
 					}
 					
 					//add this user ID to the session object
