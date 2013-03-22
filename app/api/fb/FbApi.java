@@ -43,7 +43,10 @@ public class FbApi extends BaseApi<FbJsonResponse> {
 	private static final String QUERY_KEY_ACCESS_TOKEN = "access_token";
 	private static final String QUERY_KEY_ACCESS_TOKEN_EXPIRY = "expires";
 	private static final String QUERY_KEY_OAUTH_CODE = "code";
-	private static final String QUERY_KEYVALUE_SCOPE = "scope=email";
+	private static final String QUERY_KEY_SCOPE = "scope";
+	
+	// Standard values for the above keys, where applicable
+	private static final String QUERY_VALUE_SCOPE = "email";
 	
 	/** The access token for this FbApi object, used to make API calls */
 	private final String accessToken;
@@ -103,11 +106,14 @@ public class FbApi extends BaseApi<FbJsonResponse> {
 	
 	/** Gets the URL to redirect the user for Facebook login */
 	public static String loginRedirect() {
+		@SuppressWarnings("serial") Map<String, String> params = new HashMap<String, String>() {{
+			put(QUERY_KEY_CLIENT_ID, AppContext.Var.FB_APP_ID.val());
+			put(QUERY_KEY_REDIRECT_URI, EscapingUtil.escape(AppContext.Var.FB_SITE_URL.val(), Escaper.URL));
+			put(QUERY_KEY_SCOPE, QUERY_VALUE_SCOPE);
+		}};
 		return new StringBuilder().append(DOMAIN_FB).append(PATH_LOGIN_REDIRECT)
-								.append("?").append(QUERY_KEY_CLIENT_ID).append("=").append(AppContext.Var.FB_APP_ID.val())
-								.append("&").append(QUERY_KEY_REDIRECT_URI).append("=").append(EscapingUtil.escape(AppContext.Var.FB_SITE_URL.val(), Escaper.URL))
-								.append("&").append(QUERY_KEYVALUE_SCOPE)
-								.toString();
+									.append("?").append(mapToQueryString(params))
+									.toString();
 	}
 	
 	/** Gets an access token, and creates an FbApi object with that token
