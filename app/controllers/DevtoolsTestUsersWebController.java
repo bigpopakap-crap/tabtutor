@@ -1,5 +1,6 @@
 package controllers;
 
+import actions.SessionAction.Sessioned;
 import play.mvc.Result;
 
 /**
@@ -19,12 +20,14 @@ public class DevtoolsTestUsersWebController extends DevtoolsWebController {
 	}
 	
 	/** Creates a new test user with the given first and last name */
+	@Sessioned(forceRefresh = true)
 	public static Result create(String firstName, String lastName) {
 		//TODO do this
 		return ok();
 	}
 	
 	/** Logs in as the test user with the given ID and redirects to the given url */
+	@Sessioned(forceRefresh = true)
 	public static Result login(String id, String redirect) {
 		//TODO do this
 		return ok();

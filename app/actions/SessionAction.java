@@ -26,7 +26,7 @@ import contexts.SessionContext;
  * @since 2013-02-24
  *
  */
-public class SessionAction extends Action.Simple {
+public class SessionAction {
 	
 	/**
 	 * Annotation for applying SessionedAction
@@ -35,25 +35,31 @@ public class SessionAction extends Action.Simple {
 	 * @since 2013-02-24
 	 *
 	 */
-	@With(SessionAction.class)
+	@With(SessionActionImpl.class)
 	@Target({ElementType.TYPE, ElementType.METHOD})
 	@Retention(RetentionPolicy.RUNTIME)
-	public @interface Sessioned {}
-
-	/** Implements the action */
-	@Override
-	public Result call(Context ctx) throws Throwable {
-		Logger.debug("Calling into " + this.getClass().getName());
-		
-		SessionModel session = SessionContext.get(); //use this method because it is cached
-		if (session == null) {
-			//there is no session ID set, so create it and add it to the cookie
-			SessionModel newSession = SessionModel.Factory.createAndSave();
-			ctx.session().put(SessionModel.SESSION_ID_COOKIE_KEY, newSession.GETTER.pk().toString());
-			Logger.info("Put session " + newSession.GETTER.pk() + " in cookie for IP " + ctx.request().remoteAddress());
-		}
-		
-		return delegate.call(ctx);
+	public @interface Sessioned {
+		boolean forceRefresh() default false;
 	}
 	
+	public static class SessionActionImpl extends Action<Sessioned> {
+
+		/** Implements the action */
+		@Override
+		public Result call(Context ctx) throws Throwable {
+			Logger.debug("Calling into " + this.getClass().getName());
+
+			SessionModel session = SessionContext.get(); //use this method because it is cached
+			if (session == null || configuration.forceRefresh()) {
+				//there is no session ID set, so create it and add it to the cookie
+				SessionModel newSession = SessionModel.Factory.createAndSave();
+				ctx.session().put(SessionModel.SESSION_ID_COOKIE_KEY, newSession.GETTER.pk().toString());
+				Logger.info("Put session " + newSession.GETTER.pk() + " in cookie for IP " + ctx.request().remoteAddress());
+			}
+
+			return delegate.call(ctx);
+		}
+		
+	}
+
 }

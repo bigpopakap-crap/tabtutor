@@ -12,6 +12,7 @@ import play.mvc.Action;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import play.mvc.With;
+import actions.SessionAction.SessionActionImpl;
 import api.exceptions.BaseApiException;
 import api.fb.FbApi;
 import api.fb.FbJsonResponse;
@@ -37,7 +38,7 @@ public class FbAuthAction extends Action.Simple {
 	 * @since 2013-02-24
 	 *
 	 */
-	@With({SessionAction.class, FbAuthAction.class})
+	@With({SessionActionImpl.class, FbAuthAction.class})
 	@Target({ElementType.TYPE, ElementType.METHOD})
 	@Retention(RetentionPolicy.RUNTIME)
 	public @interface FbAuthed {}

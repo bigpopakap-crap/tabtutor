@@ -10,6 +10,7 @@ import play.mvc.Action;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import play.mvc.With;
+import actions.SessionAction.SessionActionImpl;
 
 /**
  * This Action will ensure the logged-in user has access to internal resources and pages
@@ -28,7 +29,7 @@ public class InternalAuthAction extends Action.Simple {
 	 * @since 2013-02-24
 	 *
 	 */
-	@With({SessionAction.class, FbAuthAction.class, InternalAuthAction.class})
+	@With({SessionActionImpl.class, FbAuthAction.class, InternalAuthAction.class})
 	@Target({ElementType.TYPE, ElementType.METHOD})
 	@Retention(RetentionPolicy.RUNTIME)
 	public @interface InternalAuthed {}
