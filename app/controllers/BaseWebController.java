@@ -21,8 +21,8 @@ import controllers.exceptions.BaseExposedException;
 public class BaseWebController extends BaseController {
 	
 	@Override
-	public BaseExposedException getDefaultExposedException() {
-		return Factory.internalServerErrorPage();
+	public BaseExposedException getDefaultExposedException(Throwable cause) {
+		return Factory.internalServerErrorPage(cause);
 	}
 	
 	/**
@@ -35,6 +35,10 @@ public class BaseWebController extends BaseController {
 	 */
 	protected static abstract class ErrorPageException extends controllers.exceptions.BaseExposedException {
 
+		public ErrorPageException(Throwable cause) {
+			super(cause);
+		}
+
 		private static final long serialVersionUID = -8551848133552601737L;
 		
 		/** Provides static methods for creating instances of this class */
@@ -43,23 +47,23 @@ public class BaseWebController extends BaseController {
 			//TODO append the stack trace to the page except in production mode
 			//TODO add ability to specify page title
 			
-			public static ErrorPageException internalServerErrorPage() {
+			public static ErrorPageException internalServerErrorPage(Throwable cause) {
 				//TODO provide a link to the feedback page
-				return goBackPage(MessagesEnum.errorPage_internalServerErrorDescription.get());
+				return goBackPage(cause, MessagesEnum.errorPage_internalServerErrorDescription.get());
 			}
 			
-			public static ErrorPageException notFoundPage() {
-				return goBackPage(MessagesEnum.errorPage_pageNotFoundDescription.get());
+			public static ErrorPageException notFoundPage(Throwable cause) {
+				return goBackPage(cause, MessagesEnum.errorPage_pageNotFoundDescription.get());
 			}
 			
 			/** Returns an error page with a link to go back to the previous page */
-			public static ErrorPageException goBackPage() {
-				return goBackPage(null);
+			public static ErrorPageException goBackPage(Throwable cause) {
+				return goBackPage(cause, null);
 			}
 			
 			/** Returns an error page with the given short description of the error a link to go back to the previous page */
-			public static ErrorPageException goBackPage(String description) {
-				return goToPage(description, "javascript:history.back()", MessagesEnum.errorPage_toGoBack.get());
+			public static ErrorPageException goBackPage(Throwable cause, String description) {
+				return goToPage(cause, description, "javascript:history.back()", MessagesEnum.errorPage_toGoBack.get());
 			}
 			
 			/** 
@@ -69,8 +73,8 @@ public class BaseWebController extends BaseController {
 			 * @param toMessage the message to be used after the link to explain where it goes
 			 * 					"Click <a>here</a> *toMessage*
 			 */
-			public static ErrorPageException goToPage(String url, String toMessage) {
-				return goToPage(null, url, toMessage);
+			public static ErrorPageException goToPage(Throwable cause, String url, String toMessage) {
+				return goToPage(cause, null, url, toMessage);
 			}
 			
 			/** 
@@ -83,16 +87,16 @@ public class BaseWebController extends BaseController {
 			 * 					This cannot be null
 			 * @throws IllegalArgumentException if either the url of the toMessage is null
 			 */
-			public static ErrorPageException goToPage(String description, String url, String toMessage) {
+			public static ErrorPageException goToPage(Throwable cause, String description, String url, String toMessage) {
 				//TODO style the page
 				if (url == null) throw new IllegalArgumentException("Url cannot be null in error page");
 				if (toMessage == null) throw new IllegalArgumentException("toMessage cannot be null in error page");
-				return custom(views.html.errorPage.render(description, url, toMessage));
+				return custom(cause, views.html.errorPage.render(description, url, toMessage));
 			}
 			
 			/** Returns a custom error page that will return the given HTML */
-			public static ErrorPageException custom(final Html page) {
-				return new ErrorPageException() {
+			public static ErrorPageException custom(Throwable cause, final Html page) {
+				return new ErrorPageException(cause) {
 
 					private static final long serialVersionUID = -3927537673541009374L;
 

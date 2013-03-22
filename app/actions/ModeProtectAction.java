@@ -48,7 +48,7 @@ public class ModeProtectAction {
 			
 			if (AppContext.Mode.get() != configuration.allowedMode()) {
 				//TODO figure out which default error to show to the user
-				throw BaseExposedException.Factory.notFound();
+				throw BaseExposedException.Factory.notFound(null);
 			}
 			else {
 				return delegate.call(ctx);

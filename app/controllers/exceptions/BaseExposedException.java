@@ -19,6 +19,11 @@ public abstract class BaseExposedException extends RuntimeException {
 
 	private static final long serialVersionUID = -935805780499802623L;
 	
+	/** Only define this constructor so all subclasses are forced to specify the cause */
+	public BaseExposedException(Throwable cause) {
+		super(cause);
+	}
+	
 	/** Returns the result representing this exception that should be sent to the client */
 	public abstract Result result();
 	
@@ -26,13 +31,13 @@ public abstract class BaseExposedException extends RuntimeException {
 	public static class Factory {
 		
 		/** Returns an exposed exception that simply responds with a NOT FOUND error with no body */
-		public static BaseExposedException notFound() {
-			return notFound(null);
+		public static BaseExposedException notFound(Throwable cause) {
+			return notFound(cause, null);
 		}
 		
 		/** Returns an exposed exception that simply responds with a NOT FOUND error with the given message */
-		public static BaseExposedException notFound(final String msg) {
-			return new BaseExposedException() {
+		public static BaseExposedException notFound(Throwable cause, final String msg) {
+			return new BaseExposedException(cause) {
 
 				private static final long serialVersionUID = 3981117505185668591L;
 
@@ -47,13 +52,13 @@ public abstract class BaseExposedException extends RuntimeException {
 		}
 		
 		/** Returns an exposed exception that simply responds with an INTERNAL SERVER ERROR with no body */
-		public static BaseExposedException internalServerError() {
-			return internalServerError(null);
+		public static BaseExposedException internalServerError(Throwable cause) {
+			return internalServerError(cause, null);
 		}
 		
 		/** Returns an exposed exception that simply responds with an INTERNAL SERVER ERROR with the given message */
-		public static BaseExposedException internalServerError(final String msg) {
-			return new BaseExposedException() {
+		public static BaseExposedException internalServerError(Throwable cause, final String msg) {
+			return new BaseExposedException(cause) {
 
 				private static final long serialVersionUID = 7329710051663165079L;
 

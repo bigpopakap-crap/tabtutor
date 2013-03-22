@@ -13,6 +13,6 @@ import controllers.exceptions.BaseExposedException;
 public abstract class BaseController extends Controller {
 	
 	/** Get the default exposed exception for this controller */
-	public abstract BaseExposedException getDefaultExposedException();
+	public abstract BaseExposedException getDefaultExposedException(Throwable cause);
 
 }

@@ -19,7 +19,7 @@ public abstract class BaseApiController extends BaseController {
 	//add exposed API paths when we want to start exposing an API
 	
 	@Override
-	public BaseExposedException getDefaultExposedException() {
+	public BaseExposedException getDefaultExposedException(Throwable cause) {
 		//TODO implement
 		return null;
 	}
@@ -34,7 +34,11 @@ public abstract class BaseApiController extends BaseController {
 	 */
 	protected static abstract class ErrorResponseException extends BaseExposedException {
 
-		private static final long serialVersionUID = 6385621008097532663L;
+		private static final long serialVersionUID = -6385930513439257047L;
+
+		public ErrorResponseException(Throwable cause) {
+			super(cause);
+		}
 		
 	}
 	

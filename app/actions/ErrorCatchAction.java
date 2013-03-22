@@ -53,7 +53,7 @@ public class ErrorCatchAction extends Action.Simple {
 			Logger.error("Exception caught in " + this.getClass(), ex);
 			//TODO figure out which default error to display to the user
 			if (AppContext.Mode.isProduction()) {
-				return BaseExposedException.Factory.internalServerError().result();
+				return BaseExposedException.Factory.internalServerError(ex).result();
 			}
 			else {
 				throw ex;
