@@ -3,6 +3,7 @@ package controllers;
 import models.SessionModel;
 import models.UserModel;
 import play.mvc.Result;
+import api.exceptions.ApiNoResponseException;
 import api.fb.FbApi;
 import contexts.SessionContext;
 
@@ -37,22 +38,28 @@ public class FbAuthWebController extends BaseWebController {
 			return redirect(FbApi.loginRedirect());
 		}
 		else {
-			//Fetch the access token and expiry time
-			FbApi fbApi = FbApi.accessToken(code);
-			
-			//add this information to the session
-			SessionModel session = SessionContext.get();
-			SessionModel.Updater.setFbAuthInfoAndUpdate(session, fbApi.getToken(), fbApi.getTokenExpiry());
-			
-			//if there is an associated user, update the login time
-			if (SessionContext.hasUser()) {
-				UserModel user = SessionContext.user();
-				UserModel.Updater.setLoginTimeAndUpdate(user);
+			try {
+				//Fetch the access token and expiry time
+				FbApi fbApi = FbApi.accessToken(code);
+				
+				//add this information to the session
+				SessionModel session = SessionContext.get();
+				SessionModel.Updater.setFbAuthInfoAndUpdate(session, fbApi.getToken(), fbApi.getTokenExpiry());
+				
+				//if there is an associated user, update the login time
+				if (SessionContext.hasUser()) {
+					UserModel user = SessionContext.user();
+					UserModel.Updater.setLoginTimeAndUpdate(user);
+				}
+				
+				//don't get the associated user, that will be taken care of in SecuredActions
+				//redirect to the given redirect url, or to the landing page
+				return redirect("/");
 			}
-			
-			//don't get the associated user, that will be taken care of in SecuredActions
-			//redirect to the given redirect url, or to the landing page
-			return redirect("/");
+			catch (ApiNoResponseException ex) {
+				//TODO how should this be handled?
+				throw ErrorPageException.Factory.internalServerErrorPage();
+			}
 		}
 	}
 	

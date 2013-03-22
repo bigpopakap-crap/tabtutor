@@ -70,7 +70,7 @@ public class FbAuthAction extends Action.Simple {
 			
 			//start by getting the user's Facebook ID from the Facebook API
 			try {
-				FbJsonResponse fbJson = fbApi.me().get().get();
+				FbJsonResponse fbJson = fbApi.me().get();
 				
 				String fbId = fbJson.fbId();
 				String firstName = fbJson.firstName();
