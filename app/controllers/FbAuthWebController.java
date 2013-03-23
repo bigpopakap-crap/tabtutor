@@ -3,6 +3,8 @@ package controllers;
 import models.SessionModel;
 import models.UserModel;
 import play.mvc.Result;
+import actions.ActionAnnotations.ErrorCaught;
+import actions.ActionAnnotations.Sessioned;
 import api.exceptions.ApiNoResponseException;
 import api.fb.FbApi;
 import contexts.SessionContext;
@@ -32,6 +34,7 @@ public class FbAuthWebController extends BaseWebController {
 	 * @param code the code returned from Facebook. If null, redirect the user to the login dialogue
 	 * @return
 	 */
+	@ErrorCaught @Sessioned
 	public static Result fblogin(final String code, String state) {
 		if (code == null) {
 			//the login flow has started, redirect to the Facebook login dialogue
