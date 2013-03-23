@@ -3,6 +3,7 @@ package api;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.Callable;
 
 import play.Logger;
 import play.libs.F.Promise;
@@ -13,6 +14,7 @@ import play.mvc.Http.Status;
 import types.HttpMethodType;
 import utils.EscapingUtil;
 import utils.EscapingUtil.Escaper;
+import utils.ThreadedMethodUtil;
 import api.exceptions.ApiErrorCodeException;
 import api.exceptions.ApiNoResponseException;
 
@@ -58,6 +60,9 @@ public abstract class BaseApi<R extends BaseApiResponse<?>> {
 	/**
 	 * Performs a request to the given API path and returns the wrapped JSON response
 	 * (appends the access token on behalf of the caller)
+	 * 
+	 * Uses {@link #rawQuery(HttpMethodType, String, Map)} to make the query, then maps
+	 * it to the correct object
 	 * 
 	 * @param method the HTTP method to use for the request
 	 * @param path the full url to query
@@ -110,7 +115,11 @@ public abstract class BaseApi<R extends BaseApiResponse<?>> {
 	/**
 	 * Creates a promise to query the given url, with the given HTTP method and the given params
 	 * Url must be non-null
+	 * 
+	 * Makes the call in its own thread, so it is not idly waiting. Don't worry about that!
+	 * 
 	 * Note that only GET and POST are supported currently
+	 * 
 	 * @throws ApiNoResponseException if any exception is thrown while getting the promise
 	 */
 	protected static final Response rawQuery(HttpMethodType method, String url, Map<String, String> params) throws ApiNoResponseException {
@@ -140,10 +149,22 @@ public abstract class BaseApi<R extends BaseApiResponse<?>> {
 		}
 		
 		try {
-			Logger.debug("Querying " + method + " " + url + " " + params);
-			Response resp = promise.get();
-			Logger.debug("Received response " + resp.getBody());
-			return resp;
+			//get the response in its own thread
+			final Promise<Response> fPromise = promise;
+			final HttpMethodType fMethod = method;
+			final String fUrl = url;
+			final Map<String, String> fParams = params;
+			return ThreadedMethodUtil.threaded(new Callable<Response>() {
+
+				@Override
+				public Response call() throws Exception {
+					Logger.debug("Querying " + fMethod + " " + fUrl + " " + fParams);
+					Response resp = fPromise.get();
+					Logger.debug("Received response " + resp.getBody());
+					return resp;
+				}
+				
+			});
 		}
 		catch (Exception ex) {
 			throw new ApiNoResponseException();
