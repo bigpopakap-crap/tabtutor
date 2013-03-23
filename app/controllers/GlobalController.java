@@ -1,13 +1,10 @@
 package controllers;
 
-import java.lang.reflect.Method;
 import java.util.TimeZone;
 
 import play.Application;
 import play.GlobalSettings;
 import play.Logger;
-import play.mvc.Action;
-import play.mvc.Http.Request;
 import play.mvc.Http.RequestHeader;
 import play.mvc.Result;
 import contexts.AppContext;
@@ -61,12 +58,6 @@ public class GlobalController extends GlobalSettings {
 	public Result onBadRequest(RequestHeader req, String err) {
 		Logger.warn("Bad request " + req + " (IP: " + req.remoteAddress() + ")");
 		return super.onBadRequest(req, err);
-	}
-	
-	@Override
-	public Action<?> onRequest(Request req, Method method) {
-		Logger.info("Handling " + req + " (IP: " + req.remoteAddress() + ")");
-		return super.onRequest(req, method);
 	}
 	
 }

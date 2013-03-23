@@ -30,16 +30,16 @@ public abstract class BaseAction<T> extends Action<T> {
 	@SuppressWarnings("unchecked")
 	public final Result call(Context ctx) throws Throwable {
 		try {
-			Logger.debug("Calling into " + this.getClass());
+			Logger.trace("Calling into " + this.getClass());
 			throwIfDependenciesNotSatisfied();
 			RequestActionContext.put((Class<BaseAction<?>>) this.getClass());
 			
 			//delegate to the implementing action
-			Logger.debug("Calling into " + this.getClass() + " implementation");
+			Logger.trace("Calling into " + this.getClass() + " implementation");
 			return hook_call(ctx);
 		}
 		finally {
-			Logger.debug("Exiting from " + this.getClass());
+			Logger.trace("Exiting from " + this.getClass());
 		}
 	}
 	
@@ -47,8 +47,8 @@ public abstract class BaseAction<T> extends Action<T> {
 		List<Class<? extends BaseAction<?>>> dependencies = new LinkedList<Class<? extends BaseAction<?>>>();
 		
 		//add the default dependencies if this is not one of them
-		if (!(this instanceof ErrorCatchAction)) {
-			dependencies.add(ErrorCatchAction.class);
+		if (!(this instanceof TryCatchFinallyAction)) {
+			dependencies.add(TryCatchFinallyAction.class);
 		}
 		
 		//add dependencies specific to the subclass
