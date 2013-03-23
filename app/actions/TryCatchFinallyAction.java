@@ -5,7 +5,7 @@ import java.util.List;
 import play.Logger;
 import play.mvc.Http.Context;
 import play.mvc.Result;
-import actions.ActionAnnotations.ErrorCaught;
+import actions.ActionAnnotations.TriedCaughtFinally;
 import contexts.AppContext;
 import contexts.RequestActionContext;
 import controllers.exceptions.BaseExposedException;
@@ -20,7 +20,7 @@ import controllers.exceptions.BaseExposedException;
  * @since 2013-03-06
  *
  */
-public class TryCatchFinallyAction extends BaseAction<ErrorCaught> {
+public class TryCatchFinallyAction extends BaseAction<TriedCaughtFinally> {
 	
 	@Override
 	protected List<Class<? extends BaseAction<?>>> hook_listDependencies() {

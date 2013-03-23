@@ -27,7 +27,7 @@ public abstract class ActionAnnotations {
 	@With(TryCatchFinallyAction.class)
 	@Target({ElementType.TYPE, ElementType.METHOD})
 	@Retention(RetentionPolicy.RUNTIME)
-	public static @interface ErrorCaught {}
+	public static @interface TriedCaughtFinally {}
 	
 	/**
 	 * Annotation for applying ModeProtectAction
