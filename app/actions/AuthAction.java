@@ -44,7 +44,7 @@ public class AuthAction extends BaseAction<Authed> {
 		//TODO add ability to force re-authentication: need to worry about getting caught in infinite loop
 		if (!SessionModel.Validator.hasValidFbAuthInfo(session)) {
 			Logger.debug("Session needs Facebook auth. Redirecting to the login flow");
-			return FbAuthWebController.fblogin(null, null, null);
+			return FbAuthWebController.fblogin(null, null, ctx.request().path());
 		}
 		
 		//get the FbApi object, which must be valid by now
