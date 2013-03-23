@@ -42,14 +42,14 @@ public class FbAuthWebController extends BaseWebController {
 		
 		if (code == null) {
 			//the login flow has started, redirect to the Facebook login dialogue
-			String redirect = FbApi.loginRedirect(request(), targetUrl);
+			String redirect = FbApi.fbLoginUrl(request(), targetUrl);
 			Logger.debug("Redirecting to " + redirect);
 			return redirect(redirect);
 		}
 		else {
 			try {
 				//Fetch the access token and expiry time
-				FbApi fbApi = FbApi.accessToken(code);
+				FbApi fbApi = FbApi.accessToken(request(), targetUrl, code);
 				
 				//add this information to the session
 				SessionModel session = SessionContext.get();

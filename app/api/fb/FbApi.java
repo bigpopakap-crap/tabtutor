@@ -103,12 +103,16 @@ public class FbApi extends BaseApi<FbJsonResponse> {
 	 *  BEGIN THE PUBLIC API CALL METHODS
 	 ***************************************************** */
 	
+	public static String fbLoginRedirectUri(Request request, String targetUrl) {
+		return routes.FbAuthWebController.fblogin(null, null, targetUrl).absoluteURL(request);
+	}
+	
 	/** Gets the URL to redirect the user for Facebook login */
-	public static String loginRedirect(Request request, String targetUrl) {
+	public static String fbLoginUrl(Request request, String targetUrl) {
 		return new StringBuilder().append(DOMAIN_FB).append(PATH_LOGIN_REDIRECT)
 									.append("?").append(mapToQueryString(
 											QUERY_KEY_CLIENT_ID, AppContext.Var.FB_APP_ID.val(),
-											QUERY_KEY_REDIRECT_URI, routes.FbAuthWebController.fblogin(null, null, targetUrl).absoluteURL(request),
+											QUERY_KEY_REDIRECT_URI, fbLoginRedirectUri(request, targetUrl),
 											QUERY_KEY_SCOPE, QUERY_VALUE_SCOPE
 									))
 									.toString();
@@ -119,12 +123,12 @@ public class FbApi extends BaseApi<FbJsonResponse> {
 	 * This should be the only way to create an object for which hasTokenExpiry() is true 
 	 * @throws ApiNoResponseException if there is an error communicating with Facebook
 	 */
-	public static FbApi accessToken(final String code) throws ApiNoResponseException {
+	public static FbApi accessToken(final Request request, final String targetUrl, final String code) throws ApiNoResponseException {
 		if (code == null) throw new IllegalArgumentException("Code cannot be null");
 		
 		@SuppressWarnings("serial") Map<String, String> params = new HashMap<String, String>() {{
 			put(QUERY_KEY_CLIENT_ID, AppContext.Var.FB_APP_ID.val());
-			put(QUERY_KEY_REDIRECT_URI, AppContext.Var.FB_SITE_URL.val());
+			put(QUERY_KEY_REDIRECT_URI, fbLoginRedirectUri(request, targetUrl));
 			put(QUERY_KEY_CLIENT_SECRET, AppContext.Var.FB_APP_SECRET.val());
 			put(QUERY_KEY_OAUTH_CODE, code);
 		}};
