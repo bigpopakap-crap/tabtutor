@@ -61,6 +61,7 @@ public abstract class BaseAction<T> extends Action<T> {
 		List<Class<? extends BaseAction<?>>> dependencies = listDependencies();
 		if (!RequestActionContext.has(dependencies)) {
 			throw new IllegalStateException("Action dependencies haevn't been applied on this request.\n" +
+											"This: " + this.getClass() + "\n" +
 											"Needs: " + dependencies + "\n" +
 											"Has: " + RequestActionContext.get());
 		}
