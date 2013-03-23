@@ -1,7 +1,7 @@
 package controllers;
 
-import actions.SessionAction.Sessioned;
 import play.mvc.Result;
+import actions.ActionAnnotations.Sessioned;
 
 /**
  * This class handles routes that are related to creating and logging in as

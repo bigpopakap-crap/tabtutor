@@ -1,6 +1,6 @@
 package controllers;
 
-import actions.ModeProtectAction.ModeProtected;
+import actions.ActionAnnotations.ModeProtected;
 
 /**
  * This class handles routes (or parents classes that handle routes) which are used by tests for various purposes
