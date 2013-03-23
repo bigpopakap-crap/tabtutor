@@ -90,12 +90,26 @@ public abstract class BaseModel extends Model {
 	/* ******************************************
 	 *  HOOKS FOR DML OPERATIONS
 	 ****************************************** */
+	
+	/**
+	 * Called before the retry of any DML operation.
+	 * Note that this is not called before the first try
+	 * 
+	 * @param opType the type of the operation
+	 */
+	protected void hook_preModifyingOperationRetry(BasicDmlModifyingType opType) {
+		//do nothing. models can override this if they want to do something
+	}
 
 	/**
 	 * Called after every DML operation, whether it succeeded or not
+	 * 
+	 * This is called after all retries have completed, not before each retry.
+	 * For that functionality, see {@link #hook_preModifyingOperationRetry(BasicDmlModifyingType)}
+	 * 
 	 * @param opType the type of the operation
-	 * @param wasSuccessful true if the operation succeeded, false if it failed because of a
-	 * 						OptimisticLockException
+	 * @param wasSuccessful true if the operation succeeded, false if it failed.
+	 * 							Failure means that it failed after all retries
 	 */
 	protected void hook_postModifyingOperation(BasicDmlModifyingType opType, boolean wasSuccessful) {
 		//do nothing. models can override this if they want to do something
@@ -105,25 +119,96 @@ public abstract class BaseModel extends Model {
 	 * BEGIN PRIVATE HELPERS
 	 *********************************************************************** */
 	
-	private void doOperationAndRetry(BasicDmlModifyingType opType, Callable<Void> doOperation) {
-		for (int i = 1; i <= NUM_OPERATION_RETRIES; i++) {
+	/**
+	 * Class to run database operations and do all retry logic involved in that
+	 * This class is implemented this way so that it can be wrapped into it's own thread
+	 * 
+	 * @author bigpopakap
+	 * @since 2013-03-23
+	 *
+	 */
+	private class BaseOperationCallable implements Callable<Void> {
+		
+		private final BaseModel model;
+		private final BasicDmlModifyingType opType;
+		private final Callable<Void> doOperation;
+		
+		/**
+		 * Creates a new instance of this class
+		 * @param model the model on which the operation will execute
+		 * @param opType the type of the operation
+		 * @param doOperation the callable that implements the operation, without retry logic
+		 */
+		private BaseOperationCallable(BaseModel model, BasicDmlModifyingType opType, Callable<Void> doOperation) {
+			if (model == null) throw new IllegalArgumentException("Model cannot be null");
+			if (opType == null) throw new IllegalArgumentException("OpType cannot be null");
+			if (doOperation == null) throw new IllegalArgumentException("doOperation cannot be null");
+			this.model = model;
+			this.opType = opType;
+			this.doOperation = doOperation;
+		}
+
+		@Override
+		public Void call() throws Exception {
+			boolean isFirstTry = true;
+			boolean wasSuccessful = false;
 			try {
-				//execute the operation in a separate thread
-				ThreadedMethodUtil.threaded(doOperation);
-				
-				//if the operation was successful, call the post-op and stop retrying
-				hook_postModifyingOperation(opType, true);
-				break;
-			}
-			catch (OptimisticLockException ex) {
-				//call the post-op and retry the operation
-				Logger.debug(opType + " operation for " + this.getClass() + " failed, retrying...");
-				hook_postModifyingOperation(opType, false);
+				for (int i = 1; i <= NUM_OPERATION_RETRIES && !wasSuccessful; i++) {
+					try {
+						//if this is not the first attempt, call the hook
+						if (isFirstTry) hook_preModifyingOperationRetry(opType);
+						isFirstTry = false;
+						
+						//try the operation
+						doOperation.call();
+						wasSuccessful = true;
+					}
+					catch (OptimisticLockException ex) {
+						//call the post-op and retry the operation
+						Logger.debug(opType + " operation for " + this.getClass() + " failed, retrying...");
+					}
+				}
 			}
 			catch (Exception ex) {
-				//TODO should this be thrown like this?
-				throw new FailedOperationException(this, opType, ex);
+				//any other exception thrown means a failed operation
+				if (wasSuccessful) throw new IllegalStateException("wasSuccessful should never be true in this block");
+				hook_postModifyingOperation(opType, wasSuccessful);
+				throw new FailedOperationException(model, opType, ex);
 			}
+			finally {
+				//we've done all the retries, check if the operation was successful
+				hook_postModifyingOperation(opType, wasSuccessful);
+				
+				if (!wasSuccessful) {
+					//TODO should the cause be set to null?
+					throw new FailedOperationException(model, opType, null);
+				}
+			}
+			
+			//shut up the compiler
+			return null;
+		}
+		
+	}
+	
+	/**
+	 * Executes the given DML operation, doing all retry logic
+	 * 
+	 * @param opType the type of the operation
+	 * @param doOperation the callable that actually executes the operation (without any retry logic)
+	 * @throws FailedOperationException if the operation fails after all retries
+	 */
+	private void doOperationAndRetry(BasicDmlModifyingType opType, Callable<Void> doOperation) throws FailedOperationException {
+		try {
+			ThreadedMethodUtil.threaded(new BaseOperationCallable(this, opType, doOperation));
+		}
+		catch (RuntimeException ex) {
+			//just relay that exception
+			throw ex;
+		}
+		catch (Exception ex) {
+			//wrap the exception in a RuntimeException
+			throw new RuntimeException(ex);
 		}
 	}
 	

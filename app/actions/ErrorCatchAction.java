@@ -30,7 +30,7 @@ public class ErrorCatchAction extends BaseAction<ErrorCaught> {
 			return delegate.call(ctx);
 		}
 		catch (BaseExposedException ex) {
-			Logger.error("Exposed exception caught in " + this.getClass(), ex);
+			Logger.warn("Exposed exception caught in " + this.getClass(), ex);
 			return ex.result();
 		}
 		catch (Exception ex) {
