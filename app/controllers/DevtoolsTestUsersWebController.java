@@ -28,7 +28,7 @@ public class DevtoolsTestUsersWebController extends DevtoolsWebController {
 	
 	/** Logs in as the test user with the given ID and redirects to the given url */
 	@Sessioned(forceRefresh = true)
-	public static Result login(String id, String redirect) {
+	public static Result login(String id, String targetUrl) {
 		//TODO do this
 		return ok();
 	}

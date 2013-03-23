@@ -14,7 +14,7 @@
 #	BEGIN PAGE ROUTING													#
 # --------------------------------------------------------------------- #
 GET     /                           controllers.SimpleWebController.landing()
-GET		/fblogin					controllers.FbAuthWebController.fblogin(code ?= null, state ?= null)
+GET		/fblogin					controllers.FbAuthWebController.fblogin(code ?= null, state ?= null, targetUrl ?= "/")
 
 # --------------------------------------------------------------------- #
 #	BEGIN /INTERNAL/ADMIN PAGE ROUTING									#
@@ -26,7 +26,7 @@ GET		/fblogin					controllers.FbAuthWebController.fblogin(code ?= null, state ?=
 # --------------------------------------------------------------------- #
 GET		/internal/devtools/testusers/list			controllers.DevtoolsTestUsersWebController.list()
 POST	/internal/devtools/testusers/create			controllers.DevtoolsTestUsersWebController.create(firstName, lastName)
-POST	/internal/devtools/testusers/login/:id		controllers.DevtoolsTestUsersWebController.login(id, redirect ?= "/")
+POST	/internal/devtools/testusers/login/:id		controllers.DevtoolsTestUsersWebController.login(id, targetUrl ?= "/")
 
 # --------------------------------------------------------------------- #
 #	BEGIN /INTERNAL/TEST PAGE ROUTING									#

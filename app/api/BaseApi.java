@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.Callable;
 
+import play.Logger;
 import play.libs.F.Promise;
 import play.libs.WS;
 import play.libs.WS.Response;
@@ -150,11 +151,17 @@ public abstract class BaseApi<R extends BaseApiResponse<?>> {
 		try {
 			//get the response in its own thread
 			final Promise<Response> fPromise = promise;
+			final HttpMethodType fMethod = method;
+			final String fUrl = url;
+			final Map<String, String> fParams = params;
 			return ThreadedMethodUtil.threaded(new Callable<Response>() {
 
 				@Override
 				public Response call() throws Exception {
-					return fPromise.get();
+					Logger.debug("Querying " + fMethod + " " + fUrl + " " + fParams);
+					Response resp = fPromise.get();
+					Logger.debug("Received response " + resp.getBody());
+					return resp;
 				}
 				
 			});
@@ -164,7 +171,7 @@ public abstract class BaseApi<R extends BaseApiResponse<?>> {
 		}
 	}
 	
-	/** Converts a map of key-value pairs to a query string */
+	/** Converts a map of key-value pairs to a query string without the leading "?" */
 	protected static final String mapToQueryString(Map<String, String> map) {
 		StringBuilder str = new StringBuilder();
 		for (String key : map.keySet()) {
@@ -174,6 +181,25 @@ public abstract class BaseApi<R extends BaseApiResponse<?>> {
 			   .append(EscapingUtil.escape(map.get(key), Escaper.URL));
 		}
 		return str.toString();
+	}
+	
+	/** 
+	 * The same as {@link #mapToQueryString(Map)}, but the map is represented as
+	 * pairs of strings
+	 * 
+	 * Example: mapToQueryStrign("key1", "val1", "key1", "val1")
+	 * 
+	 * @throws IllegalArgumentException if there are not an even number of arguments
+	 */
+	protected static final String mapToQueryString(String... params) throws IllegalArgumentException {
+		if (params.length % 2 != 0) throw new IllegalArgumentException("There must be an even number of params");
+		
+		Map<String, String> map = new HashMap<String, String>();
+		for (int i = 0; i < params.length; i += 2) {
+			map.put(params[i], params[i + 1]);
+		}
+		
+		return mapToQueryString(map);
 	}
 	
 	/** Converts a query string to a map of key-value pairs
