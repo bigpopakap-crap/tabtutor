@@ -27,9 +27,17 @@ public class RequestActionContext extends BaseContext {
 		return getOrLoad(REQUEST_ACTION_LIST_CONTEXT_KEY, REQUEST_ACTION_LIST_CALLABLE);
 	}
 	
-	/** Determines if the given action was applied in this request */
+	/** 
+	 * Determines if the given action object was applied in this request.
+	 * Uses the class of the given action to do the lookup
+	 */
+	public static synchronized boolean has(BaseAction<?> action) {
+		return action != null && get().contains(action.getClass());
+	}
+	
+	/** Determines if the given actions were applied in this request */
 	public static synchronized boolean has(List<Class<? extends BaseAction<?>>> actions) {
-		return actions != null ? get().containsAll(actions) : false;
+		return actions != null && get().containsAll(actions);
 	}
 	
 	/** Appends the action to the list of those applied during the request.

@@ -15,7 +15,7 @@ import controllers.exceptions.BaseExposedException;
  * @since 2013-02-17
  *
  */
-@ErrorCaught //top level action to catch all unhandled exceptions
+@ErrorCaught //methods should not forget to include this
 public class BaseWebController extends BaseController {
 	
 	@Override

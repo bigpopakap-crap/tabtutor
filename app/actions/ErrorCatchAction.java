@@ -7,6 +7,7 @@ import play.mvc.Http.Context;
 import play.mvc.Result;
 import actions.ActionAnnotations.ErrorCaught;
 import contexts.AppContext;
+import contexts.RequestActionContext;
 import controllers.exceptions.BaseExposedException;
 
 /**
@@ -26,6 +27,12 @@ public class ErrorCatchAction extends BaseAction<ErrorCaught> {
 	
 	@Override
 	protected Result hook_call(Context ctx) throws Throwable {
+		//if this has been applied already, don't catch any exceptions
+		if (RequestActionContext.has(this)) {
+			return delegate.call(ctx);
+		}
+		
+		//this has not been applied yet, so catch exceptions
 		try {
 			return delegate.call(ctx);
 		}
