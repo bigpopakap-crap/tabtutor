@@ -36,7 +36,7 @@ GET		/internal/test/errorpageexception/notfoundpage				controllers.TestErrorPage
 GET		/internal/test/errorpageexception/gobackpage				controllers.TestErrorPageExceptionWebController.goBackPage()
 GET		/internal/test/errorpageexception/gotopage					controllers.TestErrorPageExceptionWebController.goToPage()
 GET		/internal/test/actions/sessionaction						controllers.TestActionsWebController.sessionAction()
-GET		/internal/test/actions/fbauthaction							controllers.TestActionsWebController.fbAuthAction()
+GET		/internal/test/actions/authaction							controllers.TestActionsWebController.authAction()
 
 # --------------------------------------------------------------------- #
 #	BEGIN /API ROUTING													#

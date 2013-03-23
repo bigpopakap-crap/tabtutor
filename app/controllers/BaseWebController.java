@@ -3,8 +3,8 @@ package controllers;
 import play.api.templates.Html;
 import play.mvc.Result;
 import utils.MessagesEnum;
-import actions.ErrorCatchAction.ErrorCaught;
-import actions.SessionAction.Sessioned;
+import actions.ActionAnnotations.ErrorCaught;
+import actions.ActionAnnotations.Sessioned;
 import controllers.BaseWebController.ErrorPageException.Factory;
 import controllers.exceptions.BaseExposedException;
 

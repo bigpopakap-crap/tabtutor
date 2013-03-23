@@ -1,8 +1,8 @@
 package controllers;
 
 import play.mvc.Result;
-import actions.AuthAction.Authed;
-import actions.SessionAction.Sessioned;
+import actions.ActionAnnotations.Authed;
+import actions.ActionAnnotations.Sessioned;
 
 /**
  * Test pages that use various annotations
@@ -18,8 +18,9 @@ public class TestActionsWebController extends TestWebController {
 		return ok("yay");
 	}
 	
-	@Sessioned @Authed
-	public static Result fbAuthAction() {
+	@Sessioned
+	@Authed
+	public static Result authAction() {
 		return ok("yay");
 	}
 	

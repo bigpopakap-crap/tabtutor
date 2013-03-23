@@ -1,17 +1,11 @@
 package actions;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.util.List;
 
-import play.Logger;
-import play.mvc.Action;
 import play.mvc.Http.Context;
 import play.mvc.Result;
-import play.mvc.With;
+import actions.ActionAnnotations.ModeProtected;
 import contexts.AppContext;
-import contexts.RequestActionContext;
 import controllers.exceptions.BaseExposedException;
 
 /**
@@ -22,39 +16,22 @@ import controllers.exceptions.BaseExposedException;
  * @since 2013-03-06
  *
  */
-public class ModeProtectAction {
+public class ModeProtectAction extends BaseAction<ModeProtected> {
 	
-	/**
-	 * Annotation for applying ModeProtectAction
-	 * 
-	 * @author bigpopakap
-	 * @since 2013-03-06
-	 *
-	 */
-	@With(ModeProtectedActionImpl.class)
-	@Target({ElementType.TYPE, ElementType.METHOD})
-	@Retention(RetentionPolicy.RUNTIME)
-	public static @interface ModeProtected {
-		AppContext.Mode allowedMode() default AppContext.Mode.DEVELOPMENT;
+	@Override
+	protected List<Class<? extends BaseAction<?>>> hook_listDependencies() {
+		return NO_DEPENDENCIES;
 	}
 	
-	public static class ModeProtectedActionImpl extends Action<ModeProtected> {
-		
-		/** Implements the action */
-		@Override
-		public Result call(Context ctx) throws Throwable {
-			Logger.debug("Calling into " + this.getClass() + " only allowing mode " + configuration.allowedMode());
-			RequestActionContext.put(this.getClass());
-			
-			if (AppContext.Mode.get() != configuration.allowedMode()) {
-				//TODO figure out which default error to show to the user
-				throw BaseExposedException.Factory.notFound(null);
-			}
-			else {
-				return delegate.call(ctx);
-			}
+	@Override
+	protected Result callImpl(Context ctx) throws Throwable {
+		if (AppContext.Mode.get() != configuration.allowedMode()) {
+			//TODO figure out which default error to show to the user
+			throw BaseExposedException.Factory.notFound(null);
 		}
-		
+		else {
+			return delegate.call(ctx);
+		}
 	}
 	
 }
