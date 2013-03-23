@@ -1,17 +1,12 @@
 package actions;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.util.List;
 
 import models.SessionModel;
 import play.Logger;
-import play.mvc.Action;
 import play.mvc.Http.Context;
 import play.mvc.Result;
-import play.mvc.With;
-import contexts.RequestActionContext;
+import actions.ActionAnnotations.Sessioned;
 import contexts.SessionContext;
 
 /**
@@ -27,40 +22,24 @@ import contexts.SessionContext;
  * @since 2013-02-24
  *
  */
-public class SessionAction {
+public class SessionAction extends BaseAction<Sessioned> {
 	
-	/**
-	 * Annotation for applying SessionedAction
-	 * 
-	 * @author bigpopakap
-	 * @since 2013-02-24
-	 *
-	 */
-	@With(SessionActionImpl.class)
-	@Target({ElementType.TYPE, ElementType.METHOD})
-	@Retention(RetentionPolicy.RUNTIME)
-	public @interface Sessioned {
-		boolean forceRefresh() default false;
+	@Override
+	protected List<Class<? extends BaseAction<?>>> hook_listDependencies() {
+		return NO_DEPENDENCIES;
 	}
-	
-	public static class SessionActionImpl extends Action<Sessioned> {
 
-		/** Implements the action */
-		@Override
-		public Result call(Context ctx) throws Throwable {
-			Logger.debug("Calling into " + this.getClass().getName());
-			RequestActionContext.put(this.getClass());
-
-			SessionModel session = SessionContext.get(); //use this method because it is cached
-			if (session == null || configuration.forceRefresh()) {
-				//there is no session ID set, so create it and add it to the cookie
-				SessionModel newSession = SessionModel.Factory.createNewSessionAndSave();
-				ctx.session().put(SessionModel.SESSION_ID_COOKIE_KEY, newSession.GETTER.pk().toString());
-				Logger.info("Put session " + newSession.GETTER.pk() + " in cookie for IP " + ctx.request().remoteAddress());
-			}
-
-			return delegate.call(ctx);
+	@Override
+	protected Result hook_call(Context ctx) throws Throwable {
+		SessionModel session = SessionContext.get(); //use this method because it is cached
+		if (session == null || configuration.forceRefresh()) {
+			//there is no session ID set, so create it and add it to the cookie
+			SessionModel newSession = SessionModel.Factory.createNewSessionAndSave();
+			ctx.session().put(SessionModel.SESSION_ID_COOKIE_KEY, newSession.GETTER.pk().toString());
+			Logger.info("Put session " + newSession.GETTER.pk() + " in cookie for IP " + ctx.request().remoteAddress());
 		}
+
+		return delegate.call(ctx);
 	}
 
 }
