@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import play.libs.WS.Response;
+import play.mvc.Http.Request;
 import types.HttpMethodType;
 import api.ApiResponseOption;
 import api.BaseApi;
@@ -11,6 +12,7 @@ import api.exceptions.ApiErrorCodeException;
 import api.exceptions.ApiNoResponseException;
 import contexts.AppContext;
 import contexts.BaseContext.ContextKey;
+import controllers.routes;
 
 /**
  * This class implements interactions with the Facebook REST API
@@ -102,14 +104,13 @@ public class FbApi extends BaseApi<FbJsonResponse> {
 	 ***************************************************** */
 	
 	/** Gets the URL to redirect the user for Facebook login */
-	public static String loginRedirect() {
-		@SuppressWarnings("serial") Map<String, String> params = new HashMap<String, String>() {{
-			put(QUERY_KEY_CLIENT_ID, AppContext.Var.FB_APP_ID.val());
-			put(QUERY_KEY_REDIRECT_URI, AppContext.Var.FB_SITE_URL.val());
-			put(QUERY_KEY_SCOPE, QUERY_VALUE_SCOPE);
-		}};
+	public static String loginRedirect(Request request, String targetUrl) {
 		return new StringBuilder().append(DOMAIN_FB).append(PATH_LOGIN_REDIRECT)
-									.append("?").append(mapToQueryString(params))
+									.append("?").append(mapToQueryString(
+											QUERY_KEY_CLIENT_ID, AppContext.Var.FB_APP_ID.val(),
+											QUERY_KEY_REDIRECT_URI, routes.FbAuthWebController.fblogin(null, null, targetUrl).absoluteURL(request),
+											QUERY_KEY_SCOPE, QUERY_VALUE_SCOPE
+									))
 									.toString();
 	}
 	

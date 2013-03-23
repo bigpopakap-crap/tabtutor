@@ -2,6 +2,7 @@ package controllers;
 
 import models.SessionModel;
 import models.UserModel;
+import play.Logger;
 import play.mvc.Result;
 import api.exceptions.ApiNoResponseException;
 import api.fb.FbApi;
@@ -30,12 +31,17 @@ public class FbAuthWebController extends BaseWebController {
 	 * Handles the Facebook login. Redirects the user to the Facebook login dialogue,
 	 * or exchange the code for an access token
 	 * @param code the code returned from Facebook. If null, redirect the user to the login dialogue
-	 * @return
+	 * @param state the CSRF token
+	 * @param targetUrl the url to redirect after login
 	 */
-	public static Result fblogin(final String code, String state) {
+	public static Result fblogin(final String code, String state, String targetUrl) {
+		if (targetUrl == null) targetUrl = "/";
+		
 		if (code == null) {
 			//the login flow has started, redirect to the Facebook login dialogue
-			return redirect(FbApi.loginRedirect());
+			String redirect = FbApi.loginRedirect(request(), targetUrl);
+			Logger.debug("Redirecting to " + redirect);
+			return redirect(redirect);
 		}
 		else {
 			try {
@@ -54,7 +60,8 @@ public class FbAuthWebController extends BaseWebController {
 				
 				//don't get the associated user, that will be taken care of in SecuredActions
 				//redirect to the given redirect url, or to the landing page
-				return redirect("/");
+				Logger.debug("Redirecting to " + targetUrl);
+				return redirect(targetUrl);
 			}
 			catch (ApiNoResponseException ex) {
 				//TODO how should this be handled?
