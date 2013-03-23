@@ -30,7 +30,7 @@ public class SessionAction extends BaseAction<Sessioned> {
 	}
 
 	@Override
-	protected Result callImpl(Context ctx) throws Throwable {
+	protected Result hook_call(Context ctx) throws Throwable {
 		SessionModel session = SessionContext.get(); //use this method because it is cached
 		if (session == null || configuration.forceRefresh()) {
 			//there is no session ID set, so create it and add it to the cookie

@@ -24,7 +24,7 @@ public class ModeProtectAction extends BaseAction<ModeProtected> {
 	}
 	
 	@Override
-	protected Result callImpl(Context ctx) throws Throwable {
+	protected Result hook_call(Context ctx) throws Throwable {
 		if (AppContext.Mode.get() != configuration.allowedMode()) {
 			//TODO figure out which default error to show to the user
 			throw BaseExposedException.Factory.notFound(null);

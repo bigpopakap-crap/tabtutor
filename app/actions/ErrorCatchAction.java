@@ -25,7 +25,7 @@ public class ErrorCatchAction extends BaseAction<ErrorCaught> {
 	}
 	
 	@Override
-	protected Result callImpl(Context ctx) throws Throwable {
+	protected Result hook_call(Context ctx) throws Throwable {
 		try {
 			return delegate.call(ctx);
 		}

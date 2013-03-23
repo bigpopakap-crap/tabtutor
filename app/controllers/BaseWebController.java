@@ -4,7 +4,6 @@ import play.api.templates.Html;
 import play.mvc.Result;
 import utils.MessagesEnum;
 import actions.ActionAnnotations.ErrorCaught;
-import actions.ActionAnnotations.Sessioned;
 import controllers.BaseWebController.ErrorPageException.Factory;
 import controllers.exceptions.BaseExposedException;
 
@@ -17,7 +16,6 @@ import controllers.exceptions.BaseExposedException;
  *
  */
 @ErrorCaught //top level action to catch all unhandled exceptions
-@Sessioned //this is important to make sure all web requests enforce the creation of a session
 public class BaseWebController extends BaseController {
 	
 	@Override

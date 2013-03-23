@@ -35,7 +35,7 @@ public class AuthAction extends BaseAction<Authed> {
 	}
 
 	@Override
-	protected Result callImpl(Context ctx) throws Throwable {
+	protected Result hook_call(Context ctx) throws Throwable {
 		//get the session object
 		final SessionModel session = SessionContext.get();
 		if (session == null) throw new IllegalStateException("Session should have been populated by now");
