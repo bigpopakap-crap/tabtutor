@@ -47,7 +47,7 @@ public abstract class ThreadedMethodUtil {
 			//start the callable in a new thread
 			Thread thread = new Thread(new ThreadedMethodRunner<T>(latch, atomicException, atomicReturned, callable));
 			threadId = thread.getId();
-			Logger.debug("About to start threaded method in thread " + threadId);
+			Logger.trace("About to start threaded method in thread " + threadId);
 			thread.run();
 			
 			//wait for the thread and get its return values
@@ -63,7 +63,7 @@ public abstract class ThreadedMethodUtil {
 			else return returned;
 		}
 		finally {
-			Logger.debug("Thread " + threadId + (threadCompleted ? " completed successfully" : " timed out"));
+			Logger.trace("Thread " + threadId + (threadCompleted ? " completed successfully" : " timed out"));
 		}
 	}
 	
@@ -113,7 +113,7 @@ public abstract class ThreadedMethodUtil {
 				atomicException.set(ex);
 			}
 			finally {
-				Logger.debug("Thread " + Thread.currentThread().getId() + " about to countdown on latch");
+				Logger.trace("Thread " + Thread.currentThread().getId() + " about to countdown on latch");
 				latch.countDown();
 			}
 		}

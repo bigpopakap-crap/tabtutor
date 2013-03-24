@@ -1,14 +1,11 @@
 package actions;
 
-import java.util.List;
-
 import models.UserModel;
 import play.Logger;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import actions.ActionAnnotations.TriedCaughtFinally;
 import contexts.AppContext;
-import contexts.RequestActionContext;
 import contexts.SessionContext;
 import controllers.exceptions.BaseExposedException;
 
@@ -25,17 +22,7 @@ import controllers.exceptions.BaseExposedException;
 public class TryCatchFinallyAction extends BaseAction<TriedCaughtFinally> {
 	
 	@Override
-	protected List<Class<? extends BaseAction<?>>> hook_listDependencies() {
-		return NO_DEPENDENCIES;
-	}
-	
-	@Override
 	protected Result hook_call(Context ctx) throws Throwable {
-		//if this has been applied already, don't catch any exceptions
-		if (RequestActionContext.count(this) > 1) { //"> 1" because this action will be counted alreadyS
-			return delegate.call(ctx);
-		}
-		
 		//catch the start time and log the start of the request
 		long startTime = System.currentTimeMillis();
 		logRequest(ctx, true, -1);

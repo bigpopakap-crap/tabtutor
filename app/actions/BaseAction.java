@@ -3,6 +3,7 @@ package actions;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import play.Logger;
 import play.mvc.Action;
@@ -24,11 +25,46 @@ public abstract class BaseAction<T> extends Action<T> {
 	//TODO test that all actions have their dependencies satisfied
 	
 	/** Helper value for subclasses */
-	protected static final List<Class<? extends BaseAction<?>>> NO_DEPENDENCIES = Collections.emptyList();
+	protected static final Set<Class<? extends BaseAction<?>>> NO_DEPENDENCIES = Collections.emptySet();
+	
+	/**
+	 * Called at the very beginning of the action, before the action is registered
+	 * to have been called. If true, it will check to see if this action has already
+	 * been called for the request and bypass the action if it was
+	 * 
+	 * If an action wants to execute every time it is applied to the request, it should
+	 * override this method and return false
+	 */
+	protected boolean isIdempotent() {
+		return true;
+	}
+	
+	/**
+	 * Lists the actions on which this action is dependent
+	 * Some dependencies are enforced for all (see {@link #listDependencies()})
+	 * 
+	 * The default implementation is to return an empty list, but subclasses
+	 * can override this to specify more dependencies
+	 * 
+	 * Currently, the order of the dependencies are not checked, just that they
+	 * were indeed called
+	 */
+	protected Set<Class<? extends BaseAction<?>>> hook_listDependencies() {
+		return NO_DEPENDENCIES;
+	}
+	
+	/** Implements the actual action. Must eventually delegate to the delegate */
+	protected abstract Result hook_call(Context ctx) throws Throwable;
 	
 	@Override
 	@SuppressWarnings("unchecked")
 	public final Result call(Context ctx) throws Throwable {
+		//short circuit if requested
+		if (isIdempotent() && RequestActionContext.has(this)) {
+			return delegate.call(ctx);
+		}
+		
+		//proceed with the action
 		try {
 			Logger.trace("Calling into " + this.getClass());
 			throwIfDependenciesNotSatisfied();
@@ -66,11 +102,5 @@ public abstract class BaseAction<T> extends Action<T> {
 											"Has: " + RequestActionContext.get());
 		}
 	}
-	
-	/** Lists the actions on which this action is dependent */
-	protected abstract List<Class<? extends BaseAction<?>>> hook_listDependencies();
-	
-	/** Implements the actual action. Must eventually delegate to the delegate */
-	protected abstract Result hook_call(Context ctx) throws Throwable;
 	
 }

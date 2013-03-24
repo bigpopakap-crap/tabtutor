@@ -1,7 +1,7 @@
 package actions;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import models.SessionModel;
 import models.UserModel;
@@ -28,8 +28,8 @@ import controllers.FbAuthWebController;
 public class AuthAction extends BaseAction<Authed> {
 	
 	@Override
-	protected List<Class<? extends BaseAction<?>>> hook_listDependencies() {
-		List<Class<? extends BaseAction<?>>> list = new LinkedList<Class<? extends BaseAction<?>>>();
+	protected Set<Class<? extends BaseAction<?>>> hook_listDependencies() {
+		Set<Class<? extends BaseAction<?>>> list = new HashSet<Class<? extends BaseAction<?>>>();
 		list.add(SessionAction.class);
 		return list;
 	}

@@ -1,7 +1,5 @@
 package actions;
 
-import java.util.List;
-
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import actions.ActionAnnotations.ModeProtected;
@@ -17,11 +15,6 @@ import controllers.exceptions.BaseExposedException;
  *
  */
 public class ModeProtectAction extends BaseAction<ModeProtected> {
-	
-	@Override
-	protected List<Class<? extends BaseAction<?>>> hook_listDependencies() {
-		return NO_DEPENDENCIES;
-	}
 	
 	@Override
 	protected Result hook_call(Context ctx) throws Throwable {

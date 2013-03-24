@@ -1,7 +1,5 @@
 package actions;
 
-import java.util.List;
-
 import models.SessionModel;
 import play.Logger;
 import play.mvc.Http.Context;
@@ -24,11 +22,6 @@ import contexts.SessionContext;
  */
 public class SessionAction extends BaseAction<Sessioned> {
 	
-	@Override
-	protected List<Class<? extends BaseAction<?>>> hook_listDependencies() {
-		return NO_DEPENDENCIES;
-	}
-
 	@Override
 	protected Result hook_call(Context ctx) throws Throwable {
 		SessionModel session = SessionContext.get(); //use this method because it is cached
