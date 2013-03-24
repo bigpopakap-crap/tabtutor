@@ -3,7 +3,7 @@ package controllers;
 import play.api.templates.Html;
 import play.mvc.Result;
 import utils.MessagesEnum;
-import actions.ActionAnnotations.ErrorCaught;
+import actions.ActionAnnotations.TriedCaughtFinally;
 import controllers.BaseWebController.ErrorPageException.Factory;
 import controllers.exceptions.BaseExposedException;
 
@@ -15,7 +15,7 @@ import controllers.exceptions.BaseExposedException;
  * @since 2013-02-17
  *
  */
-@ErrorCaught //top level action to catch all unhandled exceptions
+@TriedCaughtFinally //methods should not forget to include this
 public class BaseWebController extends BaseController {
 	
 	@Override

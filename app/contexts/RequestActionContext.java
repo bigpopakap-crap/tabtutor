@@ -1,5 +1,6 @@
 package contexts;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -27,9 +28,17 @@ public class RequestActionContext extends BaseContext {
 		return getOrLoad(REQUEST_ACTION_LIST_CONTEXT_KEY, REQUEST_ACTION_LIST_CALLABLE);
 	}
 	
-	/** Determines if the given action was applied in this request */
+	/** 
+	 * Gets the number of times this actions has been applied in this request
+	 * Uses the class of the given action to do the lookup
+	 */
+	public static synchronized int count(BaseAction<?> action) {
+		return action != null ? Collections.frequency(get(), action.getClass()) : 0;
+	}
+	
+	/** Determines if the given actions were applied in this request */
 	public static synchronized boolean has(List<Class<? extends BaseAction<?>>> actions) {
-		return actions != null ? get().containsAll(actions) : false;
+		return actions != null && get().containsAll(actions);
 	}
 	
 	/** Appends the action to the list of those applied during the request.
