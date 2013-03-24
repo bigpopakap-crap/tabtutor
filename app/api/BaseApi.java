@@ -158,16 +158,16 @@ public abstract class BaseApi<R extends BaseApiResponse<?>> {
 
 				@Override
 				public Response call() throws Exception {
-					Logger.debug("Querying " + fMethod + " " + fUrl + " " + fParams);
+					Logger.trace("Querying " + fMethod + " " + fUrl + " " + fParams);
 					Response resp = fPromise.get();
-					Logger.debug("Received response " + resp.getBody());
+					Logger.trace("Received response " + resp.getBody());
 					return resp;
 				}
 				
 			});
 		}
 		catch (Exception ex) {
-			throw new ApiNoResponseException();
+			throw new ApiNoResponseException(ex);
 		}
 	}
 	
