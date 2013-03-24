@@ -14,6 +14,7 @@ CREATE TABLE User (
 	lastName t_userName NOT NULL,
 	email t_email NOT NULL,
 	registerTime timestamp NOT NULL,
+	lastAccessTime timestamp NOT NULL,
 	lastLoginTime timestamp NOT NULL,
 	secondToLastLoginTime timestamp,
 	CHECK (lastLoginTime >= registerTime),

@@ -38,6 +38,7 @@ public class UserModel extends BaseModel {
 	@Column(name = "lastName") public String lastName;
 	@Column(name = "email") public String email;
 	@Column(name = "registerTime") public Date registerTime;
+	@Column(name = "lastAccessTime") public Date lastAccessTime;
 	@Column(name = "lastLoginTime") public Date lastLoginTime;
 	@Column(name = "secondToLastLoginTime") public Date secondToLastLoginTime;
 	
@@ -62,13 +63,13 @@ public class UserModel extends BaseModel {
 		 */
 		public static UserModel createNewUserAndSave(String fbId, String firstName, String lastName, String email) {
 			Date now = DbTypesUtil.now();
-			return create(UUID.randomUUID(), fbId, true, firstName, lastName, email, now, now, null, true);
+			return create(UUID.randomUUID(), fbId, true, firstName, lastName, email, now, now, now, null, true);
 		}
 		
 		/** This should be the only method that touches the fields */
 		private static UserModel create(UUID pk, String fbId, boolean fbIsAuthed,
-										String firstName, String lastName,
-										String email, Date registerTime, Date lastLoginTime,
+										String firstName, String lastName, String email,
+										Date registerTime, Date lastLoginTime, Date lastAccessTime,
 										Date secondToLastLoginTime, boolean save) {
 			UserModel user = new UserModel();
 			user.pk = pk;
@@ -78,6 +79,7 @@ public class UserModel extends BaseModel {
 			user.lastName = lastName;
 			user.email = email;
 			user.registerTime = registerTime;
+			user.lastAccessTime = lastAccessTime;
 			user.lastLoginTime = lastLoginTime;
 			user.secondToLastLoginTime = secondToLastLoginTime;
 			
@@ -132,6 +134,18 @@ public class UserModel extends BaseModel {
 	}
 	
 	public static class Updater extends BaseUpdater {
+		
+		/** Sets the user last access time to the current time */
+		public static void setLastAccessTimeAndUpdate(UserModel user) {
+			if (user == null) {
+				Logger.debug("setLastAccessTimeAndUpdate called on null user");
+				return;
+			}
+			
+			user.lastAccessTime = DbTypesUtil.now();
+			user.doUpdateAndRetry();
+			Logger.debug("User " + user.pk + " last access time updated to " + user.lastAccessTime);
+		}
 		
 		/** Sets the user login time to the current time */
 		public static void setLoginTimeAndUpdate(UserModel user) {

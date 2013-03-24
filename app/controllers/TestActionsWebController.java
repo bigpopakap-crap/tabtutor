@@ -2,7 +2,7 @@ package controllers;
 
 import play.mvc.Result;
 import actions.ActionAnnotations.Authed;
-import actions.ActionAnnotations.ErrorCaught;
+import actions.ActionAnnotations.TriedCaughtFinally;
 import actions.ActionAnnotations.Sessioned;
 
 /**
@@ -14,12 +14,12 @@ import actions.ActionAnnotations.Sessioned;
  */
 public class TestActionsWebController extends TestWebController {
 	
-	@ErrorCaught @Sessioned
+	@TriedCaughtFinally @Sessioned
 	public static Result sessionAction() {
 		return ok("yay");
 	}
 	
-	@ErrorCaught @Sessioned @Authed
+	@TriedCaughtFinally @Sessioned @Authed
 	public static Result authAction() {
 		return ok("yay");
 	}
