@@ -2,12 +2,14 @@ package actions;
 
 import java.util.List;
 
+import models.UserModel;
 import play.Logger;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import actions.ActionAnnotations.TriedCaughtFinally;
 import contexts.AppContext;
 import contexts.RequestActionContext;
+import contexts.SessionContext;
 import controllers.exceptions.BaseExposedException;
 
 /**
@@ -40,6 +42,14 @@ public class TryCatchFinallyAction extends BaseAction<TriedCaughtFinally> {
 		
 		//this has not been applied yet, so catch exceptions
 		try {
+			try {
+				preRequestDangerousActions();
+			}
+			catch (Exception ex) {
+				//do nothing, just swallow :-) this error
+			}
+			
+			//delegate to the actual handler
 			return delegate.call(ctx);
 		}
 		catch (BaseExposedException ex) {
@@ -59,6 +69,15 @@ public class TryCatchFinallyAction extends BaseAction<TriedCaughtFinally> {
 		finally {
 			long duration = System.currentTimeMillis() - startTime;
 			logRequest(ctx, false, duration);
+		}
+	}
+	
+	/** Actions to perform before the request whose exceptions should be suppressed */
+	private void preRequestDangerousActions() {
+		//TODO formalize this. And if it gets too hefty a method, it's got to move somewhere else
+		//if there is a user, modify their last access time
+		if (SessionContext.hasUser()) {
+			UserModel.Updater.setLastAccessTimeAndUpdate(SessionContext.user());
 		}
 	}
 	
