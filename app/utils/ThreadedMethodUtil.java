@@ -6,6 +6,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
 
+import contexts.AppContext;
+
 import play.Logger;
 
 /**
@@ -18,8 +20,16 @@ import play.Logger;
  */
 public abstract class ThreadedMethodUtil {
 	
+	/** Setting to false will not use threads for these method calls for debugging purposes
+	 *  This value is ignored and treated as true if in production mode */
+	public static volatile boolean USE_THREADING = false;
+	
 	/** Default number of seconds to wait */
 	private static final long DEFAULT_THREAD_TIMEOUT_SECONDS = 10000;
+	
+	private static boolean useThreading() {
+		return USE_THREADING || AppContext.Mode.isProduction();
+	}
 	
 	/**
 	 * Executes the given callable on a separate thread, awaits its return value and returns it here
@@ -36,6 +46,11 @@ public abstract class ThreadedMethodUtil {
 	
 	/** Same as {@link #threaded(Callable)}, specifying a timeout in seconds */
 	public static <T> T threaded(Callable<T> callable, long timeoutSeconds) throws InterruptedException, TimeoutException, Exception {
+		//if should be single threaded, just call the callable
+		if (!useThreading()) {
+			return callable.call();
+		}
+		
 		boolean threadCompleted = false;
 		long threadId = -1;
 		try {

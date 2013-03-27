@@ -156,7 +156,7 @@ public abstract class BaseModel extends Model {
 				for (int i = 1; i <= NUM_OPERATION_RETRIES && !wasSuccessful; i++) {
 					try {
 						//if this is not the first attempt, call the hook
-						if (isFirstTry) hook_preModifyingOperationRetry(opType);
+						if (!isFirstTry) hook_preModifyingOperationRetry(opType);
 						isFirstTry = false;
 						
 						//try the operation
