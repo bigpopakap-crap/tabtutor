@@ -68,7 +68,7 @@ public class FbAuthWebController extends BaseWebController {
 			}
 			catch (ApiNoResponseException ex) {
 				//TODO how should this be handled?
-				throw ErrorPageException.Factory.internalServerErrorPage(ex);
+				throw new InternalServerErrorPageException(ex);
 			}
 		}
 	}
