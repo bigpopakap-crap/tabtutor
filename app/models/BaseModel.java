@@ -1,5 +1,7 @@
 package models;
 
+import globals.Globals.DevelopmentSwitch;
+
 import java.util.concurrent.Callable;
 
 import javax.persistence.MappedSuperclass;
@@ -21,71 +23,14 @@ import utils.ThreadedMethodUtil;
  * @since 2013-02-26
  *
  */
-@SuppressWarnings("serial")
 @MappedSuperclass
 public abstract class BaseModel extends Model {
 	
-	private static int NUM_OPERATION_RETRIES = 5;
+	private static final long serialVersionUID = 1L;
+	private static DevelopmentSwitch<Integer> NUM_OPERATION_RETRIES = new DevelopmentSwitch<Integer>(5);
 	
 	//TODO static analysis test that nobody calls Ebean.save(), update(), etc. directly
 	//TODO static analysis test that nobody reads or modifies columns in a model directly
-	
-	/**
-	 * This class should be extended by the implementing model class, providing all
-	 * methods to create objects
-	 * 
-	 * @author bigpopakap
-	 * @since 2013-02-26
-	 */
-	protected static abstract class BaseFactory {}
-	
-	/**
-	 * This class should be extended by the implementing model class, providing all
-	 * methods to access fields of an object
-	 * 
-	 * Fields should be declared private and only accessible through methods in this class
-	 * This is done to prevent outside classes from modifying model objects
-	 * 
-	 * Classes should be careful to make defensive copies of returned objects. Except for other
-	 * BaseModel objects, which are not immutable, but have limited interaction with outside classes
-	 * 
-	 * Note that Play generates getters and setters at runtime for classes to conform to the
-	 * JavaBean structure that is expected by frameworks like the Ebean ORM. This is ok because
-	 * our code cannot reference these methods. So using this getter class is still an effective
-	 * way to limit outside access
-	 * 
-	 * @author bigpopakap
-	 * @since 2013-03-02
-	 *
-	 */
-	protected abstract class BaseGetter {}
-	
-	/**
-	 * This class should be extended by the implementing model class, providing all
-	 * methods to read data from the table
-	 * 
-	 * @author bigpopakap
-	 * @since 2013-02-26
-	 */
-	protected static abstract class BaseSelector {}
-	
-	/**
-	 * This class should be extended by the implementing model class, providing all
-	 * methods to modify data in the table
-	 * 
-	 * @author bigpopakap
-	 * @since 2013-02-26
-	 */
-	protected static abstract class BaseUpdater {}
-	
-	/**
-	 * This class should be extended by the implementing model class, providing methods
-	 * to validate the model
-	 * 
-	 * @author bigpopakap
-	 * @since 2013-02-26
-	 */
-	protected static abstract class BaseValidator {}
 	
 	/* ******************************************
 	 *  HOOKS FOR DML OPERATIONS
@@ -127,7 +72,7 @@ public abstract class BaseModel extends Model {
 	 * @since 2013-03-23
 	 *
 	 */
-	private class BaseOperationCallable implements Callable<Void> {
+	private class OperationCallable implements Callable<Void> {
 		
 		private final BaseModel model;
 		private final BasicDmlModifyingType opType;
@@ -139,7 +84,7 @@ public abstract class BaseModel extends Model {
 		 * @param opType the type of the operation
 		 * @param doOperation the callable that implements the operation, without retry logic
 		 */
-		private BaseOperationCallable(BaseModel model, BasicDmlModifyingType opType, Callable<Void> doOperation) {
+		private OperationCallable(BaseModel model, BasicDmlModifyingType opType, Callable<Void> doOperation) {
 			if (model == null) throw new IllegalArgumentException("Model cannot be null");
 			if (opType == null) throw new IllegalArgumentException("OpType cannot be null");
 			if (doOperation == null) throw new IllegalArgumentException("doOperation cannot be null");
@@ -153,7 +98,7 @@ public abstract class BaseModel extends Model {
 			boolean isFirstTry = true;
 			boolean wasSuccessful = false;
 			try {
-				for (int i = 1; i <= NUM_OPERATION_RETRIES && !wasSuccessful; i++) {
+				for (int i = 1; i <= NUM_OPERATION_RETRIES.get() && !wasSuccessful; i++) {
 					try {
 						//if this is not the first attempt, call the hook
 						if (!isFirstTry) hook_preModifyingOperationRetry(opType);
@@ -200,7 +145,7 @@ public abstract class BaseModel extends Model {
 	 */
 	private void doOperationAndRetry(BasicDmlModifyingType opType, Callable<Void> doOperation) throws FailedOperationException {
 		try {
-			ThreadedMethodUtil.threaded(new BaseOperationCallable(this, opType, doOperation));
+			ThreadedMethodUtil.threaded(new OperationCallable(this, opType, doOperation));
 		}
 		catch (RuntimeException ex) {
 			//just relay that exception
