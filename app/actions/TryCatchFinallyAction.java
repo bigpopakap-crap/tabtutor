@@ -8,6 +8,7 @@ import actions.ActionAnnotations.TriedCaughtFinally;
 import contexts.AppContext;
 import contexts.SessionContext;
 import controllers.exceptions.BaseExposedException;
+import controllers.exceptions.InternalServerErrorExposedException;
 
 /**
  * This action will catch any exceptions in the delegated action, and
@@ -47,7 +48,7 @@ public class TryCatchFinallyAction extends BaseAction<TriedCaughtFinally> {
 			Logger.error("Exception caught in " + this.getClass(), ex);
 			//TODO figure out which default error to display to the user
 			if (AppContext.Mode.isProduction()) {
-				return BaseExposedException.Factory.internalServerError(ex).result();
+				return new InternalServerErrorExposedException(ex).result();
 			}
 			else {
 				throw ex;

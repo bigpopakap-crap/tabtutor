@@ -4,7 +4,7 @@ import play.mvc.Http.Context;
 import play.mvc.Result;
 import actions.ActionAnnotations.ModeProtected;
 import contexts.AppContext;
-import controllers.exceptions.BaseExposedException;
+import controllers.exceptions.NotFoundExposedException;
 
 /**
  * This action will catch throw an exception if the app is not running in the
@@ -20,7 +20,7 @@ public class ModeProtectAction extends BaseAction<ModeProtected> {
 	protected Result hook_call(Context ctx) throws Throwable {
 		if (AppContext.Mode.get() != configuration.allowedMode()) {
 			//TODO figure out which default error to show to the user
-			throw BaseExposedException.Factory.notFound(null);
+			throw new NotFoundExposedException(null);
 		}
 		else {
 			return delegate.call(ctx);
