@@ -1,12 +1,12 @@
 package utils;
 
+import globals.Globals.DevelopmentSwitch;
+
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
-
-import contexts.AppContext;
 
 import play.Logger;
 
@@ -22,15 +22,12 @@ public abstract class ThreadedMethodUtil {
 	
 	/** Setting to false will not use threads for these method calls for debugging purposes
 	 *  This value is ignored and treated as true if in production mode */
-	public static volatile boolean USE_THREADING = false;
+	public static final DevelopmentSwitch<Boolean> USE_THREADING = new DevelopmentSwitch<Boolean>(true);
 	
 	/** Default number of seconds to wait */
-	private static final long DEFAULT_THREAD_TIMEOUT_SECONDS = 10000;
-	
-	private static boolean useThreading() {
-		return USE_THREADING || AppContext.Mode.isProduction();
-	}
-	
+	private static final DevelopmentSwitch<Long> DEFAULT_THREAD_TIMEOUT_SECONDS = new DevelopmentSwitch<Long>(10000L)
+																					.set(20000L);
+
 	/**
 	 * Executes the given callable on a separate thread, awaits its return value and returns it here
 	 * @param callable the method to run
@@ -41,13 +38,13 @@ public abstract class ThreadedMethodUtil {
 	 * 					is captured and thrown here
 	 */
 	public static <T> T threaded(Callable<T> callable) throws InterruptedException, TimeoutException, Exception {
-		return threaded(callable, DEFAULT_THREAD_TIMEOUT_SECONDS);
+		return threaded(callable, DEFAULT_THREAD_TIMEOUT_SECONDS.get());
 	}
 	
 	/** Same as {@link #threaded(Callable)}, specifying a timeout in seconds */
 	public static <T> T threaded(Callable<T> callable, long timeoutSeconds) throws InterruptedException, TimeoutException, Exception {
 		//if should be single threaded, just call the callable
-		if (!useThreading()) {
+		if (!USE_THREADING.get()) {
 			return callable.call();
 		}
 		
