@@ -1,13 +1,7 @@
 <project>
 	<target name="run">
 		<exec executable="cmd.exe">
-			<arg value="/c"/>
-			<arg value="foreman"/>
-			<arg value="start"/>
-			<arg value="-f"/>
-			<arg file="Procfile.dev"/>
-			<arg value="-e"/>
-			<arg file="env.dev"/>
+			<arg line="/c foreman start -f Procfile.dev -e env.dev"/>
 		</exec>
 	</target>
 </project>
