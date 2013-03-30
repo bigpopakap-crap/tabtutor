@@ -25,11 +25,15 @@ public abstract class ThreadedMethodUtil {
 	public static final DevelopmentSwitch<Boolean> USE_THREADING = new DevelopmentSwitch<Boolean>(true);
 	
 	/** Default number of seconds to wait */
-	private static final DevelopmentSwitch<Long> DEFAULT_THREAD_TIMEOUT_SECONDS = new DevelopmentSwitch<Long>(10000L)
-																					.set(20000L);
+	private static final DevelopmentSwitch<Long> DEFAULT_THREAD_TIMEOUT_SECONDS = new DevelopmentSwitch<Long>(10L).set(20L);
 
 	/**
 	 * Executes the given callable on a separate thread, awaits its return value and returns it here
+	 * 
+	 * Note: be careful about referencing singletons in threaded methods. Since they are run in a separate
+	 * thread, the ThreadLocal variables might not be available
+	 * TODO this problem should be fixed automatically in this method here
+	 * 
 	 * @param callable the method to run
 	 * @return the value returned by that method, which is run in its own thread
 	 * @throws InterruptedException if the thread running the method is interrupted
