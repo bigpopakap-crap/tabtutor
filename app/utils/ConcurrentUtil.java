@@ -18,18 +18,22 @@ import play.Logger;
  * @since 2013-03-23
  *
  */
-public abstract class ThreadedMethodUtil {
+public abstract class ConcurrentUtil {
 	
 	/** Setting to false will not use threads for these method calls for debugging purposes
 	 *  This value is ignored and treated as true if in production mode */
 	public static final DevelopmentSwitch<Boolean> USE_THREADING = new DevelopmentSwitch<Boolean>(true);
 	
 	/** Default number of seconds to wait */
-	private static final DevelopmentSwitch<Long> DEFAULT_THREAD_TIMEOUT_SECONDS = new DevelopmentSwitch<Long>(10000L)
-																					.set(20000L);
+	private static final DevelopmentSwitch<Long> DEFAULT_THREAD_TIMEOUT_SECONDS = new DevelopmentSwitch<Long>(10L).set(20L);
 
 	/**
 	 * Executes the given callable on a separate thread, awaits its return value and returns it here
+	 * 
+	 * Note: be careful about referencing singletons in threaded methods. Since they are run in a separate
+	 * thread, the ThreadLocal variables might not be available
+	 * TODO this problem should be fixed automatically in this method here
+	 * 
 	 * @param callable the method to run
 	 * @return the value returned by that method, which is run in its own thread
 	 * @throws InterruptedException if the thread running the method is interrupted
@@ -37,13 +41,13 @@ public abstract class ThreadedMethodUtil {
 	 * @throws Exception if the callable throws an exception during its execution, the exception
 	 * 					is captured and thrown here
 	 */
-	public static <T> T threaded(Callable<T> callable) throws InterruptedException, TimeoutException, Exception {
-		return threaded(callable, DEFAULT_THREAD_TIMEOUT_SECONDS.get());
+	public static <T> T joinThread(Callable<T> callable) throws InterruptedException, TimeoutException, Exception {
+		return joinThread(callable, DEFAULT_THREAD_TIMEOUT_SECONDS.get());
 	}
 	
-	/** Same as {@link #threaded(Callable)}, specifying a timeout in seconds */
-	public static <T> T threaded(Callable<T> callable, long timeoutSeconds) throws InterruptedException, TimeoutException, Exception {
-		//if should be single threaded, just call the callable
+	/** Same as {@link #joinThread(Callable)}, specifying a timeout in seconds */
+	public static <T> T joinThread(Callable<T> callable, long timeoutSeconds) throws InterruptedException, TimeoutException, Exception {
+		//bypass the creation of a Thread object if we're not threading
 		if (!USE_THREADING.get()) {
 			return callable.call();
 		}
@@ -57,10 +61,8 @@ public abstract class ThreadedMethodUtil {
 			AtomicReference<T> atomicReturned = new AtomicReference<T>(null);
 			
 			//start the callable in a new thread
-			Thread thread = new Thread(new ThreadedMethodRunner<T>(latch, atomicException, atomicReturned, callable));
-			threadId = thread.getId();
+			threadId = forkThread(new ThreadedMethodRunner<T>(latch, atomicException, atomicReturned, callable));
 			Logger.trace("About to start threaded method in thread " + threadId);
-			thread.run();
 			
 			//wait for the thread and get its return values
 			if (!latch.await(timeoutSeconds, TimeUnit.SECONDS)) {
@@ -76,6 +78,54 @@ public abstract class ThreadedMethodUtil {
 		}
 		finally {
 			Logger.trace("Thread " + threadId + (threadCompleted ? " completed successfully" : " timed out"));
+		}
+	}
+	
+	/** Executes the callable in a new thread, without doing any waiting
+	 *  @return the ID of the thread, or -1 if no threading is used */
+	public static <T> long forkThread(Callable<T> callable) {
+		//bypass the creating a runnable if we're not threading
+		if (USE_THREADING.get()) {
+			return forkThread(callableToRunnable(callable));
+		}
+		else {
+			suppressCall(callable);
+			return -1;
+		}
+	}
+	
+	/** Executes the runnable in a new thread, without doing any waiting
+	 *  @return the ID of the thread */
+	public static <T> long forkThread(Runnable runnable) {
+		Thread thread = new Thread(runnable);
+		
+		//either start in a new thread or in current thread
+		if (USE_THREADING.get()) thread.start();
+		else thread.run();
+		
+		return thread.getId();
+	}
+	
+	/** Converts a callable to a runnable */
+	public static <T> Runnable callableToRunnable(final Callable<T> callable) {
+		return new Runnable() {
+			@Override
+			public void run() {
+				suppressCall(callable);
+			}
+		};
+	}
+	
+	/** Calls a callable and converts explicit exceptions to runtime exceptions */
+	public static <T> T suppressCall(Callable<T> callable) {
+		try {
+			return callable.call();
+		}
+		catch (RuntimeException ex) {
+			throw ex;
+		}
+		catch (Exception ex) {
+			throw new RuntimeException(ex);
 		}
 	}
 	

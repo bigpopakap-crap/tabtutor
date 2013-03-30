@@ -34,6 +34,8 @@ public abstract class Globals {
 	 */
 	public static class DevelopmentSwitch<T> {
 		
+		//TODO unit test that this changes in development but not production
+		
 		private T value;
 		
 		/** Creates a new switch with the given default production value,

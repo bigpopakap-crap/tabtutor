@@ -9,7 +9,7 @@ import models.exceptions.FailedOperationException;
 import play.Logger;
 import play.db.ebean.Model;
 import types.SqlOperationType.BasicDmlModifyingType;
-import utils.ThreadedMethodUtil;
+import utils.ConcurrentUtil;
 
 /**
  * Base class for all models. All models should extend this class
@@ -200,7 +200,7 @@ public abstract class BaseModel extends Model {
 	 */
 	private void doOperationAndRetry(BasicDmlModifyingType opType, Callable<Void> doOperation) throws FailedOperationException {
 		try {
-			ThreadedMethodUtil.threaded(new BaseOperationCallable(this, opType, doOperation));
+			ConcurrentUtil.joinThread(new BaseOperationCallable(this, opType, doOperation));
 		}
 		catch (RuntimeException ex) {
 			//just relay that exception

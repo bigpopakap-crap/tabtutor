@@ -14,7 +14,7 @@ import play.mvc.Http.Status;
 import types.HttpMethodType;
 import utils.EscapingUtil;
 import utils.EscapingUtil.Escaper;
-import utils.ThreadedMethodUtil;
+import utils.ConcurrentUtil;
 import api.exceptions.ApiErrorCodeException;
 import api.exceptions.ApiNoResponseException;
 
@@ -154,7 +154,7 @@ public abstract class BaseApi<R extends BaseApiResponse<?>> {
 			final HttpMethodType fMethod = method;
 			final String fUrl = url;
 			final Map<String, String> fParams = params;
-			return ThreadedMethodUtil.threaded(new Callable<Response>() {
+			return ConcurrentUtil.joinThread(new Callable<Response>() {
 
 				@Override
 				public Response call() throws Exception {
