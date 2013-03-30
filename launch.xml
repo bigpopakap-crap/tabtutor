@@ -5,22 +5,14 @@
 	<property name="launch.pidfile" value="RUNNING_PID"/>				<!-- Name of the file with the PID -->
 
 	<!-- Start the app -->
-	<target name="start">
-		<!-- Stop the previous app -->
-		<antcall target="stop"/>
-		
-		<!-- Run the app -->
+	<target name="start" depends="stop">
 		<antcall target="-foreman">
 			<param name="foreman-procfile" value="${launch.startproc}"/>
 		</antcall>
 	</target>
 	
 	<!-- Run tests -->
-	<target name="test">
-		<!-- Stop the previous app -->
-		<antcall target="stop"/>
-		
-		<!-- Run the tests -->
+	<target name="test" depends="stop">
 		<antcall target="-foreman">
 			<param name="foreman-procfile" value="${launch.testproc}"/>
 		</antcall>
