@@ -4,6 +4,9 @@ import java.util.concurrent.Callable;
 
 import models.SessionModel;
 import models.UserModel;
+
+import org.h2.engine.Session;
+
 import play.Logger;
 import play.i18n.Lang;
 import play.mvc.Http.Context;
@@ -52,7 +55,7 @@ public abstract class SessionContext extends BaseContext {
 			UserModel.USER_OBJ_CONTEXT_KEY,
 			FbApi.FBAPI_OBJ_CONTEXT_KEY
 		);
-		Logger.debug(SessionContext.class + " refreshed");
+		Logger.debug(Session.class.getCanonicalName() + " refreshed");
 	}
 	
 	/* *****************************************************
@@ -65,8 +68,8 @@ public abstract class SessionContext extends BaseContext {
 		@Override
 		public SessionModel call() throws Exception {
 			String sessionId = Context.current().session().get(SessionModel.SESSION_ID_COOKIE_KEY);
-			if (sessionId != null && SessionModel.Validator.isValidExistingId(sessionId)) {
-				return SessionModel.Selector.getById(sessionId);
+			if (sessionId != null && SessionModel.isValidExistingId(sessionId)) {
+				return SessionModel.getById(sessionId);
 			}
 			else {
 				return null;
@@ -81,8 +84,8 @@ public abstract class SessionContext extends BaseContext {
 		@Override
 		public UserModel call() throws Exception {
 			SessionModel session = get();
-			if (session != null && SessionModel.Validator.hasValidUserPk(session)) {
-				return SessionModel.Selector.getUser(session);
+			if (session != null && session.hasValidUserPk()) {
+				return session.getUser();
 			}
 			else {
 				return null;
@@ -97,8 +100,8 @@ public abstract class SessionContext extends BaseContext {
 		@Override
 		public FbApi call() throws Exception {
 			SessionModel session = get();
-			if (session != null && SessionModel.Validator.hasValidFbAuthInfo(session)) {
-				return new FbApi(session.GETTER.fbToken());
+			if (session != null && session.hasValidFbAuthInfo()) {
+				return new FbApi(session.getFbToken());
 			}
 			else {
 				return null;

@@ -23,5 +23,5 @@
 	window.WTF.get('Logger').init(@(AppContext.Mode.isProduction()));
 </script>
 @p_fbJsSdk(
-	!forceNoDetectLogin && !SessionModel.Validator.hasValidFbAuthInfo(SessionContext.get())
+	!forceNoDetectLogin && (SessionContext.get() == null || !SessionContext.get().hasValidFbAuthInfo())
 )

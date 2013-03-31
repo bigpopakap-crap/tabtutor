@@ -45,7 +45,7 @@ public class RequestStaticResourceContext extends BaseContext {
 		@Override
 		public Set<String> call() throws Exception {
 			//just create a new one, since there's no persistent storage for this
-			return new HashSet<String>();
+			return new HashSet<>();
 		}
 		
 	};

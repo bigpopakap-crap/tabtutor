@@ -40,6 +40,10 @@ public abstract class BaseContext {
 		return t;
 	}
 	
+	protected static synchronized void set(ContextKey contextKey, Object value) {
+		Context.current().args.put(contextKey.get(), value);
+	}
+	
 	/** Helper to clear set all the values to null for the given keys */
 	protected static synchronized void refresh(ContextKey... keys) {
 		for (ContextKey key : keys) {
@@ -75,7 +79,7 @@ public abstract class BaseContext {
 		}
 		
 		/** The list of all registered context keys */
-		private static final Set<String> REGISTERED_KEYS = new HashSet<String>();
+		private static final Set<String> REGISTERED_KEYS = new HashSet<>();
 		
 		/** Determines if the given string is already registered as a context key */
 		public static synchronized boolean isRegistered(String key) {

@@ -10,5 +10,13 @@ package api.exceptions;
 public abstract class BaseApiException extends Exception {
 
 	private static final long serialVersionUID = 5491031286228518832L;
+	
+	public BaseApiException() {
+		super();
+	}
+	
+	public BaseApiException(Throwable cause) {
+		super(cause);
+	}
 
 }
