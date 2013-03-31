@@ -19,6 +19,8 @@ public class ObjectUtils {
 		
 		//iterate over columns
 		for (Field field : o.getClass().getDeclaredFields()) {
+			field.setAccessible(true); //this is okay because we're just reading values
+			
 			String value = null;
 			boolean valueIsException = false;
 			try {
