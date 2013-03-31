@@ -40,6 +40,10 @@ public abstract class BaseContext {
 		return t;
 	}
 	
+	protected static synchronized void set(ContextKey contextKey, Object value) {
+		Context.current().args.put(contextKey.get(), value);
+	}
+	
 	/** Helper to clear set all the values to null for the given keys */
 	protected static synchronized void refresh(ContextKey... keys) {
 		for (ContextKey key : keys) {

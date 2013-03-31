@@ -2,7 +2,6 @@ package models;
 
 import globals.Globals.DevelopmentSwitch;
 
-import java.lang.reflect.Field;
 import java.util.concurrent.Callable;
 
 import javax.persistence.MappedSuperclass;
@@ -13,6 +12,8 @@ import play.Logger;
 import play.db.ebean.Model;
 import types.SqlOperationType.BasicDmlModifyingType;
 import utils.ConcurrentUtil;
+import utils.ObjectUtils;
+import contexts.RequestStatsContext;
 
 /**
  * Base class for all models. All models should extend this class
@@ -48,6 +49,7 @@ public abstract class BaseModel extends Model {
 	protected void hook_preModifyingOperationRetry(BasicDmlModifyingType opType) {
 		//do nothing but log. models can override this if they want to do something
 		Logger.trace("Retrying " + opType.name() + " operation on " + this.getClass());
+		RequestStatsContext.get().incrModelOperationRetries();
 	}
 
 	/**
@@ -65,6 +67,7 @@ public abstract class BaseModel extends Model {
 	protected void hook_postModifyingOperation(BasicDmlModifyingType opType, boolean wasSuccessful) {
 		//do nothing but log. models can override this if they want to do something
 		Logger.trace(opType.name() + " operation on " + this.getClass() + (wasSuccessful ? " was successful" : " failed"));
+		if (!wasSuccessful) RequestStatsContext.get().incrModelOperationFailures();
 	}
 	
 	/* ***********************************************************************
@@ -74,30 +77,7 @@ public abstract class BaseModel extends Model {
 	/** Default toString that returns the field=value mappings */
 	@Override
 	public String toString() {
-		StringBuilder str = new StringBuilder();
-		str.append(this.getClass()).append(":[\n");
-		
-		//iterate over columns
-		for (Field field : getClass().getDeclaredFields()) {
-			String value = null;
-			boolean valueIsException = false;
-			try {
-				value = field.get(this).toString();
-			}
-			catch (Exception ex) {
-				value = ex.getClass().getName();
-				valueIsException = true;
-			}
-			
-			str.append("\t")
-				.append(field.getName())
-				.append(valueIsException ? " threw " : " = ")
-				.append(value)
-				.append("\n");
-		}
-		
-		str.append("]");
-		return str.toString();
+		return ObjectUtils.getFieldsToString(this);
 	}
 	
 	/* ***********************************************************************

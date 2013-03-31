@@ -1,6 +1,6 @@
 package contexts;
 
-import play.mvc.Http.Context;
+import java.util.concurrent.Callable;
 
 /**
  * This class can be used to store any errors and error messages for the duration of the
@@ -17,19 +17,32 @@ import play.mvc.Http.Context;
  */
 public abstract class RequestErrorContext extends BaseContext {
 	
-	private static final String FB_CONNECTION_ERROR_CONTEXT_KEY = "fbConnectionErrorContextKey";
+	private static final ContextKey FB_CONNECTION_ERROR_CONTEXT_KEY = ContextKey.register("fbConnectionErrorContextKey");
 	
 	/** Returns true if there was an error accessing Facebook for this session context */
 	public static synchronized boolean fbConnectionError() {
 		//any value set is considered true
-		return Context.current().args.get(FB_CONNECTION_ERROR_CONTEXT_KEY) != null;
+		return getOrLoad(FB_CONNECTION_ERROR_CONTEXT_KEY, REQUEST_ACTION_LIST_CALLABLE);
 	}
 	
 	/** Sets whether or not there was an FB connection error in the request context */
 	public static synchronized void setFbConnectionError(boolean b) {
-		Context.current().args.put(FB_CONNECTION_ERROR_CONTEXT_KEY, b ? true : null);
+		set(FB_CONNECTION_ERROR_CONTEXT_KEY, b);
 	}
 	
 	//TODO add ability to get form errors
+	
+	/* ***************************************************************
+	 * BEGIN PRIVATE HELPERS
+	 *************************************************************** */
+	
+	private static final Callable<Boolean> REQUEST_ACTION_LIST_CALLABLE = new Callable<Boolean>() {
+
+		@Override
+		public Boolean call() throws Exception {
+			return false;
+		}
+		
+	};
 	
 }

@@ -5,6 +5,7 @@ import play.mvc.Http.Context;
 import play.mvc.Result;
 import actions.ActionAnnotations.TriedCaughtFinally;
 import contexts.AppContext;
+import contexts.RequestStatsContext;
 import contexts.SessionContext;
 import controllers.exceptions.BaseExposedException;
 import controllers.exceptions.InternalServerErrorExposedException;
@@ -23,17 +24,20 @@ public class TryCatchFinallyAction extends BaseAction<TriedCaughtFinally> {
 	
 	@Override
 	protected Result hook_call(Context ctx) throws Throwable {
-		//catch the start time and log the start of the request
-		long startTime = System.currentTimeMillis();
-		logRequest(ctx, true, -1);
-		
 		//this has not been applied yet, so catch exceptions
 		try {
 			try {
+				Logger.info("Started handling " + ctx.request() + " for session " + ctx.session());
+				RequestStatsContext.get();	//Initialize the stats by getting them
 				preRequestDangerousActions();
 			}
 			catch (Exception ex) {
-				//do nothing, just swallow :-) this error
+				if (AppContext.Mode.isProduction()) {
+					Logger.error("Exception caught before delegating from " + this.getClass(), ex);
+				}
+				else {
+					throw ex;
+				}
 			}
 			
 			//delegate to the actual handler
@@ -54,8 +58,20 @@ public class TryCatchFinallyAction extends BaseAction<TriedCaughtFinally> {
 			}
 		}
 		finally {
-			long duration = System.currentTimeMillis() - startTime;
-			logRequest(ctx, false, duration);
+			try {
+				//print out the request stats
+				RequestStatsContext.get().setCompleted();
+				Logger.info("Finished handling request " + ctx.request() + " for session " + ctx.session() + "\n" +
+							RequestStatsContext.get());
+			}
+			catch (Exception ex) {
+				if (AppContext.Mode.isProduction()) {
+					Logger.error("Exception caught in finally of " + this.getClass(), ex);
+				}
+				else {
+					throw ex;
+				}
+			}
 		}
 	}
 	
@@ -66,22 +82,6 @@ public class TryCatchFinallyAction extends BaseAction<TriedCaughtFinally> {
 		if (SessionContext.hasUser()) {
 			SessionContext.user().setLastAccessTimeAndUpdate();
 		}
-	}
-	
-	/** Helper method for logging the beginning and end of a request */
-	private static void logRequest(Context ctx, boolean isStart, long duration) {
-		//create the string to log
-		//TODO include other info about request (IP addres, etc)
-		String message = (isStart ? "Started" : "Finished") +
-						 " handling request " + ctx.request() +
-						 " on session " + ctx.session() +
-						 (duration < 0 ? "" : ", took " + duration + "ms");
-		
-		//choose the level to log at
-		//TODO formalize this
-		if (duration > 6000) Logger.error(message);
-		else if (duration > 3000) Logger.warn(message);
-		else Logger.info(message);
 	}
 
 }
