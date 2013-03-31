@@ -22,7 +22,7 @@ public abstract class ConcurrentUtil {
 	
 	/** Setting to false will not use threads for these method calls for debugging purposes
 	 *  This value is ignored and treated as true if in production mode */
-	public static final DevelopmentSwitch<Boolean> USE_THREADING = new DevelopmentSwitch<Boolean>(true);
+	public static final DevelopmentSwitch<Boolean> USE_THREADING = new DevelopmentSwitch<Boolean>(false);
 	
 	/** Default number of seconds to wait */
 	private static final DevelopmentSwitch<Long> DEFAULT_THREAD_TIMEOUT_SECONDS = new DevelopmentSwitch<Long>(10L).set(20L);
