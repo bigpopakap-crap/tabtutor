@@ -77,7 +77,7 @@ public abstract class BaseModel extends Model {
 	/** Default toString that returns the field=value mappings */
 	@Override
 	public String toString() {
-		return ObjectUtils.getFieldsToString(this);
+		return this.getClass() + ":" + ObjectUtils.getFieldMap(this);
 	}
 	
 	/* ***********************************************************************

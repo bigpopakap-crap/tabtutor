@@ -22,6 +22,9 @@ import controllers.exceptions.InternalServerErrorExposedException;
  */
 public class TryCatchFinallyAction extends BaseAction<TriedCaughtFinally> {
 	
+	/** If a request takes more than this number of seconds, log it with an error level */
+	private static final double REQUEST_DURATION_ERROR_THRESHOLD_SECONDS = 5;
+	
 	@Override
 	protected Result hook_call(Context ctx) throws Throwable {
 		//this has not been applied yet, so catch exceptions
@@ -61,8 +64,17 @@ public class TryCatchFinallyAction extends BaseAction<TriedCaughtFinally> {
 			try {
 				//print out the request stats
 				RequestStatsContext.get().setCompleted();
-				Logger.info("Finished handling request " + ctx.request() + " for session " + ctx.session() + "\n" +
-							RequestStatsContext.get());
+				String message = "Finished handling request " + ctx.request() +
+									" for session " + ctx.session() +
+									" with stats " + RequestStatsContext.get();
+
+				//log at error if the request took a long time
+				if (RequestStatsContext.get().getDurationSeconds() > REQUEST_DURATION_ERROR_THRESHOLD_SECONDS) {
+					Logger.error(message);
+				}
+				else {
+					Logger.info(message);
+				}
 			}
 			catch (Exception ex) {
 				if (AppContext.Mode.isProduction()) {

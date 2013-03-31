@@ -1,6 +1,8 @@
 package utils;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Utils for dealing with objects
@@ -11,35 +13,28 @@ import java.lang.reflect.Field;
  */
 public class ObjectUtils {
 	
-	public static String getFieldsToString(Object o) {
-		if (o == null) return "null";
-		
-		StringBuilder str = new StringBuilder();
-		str.append(o.getClass()).append(":[\n");
+	/**
+	 * Returns a map of field names to values for this object
+	 * @param o
+	 */
+	public static Map<String, String> getFieldMap(Object o) {
+		Map<String, String> map = new HashMap<String, String>();
+		if (o == null) return map;
 		
 		//iterate over columns
 		for (Field field : o.getClass().getDeclaredFields()) {
 			field.setAccessible(true); //this is okay because we're just reading values
 			
-			String value = null;
-			boolean valueIsException = false;
 			try {
-				value = field.get(o).toString();
+				map.put(field.getName(), field.get(o).toString());
 			}
 			catch (Exception ex) {
-				value = ex.getClass().getName();
-				valueIsException = true;
+				//put a default string here
+				map.put(field.getName(), "?");
 			}
-			
-			str.append("\t")
-				.append(field.getName())
-				.append(valueIsException ? " threw " : " = ")
-				.append(value)
-				.append("\n");
 		}
 		
-		str.append("]");
-		return str.toString();
+		return map;
 	}
 
 }

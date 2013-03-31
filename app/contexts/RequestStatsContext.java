@@ -1,9 +1,10 @@
 package contexts;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 import utils.DbTypesUtil;
-import utils.ObjectUtils;
 
 /**
  * Class for gathering stats about the request
@@ -36,7 +37,13 @@ public class RequestStatsContext extends BaseContext {
 	
 	@Override
 	public String toString() {
-		return ObjectUtils.getFieldsToString(this);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("isComplete", isComplete());
+		if (isComplete()) map.put("duration", getDurationSeconds() + "s");
+		map.put("numDbFailures", getNumModelOperationFailures());
+		map.put("numDbRetries", getNumModelOperationRetries());
+		
+		return this.getClass().getCanonicalName() + ":" + map;
 	}
 	
 	/* **************************************************************************
