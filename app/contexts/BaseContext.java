@@ -33,7 +33,7 @@ public abstract class BaseContext {
 				t = null;
 			}
 			
-			Context.current().args.put(contextKey.get(), t);
+			set(contextKey, t);
 		}
 		
 		//finally return the value
