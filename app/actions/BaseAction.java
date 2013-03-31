@@ -66,16 +66,16 @@ public abstract class BaseAction<T> extends Action<T> {
 		
 		//proceed with the action
 		try {
-			Logger.trace("Calling into " + this.getClass());
+			Logger.trace("Calling into " + this.getClass().getCanonicalName());
 			throwIfDependenciesNotSatisfied();
 			RequestActionContext.put((Class<BaseAction<?>>) this.getClass());
 			
 			//delegate to the implementing action
-			Logger.trace("Calling into " + this.getClass() + " implementation");
+			Logger.trace("Calling into " + this.getClass().getCanonicalName() + " implementation");
 			return hook_call(ctx);
 		}
 		finally {
-			Logger.trace("Exiting from " + this.getClass());
+			Logger.trace("Exiting from " + this.getClass().getCanonicalName());
 		}
 	}
 	
@@ -97,7 +97,7 @@ public abstract class BaseAction<T> extends Action<T> {
 		List<Class<? extends BaseAction<?>>> dependencies = listDependencies();
 		if (!RequestActionContext.has(dependencies)) {
 			throw new IllegalStateException("Action dependencies haevn't been applied on this request.\n" +
-											"This: " + this.getClass() + "\n" +
+											"This: " + this.getClass().getCanonicalName() + "\n" +
 											"Needs: " + dependencies + "\n" +
 											"Has: " + RequestActionContext.get());
 		}

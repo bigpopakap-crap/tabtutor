@@ -48,7 +48,7 @@ public abstract class BaseModel extends Model {
 	 */
 	protected void hook_preModifyingOperationRetry(BasicDmlModifyingType opType) {
 		//do nothing but log. models can override this if they want to do something
-		Logger.trace("Retrying " + opType.name() + " operation on " + this.getClass());
+		Logger.trace("Retrying " + opType.name() + " operation on " + this.getClass().getCanonicalName());
 		RequestStatsContext.get().incrModelOperationRetries();
 	}
 
@@ -66,7 +66,7 @@ public abstract class BaseModel extends Model {
 	 */
 	protected void hook_postModifyingOperation(BasicDmlModifyingType opType, boolean wasSuccessful) {
 		//do nothing but log. models can override this if they want to do something
-		Logger.trace(opType.name() + " operation on " + this.getClass() + (wasSuccessful ? " was successful" : " failed"));
+		Logger.trace(opType.name() + " operation on " + this.getClass().getCanonicalName() + (wasSuccessful ? " was successful" : " failed"));
 		if (!wasSuccessful) RequestStatsContext.get().incrModelOperationFailures();
 	}
 	
@@ -77,7 +77,7 @@ public abstract class BaseModel extends Model {
 	/** Default toString that returns the field=value mappings */
 	@Override
 	public String toString() {
-		return this.getClass() + ":" + ObjectUtils.getFieldMap(this);
+		return this.getClass().getCanonicalName() + ":" + ObjectUtils.getFieldMap(this);
 	}
 	
 	/* ***********************************************************************
@@ -130,7 +130,7 @@ public abstract class BaseModel extends Model {
 					}
 					catch (OptimisticLockException ex) {
 						//call the post-op and retry the operation
-						Logger.debug(opType + " operation for " + this.getClass() + " failed, retrying...");
+						Logger.debug(opType + " operation for " + this.getClass().getCanonicalName() + " failed, retrying...");
 					}
 				}
 				

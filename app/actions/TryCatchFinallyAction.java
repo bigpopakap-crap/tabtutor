@@ -36,7 +36,7 @@ public class TryCatchFinallyAction extends BaseAction<TriedCaughtFinally> {
 			}
 			catch (Exception ex) {
 				if (AppContext.Mode.isProduction()) {
-					Logger.error("Exception caught before delegating from " + this.getClass(), ex);
+					Logger.error("Exception caught before delegating from " + this.getClass().getCanonicalName(), ex);
 				}
 				else {
 					throw ex;
@@ -47,11 +47,11 @@ public class TryCatchFinallyAction extends BaseAction<TriedCaughtFinally> {
 			return delegate.call(ctx);
 		}
 		catch (BaseExposedException ex) {
-			Logger.warn("Exposed exception caught in " + this.getClass(), ex);
+			Logger.warn("Exposed exception caught in " + this.getClass().getCanonicalName(), ex);
 			return ex.result();
 		}
 		catch (Exception ex) {
-			Logger.error("Exception caught in " + this.getClass(), ex);
+			Logger.error("Exception caught in " + this.getClass().getCanonicalName(), ex);
 			//TODO figure out which default error to display to the user
 			if (AppContext.Mode.isProduction()) {
 				return new InternalServerErrorExposedException(ex).result();
@@ -78,7 +78,7 @@ public class TryCatchFinallyAction extends BaseAction<TriedCaughtFinally> {
 			}
 			catch (Exception ex) {
 				if (AppContext.Mode.isProduction()) {
-					Logger.error("Exception caught in finally of " + this.getClass(), ex);
+					Logger.error("Exception caught in finally of " + this.getClass().getCanonicalName(), ex);
 				}
 				else {
 					throw ex;
