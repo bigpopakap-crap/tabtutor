@@ -133,20 +133,39 @@ public abstract class BaseModel extends Model {
 						Logger.debug(opType + " operation for " + this.getClass() + " failed, retrying...");
 					}
 				}
-			}
-			catch (Exception ex) {
-				//any other exception thrown means a failed operation
-				if (wasSuccessful) throw new IllegalStateException("wasSuccessful should never be true in this block");
-				hook_postModifyingOperation(opType, wasSuccessful);
-				throw new FailedOperationException(model, opType, ex);
-			}
-			finally {
-				//we've done all the retries, check if the operation was successful
-				hook_postModifyingOperation(opType, wasSuccessful);
 				
+				//throw exception if not successful
 				if (!wasSuccessful) {
 					//TODO should the cause be set to null?
 					throw new FailedOperationException(model, opType, null);
+				}
+			}
+			catch (FailedOperationException ex) {
+				//relay this exception
+				throw ex;
+			}
+			catch (Exception ex) {
+				//any other exception thrown means a failed operation
+				if (wasSuccessful) throw new IllegalStateException("wasSuccessful should never be true in this block", ex);
+				
+				try {
+					hook_postModifyingOperation(opType, wasSuccessful);
+				}
+				catch (Exception ex2) {
+					Logger.error("Caught exception in BaseModel post operation hook", ex2);
+				}
+				
+				//wrap the cause exception
+				throw new FailedOperationException(model, opType, ex);
+			}
+			finally {
+				//catch exceptions here so callers don't think the operation failed when it didn't
+				try {
+					//we've done all the retries, check if the operation was successful
+					hook_postModifyingOperation(opType, wasSuccessful);
+				}
+				catch (Exception ex) {
+					Logger.error("Caught exception in finally of BaseModel operation ", ex);
 				}
 			}
 			

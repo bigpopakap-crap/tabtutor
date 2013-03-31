@@ -72,8 +72,8 @@ public class SessionModel extends BaseModel {
 	protected void hook_postModifyingOperation(BasicDmlModifyingType opType, boolean wasSuccessful) {
 		super.hook_postModifyingOperation(opType, wasSuccessful);
 		
-		//refresh the app context
-		SessionContext.refresh();
+		//refresh the app context if the operation was successful
+		if (wasSuccessful) SessionContext.refresh();
 		
 		//TODO add caching here
 	}
