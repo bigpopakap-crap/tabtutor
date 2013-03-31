@@ -1,5 +1,7 @@
 package models;
 
+import globals.Globals.DevelopmentSwitch;
+
 import java.util.concurrent.Callable;
 
 import javax.persistence.MappedSuperclass;
@@ -9,7 +11,9 @@ import models.exceptions.FailedOperationException;
 import play.Logger;
 import play.db.ebean.Model;
 import types.SqlOperationType.BasicDmlModifyingType;
-import utils.ThreadedMethodUtil;
+import utils.ConcurrentUtil;
+import utils.ObjectUtils;
+import contexts.RequestStatsContext;
 
 /**
  * Base class for all models. All models should extend this class
@@ -21,71 +25,14 @@ import utils.ThreadedMethodUtil;
  * @since 2013-02-26
  *
  */
-@SuppressWarnings("serial")
 @MappedSuperclass
 public abstract class BaseModel extends Model {
 	
-	private static int NUM_OPERATION_RETRIES = 5;
+	private static final long serialVersionUID = 1L;
+	private static DevelopmentSwitch<Integer> NUM_OPERATION_RETRIES = new DevelopmentSwitch<>(5);
 	
 	//TODO static analysis test that nobody calls Ebean.save(), update(), etc. directly
 	//TODO static analysis test that nobody reads or modifies columns in a model directly
-	
-	/**
-	 * This class should be extended by the implementing model class, providing all
-	 * methods to create objects
-	 * 
-	 * @author bigpopakap
-	 * @since 2013-02-26
-	 */
-	protected static abstract class BaseFactory {}
-	
-	/**
-	 * This class should be extended by the implementing model class, providing all
-	 * methods to access fields of an object
-	 * 
-	 * Fields should be declared private and only accessible through methods in this class
-	 * This is done to prevent outside classes from modifying model objects
-	 * 
-	 * Classes should be careful to make defensive copies of returned objects. Except for other
-	 * BaseModel objects, which are not immutable, but have limited interaction with outside classes
-	 * 
-	 * Note that Play generates getters and setters at runtime for classes to conform to the
-	 * JavaBean structure that is expected by frameworks like the Ebean ORM. This is ok because
-	 * our code cannot reference these methods. So using this getter class is still an effective
-	 * way to limit outside access
-	 * 
-	 * @author bigpopakap
-	 * @since 2013-03-02
-	 *
-	 */
-	protected abstract class BaseGetter {}
-	
-	/**
-	 * This class should be extended by the implementing model class, providing all
-	 * methods to read data from the table
-	 * 
-	 * @author bigpopakap
-	 * @since 2013-02-26
-	 */
-	protected static abstract class BaseSelector {}
-	
-	/**
-	 * This class should be extended by the implementing model class, providing all
-	 * methods to modify data in the table
-	 * 
-	 * @author bigpopakap
-	 * @since 2013-02-26
-	 */
-	protected static abstract class BaseUpdater {}
-	
-	/**
-	 * This class should be extended by the implementing model class, providing methods
-	 * to validate the model
-	 * 
-	 * @author bigpopakap
-	 * @since 2013-02-26
-	 */
-	protected static abstract class BaseValidator {}
 	
 	/* ******************************************
 	 *  HOOKS FOR DML OPERATIONS
@@ -95,10 +42,14 @@ public abstract class BaseModel extends Model {
 	 * Called before the retry of any DML operation.
 	 * Note that this is not called before the first try
 	 * 
+	 * Default implementation is just to log the operation
+	 * 
 	 * @param opType the type of the operation
 	 */
 	protected void hook_preModifyingOperationRetry(BasicDmlModifyingType opType) {
-		//do nothing. models can override this if they want to do something
+		//do nothing but log. models can override this if they want to do something
+		Logger.trace("Retrying " + opType.name() + " operation on " + this.getClass().getCanonicalName());
+		RequestStatsContext.get().incrModelOperationRetries();
 	}
 
 	/**
@@ -107,12 +58,26 @@ public abstract class BaseModel extends Model {
 	 * This is called after all retries have completed, not before each retry.
 	 * For that functionality, see {@link #hook_preModifyingOperationRetry(BasicDmlModifyingType)}
 	 * 
+	 * Default implementation is just to log the operation
+	 * 
 	 * @param opType the type of the operation
 	 * @param wasSuccessful true if the operation succeeded, false if it failed.
 	 * 							Failure means that it failed after all retries
 	 */
 	protected void hook_postModifyingOperation(BasicDmlModifyingType opType, boolean wasSuccessful) {
-		//do nothing. models can override this if they want to do something
+		//do nothing but log. models can override this if they want to do something
+		Logger.trace(opType.name() + " operation on " + this.getClass().getCanonicalName() + (wasSuccessful ? " was successful" : " failed"));
+		if (!wasSuccessful) RequestStatsContext.get().incrModelOperationFailures();
+	}
+	
+	/* ***********************************************************************
+	 * BEGIN PUBLIC OVERRIDES
+	 *********************************************************************** */
+	
+	/** Default toString that returns the field=value mappings */
+	@Override
+	public String toString() {
+		return this.getClass().getCanonicalName() + ":" + ObjectUtils.getFieldMap(this);
 	}
 	
 	/* ***********************************************************************
@@ -127,7 +92,7 @@ public abstract class BaseModel extends Model {
 	 * @since 2013-03-23
 	 *
 	 */
-	private class BaseOperationCallable implements Callable<Void> {
+	private class OperationCallable implements Callable<Void> {
 		
 		private final BaseModel model;
 		private final BasicDmlModifyingType opType;
@@ -139,7 +104,7 @@ public abstract class BaseModel extends Model {
 		 * @param opType the type of the operation
 		 * @param doOperation the callable that implements the operation, without retry logic
 		 */
-		private BaseOperationCallable(BaseModel model, BasicDmlModifyingType opType, Callable<Void> doOperation) {
+		private OperationCallable(BaseModel model, BasicDmlModifyingType opType, Callable<Void> doOperation) {
 			if (model == null) throw new IllegalArgumentException("Model cannot be null");
 			if (opType == null) throw new IllegalArgumentException("OpType cannot be null");
 			if (doOperation == null) throw new IllegalArgumentException("doOperation cannot be null");
@@ -153,10 +118,10 @@ public abstract class BaseModel extends Model {
 			boolean isFirstTry = true;
 			boolean wasSuccessful = false;
 			try {
-				for (int i = 1; i <= NUM_OPERATION_RETRIES && !wasSuccessful; i++) {
+				for (int i = 1; i <= NUM_OPERATION_RETRIES.get() && !wasSuccessful; i++) {
 					try {
 						//if this is not the first attempt, call the hook
-						if (isFirstTry) hook_preModifyingOperationRetry(opType);
+						if (!isFirstTry) hook_preModifyingOperationRetry(opType);
 						isFirstTry = false;
 						
 						//try the operation
@@ -165,23 +130,42 @@ public abstract class BaseModel extends Model {
 					}
 					catch (OptimisticLockException ex) {
 						//call the post-op and retry the operation
-						Logger.debug(opType + " operation for " + this.getClass() + " failed, retrying...");
+						Logger.debug(opType + " operation for " + this.getClass().getCanonicalName() + " failed, retrying...");
 					}
 				}
-			}
-			catch (Exception ex) {
-				//any other exception thrown means a failed operation
-				if (wasSuccessful) throw new IllegalStateException("wasSuccessful should never be true in this block");
-				hook_postModifyingOperation(opType, wasSuccessful);
-				throw new FailedOperationException(model, opType, ex);
-			}
-			finally {
-				//we've done all the retries, check if the operation was successful
-				hook_postModifyingOperation(opType, wasSuccessful);
 				
+				//throw exception if not successful
 				if (!wasSuccessful) {
 					//TODO should the cause be set to null?
 					throw new FailedOperationException(model, opType, null);
+				}
+			}
+			catch (FailedOperationException ex) {
+				//relay this exception
+				throw ex;
+			}
+			catch (Exception ex) {
+				//any other exception thrown means a failed operation
+				if (wasSuccessful) throw new IllegalStateException("wasSuccessful should never be true in this block", ex);
+				
+				try {
+					hook_postModifyingOperation(opType, wasSuccessful);
+				}
+				catch (Exception ex2) {
+					Logger.error("Caught exception in BaseModel post operation hook", ex2);
+				}
+				
+				//wrap the cause exception
+				throw new FailedOperationException(model, opType, ex);
+			}
+			finally {
+				//catch exceptions here so callers don't think the operation failed when it didn't
+				try {
+					//we've done all the retries, check if the operation was successful
+					hook_postModifyingOperation(opType, wasSuccessful);
+				}
+				catch (Exception ex) {
+					Logger.error("Caught exception in finally of BaseModel operation ", ex);
 				}
 			}
 			
@@ -200,7 +184,7 @@ public abstract class BaseModel extends Model {
 	 */
 	private void doOperationAndRetry(BasicDmlModifyingType opType, Callable<Void> doOperation) throws FailedOperationException {
 		try {
-			ThreadedMethodUtil.threaded(new BaseOperationCallable(this, opType, doOperation));
+			ConcurrentUtil.joinThread(new OperationCallable(this, opType, doOperation));
 		}
 		catch (RuntimeException ex) {
 			//just relay that exception

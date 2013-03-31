@@ -11,5 +11,13 @@ package api.exceptions;
 public class ApiNoResponseException extends BaseApiException {
 	
 	private static final long serialVersionUID = -4920976263519573529L;
+	
+	public ApiNoResponseException() {
+		super();
+	}
+	
+	public ApiNoResponseException(Throwable cause) {
+		super(cause);
+	}
 
 }

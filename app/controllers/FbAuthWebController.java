@@ -4,8 +4,8 @@ import models.SessionModel;
 import models.UserModel;
 import play.Logger;
 import play.mvc.Result;
-import actions.ActionAnnotations.TriedCaughtFinally;
 import actions.ActionAnnotations.Sessioned;
+import actions.ActionAnnotations.TriedCaughtFinally;
 import api.exceptions.ApiNoResponseException;
 import api.fb.FbApi;
 import contexts.SessionContext;
@@ -53,13 +53,13 @@ public class FbAuthWebController extends BaseWebController {
 				
 				//add this information to the session
 				SessionModel session = SessionContext.get();
-				SessionModel.Updater.setFbAuthInfoAndUpdate(session, fbApi.getToken(), fbApi.getTokenExpiry());
+				session.setFbAuthInfoAndUpdate(fbApi.getToken(), fbApi.getTokenExpiry());
 				
 				//if there is an associated user, update the login time
 				//TODO this shouldn't happen if the user is already logged in
 				if (SessionContext.hasUser()) {
 					UserModel user = SessionContext.user();
-					UserModel.Updater.setLoginTimeAndUpdate(user);
+					user.setLoginTimeAndUpdate();
 				}
 				
 				//don't get the associated user, that will be taken care of in SecuredActions
@@ -69,7 +69,7 @@ public class FbAuthWebController extends BaseWebController {
 			}
 			catch (ApiNoResponseException ex) {
 				//TODO how should this be handled?
-				throw ErrorPageException.Factory.internalServerErrorPage(ex);
+				throw new InternalServerErrorPageException(ex);
 			}
 		}
 	}

@@ -31,6 +31,10 @@ public class UserModel extends BaseModel {
 
 	private static final long serialVersionUID = 5854422586239724109L;
 	
+	/* **************************************************************************
+	 *  FIELDS
+	 ************************************************************************** */
+	
 	@Column(name = "pk") @Id public UUID pk;
 	@Column(name = "fbId") public String fbId;
 	@Column(name = "fbIsAuthed") public boolean fbIsAuthed;
@@ -45,135 +49,115 @@ public class UserModel extends BaseModel {
 	@Transient @Formula(select = "firstName || ' ' || lastName") public String fullName;
 	@Transient @Formula(select = "secondToLastLoginTime IS NULL") public boolean isFirstLogin;
 	
+	public UUID getPk() { return UUID.fromString(pk.toString()); } //defensive copy
+	public String getFbId() { return fbId; }
+	public boolean getFbIsAuthed() { return fbIsAuthed; }
+	public String getFirstName() { return firstName; }
+	public String getLastName() { return lastName; }
+	public String getFullName() { return fullName; }
+	public String getEmail() { return email; }
+	public Date getLastLoginTime() { return (Date) lastLoginTime.clone(); } //defensive copy
+	public Date getsecondToLastLoginTime() { return (Date) secondToLastLoginTime.clone(); } //defensive copy
+	public boolean isFirstLogin() { return isFirstLogin; }
+	
 	/** Private helper for DB interaction implementation */
-	private static final Finder<UUID, UserModel> FINDER = new Finder<UUID, UserModel>(
+	private static final Finder<UUID, UserModel> FINDER = new Finder<>(
 		UUID.class, UserModel.class
 	);
 	
-	public static class Factory extends BaseFactory {
+	/* **************************************************************************
+	 *  BEGIN HOOKS
+	 ************************************************************************** */
+	
+	/* **************************************************************************
+	 *  BEGIN CONSTRUCTORS (PRIVATE)
+	 ************************************************************************** */
+	
+	/**
+	 * Creates a user with the given information
+	 */
+	private UserModel(String fbId, String firstName, String lastName, String email) {
+		Date now = DbTypesUtil.now();
 		
-		/**
-		 * Creates a new user object with the given Facebook auth information
-		 * @param isTestUser is this a test user who is not connected to Facebook
-		 * @param fbId the Facebook ID of the user
-		 * @param firstName
-		 * @param lastName
-		 * @param email
-		 * @return
-		 */
-		public static UserModel createNewUserAndSave(String fbId, String firstName, String lastName, String email) {
-			Date now = DbTypesUtil.now();
-			return create(UUID.randomUUID(), fbId, true, firstName, lastName, email, now, now, now, null, true);
-		}
-		
-		/** This should be the only method that touches the fields */
-		private static UserModel create(UUID pk, String fbId, boolean fbIsAuthed,
-										String firstName, String lastName, String email,
-										Date registerTime, Date lastLoginTime, Date lastAccessTime,
-										Date secondToLastLoginTime, boolean save) {
-			UserModel user = new UserModel();
-			user.pk = pk;
-			user.fbId = fbId;
-			user.fbIsAuthed = fbIsAuthed;
-			user.firstName = firstName;
-			user.lastName = lastName;
-			user.email = email;
-			user.registerTime = registerTime;
-			user.lastAccessTime = lastAccessTime;
-			user.lastLoginTime = lastLoginTime;
-			user.secondToLastLoginTime = secondToLastLoginTime;
-			
-			if (save) {
-				user.doSaveAndRetry();
-				Logger.debug("Saved user " + user.pk + " to database");
-			}
-			
-			return user;
-		}
-		
+		this.pk = UUID.randomUUID();
+		this.fbId = fbId;
+		this.fbIsAuthed = true;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.registerTime = now;
+		this.lastAccessTime = now;
+		this.lastLoginTime = now;
+		this.secondToLastLoginTime = null;
 	}
 	
-	public class Getter extends BaseGetter {
-		
-		public UUID pk() { return UUID.fromString(pk.toString()); } //defensive copy
-		public String fbId() { return fbId; }
-		public boolean fbIsAuthed() { return fbIsAuthed; }
-		public String firstName() { return firstName; }
-		public String lastName() { return lastName; }
-		public String fullName() { return fullName; }
-		public String email() { return email; }
-		public Date lastLoginTime() { return (Date) lastLoginTime.clone(); } //defensive copy
-		public Date secondToLastLoginTime() { return (Date) secondToLastLoginTime.clone(); } //defensive copy
-		public boolean isFirstLogin() { return isFirstLogin; }
-		
+	/* **************************************************************************
+	 *  BEGIN CREATORS (PUBLIC)
+	 ************************************************************************** */
+	
+	/** Creates a new user and saves it to the DB */
+	public static UserModel create(String fbId, String firstName, String lastName, String email) {
+		UserModel user = new UserModel(fbId, firstName, lastName, email);
+		user.doSaveAndRetry();
+		return user;
 	}
 	
-	public static class Selector extends BaseSelector {
-		
-		/** Gets a Session by ID, converts the string to a UUID internally */
-		public static UserModel getById(String id) {
-			try {
-				return getById(id != null ? UUID.fromString(id) : null);
-			}
-			catch (IllegalArgumentException ex) {
-				//the string was not a valid UUID
-				return null;
-			}
+	/* **************************************************************************
+	 *  BEGIN SELECTORS
+	 ************************************************************************** */
+	
+	/** Gets a Session by ID, converts the string to a UUID internally */
+	public static UserModel getById(String id) {
+		try {
+			return getById(id != null ? UUID.fromString(id) : null);
 		}
-		
-		/** Gets a Session by ID */
-		public static UserModel getById(UUID id) {
-			return id != null ? FINDER.byId(id) : null;
+		catch (IllegalArgumentException ex) {
+			//the string was not a valid UUID
+			return null;
 		}
+	}
+	
+	/** Gets a Session by ID */
+	public static UserModel getById(UUID id) {
+		return id != null ? FINDER.byId(id) : null;
+	}
 
-		/** Gets a Session by fbId */
-		public static UserModel getByFbId(String fbId) {
-			return fbId != null ? FINDER.where().eq("fbId", fbId).findUnique() : null;
-		}
-		
+	/** Gets a Session by fbId */
+	public static UserModel getByFbId(String fbId) {
+		return fbId != null ? FINDER.where().eq("fbId", fbId).findUnique() : null;
 	}
 	
-	public static class Updater extends BaseUpdater {
-		
-		/** Sets the user last access time to the current time */
-		public static void setLastAccessTimeAndUpdate(UserModel user) {
-			if (user == null) {
-				Logger.debug("setLastAccessTimeAndUpdate called on null user");
-				return;
-			}
-			
-			user.lastAccessTime = DbTypesUtil.now();
-			user.doUpdateAndRetry();
-			Logger.debug("User " + user.pk + " last access time updated to " + user.lastAccessTime);
-		}
-		
-		/** Sets the user login time to the current time */
-		public static void setLoginTimeAndUpdate(UserModel user) {
-			if (user == null) {
-				Logger.debug("setLoginTimeAndUpdate called on null user");
-				return;
-			}
-			
-			user.secondToLastLoginTime = user.lastLoginTime;
-			user.lastLoginTime = DbTypesUtil.now();
-			user.doUpdateAndRetry();
-			Logger.debug("User " + user.pk + " login time updated to " + user.lastLoginTime);
-		}
-		
+	/* **************************************************************************
+	 * BEGIN  UPDATERS
+	 ************************************************************************** */
+	
+	/** Sets the user last access time to the current time */
+	public void setLastAccessTimeAndUpdate() {
+		lastAccessTime = DbTypesUtil.now();
+		doUpdateAndRetry();
+		Logger.debug("User " + pk + " last access time updated to " + lastAccessTime);
 	}
 	
-	public static class Validator extends BaseValidator {
-		
-		/** Determines if a User exists with the given ID */
-		public static boolean isValidExistingId(UUID id) {
-			return Selector.getById(id) != null;
-		}
-		
-		/** Determines if a User exists with the given fbId */
-		public static boolean isValidExistingFbId(String fbId) {
-			return Selector.getByFbId(fbId) != null;
-		}
-		
+	/** Sets the user login time to the current time */
+	public void setLoginTimeAndUpdate() {
+		secondToLastLoginTime = lastLoginTime;
+		lastLoginTime = DbTypesUtil.now();
+		doUpdateAndRetry();
+		Logger.debug("User " + pk + " login time updated to " + lastLoginTime);
 	}
 	
+	/* **************************************************************************
+	 *  BEGIN VALIDATORS
+	 ************************************************************************** */
+		
+	/** Determines if a User exists with the given ID */
+	public static boolean isValidExistingId(UUID id) {
+		return getById(id) != null;
+	}
+	
+	/** Determines if a User exists with the given fbId */
+	public static boolean isValidExistingFbId(String fbId) {
+		return getByFbId(fbId) != null;
+	}
+		
 }

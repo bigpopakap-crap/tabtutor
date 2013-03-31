@@ -103,6 +103,7 @@ public class FbApi extends BaseApi<FbJsonResponse> {
 	 *  BEGIN THE PUBLIC API CALL METHODS
 	 ***************************************************** */
 	
+	/** Returns the redirect URI to use for Facebook login. TODO quiet this damn compiler error */
 	public static String fbLoginRedirectUri(Request request, String targetUrl) {
 		return routes.FbAuthWebController.fblogin(null, null, targetUrl).absoluteURL(request);
 	}
@@ -126,12 +127,12 @@ public class FbApi extends BaseApi<FbJsonResponse> {
 	public static FbApi accessToken(final Request request, final String targetUrl, final String code) throws ApiNoResponseException {
 		if (code == null) throw new IllegalArgumentException("Code cannot be null");
 		
-		@SuppressWarnings("serial") Map<String, String> params = new HashMap<String, String>() {{
-			put(QUERY_KEY_CLIENT_ID, AppContext.Var.FB_APP_ID.val());
-			put(QUERY_KEY_REDIRECT_URI, fbLoginRedirectUri(request, targetUrl));
-			put(QUERY_KEY_CLIENT_SECRET, AppContext.Var.FB_APP_SECRET.val());
-			put(QUERY_KEY_OAUTH_CODE, code);
-		}};
+		Map<String, String> params = new HashMap<>();
+		params.put(QUERY_KEY_CLIENT_ID, AppContext.Var.FB_APP_ID.val());
+		params.put(QUERY_KEY_REDIRECT_URI, fbLoginRedirectUri(request, targetUrl));
+		params.put(QUERY_KEY_CLIENT_SECRET, AppContext.Var.FB_APP_SECRET.val());
+		params.put(QUERY_KEY_OAUTH_CODE, code);
+
 		Response resp = rawQuery(HttpMethodType.POST, DOMAIN_GRAPH_API + PATH_OAUTH_ACCESSTOKEN, params);
 		
 		//TODO throw an ApiInitializationError on error during this constructor

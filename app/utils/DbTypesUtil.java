@@ -16,6 +16,11 @@ public abstract class DbTypesUtil {
 		return new Date();
 	}
 	
+	/** Sugar for creating a Date representing the current time */
+	public static long nowMillis() {
+		return System.currentTimeMillis();
+	}
+	
 	/** Returns a new Date, which is the given number of seconds after the given Date */
 	public static Date add(Date date, int seconds) {
 		return new Date(date.getTime() + (seconds * 1000));

@@ -13,27 +13,27 @@ import utils.MessagesEnum;
 public class TestErrorPageExceptionWebController extends TestWebController {
 	
 	public static Result internalServerErrorPage() {
-		throw ErrorPageException.Factory.internalServerErrorPage(new RuntimeException());
+		throw new InternalServerErrorPageException(new RuntimeException());
 	}
 	
 	public static Result notFoundPage() {
-		throw ErrorPageException.Factory.notFoundPage(new RuntimeException());
+		throw new NotFoundErrorPageException(new RuntimeException());
 	}
 	
 	public static Result goBackPage() {
-		throw ErrorPageException.Factory.goBackPage(
-				new RuntimeException(),
-				MessagesEnum.errorPage_sampleDescription.get()
-			);
+		throw new GoBackErrorPageException(
+			new RuntimeException(),
+			MessagesEnum.errorPage_sampleDescription.get()
+		);
 	}
 	
 	public static Result goToPage() {
-		throw ErrorPageException.Factory.goToPage(
-				new RuntimeException(),
-				MessagesEnum.errorPage_sampleDescription.get(), 
-				"/",
-				MessagesEnum.errorPage_toGoHome.get()
-			);
+		throw new GoToErrorPageException(
+			new RuntimeException(),
+			"/",
+			MessagesEnum.errorPage_toGoHome.get(),
+			MessagesEnum.errorPage_sampleDescription.get()
+		);
 	}
 
 }

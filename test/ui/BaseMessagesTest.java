@@ -47,7 +47,7 @@ public abstract class BaseMessagesTest extends BaseFuncTest {
 		
 		/** Get all the Strings on the page that should be tested */
 		public List<String> locate() {
-			return new LinkedList<String>();
+			return new LinkedList<>();
 		}
 		
 		/** Validate the string */
