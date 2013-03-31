@@ -9,7 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import play.Logger;
 import types.SqlOperationType.BasicDmlModifyingType;
 import utils.DbTypesUtil;
 
@@ -39,6 +38,10 @@ public class SessionModel extends BaseModel {
 	
 	private static final long serialVersionUID = -6111608082703517322L;
 	
+	/* **************************************************************************
+	 *  BEGIN FIELDS
+	 ************************************************************************** */
+	
 	@Column(name = "pk") @Id public UUID pk;
 	@Column(name = "userPk") public UUID userPk; //TODO how to populate this as the user object reference?
 	@Column(name = "fbToken") public String fbToken;
@@ -46,6 +49,24 @@ public class SessionModel extends BaseModel {
 	@Transient @Formula(select = "NOW() > fbTokenExpireTime") public boolean isFbtokenExpired;
 	@Column(name = "startTime") public Date startTime;
 	@Column(name = "lastAccessTime") public Date lastAccessTime;
+	
+	public UUID getPk() { return UUID.fromString(pk.toString()); } //defensive copy
+	public String getPk_String() { return getPk().toString(); }
+	public UUID getUserPk() { return UUID.fromString(userPk.toString()); }
+	public String getFbToken() { return fbToken; }
+	public Date getFbTokenExpireTime() { return (Date) fbTokenExpireTime.clone(); } //defensive copy
+	public boolean isFbtokenExpired() { return isFbtokenExpired; }
+	public Date getStartTime() { return (Date) startTime.clone(); } //defensive copy
+	public Date getLastAccessTime() { return (Date) lastAccessTime.clone(); } //defensive copy
+	
+	/** Private helper for DB interaction implementation */
+	private static final Finder<UUID, SessionModel> FINDER = new Finder<UUID, SessionModel>(
+		UUID.class, SessionModel.class
+	);
+	
+	/* **************************************************************************
+	 *  BEGIN HOOKS
+	 ************************************************************************** */
 	
 	@Override
 	protected void hook_postModifyingOperation(BasicDmlModifyingType opType, boolean wasSuccessful) {
@@ -57,158 +78,102 @@ public class SessionModel extends BaseModel {
 		//TODO add caching here
 	}
 	
-	/** Private helper for DB interaction implementation */
-	private static final Finder<UUID, SessionModel> FINDER = new Finder<UUID, SessionModel>(
-		UUID.class, SessionModel.class
-	);
+	/* **************************************************************************
+	 *  BEGIN CONSTRUCTORS/SAVERS
+	 ************************************************************************** */
 	
-	public static class Factory extends BaseFactory {
+	/**
+	 * Creates a default new session with a random ID, no associated user,
+	 * no Facebook auth information, and the current start and update times.
+	 * 
+	 * Saves it to the DB
+	 */
+	public SessionModel() {
+		Date now = DbTypesUtil.now();
 		
-		/**
-		 * Creates a default new session with a random ID, no associated user,
-		 * no Facebook auth information, and the current start and update times
-		 * @return the new model after it is saved
-		 */
-		public static SessionModel createAndSave() {
-			Date now = DbTypesUtil.now();
-			return create(UUID.randomUUID(), null, null, null, now, now, true);
-		}
+		this.pk = UUID.randomUUID();
+		this.userPk = null;
+		this.fbToken = null;
+		this.fbTokenExpireTime = null;
+		this.startTime = now;
+		this.lastAccessTime = now;
 		
-		private static SessionModel create(UUID pk, UUID userPk,
-									String fbtoken, Date fbtokenExpireTime,
-									Date startTime, Date lastAccessTime,
-									boolean save) {
-			//TODO how to make sure this covers all columns?
-			SessionModel session = new SessionModel();
-			session.pk = pk;
-			session.userPk = userPk;
-			session.fbToken = fbtoken;
-			session.fbTokenExpireTime = fbtokenExpireTime;
-			session.startTime = startTime;
-			session.lastAccessTime = lastAccessTime;
-			
-			if (save) {
-				session.doSaveAndRetry();
-				Logger.debug("Saved session " + session.pk + " to database");
-			}
-			
-			return session;
-		}
-
+		//save the object
+		doSaveAndRetry();
 	}
 	
-	public class Getter extends BaseGetter {
-		
-		public UUID pk() { return UUID.fromString(pk.toString()); } //defensive copy
-		public String pk_String() { return pk().toString(); }
-		public UUID userPk() { return UUID.fromString(userPk.toString()); }
-		public String fbToken() { return fbToken; }
-		public Date fbTokenExpireTime() { return (Date) fbTokenExpireTime.clone(); } //defensive copy
-		public boolean isFbtokenExpired() { return isFbtokenExpired; }
-		public Date startTime() { return (Date) startTime.clone(); } //defensive copy
-		public Date lastAccessTime() { return (Date) lastAccessTime.clone(); } //defensive copy
-		
-	}
-	public Getter GETTER = new Getter();
+	/* **************************************************************************
+	 *  BEGIN SELECTORS
+	 ************************************************************************** */
 	
-	public static class Selector extends BaseSelector {
-		
-		/** Gets a Session by ID, converts the string to a UUID internally */
-		public static SessionModel getById(String id) {
-			try {
-				return getById(id != null ? UUID.fromString(id) : null);
-			}
-			catch (IllegalArgumentException ex) {
-				//the string was not a valid UUID
-				return null;
-			}
+	/** Gets a Session by ID, converts the string to a UUID internally */
+	public static SessionModel getById(String id) {
+		try {
+			return getById(id != null ? UUID.fromString(id) : null);
 		}
-		
-		/** Gets a Session by ID */
-		public static SessionModel getById(UUID id) {
-			return id != null ? FINDER.byId(id) : null;
+		catch (IllegalArgumentException ex) {
+			//the string was not a valid UUID
+			return null;
 		}
-		
-		/** Gets the user associated with this session, or null if no user has been associated yet */
-		public static UserModel getUser(SessionModel session) {
-			return session != null && Validator.hasValidUserPk(session)
-						? UserModel.Selector.getById(session.userPk)
-						: null;
-		}
-		
 	}
 	
-	public static class Updater extends BaseUpdater {
-		
-		/**
-		 * Adds the Facebook auth token and expiry time to the session
-		 * @param session the session to alter
-		 * @param token the auth token
-		 * @param seconds number of seconds until the token expires
-		 */
-		public static void setFbAuthInfoAndUpdate(SessionModel session, String token, int seconds) {
-			if (session == null) {
-				Logger.debug("setFbAuthInfoAndUpdate called on null session");
-				return;
-			}
-			
-			session.fbToken = token;
-			session.fbTokenExpireTime = DbTypesUtil.add(DbTypesUtil.now(), seconds);
-			session.doUpdateAndRetry();
-			Logger.debug("Session " + session.pk + " updated with Facebook token " + session.fbToken);
-		}
-		
-		/** Adds the user pk to the session. Assumes that the given userPk is valid */
-		public static void setUserPkAndUpdate(SessionModel session, UUID userPk) {
-			if (session == null) {
-				Logger.debug("setUserPkAndUpdate called on null session");
-				return;
-			}
-			
-			session.userPk = userPk;
-			session.doUpdateAndRetry();
-			Logger.debug("Session " + session.pk + " updated with User reference " + session.userPk);
-		}
-		
+	/** Gets a Session by ID */
+	public static SessionModel getById(UUID id) {
+		return id != null ? FINDER.byId(id) : null;
 	}
 	
-	public static class Validator extends BaseValidator {
-		
-		/** Determines if the given ID is valid and it exists in the database */
-		public static boolean isValidExistingId(String id) {
-			return Selector.getById(id) != null;
-		}
-		
-		/**
-		 * @param session the session to check
-		 * @return true if this session has a Facebook auth token that has not expired
-		 */
-		public static boolean hasValidFbAuthInfo(SessionModel session) {
-			if (session == null) {
-				//this is a weird case, but forcing auth may solve it
-				Logger.warn("Null passed to hasValidFbAuthInfo method");
-				return false;
-			}
-			else {
-				return session.fbToken != null && !session.isFbtokenExpired;
-			}
-		}
-		
-		/**
-		 * @param session the session to check
-		 * @return true if the session has a reference to a user
-		 */
-		public static boolean hasValidUserPk(SessionModel session) {
-			if (session == null) {
-				//this is a weird case, but forcing auth may solve it
-				Logger.warn("Null passed to hasValidUserReference method");
-				return true;
-			}
-			else {
-				return session.userPk != null && UserModel.Validator.isValidExistingId(session.userPk);
-			}
-		}
-		
+	/** Gets the user associated with this session, or null if no user has been associated yet */
+	public UserModel getUser() {
+		return hasValidUserPk()
+				? UserModel.getById(userPk)
+				: null;
 	}
 	
+	/* **************************************************************************
+	 *  BEGIN UPDATERS
+	 ************************************************************************** */
+	
+	/**
+	 * Adds the Facebook auth token and expiry time to the session
+	 * @param session the session to alter
+	 * @param token the auth token
+	 * @param seconds number of seconds until the token expires
+	 */
+	public void setFbAuthInfoAndUpdate(String token, int seconds) {
+		fbToken = token;
+		fbTokenExpireTime = DbTypesUtil.add(DbTypesUtil.now(), seconds);
+		doUpdateAndRetry();
+	}
+	
+	/** Adds the user pk to the session. Assumes that the given userPk is valid */
+	public void setUserPkAndUpdate(UUID userPk) {
+		this.userPk = userPk;
+		doUpdateAndRetry();
+	}
+	
+	/* **************************************************************************
+	 *  BEGIN VALIDATORS
+	 ************************************************************************** */
+		
+	/** Determines if the given ID is valid and it exists in the database */
+	public static boolean isValidExistingId(String id) {
+		return getById(id) != null;
+	}
+	
+	/**
+	 * @param session the session to check
+	 * @return true if this session has a Facebook auth token that has not expired
+	 */
+	public boolean hasValidFbAuthInfo() {
+		return fbToken != null && !isFbtokenExpired;
+	}
+	
+	/**
+	 * @param session the session to check
+	 * @return true if the session has a reference to a user
+	 */
+	public boolean hasValidUserPk() {
+		return userPk != null && UserModel.isValidExistingId(userPk);
+	}
+		
 }

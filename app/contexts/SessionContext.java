@@ -65,8 +65,8 @@ public abstract class SessionContext extends BaseContext {
 		@Override
 		public SessionModel call() throws Exception {
 			String sessionId = Context.current().session().get(SessionModel.SESSION_ID_COOKIE_KEY);
-			if (sessionId != null && SessionModel.Validator.isValidExistingId(sessionId)) {
-				return SessionModel.Selector.getById(sessionId);
+			if (sessionId != null && SessionModel.isValidExistingId(sessionId)) {
+				return SessionModel.getById(sessionId);
 			}
 			else {
 				return null;
@@ -81,8 +81,8 @@ public abstract class SessionContext extends BaseContext {
 		@Override
 		public UserModel call() throws Exception {
 			SessionModel session = get();
-			if (session != null && SessionModel.Validator.hasValidUserPk(session)) {
-				return SessionModel.Selector.getUser(session);
+			if (session != null && session.hasValidUserPk()) {
+				return session.getUser();
 			}
 			else {
 				return null;
@@ -97,8 +97,8 @@ public abstract class SessionContext extends BaseContext {
 		@Override
 		public FbApi call() throws Exception {
 			SessionModel session = get();
-			if (session != null && SessionModel.Validator.hasValidFbAuthInfo(session)) {
-				return new FbApi(session.GETTER.fbToken());
+			if (session != null && session.hasValidFbAuthInfo()) {
+				return new FbApi(session.getFbToken());
 			}
 			else {
 				return null;

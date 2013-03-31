@@ -1,6 +1,5 @@
 package actions;
 
-import models.UserModel;
 import play.Logger;
 import play.mvc.Http.Context;
 import play.mvc.Result;
@@ -65,7 +64,7 @@ public class TryCatchFinallyAction extends BaseAction<TriedCaughtFinally> {
 		//TODO formalize this. And if it gets too hefty a method, it's got to move somewhere else
 		//if there is a user, modify their last access time
 		if (SessionContext.hasUser()) {
-			UserModel.Updater.setLastAccessTimeAndUpdate(SessionContext.user());
+			SessionContext.user().setLastAccessTimeAndUpdate();
 		}
 	}
 	

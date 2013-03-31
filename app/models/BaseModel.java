@@ -2,6 +2,7 @@ package models;
 
 import globals.Globals.DevelopmentSwitch;
 
+import java.lang.reflect.Field;
 import java.util.concurrent.Callable;
 
 import javax.persistence.MappedSuperclass;
@@ -40,10 +41,13 @@ public abstract class BaseModel extends Model {
 	 * Called before the retry of any DML operation.
 	 * Note that this is not called before the first try
 	 * 
+	 * Default implementation is just to log the operation
+	 * 
 	 * @param opType the type of the operation
 	 */
 	protected void hook_preModifyingOperationRetry(BasicDmlModifyingType opType) {
-		//do nothing. models can override this if they want to do something
+		//do nothing but log. models can override this if they want to do something
+		Logger.trace("Retrying " + opType.name() + " operation on " + this.getClass());
 	}
 
 	/**
@@ -52,12 +56,48 @@ public abstract class BaseModel extends Model {
 	 * This is called after all retries have completed, not before each retry.
 	 * For that functionality, see {@link #hook_preModifyingOperationRetry(BasicDmlModifyingType)}
 	 * 
+	 * Default implementation is just to log the operation
+	 * 
 	 * @param opType the type of the operation
 	 * @param wasSuccessful true if the operation succeeded, false if it failed.
 	 * 							Failure means that it failed after all retries
 	 */
 	protected void hook_postModifyingOperation(BasicDmlModifyingType opType, boolean wasSuccessful) {
-		//do nothing. models can override this if they want to do something
+		//do nothing but log. models can override this if they want to do something
+		Logger.trace(opType.name() + " operation on " + this.getClass() + (wasSuccessful ? " was successful" : " failed"));
+	}
+	
+	/* ***********************************************************************
+	 * BEGIN PUBLIC OVERRIDES
+	 *********************************************************************** */
+	
+	/** Default toString that returns the field=value mappings */
+	@Override
+	public String toString() {
+		StringBuilder str = new StringBuilder();
+		str.append(this.getClass()).append(":[\n");
+		
+		//iterate over columns
+		for (Field field : getClass().getDeclaredFields()) {
+			String value = null;
+			boolean valueIsException = false;
+			try {
+				value = field.get(this).toString();
+			}
+			catch (Exception ex) {
+				value = ex.getClass().getName();
+				valueIsException = true;
+			}
+			
+			str.append("\t")
+				.append(field.getName())
+				.append(valueIsException ? " threw " : " = ")
+				.append(value)
+				.append("\n");
+		}
+		
+		str.append("]");
+		return str.toString();
 	}
 	
 	/* ***********************************************************************
