@@ -60,7 +60,7 @@ public class SessionModel extends BaseModel {
 	public Date getLastAccessTime() { return (Date) lastAccessTime.clone(); } //defensive copy
 	
 	/** Private helper for DB interaction implementation */
-	private static final Finder<UUID, SessionModel> FINDER = new Finder<UUID, SessionModel>(
+	private static final Finder<UUID, SessionModel> FINDER = new Finder<>(
 		UUID.class, SessionModel.class
 	);
 	

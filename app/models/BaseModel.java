@@ -29,7 +29,7 @@ import contexts.RequestStatsContext;
 public abstract class BaseModel extends Model {
 	
 	private static final long serialVersionUID = 1L;
-	private static DevelopmentSwitch<Integer> NUM_OPERATION_RETRIES = new DevelopmentSwitch<Integer>(5);
+	private static DevelopmentSwitch<Integer> NUM_OPERATION_RETRIES = new DevelopmentSwitch<>(5);
 	
 	//TODO static analysis test that nobody calls Ebean.save(), update(), etc. directly
 	//TODO static analysis test that nobody reads or modifies columns in a model directly

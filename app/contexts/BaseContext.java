@@ -79,7 +79,7 @@ public abstract class BaseContext {
 		}
 		
 		/** The list of all registered context keys */
-		private static final Set<String> REGISTERED_KEYS = new HashSet<String>();
+		private static final Set<String> REGISTERED_KEYS = new HashSet<>();
 		
 		/** Determines if the given string is already registered as a context key */
 		public static synchronized boolean isRegistered(String key) {

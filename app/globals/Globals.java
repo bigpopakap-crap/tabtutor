@@ -24,8 +24,8 @@ public abstract class Globals {
 	 * that set it to something stupid
 	 * 
 	 * Examples of initializing them
-	 * 		DevelopmentSwitch<Integer> switch = new DevelopmentSwitch<Integer>(5) 			//creates one with the value 5
-	 * 		DevelopmentSwitch<Integer> switch = new DevelopmentSwitch<Integer>(5).set(8)	//creates one with production value 5, and sets it to 8
+	 * 		DevelopmentSwitch<Integer> switch = new DevelopmentSwitch<>(5) 			//creates one with the value 5
+	 * 		DevelopmentSwitch<Integer> switch = new DevelopmentSwitch<>(5).set(8)	//creates one with production value 5, and sets it to 8
 	 * 
 	 * @author bigpopakap
 	 * @since 2013-03-27

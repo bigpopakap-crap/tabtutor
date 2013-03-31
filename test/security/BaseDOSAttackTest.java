@@ -33,7 +33,7 @@ public class BaseDOSAttackTest extends BaseSecurityTest {
 		
 		/** List URLS to ping and test */
 		public List<String> list() {
-			return new LinkedList<String>();
+			return new LinkedList<>();
 		}
 		
 	}

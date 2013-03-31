@@ -37,7 +37,7 @@ public class RequestStatsContext extends BaseContext {
 	
 	@Override
 	public String toString() {
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		map.put("isComplete", isComplete());
 		if (isComplete()) map.put("duration", getDurationSeconds() + "s");
 		map.put("numDbFailures", getNumModelOperationFailures());

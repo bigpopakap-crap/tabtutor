@@ -18,7 +18,7 @@ public class ObjectUtils {
 	 * @param o
 	 */
 	public static Map<String, String> getFieldMap(Object o) {
-		Map<String, String> map = new HashMap<String, String>();
+		Map<String, String> map = new HashMap<>();
 		if (o == null) return map;
 		
 		//iterate over columns

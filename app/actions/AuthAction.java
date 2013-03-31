@@ -29,7 +29,7 @@ public class AuthAction extends BaseAction<Authed> {
 	
 	@Override
 	protected Set<Class<? extends BaseAction<?>>> hook_listDependencies() {
-		Set<Class<? extends BaseAction<?>>> list = new HashSet<Class<? extends BaseAction<?>>>();
+		Set<Class<? extends BaseAction<?>>> list = new HashSet<>();
 		list.add(SessionAction.class);
 		return list;
 	}

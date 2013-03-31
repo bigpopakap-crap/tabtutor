@@ -76,7 +76,7 @@ public abstract class BaseApi<R extends BaseApiResponse<?>> {
 		if (urlPath == null) throw new IllegalArgumentException("UrlPath cannot be null");
 		
 		//generate the parameter map, add common params, and convert them to a query string
-		if (params == null) params = new HashMap<String, String>();
+		if (params == null) params = new HashMap<>();
 		hook_modifyParams(method, urlDomain, urlPath, params);
 		
 		//create final versions of variables
@@ -91,24 +91,24 @@ public abstract class BaseApi<R extends BaseApiResponse<?>> {
 			resp = rawQuery(method, urlDomain + urlPath, params);
 		}
 		catch (ApiNoResponseException ex) {
-			return new ApiResponseOption<R>(
+			return new ApiResponseOption<>(
 				new ApiNoResponseException()
 			);
 		}
 		
 		//map the response object to a response option
 		if (resp == null) {
-			return new ApiResponseOption<R>(
+			return new ApiResponseOption<>(
 				new ApiNoResponseException()
 			);
 		}
 		else if (resp.getStatus() != Status.OK) {
-			return new ApiResponseOption<R>(
+			return new ApiResponseOption<>(
 				new ApiErrorCodeException(resp.getStatus())
 			);
 		}
 		else {
-			return new ApiResponseOption<R>(hook_mapResponse(fMethod, fUrlDomain, fUrlPath, fParams, resp));
+			return new ApiResponseOption<>(hook_mapResponse(fMethod, fUrlDomain, fUrlPath, fParams, resp));
 		}
 	}
 	
@@ -128,7 +128,7 @@ public abstract class BaseApi<R extends BaseApiResponse<?>> {
 		if (url == null) throw new IllegalArgumentException("Url cannot be null");
 		
 		//generate the parameter map, and convert them to a query string
-		if (params == null) params = new HashMap<String, String>();
+		if (params == null) params = new HashMap<>();
 		String paramStr = mapToQueryString(params);
 		
 		//generate the request promise depending on whether we're using POST or GET
@@ -194,7 +194,7 @@ public abstract class BaseApi<R extends BaseApiResponse<?>> {
 	protected static final String mapToQueryString(String... params) throws IllegalArgumentException {
 		if (params.length % 2 != 0) throw new IllegalArgumentException("There must be an even number of params");
 		
-		Map<String, String> map = new HashMap<String, String>();
+		Map<String, String> map = new HashMap<>();
 		for (int i = 0; i < params.length; i += 2) {
 			map.put(params[i], params[i + 1]);
 		}
@@ -213,10 +213,10 @@ public abstract class BaseApi<R extends BaseApiResponse<?>> {
 	 *  */
 	protected static final Map<String, String> queryStringToMap(String params) {
 		if (params == null || params.isEmpty()) {
-			return new TreeMap<String, String>();
+			return new TreeMap<>();
 		}
 		
-		Map<String, String> map = new HashMap<String, String>();
+		Map<String, String> map = new HashMap<>();
 		
 		//TODO make this more efficient by using regex
 		//start after the question mark, or at the beginning of the string

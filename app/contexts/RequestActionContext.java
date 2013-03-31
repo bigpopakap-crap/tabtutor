@@ -53,7 +53,7 @@ public class RequestActionContext extends BaseContext {
 		@Override
 		public List<Class<? extends BaseAction<?>>> call() throws Exception {
 			//just create a new one, since there's no persistent storage for this
-			return new LinkedList<Class<? extends BaseAction<?>>>();
+			return new LinkedList<>();
 		}
 		
 	};

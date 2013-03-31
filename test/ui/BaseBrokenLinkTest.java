@@ -44,7 +44,7 @@ public class BaseBrokenLinkTest extends BaseFuncTest {
 		/** Get all the urls on the page that should be tested */
 		public List<String> locate() {
 			//TODO get all <a href="">, <script src=""> or <link href=""> strings on the page
-			return new LinkedList<String>();
+			return new LinkedList<>();
 		}
 		
 		/** Validate the string */

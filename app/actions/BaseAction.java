@@ -80,7 +80,7 @@ public abstract class BaseAction<T> extends Action<T> {
 	}
 	
 	private List<Class<? extends BaseAction<?>>> listDependencies() {
-		List<Class<? extends BaseAction<?>>> dependencies = new LinkedList<Class<? extends BaseAction<?>>>();
+		List<Class<? extends BaseAction<?>>> dependencies = new LinkedList<>();
 		
 		//add the default dependencies if this is not one of them
 		if (!(this instanceof TryCatchFinallyAction)) {

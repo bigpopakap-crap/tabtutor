@@ -22,10 +22,10 @@ public abstract class ConcurrentUtil {
 	
 	/** Setting to false will not use threads for these method calls for debugging purposes
 	 *  This value is ignored and treated as true if in production mode */
-	public static final DevelopmentSwitch<Boolean> USE_THREADING = new DevelopmentSwitch<Boolean>(false);
+	public static final DevelopmentSwitch<Boolean> USE_THREADING = new DevelopmentSwitch<>(false);
 	
 	/** Default number of seconds to wait */
-	private static final DevelopmentSwitch<Long> DEFAULT_THREAD_TIMEOUT_SECONDS = new DevelopmentSwitch<Long>(10L).set(20L);
+	private static final DevelopmentSwitch<Long> DEFAULT_THREAD_TIMEOUT_SECONDS = new DevelopmentSwitch<>(10L).set(20L);
 
 	/**
 	 * Executes the given callable on a separate thread, awaits its return value and returns it here
@@ -57,11 +57,11 @@ public abstract class ConcurrentUtil {
 		try {
 			//initialize synchronization variables
 			CountDownLatch latch = new CountDownLatch(1);
-			AtomicReference<Exception> atomicException = new AtomicReference<Exception>(null);
-			AtomicReference<T> atomicReturned = new AtomicReference<T>(null);
+			AtomicReference<Exception> atomicException = new AtomicReference<>(null);
+			AtomicReference<T> atomicReturned = new AtomicReference<>(null);
 			
 			//start the callable in a new thread
-			threadId = forkThread(new ThreadedMethodRunner<T>(latch, atomicException, atomicReturned, callable));
+			threadId = forkThread(new ThreadedMethodRunner<>(latch, atomicException, atomicReturned, callable));
 			Logger.trace("About to start threaded method in thread " + threadId);
 			
 			//wait for the thread and get its return values

@@ -61,7 +61,7 @@ public class UserModel extends BaseModel {
 	public boolean isFirstLogin() { return isFirstLogin; }
 	
 	/** Private helper for DB interaction implementation */
-	private static final Finder<UUID, UserModel> FINDER = new Finder<UUID, UserModel>(
+	private static final Finder<UUID, UserModel> FINDER = new Finder<>(
 		UUID.class, UserModel.class
 	);
 	
