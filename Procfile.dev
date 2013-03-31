@@ -1,1 +1,1 @@
-web: play "start -DapplyEvolutions.default=true"
+web: play "run $WTF_HTTP_PORT"
