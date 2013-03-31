@@ -1,6 +1,5 @@
 package actions;
 
-import models.UserModel;
 import play.Logger;
 import play.mvc.Http.Context;
 import play.mvc.Result;
@@ -8,6 +7,7 @@ import actions.ActionAnnotations.TriedCaughtFinally;
 import contexts.AppContext;
 import contexts.SessionContext;
 import controllers.exceptions.BaseExposedException;
+import controllers.exceptions.InternalServerErrorExposedException;
 
 /**
  * This action will catch any exceptions in the delegated action, and
@@ -47,7 +47,7 @@ public class TryCatchFinallyAction extends BaseAction<TriedCaughtFinally> {
 			Logger.error("Exception caught in " + this.getClass(), ex);
 			//TODO figure out which default error to display to the user
 			if (AppContext.Mode.isProduction()) {
-				return BaseExposedException.Factory.internalServerError(ex).result();
+				return new InternalServerErrorExposedException(ex).result();
 			}
 			else {
 				throw ex;
@@ -64,7 +64,7 @@ public class TryCatchFinallyAction extends BaseAction<TriedCaughtFinally> {
 		//TODO formalize this. And if it gets too hefty a method, it's got to move somewhere else
 		//if there is a user, modify their last access time
 		if (SessionContext.hasUser()) {
-			UserModel.Updater.setLastAccessTimeAndUpdate(SessionContext.user());
+			SessionContext.user().setLastAccessTimeAndUpdate();
 		}
 	}
 	

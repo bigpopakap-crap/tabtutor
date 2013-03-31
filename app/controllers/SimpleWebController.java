@@ -20,7 +20,7 @@ public class SimpleWebController extends BaseWebController {
 	/** Show the error page for when no other page was found */
 	public static Result pageNotFound(String path) {
 		//do nothing with the path, just throw a page not found error page exception
-		throw ErrorPageException.Factory.notFoundPage(null);
+		throw new NotFoundErrorPageException(null);
 	}
 	
 }

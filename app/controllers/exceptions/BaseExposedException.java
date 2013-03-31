@@ -19,6 +19,8 @@ public abstract class BaseExposedException extends RuntimeException {
 
 	private static final long serialVersionUID = -935805780499802623L;
 	
+	//do *NOT* support a no-argument constructor in order to force classes to specify a cause
+	
 	/** Only define this constructor so all subclasses are forced to specify the cause */
 	public BaseExposedException(Throwable cause) {
 		super(cause);
@@ -26,52 +28,5 @@ public abstract class BaseExposedException extends RuntimeException {
 	
 	/** Returns the result representing this exception that should be sent to the client */
 	public abstract Result result();
-	
-	/** This class has static methods to create default instances of this class */
-	public static class Factory {
-		
-		/** Returns an exposed exception that simply responds with a NOT FOUND error with no body */
-		public static BaseExposedException notFound(Throwable cause) {
-			return notFound(cause, null);
-		}
-		
-		/** Returns an exposed exception that simply responds with a NOT FOUND error with the given message */
-		public static BaseExposedException notFound(Throwable cause, final String msg) {
-			return new BaseExposedException(cause) {
-
-				private static final long serialVersionUID = 3981117505185668591L;
-
-				@Override
-				public Result result() {
-					return msg != null
-							? play.mvc.Results.notFound(msg)
-							: play.mvc.Results.notFound();
-				}
-				
-			};
-		}
-		
-		/** Returns an exposed exception that simply responds with an INTERNAL SERVER ERROR with no body */
-		public static BaseExposedException internalServerError(Throwable cause) {
-			return internalServerError(cause, null);
-		}
-		
-		/** Returns an exposed exception that simply responds with an INTERNAL SERVER ERROR with the given message */
-		public static BaseExposedException internalServerError(Throwable cause, final String msg) {
-			return new BaseExposedException(cause) {
-
-				private static final long serialVersionUID = 7329710051663165079L;
-
-				@Override
-				public Result result() {
-					return msg != null
-							? play.mvc.Results.internalServerError(msg)
-							: play.mvc.Results.internalServerError();
-				}
-				
-			};
-		}
-		
-	}
 
 }

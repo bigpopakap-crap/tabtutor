@@ -42,7 +42,7 @@ public class AuthAction extends BaseAction<Authed> {
 		
 		//if it is a real user and we need to force re-auth or the auth info is invalid, redirect to fb login
 		//TODO add ability to force re-authentication: need to worry about getting caught in infinite loop
-		if (!SessionModel.Validator.hasValidFbAuthInfo(session)) {
+		if (!session.hasValidFbAuthInfo()) {
 			Logger.debug("Session needs Facebook auth. Redirecting to the login flow");
 			return FbAuthWebController.fblogin(null, null, ctx.request().path());
 		}
@@ -52,7 +52,7 @@ public class AuthAction extends BaseAction<Authed> {
 		if (fbApi == null) throw new IllegalStateException("FbApi should have been populated by now");
 
 		//ensure that a user is referenced by the session
-		if (!SessionModel.Validator.hasValidUserPk(session)) {
+		if (!session.hasValidUserPk()) {
 			Logger.debug("Session needs a user reference. Fetching Facebook ID and looking up user object");
 			
 			//start by getting the user's Facebook ID from the Facebook API
@@ -65,13 +65,13 @@ public class AuthAction extends BaseAction<Authed> {
 				String email = fbJson.email();
 				
 				//get the user associated with this Facebook ID, or create one
-				UserModel user = UserModel.Selector.getByFbId(fbId);
+				UserModel user = UserModel.getByFbId(fbId);
 				if (user == null) {
-					user = UserModel.Factory.createNewRealUserAndSave(fbId, firstName, lastName, email);
+					user = new UserModel(fbId, firstName, lastName, email);
 				}
 				
 				//add this user ID to the session object
-				SessionModel.Updater.setUserPkAndUpdate(session, user.pk);
+				session.setUserPkAndUpdate(user.getPk());
 			}
 			catch (BaseApiException e) {
 				RequestErrorContext.setFbConnectionError(true);
