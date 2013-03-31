@@ -67,7 +67,7 @@ public class AuthAction extends BaseAction<Authed> {
 				//get the user associated with this Facebook ID, or create one
 				UserModel user = UserModel.getByFbId(fbId);
 				if (user == null) {
-					user = new UserModel(fbId, firstName, lastName, email);
+					user = UserModel.create(fbId, firstName, lastName, email);
 				}
 				
 				//add this user ID to the session object

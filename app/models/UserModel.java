@@ -70,14 +70,13 @@ public class UserModel extends BaseModel {
 	 ************************************************************************** */
 	
 	/* **************************************************************************
-	 *  BEGIN CONSTRUCTORS/SAVERS
+	 *  BEGIN CONSTRUCTORS (PRIVATE)
 	 ************************************************************************** */
 	
 	/**
 	 * Creates a user with the given information
-	 * Saves it to the DB
 	 */
-	public UserModel(String fbId, String firstName, String lastName, String email) {
+	private UserModel(String fbId, String firstName, String lastName, String email) {
 		Date now = DbTypesUtil.now();
 		
 		this.pk = UUID.randomUUID();
@@ -91,9 +90,17 @@ public class UserModel extends BaseModel {
 		this.lastAccessTime = now;
 		this.lastLoginTime = now;
 		this.secondToLastLoginTime = null;
-		
-		//save this object
-		doSaveAndRetry();
+	}
+	
+	/* **************************************************************************
+	 *  BEGIN CREATORS (PUBLIC)
+	 ************************************************************************** */
+	
+	/** Creates a new user and saves it to the DB */
+	public static UserModel create(String fbId, String firstName, String lastName, String email) {
+		UserModel user = new UserModel(fbId, firstName, lastName, email);
+		user.doSaveAndRetry();
+		return user;
 	}
 	
 	/* **************************************************************************

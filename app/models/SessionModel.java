@@ -79,16 +79,14 @@ public class SessionModel extends BaseModel {
 	}
 	
 	/* **************************************************************************
-	 *  BEGIN CONSTRUCTORS/SAVERS
+	 *  BEGIN CONSTRUCTORS (PRIVATE)
 	 ************************************************************************** */
 	
 	/**
 	 * Creates a default new session with a random ID, no associated user,
 	 * no Facebook auth information, and the current start and update times.
-	 * 
-	 * Saves it to the DB
 	 */
-	public SessionModel() {
+	private SessionModel() {
 		Date now = DbTypesUtil.now();
 		
 		this.pk = UUID.randomUUID();
@@ -97,9 +95,17 @@ public class SessionModel extends BaseModel {
 		this.fbTokenExpireTime = null;
 		this.startTime = now;
 		this.lastAccessTime = now;
-		
-		//save the object
-		doSaveAndRetry();
+	}
+	
+	/* **************************************************************************
+	 *  BEGIN CREATORS (PUBLIC)
+	 ************************************************************************** */
+	
+	/** Creates a new session and saves it to the DB */
+	public static SessionModel create() {
+		SessionModel session = new SessionModel();
+		session.doSaveAndRetry();
+		return session;
 	}
 	
 	/* **************************************************************************

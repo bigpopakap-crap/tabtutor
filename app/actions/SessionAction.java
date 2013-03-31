@@ -27,7 +27,7 @@ public class SessionAction extends BaseAction<Sessioned> {
 		SessionModel session = SessionContext.get(); //use this method because it is cached
 		if (session == null || configuration.forceRefresh()) {
 			//there is no session ID set, so create it and add it to the cookie
-			SessionModel newSession = new SessionModel();
+			SessionModel newSession = SessionModel.create();
 			ctx.session().put(SessionModel.SESSION_ID_COOKIE_KEY, newSession.getPk_String());
 			Logger.info("Put session " + newSession.getPk() + " in cookie for IP " + ctx.request().remoteAddress());
 		}
