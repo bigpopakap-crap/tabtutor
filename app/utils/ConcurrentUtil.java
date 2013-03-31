@@ -9,6 +9,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import play.Logger;
+import play.mvc.Http.Context;
 
 /**
  * Provides utility methods for executing methods in their own thread, waiting for them
@@ -22,7 +23,7 @@ public abstract class ConcurrentUtil {
 	
 	/** Setting to false will not use threads for these method calls for debugging purposes
 	 *  This value is ignored and treated as true if in production mode */
-	public static final DevelopmentSwitch<Boolean> USE_THREADING = new DevelopmentSwitch<>(false);
+	public static final DevelopmentSwitch<Boolean> USE_THREADING = new DevelopmentSwitch<>(true);
 	
 	/** Default number of seconds to wait */
 	private static final DevelopmentSwitch<Long> DEFAULT_THREAD_TIMEOUT_SECONDS = new DevelopmentSwitch<>(10L).set(20L);
@@ -61,8 +62,12 @@ public abstract class ConcurrentUtil {
 			AtomicReference<T> atomicReturned = new AtomicReference<>(null);
 			
 			//start the callable in a new thread
-			threadId = forkThread(new ThreadedMethodRunner<>(latch, atomicException, atomicReturned, callable));
+			Thread thread = new Thread(
+				new ThreadedMethodRunner<>(Context.current(), latch, atomicException, atomicReturned, callable)
+			);
+			threadId = thread.getId();
 			Logger.trace("About to start threaded method in thread " + threadId);
+			thread.start();
 			
 			//wait for the thread and get its return values
 			if (!latch.await(timeoutSeconds, TimeUnit.SECONDS)) {
@@ -79,31 +84,6 @@ public abstract class ConcurrentUtil {
 		finally {
 			Logger.trace("Thread " + threadId + (threadCompleted ? " completed successfully" : " timed out"));
 		}
-	}
-	
-	/** Executes the callable in a new thread, without doing any waiting
-	 *  @return the ID of the thread, or -1 if no threading is used */
-	public static <T> long forkThread(Callable<T> callable) {
-		//bypass the creating a runnable if we're not threading
-		if (USE_THREADING.get()) {
-			return forkThread(callableToRunnable(callable));
-		}
-		else {
-			suppressCall(callable);
-			return -1;
-		}
-	}
-	
-	/** Executes the runnable in a new thread, without doing any waiting
-	 *  @return the ID of the thread */
-	public static <T> long forkThread(Runnable runnable) {
-		Thread thread = new Thread(runnable);
-		
-		//either start in a new thread or in current thread
-		if (USE_THREADING.get()) thread.start();
-		else thread.run();
-		
-		return thread.getId();
 	}
 	
 	/** Converts a callable to a runnable */
@@ -140,6 +120,7 @@ public abstract class ConcurrentUtil {
 	 */
 	private static class ThreadedMethodRunner<T> implements Runnable {
 		
+		private final Context ctx;
 		private final CountDownLatch latch;
 		private final AtomicReference<Exception> atomicException;
 		private final AtomicReference<T> atomicReturned;
@@ -152,13 +133,16 @@ public abstract class ConcurrentUtil {
 		 * @param atomicRef ref to put the return value of the method
 		 * @param callable the callable that executes the method
 		 */
-		private ThreadedMethodRunner(CountDownLatch latch, AtomicReference<Exception> atomicException,
+		private ThreadedMethodRunner(Context ctx,
+									 CountDownLatch latch, AtomicReference<Exception> atomicException,
 									 AtomicReference<T> atomicRef, Callable<T> callable) {
+			if (ctx == null) throw new IllegalArgumentException("ctx cannot be null");
 			if (latch == null) throw new IllegalArgumentException("latch cannot be null");
 			if (atomicException == null) throw new IllegalArgumentException("atomicException cannot be null");
 			if (atomicRef == null) throw new IllegalArgumentException("atomicRef cannot be null");
 			if (callable == null) throw new IllegalArgumentException("callable cannot be null");
 			
+			this.ctx = ctx;
 			this.latch = latch;
 			this.atomicException = atomicException;
 			this.atomicReturned = atomicRef;
@@ -168,6 +152,7 @@ public abstract class ConcurrentUtil {
 		@Override
 		public void run() {
 			try {
+				Context.current.set(ctx);
 				atomicReturned.set(callable.call());
 			}
 			catch (Exception ex) {
