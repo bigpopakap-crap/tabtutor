@@ -40,6 +40,8 @@ public abstract class BaseContext {
 		return t;
 	}
 	
+	/** Helper to set context key values in the context.
+	 *  This does no checks, and will overwrite existing values */
 	protected static synchronized void set(ContextKey contextKey, Object value) {
 		Context.current().args.put(contextKey.get(), value);
 	}
