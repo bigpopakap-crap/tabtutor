@@ -24,10 +24,10 @@ public abstract class ActionAnnotations {
 	 * @since 2013-03-06
 	 *
 	 */
-	@With(TryCatchFinallyAction.class)
+	@With(TryCatchAction.class)
 	@Target({ElementType.TYPE, ElementType.METHOD})
 	@Retention(RetentionPolicy.RUNTIME)
-	public static @interface TriedCaughtFinally {}
+	public static @interface TriedCaught {}
 	
 	/**
 	 * Annotation for applying ModeProtectAction

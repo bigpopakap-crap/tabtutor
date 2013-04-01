@@ -3,7 +3,7 @@ package actions;
 import play.Logger;
 import play.mvc.Http.Context;
 import play.mvc.Result;
-import actions.ActionAnnotations.TriedCaughtFinally;
+import actions.ActionAnnotations.TriedCaught;
 import contexts.AppContext;
 import contexts.RequestStatsContext;
 import contexts.SessionContext;
@@ -20,7 +20,7 @@ import controllers.exceptions.InternalServerErrorExposedException;
  * @since 2013-03-06
  *
  */
-public class TryCatchFinallyAction extends BaseAction<TriedCaughtFinally> {
+public class TryCatchAction extends BaseAction<TriedCaught> {
 	
 	/** If a request takes more than this number of seconds, log it with an error level */
 	private static final double REQUEST_DURATION_ERROR_THRESHOLD_SECONDS = 5;
