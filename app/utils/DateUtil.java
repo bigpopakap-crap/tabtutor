@@ -9,7 +9,7 @@ import java.util.Date;
  * @since 2013-02-24
  *
  */
-public abstract class DbTypesUtil {
+public abstract class DateUtil {
 	
 	/** Sugar for creating a Date representing the current time */
 	public static Date now() {
