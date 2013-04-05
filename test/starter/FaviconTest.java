@@ -1,4 +1,4 @@
-package ui;
+package starter;
 
 import static play.test.Helpers.GET;
 import static play.test.Helpers.fakeRequest;

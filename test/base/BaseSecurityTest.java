@@ -1,6 +1,5 @@
-package security;
+package base;
 
-import base.BaseFuncTest;
 
 /**
  * Base class for all security-related tests
