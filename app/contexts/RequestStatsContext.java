@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-import utils.DbTypesUtil;
+import utils.DateUtil;
 
 /**
  * Class for gathering stats about the request
@@ -25,7 +25,7 @@ public class RequestStatsContext extends BaseContext {
 	
 	private RequestStatsContext() {
 		this.isComplete = false;
-		this.startTime = DbTypesUtil.nowMillis();
+		this.startTime = DateUtil.nowMillis();
 		this.endTime = 0;
 		this.numModelOperationFailures = 0;
 		this.numModelOperationRetries = 0;
@@ -77,7 +77,7 @@ public class RequestStatsContext extends BaseContext {
 	/** Marks the request completed */
 	public void setCompleted() {
 		isComplete = true;
-		endTime = DbTypesUtil.nowMillis();
+		endTime = DateUtil.nowMillis();
 	}
 	
 	/** Add one to the number of database/model operation failures */
