@@ -1,4 +1,4 @@
-package ui;
+package base;
 
 import static play.test.Helpers.running;
 import static play.test.Helpers.testServer;
@@ -8,25 +8,20 @@ import java.util.List;
 
 import org.junit.Assert;
 
-import base.BaseFuncTest;
 import contexts.AppContext;
 
 /**
- * Base test for ensuring that non-dynamic strings use the messages framework, and can
- * therefore be translated easily
- * 
- * This workSs by providing some protected helper methods to do the test, and each
- * test can override hooks to navigate to pages, and select which strings should be tested
+ * This class is a base class for tests that make sure links are not broken
  * 
  * @author bigpopakap
  * @since 2013-02-26
  *
  */
-public abstract class BaseMessagesTest extends BaseFuncTest {
+public class BaseBrokenLinkTest extends BaseFuncTest {
 	
 	/**
 	 * A class that can be overridden and passed in to implement the details of a test run
-	 * See {@link #BasicMessagesTest.doTestHardcodedStrings()} as an example of how to use this class
+	 * See {@link #BaseBrokenLinkTest.doTestLinksNotBroken()} as an example of how to use this class
 	 * 
 	 * @author bigpopakap
 	 * @since 2013-02-26
@@ -45,31 +40,31 @@ public abstract class BaseMessagesTest extends BaseFuncTest {
 			//TODO go to a default page?
 		}
 		
-		/** Get all the Strings on the page that should be tested */
+		/** Get all the urls on the page that should be tested */
 		public List<String> locate() {
+			//TODO get all <a href="">, <script src=""> or <link href=""> strings on the page
 			return new LinkedList<>();
 		}
 		
 		/** Validate the string */
 		public boolean validate(String str) {
-			//TODO do some actual validation
+			//TODO do navigate to the page and make sure the response exists
 			return false;
 		}
 		
 	}
 
 	/**
-	 * Helper to test the strings. The hooks can be passed in to control the flow of this method
+	 * Helper to test the links. The hooks can be passed in to control the flow of this method
 	 * @param hooks
 	 */
-	protected void doTestHardcodedStrings(TestCaseHooks hooks) {
+	protected void doTestLinksNotBroken(TestCaseHooks hooks) {
 		final TestCaseHooks nonNullHooks = hooks != null ? hooks : new TestCaseHooks();
 		
 		running(testServer(AppContext.Var.HTTP_PORT.valAsInt()), new Runnable() {
 
 			@Override
 			public void run() {
-				//TODO set the language to the debug language
 				nonNullHooks.initialize();
 				nonNullHooks.navigate();
 				List<String> strings = nonNullHooks.locate();
@@ -81,5 +76,5 @@ public abstract class BaseMessagesTest extends BaseFuncTest {
 		});
 
 	}
-	
+
 }
