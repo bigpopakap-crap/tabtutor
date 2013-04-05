@@ -1,7 +1,7 @@
 package contexts;
 
 /**
- * 
+ * Context that holds the default transaction for each request
  * 
  * @author bigpopakap
  * @since 2013-04-04

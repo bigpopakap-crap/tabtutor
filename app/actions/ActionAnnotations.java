@@ -30,6 +30,18 @@ public abstract class ActionAnnotations {
 	public static @interface TriedCaught {}
 	
 	/**
+	 * Annotation for applying TransactionAction
+	 * 
+	 * @author bigpopakap
+	 * @since 2013-04-04
+	 *
+	 */
+	@With(TransactionAction.class)
+	@Target({ElementType.TYPE, ElementType.METHOD})
+	@Retention(RetentionPolicy.RUNTIME)
+	public static @interface Transactioned {}
+	
+	/**
 	 * Annotation for applying ModeProtectAction
 	 * 
 	 * @author bigpopakap
