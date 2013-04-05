@@ -1,4 +1,4 @@
-package api.exceptions;
+package api;
 
 /**
  * General API exception for when the service does not respond (i.e. the request
@@ -12,11 +12,11 @@ public class ApiNoResponseException extends BaseApiException {
 	
 	private static final long serialVersionUID = -4920976263519573529L;
 	
-	public ApiNoResponseException() {
+	ApiNoResponseException() {
 		super();
 	}
 	
-	public ApiNoResponseException(Throwable cause) {
+	ApiNoResponseException(Throwable cause) {
 		super(cause);
 	}
 

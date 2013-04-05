@@ -9,7 +9,7 @@ import play.Logger;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import actions.ActionAnnotations.Authed;
-import api.exceptions.BaseApiException;
+import api.BaseApiException;
 import api.fb.FbApi;
 import api.fb.FbJsonResponse;
 import contexts.RequestErrorContext;

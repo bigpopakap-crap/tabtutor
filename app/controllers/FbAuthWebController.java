@@ -6,7 +6,7 @@ import play.Logger;
 import play.mvc.Result;
 import actions.ActionAnnotations.Sessioned;
 import actions.ActionAnnotations.TriedCaught;
-import api.exceptions.ApiNoResponseException;
+import api.ApiNoResponseException;
 import api.fb.FbApi;
 import contexts.SessionContext;
 
