@@ -10,8 +10,8 @@ package main;
 public class MainApp extends BaseMain {
 	
 	/** Run the app */
-	public static void main(String[] args) throws Exception {
-		foreman("Procfile.dev", "env.dev");
+	public static void main(String[] args) {
+		foreman(APP_PROCFILE_NAME, ENV_FILE_NAME);
 	}
 
 }

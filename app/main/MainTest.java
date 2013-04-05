@@ -10,8 +10,8 @@ package main;
 public class MainTest extends BaseMain {
 	
 	/** Runs the tests */
-	public static void main(String[] args) throws Exception {
-		foreman("Procfile.test", "env.dev");
+	public static void main(String[] args) {
+		foreman(TEST_PROCFILE_NAME, ENV_FILE_NAME);
 	}
 
 }

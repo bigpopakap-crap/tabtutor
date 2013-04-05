@@ -14,46 +14,55 @@ import play.Logger;
  */
 public abstract class BaseMain {
 	
+	protected static final String APP_PROCFILE_NAME = "Procfile.dev";
+	protected static final String TEST_PROCFILE_NAME = "Procfile.test";
+	protected static final String ENV_FILE_NAME = "env.dev";
+	
 	/**
 	 * Launches foreman on the given procfile and environment file and prints the output
-	 * of that process to stdout. Adds a hook to shutdown the child process when this process exits
+	 * of that process to stdout.
+	 * 
+	 * Adds a hook to shutdown the child process when this process exits, and
+	 * waits for the process to exit
 	 * 
 	 * @param procfileName name of the procfile to use, or no procfile if this is null
 	 * @param envFileName name of the environment file to use, or no environment file if this is null
 	 */
-	protected static final void foreman(String procfileName, String envFileName) throws Exception {
-		//TODO detect what OS this is and run the appropriate command
-		//start the process
-		final Process process = Runtime.getRuntime().exec("cmd.exe /c foreman start" +
-													(procfileName != null ? " -f " + procfileName : "") +
-													(envFileName != null ? " -e " + envFileName : ""));
-		
-		//pipe the output
-		final BufferedReader inReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-		String line;
-		while ((line = inReader.readLine()) != null) {
-			System.out.println(line);
+	protected static final void foreman(String procfileName, String envFileName) {
+		BufferedReader outputReader = null;
+		try {
+			//TODO detect what OS this is and run the appropriate command
+			//start the process
+			final Process process = Runtime.getRuntime().exec("cmd.exe /c foreman start" +
+															 (procfileName != null ? " -f " + procfileName : "") +
+															 (envFileName != null ? " -e " + envFileName : ""));
+			
+			//get the reader for the child's output and pipe it
+			outputReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+			String outputLine;
+			while ((outputLine = outputReader.readLine()) != null) {
+				System.out.println(outputLine);
+			}
+			
+			//TODO figure out how to kill the process if/when Eclipse is killed
+			//wait for the process to end
+			process.waitFor();
 		}
-		
-		//kill the child process on JVM shutdown
-		Runnable destroyHook = new Runnable() {
-			@Override
-			public void run() {
-				//kill the process
-				process.destroy();
-				
-				//close the reader
-				if (inReader != null) {
-					try {
-						inReader.close();
-					}
-					catch (Exception ex) {
-						Logger.error("Error closing stream", ex);
-					}
+		catch (Exception ex) {
+			 Logger.error("Exception caught while running foreman", ex);
+		}
+		finally {
+			if (outputReader != null) {
+				try {
+					outputReader.close();
+				}
+				catch (Exception ex) {
+					Logger.error("Exception caught while closing stream", ex);
 				}
 			}
-		};
-		Runtime.getRuntime().addShutdownHook(new Thread(destroyHook));
+			
+			Logger.info("Foreman process ended");
+		}
 	}
 
 }
