@@ -4,6 +4,7 @@ import models.SessionModel;
 import models.UserModel;
 import play.Logger;
 import play.mvc.Result;
+import actions.ActionAnnotations.AccessTimed;
 import actions.ActionAnnotations.Sessioned;
 import actions.ActionAnnotations.TriedCaught;
 import api.ApiNoResponseException;
@@ -36,7 +37,7 @@ public class FbAuthWebController extends BaseWebController {
 	 * @param state the CSRF token
 	 * @param targetUrl the url to redirect after login
 	 */
-	@TriedCaught @Sessioned
+	@TriedCaught @AccessTimed @Sessioned
 	public static Result fblogin(final String code, String state, String targetUrl) {
 		if (targetUrl == null) targetUrl = "/";
 		

@@ -85,15 +85,17 @@ public abstract class BaseAction<T> extends Action<T> {
 	}
 	
 	private List<Class<? extends BaseAction<?>>> listDependencies() {
+		//add the default dependencies
 		List<Class<? extends BaseAction<?>>> dependencies = new LinkedList<>();
-		
-		//add the default dependencies if this is not one of them
-		if (!(this instanceof TryCatchAction)) {
-			dependencies.add(TryCatchAction.class);
-		}
+		dependencies.add(TryCatchAction.class);
+		dependencies.add(AccessTimeAction.class);
 		
 		//add dependencies specific to the subclass
 		dependencies.addAll(hook_listDependencies());
+		
+		//remove this action from the list of default dependencies
+		while (dependencies.remove(getClass())) { /* do nothing */ };
+		
 		return dependencies;
 	}
 	

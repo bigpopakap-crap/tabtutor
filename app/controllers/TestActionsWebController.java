@@ -1,9 +1,10 @@
 package controllers;
 
 import play.mvc.Result;
+import actions.ActionAnnotations.AccessTimed;
 import actions.ActionAnnotations.Authed;
-import actions.ActionAnnotations.TriedCaught;
 import actions.ActionAnnotations.Sessioned;
+import actions.ActionAnnotations.TriedCaught;
 
 /**
  * Test pages that use various annotations
@@ -14,12 +15,12 @@ import actions.ActionAnnotations.Sessioned;
  */
 public class TestActionsWebController extends TestWebController {
 	
-	@TriedCaught @Sessioned
+	@TriedCaught @AccessTimed @Sessioned
 	public static Result sessionAction() {
 		return ok("yay");
 	}
 	
-	@TriedCaught @Sessioned @Authed
+	@TriedCaught @AccessTimed @Sessioned @Authed
 	public static Result authAction() {
 		return ok("yay");
 	}
