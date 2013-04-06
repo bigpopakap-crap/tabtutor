@@ -30,13 +30,32 @@ public abstract class ActionAnnotations {
 	public static @interface TriedCaught {}
 	
 	/**
+	 * Annotation for applying AccessTimeAction
+	 * 
+	 * @author bigpopakap
+	 * @since 2013-03-06
+	 *
+	 */
+	@With({
+		TryCatchAction.class,
+		AccessTimeAction.class
+	})
+	@Target({ElementType.TYPE, ElementType.METHOD})
+	@Retention(RetentionPolicy.RUNTIME)
+	public static @interface AccessTimed {}
+	
+	/**
 	 * Annotation for applying ModeProtectAction
 	 * 
 	 * @author bigpopakap
 	 * @since 2013-03-06
 	 *
 	 */
-	@With(ModeProtectAction.class)
+	@With({
+		TryCatchAction.class,
+		AccessTimeAction.class,
+		ModeProtectAction.class
+	})
 	@Target({ElementType.TYPE, ElementType.METHOD})
 	@Retention(RetentionPolicy.RUNTIME)
 	public static @interface ModeProtected {
@@ -52,7 +71,11 @@ public abstract class ActionAnnotations {
 	 * @since 2013-02-24
 	 *
 	 */
-	@With(SessionAction.class)
+	@With({
+		TryCatchAction.class,
+		AccessTimeAction.class,
+		SessionAction.class
+	})
 	@Target({ElementType.TYPE, ElementType.METHOD})
 	@Retention(RetentionPolicy.RUNTIME)
 	public @interface Sessioned {
@@ -66,7 +89,12 @@ public abstract class ActionAnnotations {
 	 * @since 2013-02-24
 	 *
 	 */
-	@With(AuthAction.class)
+	@With({
+		TryCatchAction.class,
+		AccessTimeAction.class,
+		SessionAction.class,
+		AuthAction.class
+	})
 	@Target({ElementType.TYPE, ElementType.METHOD})
 	@Retention(RetentionPolicy.RUNTIME)
 	public @interface Authed {}

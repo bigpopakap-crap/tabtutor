@@ -1,8 +1,6 @@
 package actions;
 
 import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 import play.Logger;
@@ -39,20 +37,6 @@ public abstract class BaseAction<T> extends Action<T> {
 		return true;
 	}
 	
-	/**
-	 * Lists the actions on which this action is dependent
-	 * Some dependencies are enforced for all (see {@link #listDependencies()})
-	 * 
-	 * The default implementation is to return an empty list, but subclasses
-	 * can override this to specify more dependencies
-	 * 
-	 * Currently, the order of the dependencies are not checked, just that they
-	 * were indeed called
-	 */
-	protected Set<Class<? extends BaseAction<?>>> hook_listDependencies() {
-		return NO_DEPENDENCIES;
-	}
-	
 	/** Implements the actual action. Must eventually delegate to the delegate */
 	protected abstract Result hook_call(Context ctx) throws Throwable;
 	
@@ -67,39 +51,19 @@ public abstract class BaseAction<T> extends Action<T> {
 		//proceed with the action
 		try {
 			Logger.trace("Calling into " + this.getClass().getCanonicalName());
-			throwIfDependenciesNotSatisfied();
-			RequestActionContext.put((Class<BaseAction<?>>) this.getClass());
+			RequestActionContext.put((Class<? extends BaseAction<?>>) this.getClass());
 			
-			//delegate to the implementing action
+			//delegate to the implementing action (delegate for them if they return null)
 			Logger.trace("Calling into " + this.getClass().getCanonicalName() + " implementation");
-			return hook_call(ctx);
+			Result result = hook_call(ctx);
+			if (result == null) {
+				Logger.error("Action " + getClass().getCanonicalName() + " returned null from hook_call");
+				result = delegate.call(ctx);
+			}
+			return result;
 		}
 		finally {
 			Logger.trace("Exiting from " + this.getClass().getCanonicalName());
-		}
-	}
-	
-	private List<Class<? extends BaseAction<?>>> listDependencies() {
-		List<Class<? extends BaseAction<?>>> dependencies = new LinkedList<>();
-		
-		//add the default dependencies if this is not one of them
-		if (!(this instanceof TryCatchAction)) {
-			dependencies.add(TryCatchAction.class);
-		}
-		
-		//add dependencies specific to the subclass
-		dependencies.addAll(hook_listDependencies());
-		return dependencies;
-	}
-	
-	/** Throws an exception if the dependencies were not satisfied */
-	private void throwIfDependenciesNotSatisfied() {
-		List<Class<? extends BaseAction<?>>> dependencies = listDependencies();
-		if (!RequestActionContext.has(dependencies)) {
-			throw new IllegalStateException("Action dependencies haevn't been applied on this request.\n" +
-											"This: " + this.getClass().getCanonicalName() + "\n" +
-											"Needs: " + dependencies + "\n" +
-											"Has: " + RequestActionContext.get());
 		}
 	}
 	
