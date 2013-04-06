@@ -1,4 +1,4 @@
-package security;
+package base;
 
 import static play.test.Helpers.running;
 import static play.test.Helpers.testServer;

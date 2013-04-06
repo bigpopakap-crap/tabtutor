@@ -1,4 +1,4 @@
-package launch;
+package starter;
 
 import static play.test.Helpers.fakeApplication;
 import static play.test.Helpers.running;
@@ -8,6 +8,7 @@ import java.util.TimeZone;
 import org.junit.Assert;
 import org.junit.Test;
 
+import utils.EnvironmentTestingUtil;
 import base.BaseFuncTest;
 import contexts.AppContext;
 
@@ -23,31 +24,31 @@ public class EnvironmentTest extends BaseFuncTest {
 	/** Test that the environment variables necessary for Heroku are present */
 	@Test
 	public void testExpectedHerokuEnvironmentVariables() {
-		LaunchPackageHelpers.helpTestExpectedEnvironmentVariables("WTF_HTTP_PORT");
+		EnvironmentTestingUtil.helpTestExpectedEnvironmentVariables("WTF_HTTP_PORT");
 	}
 	
 	/** Test that the environment variables necessary for Play are present */
 	@Test
 	public void testExpectedPlayEnvironmentVariables() {
-		LaunchPackageHelpers.helpTestExpectedEnvironmentVariables("WTF_PLAY_MODE", "WTF_CRYPTO_SECRET");
+		EnvironmentTestingUtil.helpTestExpectedEnvironmentVariables("WTF_PLAY_MODE", "WTF_CRYPTO_SECRET");
 	}
 	
 	/** Test that the environment variables necessary for the app are present */
 	@Test
 	public void testExpectedAppEnvironmentVariables() {
-		LaunchPackageHelpers.helpTestExpectedEnvironmentVariables("WTF_APP_TITLE", "WTF_MODE", "WTF_SYSTEM_TIMEZONE_CODE");
+		EnvironmentTestingUtil.helpTestExpectedEnvironmentVariables("WTF_APP_TITLE", "WTF_MODE", "WTF_SYSTEM_TIMEZONE_CODE");
 	}
 	
 	/** Test that the environment variables necessary for the logger are present */
 	@Test
 	public void testLoggerLevelEnvironmentVariables() {
-		LaunchPackageHelpers.helpTestExpectedEnvironmentVariables("WTF_ROOT_LOGGER_LEVEL", "WTF_PLAY_LOGGER_LEVEL", "WTF_APP_LOGGER_LEVEL");
+		EnvironmentTestingUtil.helpTestExpectedEnvironmentVariables("WTF_ROOT_LOGGER_LEVEL", "WTF_PLAY_LOGGER_LEVEL", "WTF_APP_LOGGER_LEVEL");
 	}
 	
 	/** Test that the environment variables necessary for the db are present */
 	@Test
 	public void testDatabaseConnectionEnvironmentVariables() {
-		LaunchPackageHelpers.helpTestExpectedEnvironmentVariables("WTF_DB_DRIVER", "WTF_DB_URL", "WTF_DB_USERNAME", "WTF_DB_PASSWORD");
+		EnvironmentTestingUtil.helpTestExpectedEnvironmentVariables("WTF_DB_DRIVER", "WTF_DB_URL", "WTF_DB_USERNAME", "WTF_DB_PASSWORD");
 	}
 	
 	/** Tests the running tests boolean in AppContext */

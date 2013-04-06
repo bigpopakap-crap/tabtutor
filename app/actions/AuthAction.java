@@ -1,15 +1,12 @@
 package actions;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import models.SessionModel;
 import models.UserModel;
 import play.Logger;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import actions.ActionAnnotations.Authed;
-import api.exceptions.BaseApiException;
+import api.BaseApiException;
 import api.fb.FbApi;
 import api.fb.FbJsonResponse;
 import contexts.RequestErrorContext;
@@ -27,13 +24,6 @@ import controllers.FbAuthWebController;
  */
 public class AuthAction extends BaseAction<Authed> {
 	
-	@Override
-	protected Set<Class<? extends BaseAction<?>>> hook_listDependencies() {
-		Set<Class<? extends BaseAction<?>>> list = new HashSet<>();
-		list.add(SessionAction.class);
-		return list;
-	}
-
 	@Override
 	protected Result hook_call(Context ctx) throws Throwable {
 		//get the session object
@@ -60,14 +50,12 @@ public class AuthAction extends BaseAction<Authed> {
 				FbJsonResponse fbJson = fbApi.me().get();
 				
 				String fbId = fbJson.fbId();
-				String firstName = fbJson.firstName();
-				String lastName = fbJson.lastName();
 				String email = fbJson.email();
 				
 				//get the user associated with this Facebook ID, or create one
 				UserModel user = UserModel.getByFbId(fbId);
 				if (user == null) {
-					user = UserModel.create(fbId, firstName, lastName, email);
+					user = UserModel.create(fbId, email);
 				}
 				
 				//add this user ID to the session object

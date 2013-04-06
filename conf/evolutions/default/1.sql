@@ -1,6 +1,6 @@
 # --- !Ups
 CREATE TYPE t_pk AS UUID;
-CREATE TYPE t_userName AS VARCHAR(80);
+CREATE TYPE t_userUsername AS VARCHAR(80);
 CREATE TYPE t_email AS VARCHAR(255);
 CREATE TYPE t_facebookId AS VARCHAR(80);
 CREATE TYPE t_facebookToken AS VARCHAR(255);
@@ -8,11 +8,9 @@ CREATE TYPE t_csrfToken AS UUID;
 
 CREATE TABLE User (
 	pk t_pk PRIMARY KEY,
-	isTestUser BOOLEAN NOT NULL,
 	fbId t_facebookId NOT NULL UNIQUE,
 	fbIsAuthed BOOLEAN NOT NULL,
-	firstName t_userName NOT NULL,
-	lastName t_userName NOT NULL,
+	username t_userUsername NOT NULL UNIQUE,
 	email t_email NOT NULL,
 	registerTime timestamp NOT NULL,
 	lastAccessTime timestamp NOT NULL,
@@ -46,7 +44,7 @@ CREATE TABLE SessionCsrfToken (
 
 # --- !Downs
 DROP TYPE IF EXISTS t_pk;
-DROP TYPE IF EXISTS t_userName;
+DROP TYPE IF EXISTS t_userUsername;
 DROP TYPE IF EXISTS t_email;
 DROP TYPE IF EXISTS t_facebookId;
 DROP TYPE IF EXISTS t_facebookToken;

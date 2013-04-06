@@ -1,4 +1,4 @@
-package launch;
+package utils;
 
 import org.junit.Assert;
 
@@ -9,10 +9,10 @@ import org.junit.Assert;
  * @since 2013-02-26
  *
  */
-class LaunchPackageHelpers {
+public abstract class EnvironmentTestingUtil {
 	
 	/** Helps test that a minimum set of system environment variables are actually defined */
-	static void helpTestExpectedEnvironmentVariables(String... expectedEnvKeys) {
+	public static void helpTestExpectedEnvironmentVariables(String... expectedEnvKeys) {
 		for (String envKey : expectedEnvKeys) {
 			Assert.assertNotNull(
 				"Expected environment variable was not found: " + envKey,

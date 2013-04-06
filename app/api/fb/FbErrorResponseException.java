@@ -1,6 +1,6 @@
 package api.fb;
 
-import api.exceptions.BaseApiException;
+import api.BaseApiException;
 
 /**
  * Exception to be thrown representing an error response from Facebook
@@ -21,7 +21,7 @@ public class FbErrorResponseException extends BaseApiException {
 	 * Creates the exception from the given response
 	 * @param fbJson must be non-null and must represent an error
 	 */
-	public FbErrorResponseException(FbJsonResponse fbJson) {
+	FbErrorResponseException(FbJsonResponse fbJson) {
 		if (fbJson == null) throw new IllegalArgumentException("fbJson cannot be null");
 		if (!fbJson.isError()) throw new IllegalArgumentException("fbJson must represent an error");
 		this.fbJson = fbJson;

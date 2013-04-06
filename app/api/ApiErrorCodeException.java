@@ -1,4 +1,4 @@
-package api.exceptions;
+package api;
 
 /**
  * General API exception for when the service does responds with an
@@ -18,7 +18,7 @@ public class ApiErrorCodeException extends BaseApiException {
 	/**
 	 * @param code the error code returned
 	 */
-	public ApiErrorCodeException(int code) {
+	ApiErrorCodeException(int code) {
 		this(code, null);
 	}
 	
@@ -26,7 +26,7 @@ public class ApiErrorCodeException extends BaseApiException {
 	 * @param code the error code returned
 	 * @param message the body of the response, or null if there was no body
 	 */
-	public ApiErrorCodeException(int code, String body) {
+	ApiErrorCodeException(int code, String body) {
 		this.code = code;
 		this.body = body;
 	}

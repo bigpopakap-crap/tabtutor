@@ -1,7 +1,5 @@
 package api;
 
-import api.exceptions.ApiNoResponseException;
-import api.exceptions.BaseApiException;
 
 /**
  * This class represents an API response option that should be returned from

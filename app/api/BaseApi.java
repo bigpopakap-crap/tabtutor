@@ -15,8 +15,6 @@ import types.HttpMethodType;
 import utils.EscapingUtil;
 import utils.EscapingUtil.Escaper;
 import utils.ConcurrentUtil;
-import api.exceptions.ApiErrorCodeException;
-import api.exceptions.ApiNoResponseException;
 
 /**
  * The base class for classes implementing interactions with 3rd party APIs.

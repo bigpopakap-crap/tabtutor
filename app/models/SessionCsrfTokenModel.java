@@ -30,6 +30,7 @@ public class SessionCsrfTokenModel extends BaseModel {
 	@Column(name = "csrfToken") public UUID csrfToken;
 	@Column(name = "createTime") public Date createTime;
 	@Column(name = "expireTime") public Date expireTime;
+	
 	@Transient @Formula(select = "NOW() > expireTime") public boolean isExpired;
 	
 	public UUID getSessionPk() { return UUID.fromString(sessionPk.toString()); } //defensive copy

@@ -10,7 +10,8 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import play.Logger;
-import utils.DbTypesUtil;
+import utils.DateUtil;
+import utils.MessagesEnum;
 
 import com.avaje.ebean.annotation.Formula;
 
@@ -36,24 +37,22 @@ public class UserModel extends BaseModel {
 	 ************************************************************************** */
 	
 	@Column(name = "pk") @Id public UUID pk;
-	@Column(name = "isTestUser") public boolean isTestUser;
 	@Column(name = "fbId") public String fbId;
 	@Column(name = "fbIsAuthed") public boolean fbIsAuthed;
-	@Column(name = "firstName") public String firstName;
-	@Column(name = "lastName") public String lastName;
-	@Transient @Formula(select = "firstName || ' ' || lastName") public String fullName;
+	@Column(name = "username") public String username;
 	@Column(name = "email") public String email;
 	@Column(name = "registerTime") public Date registerTime;
 	@Column(name = "lastAccessTime") public Date lastAccessTime;
 	@Column(name = "lastLoginTime") public Date lastLoginTime;
 	@Column(name = "secondToLastLoginTime") public Date secondToLastLoginTime;
+	
+	@Transient @Formula(select = "firstName || ' ' || lastName") public String fullName;
 	@Transient @Formula(select = "secondToLastLoginTime IS NULL") public boolean isFirstLogin;
 	
 	public UUID getPk() { return UUID.fromString(pk.toString()); } //defensive copy
 	public String getFbId() { return fbId; }
 	public boolean getFbIsAuthed() { return fbIsAuthed; }
-	public String getFirstName() { return firstName; }
-	public String getLastName() { return lastName; }
+	public String getUsername() { return username; }
 	public String getFullName() { return fullName; }
 	public String getEmail() { return email; }
 	public Date getLastLoginTime() { return (Date) lastLoginTime.clone(); } //defensive copy
@@ -75,16 +74,15 @@ public class UserModel extends BaseModel {
 	
 	/**
 	 * Creates a user with the given information
+	 * Username will be some default value
 	 */
-	private UserModel(String fbId, String firstName, String lastName, String email) {
-		Date now = DbTypesUtil.now();
+	private UserModel(String fbId, String email) {
+		Date now = DateUtil.now();
 		
 		this.pk = UUID.randomUUID();
-		this.isTestUser = false;
 		this.fbId = fbId;
 		this.fbIsAuthed = true;
-		this.firstName = firstName;
-		this.lastName = lastName;
+		this.username = defaultUsername(fbId);
 		this.email = email;
 		this.registerTime = now;
 		this.lastAccessTime = now;
@@ -97,8 +95,8 @@ public class UserModel extends BaseModel {
 	 ************************************************************************** */
 	
 	/** Creates a new user and saves it to the DB */
-	public static UserModel create(String fbId, String firstName, String lastName, String email) {
-		UserModel user = new UserModel(fbId, firstName, lastName, email);
+	public static UserModel create(String fbId, String email) {
+		UserModel user = new UserModel(fbId, email);
 		user.doSaveAndRetry();
 		return user;
 	}
@@ -134,17 +132,17 @@ public class UserModel extends BaseModel {
 	
 	/** Sets the user last access time to the current time */
 	public void setLastAccessTimeAndUpdate() {
-		lastAccessTime = DbTypesUtil.now();
+		lastAccessTime = DateUtil.now();
 		doUpdateAndRetry();
-		Logger.debug("User " + pk + " last access time updated to " + lastAccessTime);
+		Logger.debug(getClass().getCanonicalName() + pk + " last access time updated to " + lastAccessTime);
 	}
 	
 	/** Sets the user login time to the current time */
 	public void setLoginTimeAndUpdate() {
 		secondToLastLoginTime = lastLoginTime;
-		lastLoginTime = DbTypesUtil.now();
+		lastLoginTime = DateUtil.now();
 		doUpdateAndRetry();
-		Logger.debug("User " + pk + " login time updated to " + lastLoginTime);
+		Logger.debug(getClass().getCanonicalName() + pk + " login time updated to " + lastLoginTime);
 	}
 	
 	/* **************************************************************************
@@ -159,6 +157,14 @@ public class UserModel extends BaseModel {
 	/** Determines if a User exists with the given fbId */
 	public static boolean isValidExistingFbId(String fbId) {
 		return getByFbId(fbId) != null;
+	}
+	
+	/* **************************************************************************
+	 *  BEGIN PRIVATE HELPERS
+	 ************************************************************************** */
+	
+	private static String defaultUsername(String fbId) {
+		return MessagesEnum.word_user + fbId;
 	}
 		
 }
