@@ -34,6 +34,7 @@ public class AuthAction extends BaseAction<Authed> {
 		return list;
 	}
 
+
 	@Override
 	protected Result hook_call(Context ctx) throws Throwable {
 		//get the session object

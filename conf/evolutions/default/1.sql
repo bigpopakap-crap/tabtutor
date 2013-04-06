@@ -8,7 +8,6 @@ CREATE TYPE t_csrfToken AS UUID;
 
 CREATE TABLE User (
 	pk t_pk PRIMARY KEY,
-	isTestUser BOOLEAN NOT NULL,
 	fbId t_facebookId NOT NULL UNIQUE,
 	fbIsAuthed BOOLEAN NOT NULL,
 	firstName t_userName NOT NULL,

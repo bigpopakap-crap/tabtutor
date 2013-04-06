@@ -36,7 +36,6 @@ public class UserModel extends BaseModel {
 	 ************************************************************************** */
 	
 	@Column(name = "pk") @Id public UUID pk;
-	@Column(name = "isTestUser") public boolean isTestUser;
 	@Column(name = "fbId") public String fbId;
 	@Column(name = "fbIsAuthed") public boolean fbIsAuthed;
 	@Column(name = "firstName") public String firstName;
@@ -81,7 +80,6 @@ public class UserModel extends BaseModel {
 		Date now = DateUtil.now();
 		
 		this.pk = UUID.randomUUID();
-		this.isTestUser = false;
 		this.fbId = fbId;
 		this.fbIsAuthed = true;
 		this.firstName = firstName;
