@@ -11,7 +11,6 @@ dist
 /out
 /.idea_modules
 /.classpath
-/.project
 /RUNNING_PID
 /.settings
 /bin
