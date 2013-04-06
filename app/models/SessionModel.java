@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import play.Logger;
 import types.SqlOperationType.BasicDmlModifyingType;
 import utils.DateUtil;
 
@@ -156,6 +157,13 @@ public class SessionModel extends BaseModel {
 	public void setUserPkAndUpdate(UUID userPk) {
 		this.userPk = userPk;
 		doUpdateAndRetry();
+	}
+	
+	/** Sets the session last access time to the current time */
+	public void setLastAccessTimeAndUpdate() {
+		lastAccessTime = DateUtil.now();
+		doUpdateAndRetry();
+		Logger.debug(getClass().getCanonicalName() + pk + " last access time updated to " + lastAccessTime);
 	}
 	
 	/* **************************************************************************

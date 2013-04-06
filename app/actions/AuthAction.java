@@ -61,14 +61,12 @@ public class AuthAction extends BaseAction<Authed> {
 				FbJsonResponse fbJson = fbApi.me().get();
 				
 				String fbId = fbJson.fbId();
-				String firstName = fbJson.firstName();
-				String lastName = fbJson.lastName();
 				String email = fbJson.email();
 				
 				//get the user associated with this Facebook ID, or create one
 				UserModel user = UserModel.getByFbId(fbId);
 				if (user == null) {
-					user = UserModel.create(fbId, firstName, lastName, email);
+					user = UserModel.create(fbId, email);
 				}
 				
 				//add this user ID to the session object

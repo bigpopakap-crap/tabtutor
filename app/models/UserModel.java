@@ -11,6 +11,7 @@ import javax.persistence.Transient;
 
 import play.Logger;
 import utils.DateUtil;
+import utils.MessagesEnum;
 
 import com.avaje.ebean.annotation.Formula;
 
@@ -38,8 +39,7 @@ public class UserModel extends BaseModel {
 	@Column(name = "pk") @Id public UUID pk;
 	@Column(name = "fbId") public String fbId;
 	@Column(name = "fbIsAuthed") public boolean fbIsAuthed;
-	@Column(name = "firstName") public String firstName;
-	@Column(name = "lastName") public String lastName;
+	@Column(name = "username") public String username;
 	@Column(name = "email") public String email;
 	@Column(name = "registerTime") public Date registerTime;
 	@Column(name = "lastAccessTime") public Date lastAccessTime;
@@ -52,8 +52,7 @@ public class UserModel extends BaseModel {
 	public UUID getPk() { return UUID.fromString(pk.toString()); } //defensive copy
 	public String getFbId() { return fbId; }
 	public boolean getFbIsAuthed() { return fbIsAuthed; }
-	public String getFirstName() { return firstName; }
-	public String getLastName() { return lastName; }
+	public String getUsername() { return username; }
 	public String getFullName() { return fullName; }
 	public String getEmail() { return email; }
 	public Date getLastLoginTime() { return (Date) lastLoginTime.clone(); } //defensive copy
@@ -75,15 +74,15 @@ public class UserModel extends BaseModel {
 	
 	/**
 	 * Creates a user with the given information
+	 * Username will be some default value
 	 */
-	private UserModel(String fbId, String firstName, String lastName, String email) {
+	private UserModel(String fbId, String email) {
 		Date now = DateUtil.now();
 		
 		this.pk = UUID.randomUUID();
 		this.fbId = fbId;
 		this.fbIsAuthed = true;
-		this.firstName = firstName;
-		this.lastName = lastName;
+		this.username = defaultUsername(fbId);
 		this.email = email;
 		this.registerTime = now;
 		this.lastAccessTime = now;
@@ -96,8 +95,8 @@ public class UserModel extends BaseModel {
 	 ************************************************************************** */
 	
 	/** Creates a new user and saves it to the DB */
-	public static UserModel create(String fbId, String firstName, String lastName, String email) {
-		UserModel user = new UserModel(fbId, firstName, lastName, email);
+	public static UserModel create(String fbId, String email) {
+		UserModel user = new UserModel(fbId, email);
 		user.doSaveAndRetry();
 		return user;
 	}
@@ -135,7 +134,7 @@ public class UserModel extends BaseModel {
 	public void setLastAccessTimeAndUpdate() {
 		lastAccessTime = DateUtil.now();
 		doUpdateAndRetry();
-		Logger.debug("User " + pk + " last access time updated to " + lastAccessTime);
+		Logger.debug(getClass().getCanonicalName() + pk + " last access time updated to " + lastAccessTime);
 	}
 	
 	/** Sets the user login time to the current time */
@@ -143,7 +142,7 @@ public class UserModel extends BaseModel {
 		secondToLastLoginTime = lastLoginTime;
 		lastLoginTime = DateUtil.now();
 		doUpdateAndRetry();
-		Logger.debug("User " + pk + " login time updated to " + lastLoginTime);
+		Logger.debug(getClass().getCanonicalName() + pk + " login time updated to " + lastLoginTime);
 	}
 	
 	/* **************************************************************************
@@ -158,6 +157,14 @@ public class UserModel extends BaseModel {
 	/** Determines if a User exists with the given fbId */
 	public static boolean isValidExistingFbId(String fbId) {
 		return getByFbId(fbId) != null;
+	}
+	
+	/* **************************************************************************
+	 *  BEGIN PRIVATE HELPERS
+	 ************************************************************************** */
+	
+	private static String defaultUsername(String fbId) {
+		return MessagesEnum.word_user + fbId;
 	}
 		
 }
