@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import types.SqlOperationType.BasicDmlModifyingType;
-import utils.DbTypesUtil;
+import utils.DateUtil;
 
 import com.avaje.ebean.annotation.Formula;
 
@@ -46,9 +46,10 @@ public class SessionModel extends BaseModel {
 	@Column(name = "userPk") public UUID userPk; //TODO how to populate this as the user object reference?
 	@Column(name = "fbToken") public String fbToken;
 	@Column(name = "fbTokenExpireTime") public Date fbTokenExpireTime;
-	@Transient @Formula(select = "NOW() > fbTokenExpireTime") public boolean isFbtokenExpired;
 	@Column(name = "startTime") public Date startTime;
 	@Column(name = "lastAccessTime") public Date lastAccessTime;
+	
+	@Transient @Formula(select = "NOW() > fbTokenExpireTime") public boolean isFbtokenExpired;
 	
 	public UUID getPk() { return UUID.fromString(pk.toString()); } //defensive copy
 	public String getPk_String() { return getPk().toString(); }
@@ -87,7 +88,7 @@ public class SessionModel extends BaseModel {
 	 * no Facebook auth information, and the current start and update times.
 	 */
 	private SessionModel() {
-		Date now = DbTypesUtil.now();
+		Date now = DateUtil.now();
 		
 		this.pk = UUID.randomUUID();
 		this.userPk = null;
@@ -147,7 +148,7 @@ public class SessionModel extends BaseModel {
 	 */
 	public void setFbAuthInfoAndUpdate(String token, int seconds) {
 		fbToken = token;
-		fbTokenExpireTime = DbTypesUtil.add(DbTypesUtil.now(), seconds);
+		fbTokenExpireTime = DateUtil.add(DateUtil.now(), seconds);
 		doUpdateAndRetry();
 	}
 	

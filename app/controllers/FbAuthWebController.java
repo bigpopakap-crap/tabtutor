@@ -5,8 +5,8 @@ import models.UserModel;
 import play.Logger;
 import play.mvc.Result;
 import actions.ActionAnnotations.Sessioned;
-import actions.ActionAnnotations.TriedCaughtFinally;
-import api.exceptions.ApiNoResponseException;
+import actions.ActionAnnotations.TriedCaught;
+import api.ApiNoResponseException;
 import api.fb.FbApi;
 import contexts.SessionContext;
 
@@ -36,7 +36,7 @@ public class FbAuthWebController extends BaseWebController {
 	 * @param state the CSRF token
 	 * @param targetUrl the url to redirect after login
 	 */
-	@TriedCaughtFinally @Sessioned
+	@TriedCaught @Sessioned
 	public static Result fblogin(final String code, String state, String targetUrl) {
 		if (targetUrl == null) targetUrl = "/";
 		
@@ -56,6 +56,7 @@ public class FbAuthWebController extends BaseWebController {
 				session.setFbAuthInfoAndUpdate(fbApi.getToken(), fbApi.getTokenExpiry());
 				
 				//if there is an associated user, update the login time
+				//TODO this shouldn't happen if the user is already logged in
 				if (SessionContext.hasUser()) {
 					UserModel user = SessionContext.user();
 					user.setLoginTimeAndUpdate();

@@ -83,8 +83,8 @@ public abstract class BaseAction<T> extends Action<T> {
 		List<Class<? extends BaseAction<?>>> dependencies = new LinkedList<>();
 		
 		//add the default dependencies if this is not one of them
-		if (!(this instanceof TryCatchFinallyAction)) {
-			dependencies.add(TryCatchFinallyAction.class);
+		if (!(this instanceof TryCatchAction)) {
+			dependencies.add(TryCatchAction.class);
 		}
 		
 		//add dependencies specific to the subclass

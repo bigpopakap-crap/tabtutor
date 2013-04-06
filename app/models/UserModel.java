@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import play.Logger;
-import utils.DbTypesUtil;
+import utils.DateUtil;
 
 import com.avaje.ebean.annotation.Formula;
 
@@ -36,17 +36,17 @@ public class UserModel extends BaseModel {
 	 ************************************************************************** */
 	
 	@Column(name = "pk") @Id public UUID pk;
-	@Column(name = "isTestUser") public boolean isTestUser;
 	@Column(name = "fbId") public String fbId;
 	@Column(name = "fbIsAuthed") public boolean fbIsAuthed;
 	@Column(name = "firstName") public String firstName;
 	@Column(name = "lastName") public String lastName;
-	@Transient @Formula(select = "firstName || ' ' || lastName") public String fullName;
 	@Column(name = "email") public String email;
 	@Column(name = "registerTime") public Date registerTime;
 	@Column(name = "lastAccessTime") public Date lastAccessTime;
 	@Column(name = "lastLoginTime") public Date lastLoginTime;
 	@Column(name = "secondToLastLoginTime") public Date secondToLastLoginTime;
+	
+	@Transient @Formula(select = "firstName || ' ' || lastName") public String fullName;
 	@Transient @Formula(select = "secondToLastLoginTime IS NULL") public boolean isFirstLogin;
 	
 	public UUID getPk() { return UUID.fromString(pk.toString()); } //defensive copy
@@ -77,10 +77,9 @@ public class UserModel extends BaseModel {
 	 * Creates a user with the given information
 	 */
 	private UserModel(String fbId, String firstName, String lastName, String email) {
-		Date now = DbTypesUtil.now();
+		Date now = DateUtil.now();
 		
 		this.pk = UUID.randomUUID();
-		this.isTestUser = false;
 		this.fbId = fbId;
 		this.fbIsAuthed = true;
 		this.firstName = firstName;
@@ -134,7 +133,7 @@ public class UserModel extends BaseModel {
 	
 	/** Sets the user last access time to the current time */
 	public void setLastAccessTimeAndUpdate() {
-		lastAccessTime = DbTypesUtil.now();
+		lastAccessTime = DateUtil.now();
 		doUpdateAndRetry();
 		Logger.debug("User " + pk + " last access time updated to " + lastAccessTime);
 	}
@@ -142,7 +141,7 @@ public class UserModel extends BaseModel {
 	/** Sets the user login time to the current time */
 	public void setLoginTimeAndUpdate() {
 		secondToLastLoginTime = lastLoginTime;
-		lastLoginTime = DbTypesUtil.now();
+		lastLoginTime = DateUtil.now();
 		doUpdateAndRetry();
 		Logger.debug("User " + pk + " login time updated to " + lastLoginTime);
 	}

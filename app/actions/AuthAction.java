@@ -9,7 +9,7 @@ import play.Logger;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import actions.ActionAnnotations.Authed;
-import api.exceptions.BaseApiException;
+import api.BaseApiException;
 import api.fb.FbApi;
 import api.fb.FbJsonResponse;
 import contexts.RequestErrorContext;
@@ -33,6 +33,7 @@ public class AuthAction extends BaseAction<Authed> {
 		list.add(SessionAction.class);
 		return list;
 	}
+
 
 	@Override
 	protected Result hook_call(Context ctx) throws Throwable {

@@ -33,13 +33,15 @@ public abstract class BaseContext {
 				t = null;
 			}
 			
-			Context.current().args.put(contextKey.get(), t);
+			set(contextKey, t);
 		}
 		
 		//finally return the value
 		return t;
 	}
 	
+	/** Helper to set context key values in the context.
+	 *  This does no checks, and will overwrite existing values */
 	protected static synchronized void set(ContextKey contextKey, Object value) {
 		Context.current().args.put(contextKey.get(), value);
 	}

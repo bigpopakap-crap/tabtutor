@@ -4,7 +4,6 @@ import java.util.Map;
 
 import play.libs.WS.Response;
 import types.HttpMethodType;
-import api.exceptions.BaseApiException;
 import contexts.AppContext;
 
 /**

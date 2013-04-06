@@ -1,4 +1,4 @@
-package launch;
+package starter;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -8,7 +8,7 @@ import java.util.TimeZone;
 import org.junit.Assert;
 import org.junit.Test;
 
-import utils.DbTypesUtil;
+import utils.DateUtil;
 import base.BaseFuncTest;
 import contexts.AppContext;
 
@@ -44,7 +44,7 @@ public class TimezoneTest extends BaseFuncTest {
 	@Test
 	public void testServerTimezone() {
 		Date date1 = new Date();
-		Date date2 = DbTypesUtil.now();
+		Date date2 = DateUtil.now();
 		TimeZone tz = AppContext.Var.SYSTEM_TIMEZONE_CODE.valAsTimezone();
 		//TODO complete this. make sure both dates are in the correct timezone
 	}

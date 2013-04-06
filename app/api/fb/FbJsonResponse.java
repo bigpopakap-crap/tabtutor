@@ -18,7 +18,7 @@ public class FbJsonResponse extends BaseApiJsonResponse<FbErrorResponseException
 	
 	private final String accessToken; //the access token used for the API call
 	
-	public FbJsonResponse(HttpMethodType method, String urlDomain, String urlPath, Map<String, String> params, Response resp, String accessToken) {
+	FbJsonResponse(HttpMethodType method, String urlDomain, String urlPath, Map<String, String> params, Response resp, String accessToken) {
 		super(method, urlDomain, urlPath, params, resp);
 		
 		if (accessToken == null) throw new IllegalArgumentException("AccessToken cannot be null");

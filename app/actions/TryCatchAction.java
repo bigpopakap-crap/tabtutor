@@ -3,10 +3,9 @@ package actions;
 import play.Logger;
 import play.mvc.Http.Context;
 import play.mvc.Result;
-import actions.ActionAnnotations.TriedCaughtFinally;
+import actions.ActionAnnotations.TriedCaught;
 import contexts.AppContext;
 import contexts.RequestStatsContext;
-import contexts.SessionContext;
 import controllers.exceptions.BaseExposedException;
 import controllers.exceptions.InternalServerErrorExposedException;
 
@@ -20,7 +19,7 @@ import controllers.exceptions.InternalServerErrorExposedException;
  * @since 2013-03-06
  *
  */
-public class TryCatchFinallyAction extends BaseAction<TriedCaughtFinally> {
+public class TryCatchAction extends BaseAction<TriedCaught> {
 	
 	/** If a request takes more than this number of seconds, log it with an error level */
 	private static final double REQUEST_DURATION_ERROR_THRESHOLD_SECONDS = 5;
@@ -29,19 +28,8 @@ public class TryCatchFinallyAction extends BaseAction<TriedCaughtFinally> {
 	protected Result hook_call(Context ctx) throws Throwable {
 		//this has not been applied yet, so catch exceptions
 		try {
-			try {
-				Logger.info("Started handling " + ctx.request() + " for session " + ctx.session());
-				RequestStatsContext.get();	//Initialize the stats by getting them
-				preRequestDangerousActions();
-			}
-			catch (Exception ex) {
-				if (AppContext.Mode.isProduction()) {
-					Logger.error("Exception caught before delegating from " + this.getClass().getCanonicalName(), ex);
-				}
-				else {
-					throw ex;
-				}
-			}
+			Logger.info("Started handling " + ctx.request() + " for session " + ctx.session());
+			RequestStatsContext.get();	//Initialize the stats by getting them
 			
 			//delegate to the actual handler
 			return delegate.call(ctx);
@@ -84,15 +72,6 @@ public class TryCatchFinallyAction extends BaseAction<TriedCaughtFinally> {
 					throw ex;
 				}
 			}
-		}
-	}
-	
-	/** Actions to perform before the request whose exceptions should be suppressed */
-	private void preRequestDangerousActions() {
-		//TODO formalize this. And if it gets too hefty a method, it's got to move somewhere else
-		//if there is a user, modify their last access time
-		if (SessionContext.hasUser()) {
-			SessionContext.user().setLastAccessTimeAndUpdate();
 		}
 	}
 

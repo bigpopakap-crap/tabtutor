@@ -1,4 +1,4 @@
-package launch;
+package starter;
 
 import models.BaseModel;
 import base.BaseFuncTest;

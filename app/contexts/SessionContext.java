@@ -4,9 +4,6 @@ import java.util.concurrent.Callable;
 
 import models.SessionModel;
 import models.UserModel;
-
-import org.h2.engine.Session;
-
 import play.Logger;
 import play.i18n.Lang;
 import play.mvc.Http.Context;
@@ -55,7 +52,7 @@ public abstract class SessionContext extends BaseContext {
 			UserModel.USER_OBJ_CONTEXT_KEY,
 			FbApi.FBAPI_OBJ_CONTEXT_KEY
 		);
-		Logger.debug(Session.class.getCanonicalName() + " refreshed");
+		Logger.debug(SessionContext.class.getCanonicalName() + " refreshed");
 	}
 	
 	/* *****************************************************
