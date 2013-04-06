@@ -1,8 +1,5 @@
 package actions;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import models.SessionModel;
 import models.UserModel;
 import play.Logger;
@@ -27,14 +24,6 @@ import controllers.FbAuthWebController;
  */
 public class AuthAction extends BaseAction<Authed> {
 	
-	@Override
-	protected Set<Class<? extends BaseAction<?>>> hook_listDependencies() {
-		Set<Class<? extends BaseAction<?>>> list = new HashSet<>();
-		list.add(SessionAction.class);
-		return list;
-	}
-
-
 	@Override
 	protected Result hook_call(Context ctx) throws Throwable {
 		//get the session object

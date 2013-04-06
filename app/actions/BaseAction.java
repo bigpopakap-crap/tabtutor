@@ -1,8 +1,6 @@
 package actions;
 
 import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 import play.Logger;
@@ -39,20 +37,6 @@ public abstract class BaseAction<T> extends Action<T> {
 		return true;
 	}
 	
-	/**
-	 * Lists the actions on which this action is dependent
-	 * Some dependencies are enforced for all (see {@link #listDependencies()})
-	 * 
-	 * The default implementation is to return an empty list, but subclasses
-	 * can override this to specify more dependencies
-	 * 
-	 * Currently, the order of the dependencies are not checked, just that they
-	 * were indeed called
-	 */
-	protected Set<Class<? extends BaseAction<?>>> hook_listDependencies() {
-		return NO_DEPENDENCIES;
-	}
-	
 	/** Implements the actual action. Must eventually delegate to the delegate */
 	protected abstract Result hook_call(Context ctx) throws Throwable;
 	
@@ -67,8 +51,7 @@ public abstract class BaseAction<T> extends Action<T> {
 		//proceed with the action
 		try {
 			Logger.trace("Calling into " + this.getClass().getCanonicalName());
-			throwIfDependenciesNotSatisfied();
-			RequestActionContext.put((Class<BaseAction<?>>) this.getClass());
+			RequestActionContext.put((Class<? extends BaseAction<?>>) this.getClass());
 			
 			//delegate to the implementing action (delegate for them if they return null)
 			Logger.trace("Calling into " + this.getClass().getCanonicalName() + " implementation");
@@ -81,32 +64,6 @@ public abstract class BaseAction<T> extends Action<T> {
 		}
 		finally {
 			Logger.trace("Exiting from " + this.getClass().getCanonicalName());
-		}
-	}
-	
-	private List<Class<? extends BaseAction<?>>> listDependencies() {
-		//add the default dependencies
-		List<Class<? extends BaseAction<?>>> dependencies = new LinkedList<>();
-		dependencies.add(TryCatchAction.class);
-		dependencies.add(AccessTimeAction.class);
-		
-		//add dependencies specific to the subclass
-		dependencies.addAll(hook_listDependencies());
-		
-		//remove this action from the list of default dependencies
-		while (dependencies.remove(getClass())) { /* do nothing */ };
-		
-		return dependencies;
-	}
-	
-	/** Throws an exception if the dependencies were not satisfied */
-	private void throwIfDependenciesNotSatisfied() {
-		List<Class<? extends BaseAction<?>>> dependencies = listDependencies();
-		if (!RequestActionContext.has(dependencies)) {
-			throw new IllegalStateException("Action dependencies haevn't been applied on this request.\n" +
-											"This: " + this.getClass().getCanonicalName() + "\n" +
-											"Needs: " + dependencies + "\n" +
-											"Has: " + RequestActionContext.get());
 		}
 	}
 	
