@@ -70,9 +70,14 @@ public abstract class BaseAction<T> extends Action<T> {
 			throwIfDependenciesNotSatisfied();
 			RequestActionContext.put((Class<BaseAction<?>>) this.getClass());
 			
-			//delegate to the implementing action
+			//delegate to the implementing action (delegate for them if they return null)
 			Logger.trace("Calling into " + this.getClass().getCanonicalName() + " implementation");
-			return hook_call(ctx);
+			Result result = hook_call(ctx);
+			if (result == null) {
+				Logger.error("Action " + getClass().getCanonicalName() + " returned null from hook_call");
+				result = delegate.call(ctx);
+			}
+			return result;
 		}
 		finally {
 			Logger.trace("Exiting from " + this.getClass().getCanonicalName());

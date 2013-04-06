@@ -30,6 +30,18 @@ public abstract class ActionAnnotations {
 	public static @interface TriedCaught {}
 	
 	/**
+	 * Annotation for applying AccessTimeAction
+	 * 
+	 * @author bigpopakap
+	 * @since 2013-03-06
+	 *
+	 */
+	@With(AccessTimeAction.class)
+	@Target({ElementType.TYPE, ElementType.METHOD})
+	@Retention(RetentionPolicy.RUNTIME)
+	public static @interface AccessTimed {}
+	
+	/**
 	 * Annotation for applying ModeProtectAction
 	 * 
 	 * @author bigpopakap
