@@ -4,6 +4,7 @@ import play.api.templates.Html;
 import play.mvc.Result;
 import utils.MessagesEnum;
 import actions.ActionAnnotations.AccessTimed;
+import actions.ActionAnnotations.Sessioned;
 import actions.ActionAnnotations.TriedCaught;
 import controllers.exceptions.BaseExposedException;
 
@@ -15,7 +16,7 @@ import controllers.exceptions.BaseExposedException;
  * @since 2013-02-17
  *
  */
-@TriedCaught @AccessTimed //methods should not forget to include these
+@TriedCaught @AccessTimed @Sessioned //methods should not forget to include these
 public class BaseWebController extends BaseController {
 	
 	@Override

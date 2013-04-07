@@ -18,7 +18,7 @@ import contexts.AppContext;
 public abstract class ActionAnnotations {
 	
 	/**
-	 * Annotation for applying ErrorCatchAction
+	 * Annotation for applying {@link TryCatchAction}
 	 * 
 	 * @author bigpopakap
 	 * @since 2013-03-06
@@ -30,7 +30,7 @@ public abstract class ActionAnnotations {
 	public static @interface TriedCaught {}
 	
 	/**
-	 * Annotation for applying AccessTimeAction
+	 * Annotation for applying {@link AccessTimeAction}
 	 * 
 	 * @author bigpopakap
 	 * @since 2013-03-06
@@ -45,7 +45,7 @@ public abstract class ActionAnnotations {
 	public static @interface AccessTimed {}
 	
 	/**
-	 * Annotation for applying ModeProtectAction
+	 * Annotation for applying {@link ModeProtectAction}
 	 * 
 	 * @author bigpopakap
 	 * @since 2013-03-06
@@ -63,7 +63,7 @@ public abstract class ActionAnnotations {
 	}
 	
 	/**
-	 * Annotation for applying SessionAction
+	 * Annotation for applying {@link SessionAction}
 	 * 
 	 * @param forceRefresh forces a refresh of the session token
 	 * 
@@ -83,7 +83,7 @@ public abstract class ActionAnnotations {
 	}
 	
 	/**
-	 * Annotation for applying AuthAction
+	 * Annotation for applying {@link AuthAction}
 	 * 
 	 * @author bigpopakap
 	 * @since 2013-02-24
