@@ -20,5 +20,10 @@ public abstract class StringUtil {
 			return false;
 		}
 	}
+	
+	/** Reverses a string */
+	public static String reverse(String str) {
+		return str == null ? null : new StringBuilder(str).reverse().toString();
+	}
 
 }

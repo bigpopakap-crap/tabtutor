@@ -173,7 +173,7 @@ public class UserModel extends BaseModel {
 					StringUtil.isInteger(fbId) || (!fbId.isEmpty() && StringUtil.isInteger(fbId.substring(1)))
 					? MessagesEnum.word_user.get() : ""
 				)
-				+ fbId;
+				+ StringUtil.reverse(fbId);
 	}
 		
 }
