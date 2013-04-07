@@ -12,6 +12,7 @@ import javax.persistence.Transient;
 import play.Logger;
 import utils.DateUtil;
 import utils.MessagesEnum;
+import utils.StringUtil;
 
 import com.avaje.ebean.annotation.Formula;
 
@@ -163,8 +164,16 @@ public class UserModel extends BaseModel {
 	 *  BEGIN PRIVATE HELPERS
 	 ************************************************************************** */
 	
+	/** Creates a default username based on the user's Facebook ID */
 	private static String defaultUsername(String fbId) {
-		return MessagesEnum.word_user + fbId;
+		if (fbId == null) throw new IllegalArgumentException("fbId cannot be null");
+		
+		//append "user" to the username if it is all numbers or only the first character is a letter
+		return (
+					StringUtil.isInteger(fbId) || (!fbId.isEmpty() && StringUtil.isInteger(fbId.substring(1)))
+					? MessagesEnum.word_user : ""
+				)
+				+ fbId;
 	}
 		
 }

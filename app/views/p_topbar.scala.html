@@ -5,8 +5,12 @@
 	Topbar common to all pages
 *@
 @import contexts.RequestContext;
+@import contexts.SessionContext;
 @p_staticResource(Array("/public/stylesheets/topbar.css"))
 <div id="topbar" class="topbar">
-	SUP BITCH
-	<a href="@(RequestContext.fbloginUrl())">Login</a>
+	@if(SessionContext.hasUser()) {
+		<p>@(SessionContext.user().getUsername())</p>
+	} else {
+		<a href="@(RequestContext.fbloginUrl())">Login</a>
+	}
 </div>

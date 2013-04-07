@@ -12,7 +12,7 @@ import play.Logger;
 import play.db.ebean.Model;
 import types.SqlOperationType.BasicDmlModifyingType;
 import utils.ConcurrentUtil;
-import utils.ObjectUtils;
+import utils.ObjectUtil;
 import contexts.RequestStatsContext;
 
 /**
@@ -77,7 +77,7 @@ public abstract class BaseModel extends Model {
 	/** Default toString that returns the field=value mappings */
 	@Override
 	public String toString() {
-		return this.getClass().getCanonicalName() + ":" + ObjectUtils.getFieldMap(this);
+		return this.getClass().getCanonicalName() + ":" + ObjectUtil.getFieldMap(this);
 	}
 	
 	/* ***********************************************************************
