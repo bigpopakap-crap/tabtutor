@@ -26,7 +26,7 @@ public class SessionCsrfTokenModel extends BaseModel {
 
 	private static final long serialVersionUID = 1065279771090088334L;
 	
-	@Column(name = "sessionPk") @Id public UUID sessionPk;
+	@Column(name = "sessionPk") @Id public UUID sessionPk; //TODO use proper foreign object reference
 	@Column(name = "csrfToken") public UUID csrfToken;
 	@Column(name = "createTime") public Date createTime;
 	@Column(name = "expireTime") public Date expireTime;

@@ -44,11 +44,12 @@ public class SessionModel extends BaseModel {
 	 ************************************************************************** */
 	
 	@Column(name = "pk") @Id public UUID pk;
-	@Column(name = "userPk") public UUID userPk; //TODO how to populate this as the user object reference?
+	@Column(name = "userPk") public UUID userPk; //TODO use proper foreign object reference
 	@Column(name = "fbToken") public String fbToken;
 	@Column(name = "fbTokenExpireTime") public Date fbTokenExpireTime;
 	@Column(name = "startTime") public Date startTime;
 	@Column(name = "lastAccessTime") public Date lastAccessTime;
+	//TODO use proper foreign object reference for CSRF token list
 	
 	@Transient @Formula(select = "NOW() > fbTokenExpireTime") public boolean isFbtokenExpired;
 	

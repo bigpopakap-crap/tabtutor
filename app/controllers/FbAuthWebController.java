@@ -71,7 +71,7 @@ public class FbAuthWebController extends BaseWebController {
 						//get the user associated with this Facebook ID, or create one
 						UserModel user = UserModel.getByFbId(fbId);
 						if (user == null) {
-							user = UserModel.create(fbId, email);
+							user = UserModel.createAndSave(fbId, email);
 						}
 						
 						//add this user ID to the session object

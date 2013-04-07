@@ -96,7 +96,7 @@ public class UserModel extends BaseModel {
 	 ************************************************************************** */
 	
 	/** Creates a new user and saves it to the DB */
-	public static UserModel create(String fbId, String email) {
+	public static UserModel createAndSave(String fbId, String email) {
 		UserModel user = new UserModel(fbId, email);
 		user.doSaveAndRetry();
 		return user;
