@@ -171,7 +171,7 @@ public class UserModel extends BaseModel {
 		//append "user" to the username if it is all numbers or only the first character is a letter
 		return (
 					StringUtil.isInteger(fbId) || (!fbId.isEmpty() && StringUtil.isInteger(fbId.substring(1)))
-					? MessagesEnum.word_user : ""
+					? MessagesEnum.word_user.get() : ""
 				)
 				+ fbId;
 	}

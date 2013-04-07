@@ -9,7 +9,7 @@
 @p_staticResource(Array("/public/stylesheets/topbar.css"))
 <div id="topbar" class="topbar">
 	@if(SessionContext.hasUser()) {
-		<p>@(SessionContext.user().getUsername())</p>
+		<span>@(SessionContext.user().getUsername())</span>
 	} else {
 		<a href="@(RequestContext.fbloginUrl())">Login</a>
 	}
