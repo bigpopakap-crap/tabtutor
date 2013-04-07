@@ -4,7 +4,9 @@
 	
 	Topbar common to all pages
 *@
+@import contexts.RequestContext;
 @p_staticResource(Array("/public/stylesheets/topbar.css"))
 <div id="topbar" class="topbar">
 	SUP BITCH
+	<a href="@(RequestContext.fbloginUrl())">Login</a>
 </div>
