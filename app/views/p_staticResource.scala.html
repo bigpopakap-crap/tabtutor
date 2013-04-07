@@ -30,7 +30,7 @@
 		
 		@if(StaticResourceType.getTypeOf(url) == null) {
 			<script type="text/javascript">
-				window.WTF.get('Logger').error('Unhandled static resource type for url @url');
+				window.WTF.get('Logger').errorAlert('Unhandled static resource type for url @url');
 			</script>
 		}
 	}

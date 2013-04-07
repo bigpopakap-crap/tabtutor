@@ -29,6 +29,11 @@ public abstract class SessionContext extends BaseContext {
 		return getOrLoad(SessionModel.SESSION_OBJ_CONTEXT_KEY, SESSION_LOADER);
 	}
 	
+	/** Determines if there is a session */
+	public static synchronized boolean has() {
+		return get() != null;
+	}
+	
 	/** Get the current logged-in user */
 	public static synchronized UserModel user() {
 		return getOrLoad(UserModel.USER_OBJ_CONTEXT_KEY, USER_LOADER);
@@ -42,6 +47,11 @@ public abstract class SessionContext extends BaseContext {
 	/** Get the FbApi object for the the current session */
 	public static synchronized FbApi fbApi() {
 		return getOrLoad(FbApi.FBAPI_OBJ_CONTEXT_KEY, FBAPI_LOADER);
+	}
+	
+	/** Determines if there is an FbApi object */
+	public static synchronized boolean hasFbApi() {
+		return fbApi() != null;
 	}
 	
 	/** Refreshes the context to make sure the values are current */
