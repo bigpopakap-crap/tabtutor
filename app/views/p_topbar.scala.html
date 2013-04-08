@@ -11,6 +11,6 @@
 	@if(SessionContext.hasUser()) {
 		<span>@(SessionContext.user().getUsername())</span>
 	} else {
-		<a href="@(RequestContext.fbloginUrl())">Login</a>
+		<a href="@(RequestContext.loginUrl())">Login</a>
 	}
 </div>
