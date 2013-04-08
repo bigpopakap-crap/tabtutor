@@ -34,6 +34,7 @@ public class SongModel extends BaseModel {
 	@Column(name = "trackNum") public int trackNum;
 	@Column(name = "isLive") public boolean isLive;
 	@Column(name = "youtubeId") public String youtubeId;
+	//TODO use proper foreign object reference for StaffMetaModel list
 	
 	@Transient @Formula(select = "youtubeId IS NOT NULL") public boolean isYoutubeEnabled;
 	

@@ -14,8 +14,8 @@ import javax.persistence.Table;
 *
 */
 @Entity
-@Table(name = "StaffMeta")
-public class StaffMetaModel extends BaseModel {
+@Table(name = "NotationMeta")
+public class NotationMetaModel extends BaseModel {
 
 	/* **************************************************************************
 	 *  FIELDS
@@ -25,8 +25,8 @@ public class StaffMetaModel extends BaseModel {
 	//TODO use proper foreign object reference for song
 	
 	/** Private helper for DB interaction implementation */
-	private static final Finder<UUID, StaffMetaModel> FINDER = new Finder<>(
-		UUID.class, StaffMetaModel.class
+	private static final Finder<UUID, NotationMetaModel> FINDER = new Finder<>(
+		UUID.class, NotationMetaModel.class
 	);
 	
 	/* **************************************************************************
