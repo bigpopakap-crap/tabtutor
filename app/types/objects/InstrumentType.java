@@ -10,6 +10,7 @@ package types.objects;
 public enum InstrumentType {
 	
 	GUITAR,
+	BASS_GUITAR,
 	VOCALS;
 
 }
