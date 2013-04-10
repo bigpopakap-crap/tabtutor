@@ -24,6 +24,7 @@ GET		/fblogin					controllers.FbAuthWebController.fblogin(code ?= null, state ?=
 # --------------------------------------------------------------------- #
 #	BEGIN /INTERNAL/DEVTOOLS PAGE ROUTING								#
 # --------------------------------------------------------------------- #
+GET		/internal/devtools/killserver				controllers.DevtoolsWebController.killserver()
 GET		/internal/devtools/testusers/list			controllers.DevtoolsTestUsersWebController.list()
 POST	/internal/devtools/testusers/create			controllers.DevtoolsTestUsersWebController.create(firstName, lastName)
 POST	/internal/devtools/testusers/login/:id		controllers.DevtoolsTestUsersWebController.login(id, targetUrl ?= "/")
