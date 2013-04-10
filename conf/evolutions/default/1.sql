@@ -35,7 +35,7 @@ CREATE TABLE Session (
 );
 
 CREATE TABLE SessionCsrfToken (
-	sessionPk t_pk PRIMARY KEY,
+	sessionPk t_pk NOT NULL,
 	csrfToken t_csrfToken NOT NULL UNIQUE,
 	createTime timestamp NOT NULL,
 	expireTime timestamp NOT NULL,
