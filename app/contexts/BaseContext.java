@@ -1,10 +1,10 @@
 package contexts;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.Callable;
 
 import play.mvc.Http.Context;
+import utils.Universe;
+import utils.Universe.UniverseElement;
 
 /**
  * Parent class of all context classes
@@ -16,12 +16,14 @@ import play.mvc.Http.Context;
  */
 public abstract class BaseContext {
 	
+	protected static final Universe<String> CONTEXT_KEY_UNIVERSE = new Universe<>();
+	
 	/** Helper to either get the value from the context (given the key), or
 	 *  load it and save it to the context */
 	@SuppressWarnings("unchecked")
-	protected static synchronized final <T> T getOrLoad(ContextKey contextKey, Callable<T> loader) {
+	protected static synchronized final <T> T getOrLoad(UniverseElement<String> contextKey, Callable<T> loader) {
 		//try getting the object from the context
-		T t = (T) Context.current().args.get(contextKey.get());
+		T t = (T) Context.current().args.get(CONTEXT_KEY_UNIVERSE.extract(contextKey));
 		
 		//if not retrieved, load it and store it in the context
 		if (t == null) {
@@ -42,65 +44,16 @@ public abstract class BaseContext {
 	
 	/** Helper to set context key values in the context.
 	 *  This does no checks, and will overwrite existing values */
-	protected static synchronized void set(ContextKey contextKey, Object value) {
-		Context.current().args.put(contextKey.get(), value);
+	protected static synchronized void set(UniverseElement<String> contextKey, Object value) {
+		Context.current().args.put(CONTEXT_KEY_UNIVERSE.extract(contextKey), value);
 	}
 	
 	/** Helper to clear set all the values to null for the given keys */
-	protected static synchronized void refresh(ContextKey... keys) {
-		for (ContextKey key : keys) {
-			Context.current().args.put(key.get(), null);
+	@SafeVarargs
+	protected static synchronized void refresh(UniverseElement<String>... contextKeys) {
+		for (UniverseElement<String> contextKey : contextKeys) {
+			Context.current().args.put(CONTEXT_KEY_UNIVERSE.extract(contextKey), null);
 		}
 	}
 	
-	/**
-	 * Class representing keys that objects can use to be stored in the
-	 * request context
-	 * 
-	 * @author bigpopakap
-	 * @since 2013-03-20
-	 *
-	 */
-	public static class ContextKey {
-		
-		/** The string that will actually be used as the key */
-		private final String key;
-		
-		/** 
-		 * 	Creates a new context key
-		 *  Note: DOES NOT check if another duplicate key is registered
-		 */
-		private ContextKey(String key) {
-			if (key == null) throw new IllegalArgumentException("Key cannot be null");
-			this.key = key;
-		}
-		
-		/** Gets the underlying string to use as the key */
-		private synchronized String get() {
-			return key;
-		}
-		
-		/** The list of all registered context keys */
-		private static final Set<String> REGISTERED_KEYS = new HashSet<>();
-		
-		/** Determines if the given string is already registered as a context key */
-		public static synchronized boolean isRegistered(String key) {
-			return REGISTERED_KEYS.contains(key);
-		}
-		
-		/** 
-		 * Registers a new context key and returns it
-		 * @throws IllegalArgumentException if the key is null or if it is already registered
-		 */
-		public static synchronized ContextKey register(String key) {
-			if (key == null) throw new IllegalArgumentException("Key cannot be null");
-			if (isRegistered(key)) throw new IllegalArgumentException("Key is already registered");
-			
-			ContextKey contextKey = new ContextKey(key); //if this thows an exception, it won't be registered
-			REGISTERED_KEYS.add(key);
-			return contextKey;
-		}
-		
-	}
-
 }

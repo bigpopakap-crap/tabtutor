@@ -11,7 +11,6 @@ import api.ApiNoResponseException;
 import api.ApiResponseOption;
 import api.BaseApi;
 import contexts.AppContext;
-import contexts.BaseContext.ContextKey;
 import controllers.routes;
 
 /**
@@ -23,8 +22,6 @@ import controllers.routes;
  */
 public class FbApi extends BaseApi<FbJsonResponse> {
 	
-	/** The key to use to store the session model object in the session context */
-	public static final ContextKey FBAPI_OBJ_CONTEXT_KEY = ContextKey.register("fbApiObjectContextKey");
 	private static final int FB_TOKEN_EXPIRY_INVALID = -1;
 	
 	// String variables representing the API domain and supported paths

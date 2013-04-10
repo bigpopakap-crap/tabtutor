@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
+import utils.Universe.UniverseElement;
+
 /**
  * Context for the request that holds which static resources the returned HTML page
  * is going to reference, so that if multiple partials request the same static resource,
@@ -16,7 +18,7 @@ import java.util.concurrent.Callable;
 public class RequestStaticResourceContext extends BaseContext {
 	
 	/** The key used to store the set of resources for the request context */
-	private static final ContextKey PAGE_RESOURCE_CONTEXT_KEY = ContextKey.register("pageResourceContextKey");
+	private static final UniverseElement<String> PAGE_RESOURCE_CONTEXT_KEY = CONTEXT_KEY_UNIVERSE.register("pageResourceContextKey");
 	
 	/** Gets the set of resources for the request context */
 	public static synchronized Set<String> get() {

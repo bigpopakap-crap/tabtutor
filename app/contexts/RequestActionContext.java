@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import utils.Universe.UniverseElement;
 import actions.BaseAction;
 
 /**
@@ -21,7 +22,7 @@ public class RequestActionContext extends BaseContext {
 	
 	//TODO static test to make sure all actions call the put() method
 	
-	private static final ContextKey REQUEST_ACTION_LIST_CONTEXT_KEY = ContextKey.register("requestActionContextKey");
+	private static final UniverseElement<String> REQUEST_ACTION_LIST_CONTEXT_KEY = CONTEXT_KEY_UNIVERSE.register("requestActionContextKey");
 	
 	/** Gets the list of actions applied in this request, in the order they were applied */
 	public static synchronized List<Class<? extends BaseAction<?>>> get() {
