@@ -40,12 +40,11 @@
 	@include(url = url)
 }
 @for(url <- devUrls) {
-	if (@(AppContext.Mode.isProduction())) {
+	@if(AppContext.Mode.isProduction()) {
 		<script type="text/javascript">
 			window.WTF.get('Logger').info('Skipping dev-only resource @url');
 		</script>
-	}
-	else {
+	} else {
 		@include(url = url)
 	}
 }
