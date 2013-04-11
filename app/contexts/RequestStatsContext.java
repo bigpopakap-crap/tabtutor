@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 import utils.DateUtil;
+import utils.Universe.UniverseElement;
 
 /**
  * Class for gathering stats about the request
@@ -15,7 +16,7 @@ import utils.DateUtil;
  */
 public class RequestStatsContext extends BaseContext {
 	
-	private static final ContextKey REQUEST_STATS_CONTEXT_KEY = ContextKey.register("requestStatsContextKey");
+	private static final UniverseElement<String> REQUEST_STATS_CONTEXT_KEY = CONTEXT_KEY_UNIVERSE.register("requestStatsContextKey");
 	
 	private boolean isComplete;
 	private long startTime;
@@ -51,22 +52,22 @@ public class RequestStatsContext extends BaseContext {
 	 ************************************************************************** */
 	
 	/** Determines if the request is basically done processing */
-	public boolean isComplete() {
+	public synchronized boolean isComplete() {
 		return isComplete;
 	}
 	
 	/** Gets the duration to handle the request in seconds */
-	public double getDurationSeconds() {
+	public synchronized double getDurationSeconds() {
 		return ((double) (endTime - startTime)) / 1000.0;
 	}
 	
 	/** Gets the number of failed database/model operations */
-	public int getNumModelOperationFailures() {
+	public synchronized int getNumModelOperationFailures() {
 		return numModelOperationFailures;
 	}
 	
 	/** Gets the number of database/model operation retries */
-	public int getNumModelOperationRetries() {
+	public synchronized int getNumModelOperationRetries() {
 		return numModelOperationRetries;
 	}
 	
@@ -75,18 +76,18 @@ public class RequestStatsContext extends BaseContext {
 	 ************************************************************************** */
 	
 	/** Marks the request completed */
-	public void setCompleted() {
+	public synchronized void setCompleted() {
 		isComplete = true;
 		endTime = DateUtil.nowMillis();
 	}
 	
 	/** Add one to the number of database/model operation failures */
-	public void incrModelOperationFailures() {
+	public synchronized void incrModelOperationFailures() {
 		numModelOperationFailures++; 
 	}
 	
 	/** Add one to the number of database/model operation retries */
-	public void incrModelOperationRetries() {
+	public synchronized void incrModelOperationRetries() {
 		numModelOperationRetries++;
 	}
 	

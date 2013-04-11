@@ -7,6 +7,7 @@ import models.UserModel;
 import play.Logger;
 import play.i18n.Lang;
 import play.mvc.Http.Context;
+import utils.Universe.UniverseElement;
 import api.fb.FbApi;
 
 /**
@@ -19,6 +20,10 @@ import api.fb.FbApi;
  */
 public abstract class SessionContext extends BaseContext {
 	
+	private static final UniverseElement<String> SESSION_OBJ_CONTEXT_KEY = CONTEXT_KEY_UNIVERSE.register("sessionObjectContextKey");
+	private static final UniverseElement<String> USER_OBJ_CONTEXT_KEY = CONTEXT_KEY_UNIVERSE.register("userObjectContextKey");
+	private static final UniverseElement<String> FBAPI_OBJ_CONTEXT_KEY = CONTEXT_KEY_UNIVERSE.register("fbApiObjectContextKey");
+	
 	/** Get the language of the current session context. Useful for templates */
 	public static synchronized Lang lang() {
 		return Context.current().lang();
@@ -26,12 +31,17 @@ public abstract class SessionContext extends BaseContext {
 	
 	/** Get the session model object for the current session */
 	public static synchronized SessionModel get() {
-		return getOrLoad(SessionModel.SESSION_OBJ_CONTEXT_KEY, SESSION_LOADER);
+		return getOrLoad(SESSION_OBJ_CONTEXT_KEY, SESSION_LOADER);
+	}
+	
+	/** Determines if there is a session */
+	public static synchronized boolean has() {
+		return get() != null;
 	}
 	
 	/** Get the current logged-in user */
 	public static synchronized UserModel user() {
-		return getOrLoad(UserModel.USER_OBJ_CONTEXT_KEY, USER_LOADER);
+		return getOrLoad(USER_OBJ_CONTEXT_KEY, USER_LOADER);
 	}
 	
 	/** Determines if there is a logged-in user */
@@ -41,16 +51,21 @@ public abstract class SessionContext extends BaseContext {
 	
 	/** Get the FbApi object for the the current session */
 	public static synchronized FbApi fbApi() {
-		return getOrLoad(FbApi.FBAPI_OBJ_CONTEXT_KEY, FBAPI_LOADER);
+		return getOrLoad(FBAPI_OBJ_CONTEXT_KEY, FBAPI_LOADER);
+	}
+	
+	/** Determines if there is an FbApi object */
+	public static synchronized boolean hasFbApi() {
+		return fbApi() != null;
 	}
 	
 	/** Refreshes the context to make sure the values are current */
 	public static synchronized void refresh() {
 		//just delete them from the context, and they will be loaded next time
 		refresh(
-			SessionModel.SESSION_OBJ_CONTEXT_KEY,
-			UserModel.USER_OBJ_CONTEXT_KEY,
-			FbApi.FBAPI_OBJ_CONTEXT_KEY
+			SESSION_OBJ_CONTEXT_KEY,
+			USER_OBJ_CONTEXT_KEY,
+			FBAPI_OBJ_CONTEXT_KEY
 		);
 		Logger.debug(SessionContext.class.getCanonicalName() + " refreshed");
 	}

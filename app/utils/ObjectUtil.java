@@ -11,7 +11,7 @@ import java.util.Map;
  * @since 2013-03-31
  *
  */
-public class ObjectUtils {
+public class ObjectUtil {
 	
 	/**
 	 * Returns a map of field names to values for this object

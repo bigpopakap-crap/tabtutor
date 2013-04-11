@@ -12,10 +12,9 @@ import javax.persistence.Transient;
 import play.Logger;
 import utils.DateUtil;
 import utils.MessagesEnum;
+import utils.StringUtil;
 
 import com.avaje.ebean.annotation.Formula;
-
-import contexts.BaseContext.ContextKey;
 
 /**
 * This Ebean maps to the User table, and represents user metadata
@@ -28,8 +27,6 @@ import contexts.BaseContext.ContextKey;
 @Table(name = "User")
 public class UserModel extends BaseModel {
 	
-	public static final ContextKey USER_OBJ_CONTEXT_KEY = ContextKey.register("userObjectContextKey");
-
 	private static final long serialVersionUID = 5854422586239724109L;
 	
 	/* **************************************************************************
@@ -163,8 +160,16 @@ public class UserModel extends BaseModel {
 	 *  BEGIN PRIVATE HELPERS
 	 ************************************************************************** */
 	
+	/** Creates a default username based on the user's Facebook ID */
 	private static String defaultUsername(String fbId) {
-		return MessagesEnum.word_user + fbId;
+		if (fbId == null) throw new IllegalArgumentException("fbId cannot be null");
+		
+		//append "user" to the username if it is all numbers or only the first character is a letter
+		return (
+					StringUtil.isInteger(fbId) || (!fbId.isEmpty() && StringUtil.isInteger(fbId.substring(1)))
+					? MessagesEnum.word_user.get() : ""
+				)
+				+ StringUtil.reverse(fbId);
 	}
 		
 }

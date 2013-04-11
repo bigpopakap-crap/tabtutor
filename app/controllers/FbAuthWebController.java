@@ -6,7 +6,10 @@ import play.Logger;
 import play.mvc.Result;
 import actions.ActionAnnotations.Sessioned;
 import api.ApiNoResponseException;
+import api.BaseApiException;
 import api.fb.FbApi;
+import api.fb.FbJsonResponse;
+import contexts.RequestErrorContext;
 import contexts.SessionContext;
 
 /**
@@ -54,12 +57,36 @@ public class FbAuthWebController extends BaseWebController {
 				SessionModel session = SessionContext.get();
 				session.setFbAuthInfoAndUpdate(fbApi.getToken(), fbApi.getTokenExpiry());
 				
-				//if there is an associated user, update the login time
-				//TODO this shouldn't happen if the user is already logged in
-				if (SessionContext.hasUser()) {
-					UserModel user = SessionContext.user();
-					user.setLoginTimeAndUpdate();
+				//ensure that a user is referenced by the session
+				if (!SessionContext.hasUser()) {
+					Logger.debug("Session needs a user reference. Fetching Facebook ID and looking up user object");
+					
+					//start by getting the user's Facebook ID from the Facebook API
+					try {
+						FbJsonResponse fbJson = fbApi.me().get();
+						
+						String fbId = fbJson.fbId();
+						String email = fbJson.email();
+						
+						//get the user associated with this Facebook ID, or create one
+						UserModel user = UserModel.getByFbId(fbId);
+						if (user == null) {
+							user = UserModel.create(fbId, email);
+						}
+						
+						//add this user ID to the session object
+						session.setUserPkAndUpdate(user.getPk());
+					}
+					catch (BaseApiException e) {
+						RequestErrorContext.setFbConnectionError(true);
+						//TODO need to do anything else to handle this error?
+					}
 				}
+				
+				//update the user's login time
+				//TODO this shouldn't happen if the user is already logged in
+				UserModel user = SessionContext.user();
+				user.setLoginTimeAndUpdate();
 				
 				//don't get the associated user, that will be taken care of in SecuredActions
 				//redirect to the given redirect url, or to the landing page

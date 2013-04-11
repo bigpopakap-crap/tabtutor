@@ -1,0 +1,16 @@
+@*
+	Author: bigpopakap
+	Since: 2013-04-06
+	
+	Topbar common to all pages
+*@
+@import contexts.RequestContext;
+@import contexts.SessionContext;
+@p_staticResource(Array("/public/stylesheets/topbar.css"))
+<div id="topbar" class="topbar">
+	@if(SessionContext.hasUser()) {
+		<span>@(SessionContext.user().getUsername())</span>
+	} else {
+		<a href="@(RequestContext.loginUrl())">Login</a>
+	}
+</div>
