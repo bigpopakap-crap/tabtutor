@@ -131,7 +131,7 @@ public class UserModel extends BaseModel {
 	public void setLastAccessTimeAndUpdate() {
 		lastAccessTime = DateUtil.now();
 		doUpdateAndRetry();
-		Logger.debug(getClass().getCanonicalName() + pk + " last access time updated to " + lastAccessTime);
+		Logger.debug(getClass().getCanonicalName() + " " + pk + " last access time updated to " + lastAccessTime);
 	}
 	
 	/** Sets the user login time to the current time */
@@ -139,7 +139,7 @@ public class UserModel extends BaseModel {
 		secondToLastLoginTime = lastLoginTime;
 		lastLoginTime = DateUtil.now();
 		doUpdateAndRetry();
-		Logger.debug(getClass().getCanonicalName() + pk + " login time updated to " + lastLoginTime);
+		Logger.debug(getClass().getCanonicalName() + " " + pk + " login time updated to " + lastLoginTime);
 	}
 	
 	/* **************************************************************************
