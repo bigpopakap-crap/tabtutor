@@ -17,8 +17,9 @@ public class RequestContext extends BaseContext {
 		return Context.current().request().path();
 	}
 	
-	/** Gets the Facebook login url that will redirect back to this page */
-	public static String fbloginUrl() {
+	/** Gets the login url that will redirect back to this page
+	 *  (as opposed to the url of the Facebook login dialogue, this is the one that initiates it) */
+	public static String loginUrl() {
 		return routes.FbAuthWebController.fblogin(null, null, url()).url();
 	}
 

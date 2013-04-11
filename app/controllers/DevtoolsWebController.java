@@ -1,5 +1,7 @@
 package controllers;
 
+import play.Logger;
+import play.mvc.Result;
 import actions.ActionAnnotations.ModeProtected;
 
 /**
@@ -12,5 +14,13 @@ import actions.ActionAnnotations.ModeProtected;
  */
 @ModeProtected
 public class DevtoolsWebController extends BaseWebController {
+	
+	//TODO make this an admin action so it is also accessible in production by priveleged users
+	/** Kill the server */
+	public static Result killserver() {
+		Logger.error("Killing server because the killserver path was queried");
+		System.exit(0);
+		return null;
+	}
 
 }

@@ -15,7 +15,6 @@ import utils.DateUtil;
 
 import com.avaje.ebean.annotation.Formula;
 
-import contexts.BaseContext.ContextKey;
 import contexts.SessionContext;
 
 /**
@@ -33,10 +32,6 @@ public class SessionModel extends BaseModel {
 	
 	/** The key to use in the cookie for the session ID */
 	public static final String SESSION_ID_COOKIE_KEY = "wtfspk";
-	
-	/** The key to use to store the session model object in the session context */
-	public static final ContextKey SESSION_OBJ_CONTEXT_KEY = ContextKey.register("sessionObjectContextKey");
-	
 	private static final long serialVersionUID = -6111608082703517322L;
 	
 	/* **************************************************************************

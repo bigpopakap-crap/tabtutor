@@ -16,8 +16,6 @@ import utils.StringUtil;
 
 import com.avaje.ebean.annotation.Formula;
 
-import contexts.BaseContext.ContextKey;
-
 /**
 * This Ebean maps to the User table, and represents user metadata
 * 
@@ -29,8 +27,6 @@ import contexts.BaseContext.ContextKey;
 @Table(name = "User")
 public class UserModel extends BaseModel {
 	
-	public static final ContextKey USER_OBJ_CONTEXT_KEY = ContextKey.register("userObjectContextKey");
-
 	private static final long serialVersionUID = 5854422586239724109L;
 	
 	/* **************************************************************************
