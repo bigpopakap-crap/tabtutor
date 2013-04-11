@@ -8,17 +8,18 @@
 		urls: The array of urls to include. This partial will automatically determine what type of
 				resoruce they are
 *@
-@(urls: Array[String])
+@(urls: Array[String], devUrls: Array[String] = Array())
+@import contexts.AppContext;
 @import contexts.RequestStaticResourceContext;
 @import types.StaticResourceType;
-@for(url <- urls) {
+@include(url: String) = {
 	@if(RequestStaticResourceContext.contains(url)) {
 		<script type="text/javascript">
 			window.WTF.get('Logger').info('Skipping already-included resource at @(url)');
 		</script>
 	} else {
-		@* Add this HTML comment so we can call the add() method *@
-		<!-- Including resource @(RequestStaticResourceContext.add(url)) -->
+		@* Call the add() method *@
+		@{RequestStaticResourceContext.add(url); ""}
 		
 		@if(StaticResourceType.JS.isType(url)) {
 			<script type="text/javascript" src="@url"></script>
@@ -30,8 +31,20 @@
 		
 		@if(StaticResourceType.getTypeOf(url) == null) {
 			<script type="text/javascript">
-				window.WTF.get('Logger').error('Unhandled static resource type for url @url');
+				window.WTF.get('Logger').errorAlert('Unhandled static resource type for url @url');
 			</script>
 		}
+	}
+}
+@for(url <- urls) {
+	@include(url = url)
+}
+@for(url <- devUrls) {
+	@if(AppContext.Mode.isProduction()) {
+		<script type="text/javascript">
+			window.WTF.get('Logger').info('Skipping dev-only resource @url');
+		</script>
+	} else {
+		@include(url = url)
 	}
 }

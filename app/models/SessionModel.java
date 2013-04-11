@@ -9,12 +9,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import play.Logger;
 import types.SqlOperationType.BasicDmlModifyingType;
 import utils.DateUtil;
 
 import com.avaje.ebean.annotation.Formula;
 
-import contexts.BaseContext.ContextKey;
 import contexts.SessionContext;
 
 /**
@@ -32,10 +32,6 @@ public class SessionModel extends BaseModel {
 	
 	/** The key to use in the cookie for the session ID */
 	public static final String SESSION_ID_COOKIE_KEY = "wtfspk";
-	
-	/** The key to use to store the session model object in the session context */
-	public static final ContextKey SESSION_OBJ_CONTEXT_KEY = ContextKey.register("sessionObjectContextKey");
-	
 	private static final long serialVersionUID = -6111608082703517322L;
 	
 	/* **************************************************************************
@@ -156,6 +152,13 @@ public class SessionModel extends BaseModel {
 	public void setUserPkAndUpdate(UUID userPk) {
 		this.userPk = userPk;
 		doUpdateAndRetry();
+	}
+	
+	/** Sets the session last access time to the current time */
+	public void setLastAccessTimeAndUpdate() {
+		lastAccessTime = DateUtil.now();
+		doUpdateAndRetry();
+		Logger.debug(getClass().getCanonicalName() + pk + " last access time updated to " + lastAccessTime);
 	}
 	
 	/* **************************************************************************

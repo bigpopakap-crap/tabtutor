@@ -2,6 +2,8 @@ package contexts;
 
 import java.util.concurrent.Callable;
 
+import utils.Universe.UniverseElement;
+
 /**
  * This class can be used to store any errors and error messages for the duration of the
  * request. Note that all the data stored in this class will be lost at the end of the
@@ -17,7 +19,7 @@ import java.util.concurrent.Callable;
  */
 public abstract class RequestErrorContext extends BaseContext {
 	
-	private static final ContextKey FB_CONNECTION_ERROR_CONTEXT_KEY = ContextKey.register("fbConnectionErrorContextKey");
+	private static final UniverseElement<String> FB_CONNECTION_ERROR_CONTEXT_KEY = CONTEXT_KEY_UNIVERSE.register("fbConnectionErrorContextKey");
 	
 	/** Returns true if there was an error accessing Facebook for this session context */
 	public static synchronized boolean fbConnectionError() {
