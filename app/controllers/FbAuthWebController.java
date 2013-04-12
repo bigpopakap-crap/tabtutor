@@ -63,15 +63,16 @@ public class FbAuthWebController extends BaseWebController {
 					
 					//start by getting the user's Facebook ID from the Facebook API
 					try {
+						//get the response from Facebook and the important fields
 						FbJsonResponse fbJson = fbApi.me().get();
-						
 						String fbId = fbJson.fbId();
+						String fbUsername = fbJson.username();
 						String email = fbJson.email();
 						
 						//get the user associated with this Facebook ID, or create one
 						UserModel user = UserModel.getByFbId(fbId);
 						if (user == null) {
-							user = UserModel.create(fbId, email);
+							user = UserModel.create(fbId, fbUsername, email);
 						}
 						
 						//add this user ID to the session object
