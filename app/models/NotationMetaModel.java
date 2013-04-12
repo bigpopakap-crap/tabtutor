@@ -5,6 +5,8 @@ import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import types.objects.InstrumentType;
@@ -30,14 +32,15 @@ public class NotationMetaModel extends BaseModel {
 	 ************************************************************************** */
 	
 	@Column(name = "pk") @Id public UUID pk;
-	@Column(name = "songPk") public UUID songPk; //TODO use proper foreign object reference
-	@Column(name = "userPk_author") public UUID userPk_author; //TODO use proper foreign object reference
 	@Column(name = "instrumentType") public InstrumentType instrumentType;
 	@Column(name = "skillLevelType") public SkillLevelType skillLevelType;
 	@Column(name = "notationType") public NotationType notationType;
 	@Column(name = "rating") public double rating;
 	//TODO add reference to the actual notation data
 	//TODO use proper foreign object reference for instrument type list
+	
+	@OneToOne @JoinColumn(name = "songPk") public SongModel song;
+	@OneToOne @JoinColumn(name = "userPk_author") public UserModel user_author;
 	
 	/** Private helper for DB interaction implementation */
 	private static final Finder<UUID, NotationMetaModel> FINDER = new Finder<>(

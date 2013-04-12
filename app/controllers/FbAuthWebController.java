@@ -75,7 +75,7 @@ public class FbAuthWebController extends BaseWebController {
 						}
 						
 						//add this user ID to the session object
-						session.setUserPkAndUpdate(user.getPk());
+						session.setUserAndUpdate(user);
 					}
 					catch (BaseApiException e) {
 						RequestErrorContext.setFbConnectionError(true);

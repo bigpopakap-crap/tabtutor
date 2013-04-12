@@ -96,7 +96,7 @@ public abstract class SessionContext extends BaseContext {
 		@Override
 		public UserModel call() throws Exception {
 			SessionModel session = get();
-			if (session != null && session.hasValidUserPk()) {
+			if (session != null && session.hasUser()) {
 				return session.getUser();
 			}
 			else {

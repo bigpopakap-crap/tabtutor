@@ -5,6 +5,8 @@ import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -26,14 +28,15 @@ public class AlbumModel extends BaseModel {
 	
 	@Column(name = "pk") @Id public UUID pk;
 	@Column(name = "title") public String title;
-	@Column(name = "artistPk") public UUID artistPk; //TODO use proper foreign object reference
 	@Column(name = "year") public int year;
 	@Column(name = "numTracks") public int numTracks;
 	//TODO use proper foreign object reference for song list
 	
+	@OneToOne @JoinColumn(name = "artistPk") public ArtistModel artist;
+	
 	public UUID getPk() { return UUID.fromString(pk.toString()); } //defensive copy
 	public String getTitle() { return title; }
-	public UUID getArtistPk() { return UUID.fromString(artistPk.toString()); } //defensive copy
+	public ArtistModel getArtist() { return artist; }
 	public int getYear() { return year; }
 	public int getNumTracks() { return numTracks; }
 	
