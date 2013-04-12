@@ -35,7 +35,7 @@ public class AlbumModel extends BaseModel {
 	@Column(name = "numTracks") public int numTracks;
 	
 	@ManyToOne @JoinColumn(name = "artistPk", referencedColumnName = "pk") public ArtistModel artist;
-	@OneToMany(fetch = FetchType.LAZY) @JoinColumn(name = "albumPk", referencedColumnName = "pk") public Set<SongModel> songs;
+	@OneToMany(fetch = FetchType.LAZY) @JoinColumn(name = "albumPk", referencedColumnName = "pk") public Set<SongModel> songs; //TODO use ordered list?
 	
 	public UUID getPk() { return UUID.fromString(pk.toString()); } //defensive copy
 	public String getTitle() { return title; }

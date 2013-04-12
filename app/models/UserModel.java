@@ -47,7 +47,7 @@ public class UserModel extends BaseModel {
 	@Column(name = "lastLoginTime") public Date lastLoginTime;
 	@Column(name = "secondToLastLoginTime") public Date secondToLastLoginTime;
 	
-	@OneToMany(fetch = FetchType.LAZY) @JoinColumn(name = "userPk_author", referencedColumnName = "pk") public Set<NotationMetaModel> authoredNotations;
+	@OneToMany(fetch = FetchType.LAZY) @JoinColumn(name = "userPk_author", referencedColumnName = "pk") public Set<NotationMetaModel> authoredNotations; //TODO use ordered list?
 	
 	@Transient @Formula(select = "(firstName || ' ' || lastName)") public String fullName;
 	@Transient @Formula(select = "(lastLoginTime IS NULL OR secondToLastLoginTime IS NULL)") public boolean isFirstLogin;

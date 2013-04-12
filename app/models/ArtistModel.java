@@ -31,8 +31,8 @@ public class ArtistModel extends BaseModel {
 	@Column(name = "pk") @Id public UUID pk;
 	@Column(name = "name") public String name;
 	
-	@OneToMany(fetch = FetchType.LAZY) @JoinColumn(name = "artistPk", referencedColumnName = "pk") public Set<AlbumModel> albums;
-	@OneToMany(fetch = FetchType.LAZY) @JoinColumn(name = "artistPk", referencedColumnName = "pk") public Set<SongModel> songs;
+	@OneToMany(fetch = FetchType.LAZY) @JoinColumn(name = "artistPk", referencedColumnName = "pk") public Set<AlbumModel> albums; //TODO use ordered list?
+	@OneToMany(fetch = FetchType.LAZY) @JoinColumn(name = "artistPk", referencedColumnName = "pk") public Set<SongModel> songs; //TODO use ordered list?
 	
 	public UUID getPk() { return UUID.fromString(pk.toString()); } //defensive copy
 	public String getName() { return name; }

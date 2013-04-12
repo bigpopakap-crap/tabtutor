@@ -39,7 +39,7 @@ public class SongModel extends BaseModel {
 	
 	@ManyToOne @JoinColumn(name = "artistPk", referencedColumnName = "pk") public ArtistModel artist;
 	@ManyToOne @JoinColumn(name = "albumPk", referencedColumnName = "pk") public AlbumModel album;
-	@OneToMany @JoinColumn(name = "songPk", referencedColumnName = "pk") public Set<NotationMetaModel> notations;
+	@OneToMany @JoinColumn(name = "songPk", referencedColumnName = "pk") public Set<NotationMetaModel> notations; //TODO use ordered list?
 	
 	@Transient @Formula(select = "(youtubeId IS NOT NULL)") public boolean isYoutubeEnabled;
 	
