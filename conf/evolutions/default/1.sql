@@ -24,8 +24,8 @@ CREATE TABLE Album (
 
 CREATE TABLE NotationMeta (
 	pk t_pk PRIMARY KEY,
-	instrumentType t_varcharShort NOT NULL,
-	skillLevelType t_varcharShort NOT NULL,
+	instrument t_varcharShort NOT NULL,
+	skillLevel t_varcharShort NOT NULL,
 	notationType t_varcharShort NOT NULL,
 	ratingNumerator BIGINT NOT NULL,
 	ratingDenomenator BIGINT NOT NULL,

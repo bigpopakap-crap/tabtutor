@@ -35,8 +35,8 @@ public class NotationMetaModel extends BaseModel {
 	 ************************************************************************** */
 	
 	@Column(name = "pk") @Id public UUID pk;
-	@Column(name = "instrumentType") public InstrumentType instrumentType;
-	@Column(name = "skillLevelType") public SkillLevelType skillLevelType;
+	@Column(name = "instrument") public InstrumentType instrument;
+	@Column(name = "skillLevel") public SkillLevelType skillLevel;
 	@Column(name = "notationType") public NotationType notationType;
 	@Column(name = "ratingNumerator") public int ratingNumerator;
 	@Column(name = "ratingDenomenator") public int ratingDenomenator;
@@ -44,9 +44,17 @@ public class NotationMetaModel extends BaseModel {
 	//TODO use proper foreign object reference for instrument type list
 	
 	@OneToOne @JoinColumn(name = "songPk") public SongModel song;
-	@OneToOne @JoinColumn(name = "userPk_author") public UserModel user_author;
+	@OneToOne @JoinColumn(name = "userPk_author") public UserModel author;
 	
 	@Transient @Formula(select = "(CASE WHEN ratingDenomenator = 0 THEN 0 ELSE (CAST(ratingNumerator AS NUMERIC) / ratingDenomenator))") public double rating;
+	
+	public UUID getPk() { return UUID.fromString(pk.toString()); } //defensive copy
+	public InstrumentType getInstrument() { return instrument; }
+	public SkillLevelType getSkillLevel() { return skillLevel; }
+	public NotationType getNotationType() { return notationType; }
+	public SongModel getSong() { return song; }
+	public UserModel getAuthor() { return author; }
+	public double getRating() { return rating; }
 	
 	/** Private helper for DB interaction implementation */
 	private static final Finder<UUID, NotationMetaModel> FINDER = new Finder<>(
