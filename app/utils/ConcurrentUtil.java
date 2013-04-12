@@ -91,13 +91,13 @@ public abstract class ConcurrentUtil {
 		return new Runnable() {
 			@Override
 			public void run() {
-				suppressCall(callable);
+				callQuietly(callable);
 			}
 		};
 	}
 	
 	/** Calls a callable and converts explicit exceptions to runtime exceptions */
-	public static <T> T suppressCall(Callable<T> callable) {
+	public static <T> T callQuietly(Callable<T> callable) {
 		try {
 			return callable.call();
 		}
