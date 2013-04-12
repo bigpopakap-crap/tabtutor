@@ -1,11 +1,15 @@
 package models;
 
 import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -41,8 +45,10 @@ public class UserModel extends BaseModel {
 	@Column(name = "lastLoginTime") public Date lastLoginTime;
 	@Column(name = "secondToLastLoginTime") public Date secondToLastLoginTime;
 	
-	@Transient @Formula(select = "firstName || ' ' || lastName") public String fullName;
-	@Transient @Formula(select = "secondToLastLoginTime IS NULL") public boolean isFirstLogin;
+	@OneToMany(fetch = FetchType.LAZY) @JoinColumn(name = "userPk_author", referencedColumnName = "pk") public Set<NotationMetaModel> authoredNotations;
+	
+	@Transient @Formula(select = "(firstName || ' ' || lastName)") public String fullName;
+	@Transient @Formula(select = "(lastLoginTime IS NULL OR secondToLastLoginTime IS NULL)") public boolean isFirstLogin;
 	
 	public UUID getPk() { return UUID.fromString(pk.toString()); } //defensive copy
 	public String getFbId() { return fbId; }
@@ -53,6 +59,7 @@ public class UserModel extends BaseModel {
 	public Date getLastLoginTime() { return (Date) lastLoginTime.clone(); } //defensive copy
 	public Date getsecondToLastLoginTime() { return (Date) secondToLastLoginTime.clone(); } //defensive copy
 	public boolean isFirstLogin() { return isFirstLogin; }
+	public Set<NotationMetaModel> getAuthoredNotations() { return authoredNotations; }
 	
 	/** Private helper for DB interaction implementation */
 	private static final Finder<UUID, UserModel> FINDER = new Finder<>(
@@ -90,7 +97,7 @@ public class UserModel extends BaseModel {
 	 ************************************************************************** */
 	
 	/** Creates a new user and saves it to the DB */
-	public static UserModel create(String fbId, String fbUsername, String email) {
+	public static UserModel createAndSave(String fbId, String fbUsername, String email) {
 		UserModel user = new UserModel(fbId, fbUsername, email);
 		user.doSaveAndRetry();
 		return user;

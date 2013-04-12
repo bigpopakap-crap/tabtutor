@@ -72,11 +72,11 @@ public class FbAuthWebController extends BaseWebController {
 						//get the user associated with this Facebook ID, or create one
 						UserModel user = UserModel.getByFbId(fbId);
 						if (user == null) {
-							user = UserModel.create(fbId, fbUsername, email);
+							user = UserModel.createAndSave(fbId, fbUsername, email);
 						}
 						
 						//add this user ID to the session object
-						session.setUserPkAndUpdate(user.getPk());
+						session.setUserAndUpdate(user);
 					}
 					catch (BaseApiException e) {
 						RequestErrorContext.setFbConnectionError(true);

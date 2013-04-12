@@ -5,7 +5,8 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -26,14 +27,15 @@ public class SessionCsrfTokenModel extends BaseModel {
 
 	private static final long serialVersionUID = 1065279771090088334L;
 	
-	@Column(name = "sessionPk") @Id public UUID sessionPk;
 	@Column(name = "csrfToken") public UUID csrfToken;
 	@Column(name = "createTime") public Date createTime;
 	@Column(name = "expireTime") public Date expireTime;
 	
-	@Transient @Formula(select = "NOW() > expireTime") public boolean isExpired;
+	@ManyToOne @JoinColumn(name = "sessionPk", referencedColumnName = "pk") public SessionModel session;
 	
-	public UUID getSessionPk() { return UUID.fromString(sessionPk.toString()); } //defensive copy
+	@Transient @Formula(select = "(NOW() > expireTime)") public boolean isExpired;
+	
+	public SessionModel getSession() { return session; }
 	public UUID getCsrfToken() { return UUID.fromString(csrfToken.toString()); } //defensive copy
 	public Date getCreateTime() { return (Date) createTime.clone(); } //defensive copy
 	public Date getExpireTime() { return (Date) expireTime.clone(); } //defensive copy
