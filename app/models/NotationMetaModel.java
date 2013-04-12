@@ -31,7 +31,7 @@ public class NotationMetaModel extends BaseModel {
 	
 	@Column(name = "pk") @Id public UUID pk;
 	@Column(name = "songPk") public UUID songPk; //TODO use proper foreign object reference
-	@Column(name = "userPk") public UUID author_userPk; //TODO use proper foreign object reference
+	@Column(name = "userPk_author") public UUID userPk_author; //TODO use proper foreign object reference
 	@Column(name = "instrumentType") public InstrumentType instrumentType;
 	@Column(name = "skillLevelType") public SkillLevelType skillLevelType;
 	@Column(name = "notationType") public NotationType notationType;

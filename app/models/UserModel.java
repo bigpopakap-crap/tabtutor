@@ -42,6 +42,7 @@ public class UserModel extends BaseModel {
 	@Column(name = "lastAccessTime") public Date lastAccessTime;
 	@Column(name = "lastLoginTime") public Date lastLoginTime;
 	@Column(name = "secondToLastLoginTime") public Date secondToLastLoginTime;
+	//TODO use reference for notations authored by this user
 	
 	@Transient @Formula(select = "(firstName || ' ' || lastName)") public String fullName;
 	@Transient @Formula(select = "(lastLoginTime IS NULL OR secondToLastLoginTime IS NULL)") public boolean isFirstLogin;
