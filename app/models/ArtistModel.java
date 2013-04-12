@@ -1,10 +1,14 @@
 package models;
 
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -26,11 +30,14 @@ public class ArtistModel extends BaseModel {
 	
 	@Column(name = "pk") @Id public UUID pk;
 	@Column(name = "name") public String name;
-	//TODO use proper foreign object reference for album list
-	//TODO use proper foreign object reference for song list
+	
+	@OneToMany(fetch = FetchType.LAZY) @JoinColumn(name = "artistPk", referencedColumnName = "pk") public Set<AlbumModel> albums;
+	@OneToMany(fetch = FetchType.LAZY) @JoinColumn(name = "artistPk", referencedColumnName = "pk") public Set<SongModel> songs;
 	
 	public UUID getPk() { return UUID.fromString(pk.toString()); } //defensive copy
 	public String getName() { return name; }
+	public Set<AlbumModel> getAlbums() { return albums; }
+	public Set<SongModel> getSongs() { return songs; }
 	
 	/** Private helper for DB interaction implementation */
 	private static final Finder<UUID, ArtistModel> FINDER = new Finder<>(

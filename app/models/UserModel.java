@@ -1,11 +1,15 @@
 package models;
 
 import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -42,7 +46,8 @@ public class UserModel extends BaseModel {
 	@Column(name = "lastAccessTime") public Date lastAccessTime;
 	@Column(name = "lastLoginTime") public Date lastLoginTime;
 	@Column(name = "secondToLastLoginTime") public Date secondToLastLoginTime;
-	//TODO use reference for notations authored by this user
+	
+	@OneToMany(fetch = FetchType.LAZY) @JoinColumn(name = "userPk_author", referencedColumnName = "pk") public Set<NotationMetaModel> authoredNotations;
 	
 	@Transient @Formula(select = "(firstName || ' ' || lastName)") public String fullName;
 	@Transient @Formula(select = "(lastLoginTime IS NULL OR secondToLastLoginTime IS NULL)") public boolean isFirstLogin;
@@ -56,6 +61,7 @@ public class UserModel extends BaseModel {
 	public Date getLastLoginTime() { return (Date) lastLoginTime.clone(); } //defensive copy
 	public Date getsecondToLastLoginTime() { return (Date) secondToLastLoginTime.clone(); } //defensive copy
 	public boolean isFirstLogin() { return isFirstLogin; }
+	public Set<NotationMetaModel> getAuthoredNotations() { return authoredNotations; }
 	
 	/** Private helper for DB interaction implementation */
 	private static final Finder<UUID, UserModel> FINDER = new Finder<>(

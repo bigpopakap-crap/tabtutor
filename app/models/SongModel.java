@@ -1,12 +1,14 @@
 package models;
 
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -34,10 +36,10 @@ public class SongModel extends BaseModel {
 	@Column(name = "trackNum") public int trackNum;
 	@Column(name = "isLive") public boolean isLive;
 	@Column(name = "youtubeId") public String youtubeId;
-	//TODO use proper foreign object reference for StaffMetaModel list
 	
-	@OneToOne @JoinColumn(name = "artistPk") public ArtistModel artist;
-	@OneToOne @JoinColumn(name = "albumPk") public AlbumModel album;
+	@ManyToOne @JoinColumn(name = "artistPk", referencedColumnName = "pk") public ArtistModel artist;
+	@ManyToOne @JoinColumn(name = "albumPk", referencedColumnName = "pk") public AlbumModel album;
+	@OneToMany @JoinColumn(name = "songPk", referencedColumnName = "pk") public Set<NotationMetaModel> notations;
 	
 	@Transient @Formula(select = "(youtubeId IS NOT NULL)") public boolean isYoutubeEnabled;
 	
@@ -49,6 +51,7 @@ public class SongModel extends BaseModel {
 	public boolean isLive() { return isLive; }
 	public String getYoutubeId() { return youtubeId; }
 	public boolean isYoutubeEnabled() { return isYoutubeEnabled; }
+	public Set<NotationMetaModel> getNotations() { return notations; }
 	
 	/** Private helper for DB interaction implementation */
 	private static final Finder<UUID, SongModel> FINDER = new Finder<>(

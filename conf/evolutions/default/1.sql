@@ -22,6 +22,30 @@ CREATE TABLE Album (
 	artistPk t_pk REFERENCES Artist(pk)
 );
 
+CREATE TABLE Song (
+	pk t_pk PRIMARY KEY,
+	title t_varcharLong NOT NULL,
+	trackNum SMALLINT,
+	isLive BOOLEAN NOT NULL,
+	youtubeId t_youtubeId,
+	artistPk t_pk NOT NULL REFERENCES Artist(pk),
+	albumPk t_pk REFERENCES Album(pk)
+);
+
+CREATE TABLE User (
+	pk t_pk PRIMARY KEY,
+	fbId t_facebookId NOT NULL UNIQUE,
+	fbIsAuthed BOOLEAN NOT NULL,
+	username t_varcharShort NOT NULL UNIQUE,
+	email t_email NOT NULL,
+	registerTime timestamp NOT NULL,
+	lastAccessTime timestamp NOT NULL,
+	lastLoginTime timestamp NOT NULL,
+	secondToLastLoginTime timestamp,
+	CHECK (lastLoginTime >= registerTime),
+	CHECK ((secondToLastLoginTime IS NULL) OR (lastLoginTime >= secondToLastLoginTime))
+);
+
 CREATE TABLE NotationMeta (
 	pk t_pk PRIMARY KEY,
 	instrument t_varcharShort NOT NULL,
@@ -31,14 +55,6 @@ CREATE TABLE NotationMeta (
 	ratingDenomenator BIGINT NOT NULL,
 	songPk t_pk NOT NULL REFERENCES Song(pk),
 	userPk_author t_pk NOT NULL REFERENCES User(pk)
-);
-
-CREATE TABLE SessionCsrfToken (
-	csrfToken t_csrfToken NOT NULL UNIQUE,
-	createTime timestamp NOT NULL,
-	expireTime timestamp NOT NULL,
-	sessionPk t_pk NOT NULL REFERENCES Session(pk),
-	CHECK (expireTime >= createTime)
 );
 
 CREATE TABLE Session (
@@ -55,28 +71,12 @@ CREATE TABLE Session (
 	CHECK (lastAccessTime >= startTime)
 );
 
-CREATE TABLE Song (
-	pk t_pk PRIMARY KEY,
-	title t_varcharLong NOT NULL,
-	trackNum SMALLINT,
-	isLive BOOLEAN NOT NULL,
-	youtubeId t_youtubeId,
-	artistPk t_pk NOT NULL REFERENCES Artist(pk),
-	albumPk t_pk REFERENCES Album(pk)
-);
-
-CREATE TABLE User (
-	pk t_pk PRIMARY KEY,
-	fbId t_facebookId NOT NULL UNIQUE,
-	fbIsAuthed BOOLEAN NOT NULL,
-	username t_userUsername NOT NULL UNIQUE,
-	email t_email NOT NULL,
-	registerTime timestamp NOT NULL,
-	lastAccessTime timestamp NOT NULL,
-	lastLoginTime timestamp NOT NULL,
-	secondToLastLoginTime timestamp,
-	CHECK (lastLoginTime >= registerTime),
-	CHECK ((secondToLastLoginTime IS NULL) OR (lastLoginTime >= secondToLastLoginTime))
+CREATE TABLE SessionCsrfToken (
+	csrfToken t_csrfToken NOT NULL UNIQUE,
+	createTime timestamp NOT NULL,
+	expireTime timestamp NOT NULL,
+	sessionPk t_pk NOT NULL REFERENCES Session(pk),
+	CHECK (expireTime >= createTime)
 );
 
 # --- !Downs

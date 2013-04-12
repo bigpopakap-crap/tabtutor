@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -43,8 +44,8 @@ public class NotationMetaModel extends BaseModel {
 	//TODO add reference to the actual notation data
 	//TODO use proper foreign object reference for instrument type list
 	
-	@OneToOne @JoinColumn(name = "songPk") public SongModel song;
-	@OneToOne @JoinColumn(name = "userPk_author") public UserModel author;
+	@ManyToOne @JoinColumn(name = "songPk", referencedColumnName = "pk") public SongModel song;
+	@ManyToOne @JoinColumn(name = "userPk_author", referencedColumnName = "pk") public UserModel author;
 	
 	@Transient @Formula(select = "(CASE WHEN ratingDenomenator = 0 THEN 0 ELSE (CAST(ratingNumerator AS NUMERIC) / ratingDenomenator))") public double rating;
 	
