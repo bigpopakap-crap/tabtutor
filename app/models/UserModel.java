@@ -15,8 +15,6 @@ import javax.persistence.Transient;
 
 import play.Logger;
 import utils.DateUtil;
-import utils.MessagesEnum;
-import utils.StringUtil;
 
 import com.avaje.ebean.annotation.Formula;
 
@@ -80,13 +78,13 @@ public class UserModel extends BaseModel {
 	 * Creates a user with the given information
 	 * Username will be some default value
 	 */
-	private UserModel(String fbId, String email) {
+	private UserModel(String fbId, String fbUsername, String email) {
 		Date now = DateUtil.now();
 		
 		this.pk = UUID.randomUUID();
 		this.fbId = fbId;
 		this.fbIsAuthed = true;
-		this.username = defaultUsername(fbId);
+		this.username = fbUsername;
 		this.email = email;
 		this.registerTime = now;
 		this.lastAccessTime = now;
@@ -99,8 +97,8 @@ public class UserModel extends BaseModel {
 	 ************************************************************************** */
 	
 	/** Creates a new user and saves it to the DB */
-	public static UserModel createAndSave(String fbId, String email) {
-		UserModel user = new UserModel(fbId, email);
+	public static UserModel createAndSave(String fbId, String fbUsername, String email) {
+		UserModel user = new UserModel(fbId, fbUsername, email);
 		user.doSaveAndRetry();
 		return user;
 	}
@@ -138,7 +136,7 @@ public class UserModel extends BaseModel {
 	public void setLastAccessTimeAndUpdate() {
 		lastAccessTime = DateUtil.now();
 		doUpdateAndRetry();
-		Logger.debug(getClass().getCanonicalName() + pk + " last access time updated to " + lastAccessTime);
+		Logger.debug(getClass().getCanonicalName() + " " + pk + " last access time updated to " + lastAccessTime);
 	}
 	
 	/** Sets the user login time to the current time */
@@ -146,7 +144,7 @@ public class UserModel extends BaseModel {
 		secondToLastLoginTime = lastLoginTime;
 		lastLoginTime = DateUtil.now();
 		doUpdateAndRetry();
-		Logger.debug(getClass().getCanonicalName() + pk + " login time updated to " + lastLoginTime);
+		Logger.debug(getClass().getCanonicalName() + " " + pk + " login time updated to " + lastLoginTime);
 	}
 	
 	/* **************************************************************************
@@ -163,20 +161,4 @@ public class UserModel extends BaseModel {
 		return getByFbId(fbId) != null;
 	}
 	
-	/* **************************************************************************
-	 *  BEGIN PRIVATE HELPERS
-	 ************************************************************************** */
-	
-	/** Creates a default username based on the user's Facebook ID */
-	private static String defaultUsername(String fbId) {
-		if (fbId == null) throw new IllegalArgumentException("fbId cannot be null");
-		
-		//append "user" to the username if it is all numbers or only the first character is a letter
-		return (
-					StringUtil.isInteger(fbId) || (!fbId.isEmpty() && StringUtil.isInteger(fbId.substring(1)))
-					? MessagesEnum.word_user.get() : ""
-				)
-				+ StringUtil.reverse(fbId);
-	}
-		
 }

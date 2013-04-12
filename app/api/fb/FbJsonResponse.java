@@ -78,6 +78,11 @@ public class FbJsonResponse extends BaseApiJsonResponse<FbErrorResponseException
 		return find("id", FbApi.PATH_ME).asText();
 	}
 	
+	/** Get the username if this response came from the /me path */
+	public String username() {
+		return find("username", FbApi.PATH_ME).asText();
+	}
+	
 	/** Get the first name if this response came from the /me path */
 	public String firstName() {
 		return find("first_name", FbApi.PATH_ME).asText();
