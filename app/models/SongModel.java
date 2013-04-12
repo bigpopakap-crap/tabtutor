@@ -36,7 +36,7 @@ public class SongModel extends BaseModel {
 	@Column(name = "youtubeId") public String youtubeId;
 	//TODO use proper foreign object reference for StaffMetaModel list
 	
-	@Transient @Formula(select = "youtubeId IS NOT NULL") public boolean isYoutubeEnabled;
+	@Transient @Formula(select = "(youtubeId IS NOT NULL)") public boolean isYoutubeEnabled;
 	
 	public UUID getPk() { return UUID.fromString(pk.toString()); } //defensive copy
 	public String getTitle() { return title; }

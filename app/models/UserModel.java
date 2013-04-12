@@ -43,8 +43,8 @@ public class UserModel extends BaseModel {
 	@Column(name = "lastLoginTime") public Date lastLoginTime;
 	@Column(name = "secondToLastLoginTime") public Date secondToLastLoginTime;
 	
-	@Transient @Formula(select = "firstName || ' ' || lastName") public String fullName;
-	@Transient @Formula(select = "secondToLastLoginTime IS NULL") public boolean isFirstLogin;
+	@Transient @Formula(select = "(firstName || ' ' || lastName)") public String fullName;
+	@Transient @Formula(select = "(lastLoginTime IS NULL OR secondToLastLoginTime IS NULL)") public boolean isFirstLogin;
 	
 	public UUID getPk() { return UUID.fromString(pk.toString()); } //defensive copy
 	public String getFbId() { return fbId; }

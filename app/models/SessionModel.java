@@ -46,7 +46,7 @@ public class SessionModel extends BaseModel {
 	@Column(name = "lastAccessTime") public Date lastAccessTime;
 	//TODO use proper foreign object reference for CSRF token list
 	
-	@Transient @Formula(select = "NOW() > fbTokenExpireTime") public boolean isFbtokenExpired;
+	@Transient @Formula(select = "(NOW() > fbTokenExpireTime)") public boolean isFbtokenExpired;
 	
 	public UUID getPk() { return UUID.fromString(pk.toString()); } //defensive copy
 	public String getPk_String() { return getPk().toString(); }
