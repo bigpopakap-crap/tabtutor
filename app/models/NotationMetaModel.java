@@ -8,10 +8,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import types.objects.InstrumentType;
 import types.objects.NotationType;
 import types.objects.SkillLevelType;
+
+import com.avaje.ebean.annotation.Formula;
 
 /**
 * This Ebean maps to the Staff table, and represents staff metadata
@@ -35,12 +38,15 @@ public class NotationMetaModel extends BaseModel {
 	@Column(name = "instrumentType") public InstrumentType instrumentType;
 	@Column(name = "skillLevelType") public SkillLevelType skillLevelType;
 	@Column(name = "notationType") public NotationType notationType;
-	@Column(name = "rating") public double rating;
+	@Column(name = "ratingNumerator") public int ratingNumerator;
+	@Column(name = "ratingDenomenator") public int ratingDenomenator;
 	//TODO add reference to the actual notation data
 	//TODO use proper foreign object reference for instrument type list
 	
 	@OneToOne @JoinColumn(name = "songPk") public SongModel song;
 	@OneToOne @JoinColumn(name = "userPk_author") public UserModel user_author;
+	
+	@Transient @Formula(select = "(CASE WHEN ratingDenomenator = 0 THEN 0 ELSE (CAST(ratingNumerator AS NUMERIC) / ratingDenomenator))") public double rating;
 	
 	/** Private helper for DB interaction implementation */
 	private static final Finder<UUID, NotationMetaModel> FINDER = new Finder<>(

@@ -32,6 +32,7 @@ public class SessionCsrfTokenModel extends BaseModel {
 	@Column(name = "expireTime") public Date expireTime;
 	
 	@ManyToOne @JoinColumn(name = "sessionPk", referencedColumnName = "pk") public SessionModel session;
+	
 	@Transient @Formula(select = "(NOW() > expireTime)") public boolean isExpired;
 	
 	public SessionModel getSession() { return session; }
