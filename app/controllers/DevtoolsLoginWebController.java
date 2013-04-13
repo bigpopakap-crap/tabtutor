@@ -1,5 +1,6 @@
 package controllers;
 
+import models.UserModel;
 import play.mvc.Result;
 import actions.ActionAnnotations.Sessioned;
 
@@ -15,8 +16,7 @@ public class DevtoolsLoginWebController extends DevtoolsWebController {
 	
 	/** Lists the test users on a page */
 	public static Result listUsers() {
-		//TODO do this
-		return ok();
+		return ok(views.html.devtools_listUsers.render(UserModel.getAll()));
 	}
 	
 	/** Creates a new test user with the given first and last name */
@@ -28,7 +28,7 @@ public class DevtoolsLoginWebController extends DevtoolsWebController {
 	
 	/** Logs in as the test user with the given ID and redirects to the given url */
 	@Sessioned(forceRefresh = true)
-	public static Result login(String id, String targetUrl) {
+	public static Result login(String pk, String targetUrl) {
 		//TODO do this
 		return ok();
 	}

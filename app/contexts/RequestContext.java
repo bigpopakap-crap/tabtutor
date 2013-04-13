@@ -22,5 +22,10 @@ public class RequestContext extends BaseContext {
 	public static String loginUrl() {
 		return routes.FbAuthWebController.fblogin(null, null, url()).url();
 	}
+	
+	/** Gets the login url for a test user */
+	public static String devtoolsLoginUrl(String pk) {
+		return routes.DevtoolsLoginWebController.login(pk, url()).url();
+	}
 
 }

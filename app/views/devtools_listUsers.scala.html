@@ -1,0 +1,56 @@
+@*
+	Author: bigpopakap
+	Since: 2013-04-12
+	
+	The page to list users and provide login links for them
+*@
+@(users: List[UserModel])
+@import contexts.RequestContext;
+@td(value: String) = {
+	<td title="@(value)">@(value)</td>
+}
+<!DOCTYPE html>
+<html>
+<head>
+	@p_preHead()
+	<style type="text/css">
+		table td {
+			border: solid 1px black;
+			padding: 4px;
+			overflow: hidden;
+		}
+	</style>
+</head>
+<body>
+	@p_topbar()
+	<table>
+		<!-- Header row -->
+		<tr>
+			<th>Login link</th>
+			<th>Username</th>
+			<th>Email</th>
+			<th>FB ID</th>
+			<th>FB isAuthed</th>
+			<th>First login</th>
+			<th>Register</th>
+			<th>Last login</th>
+			<th>Second last login</th>
+			<th>Last access</th>
+		</tr>
+		
+		@for(user <- users) {
+			<tr>
+				<td><a href="@(RequestContext.devtoolsLoginUrl(user.getPk().toString()))">Login</a></td>
+				@td(user.getUsername())
+				@td(user.getEmail())
+				@td(user.getFbId())
+				@td(user.getFbIsAuthed().toString())
+				@td(user.isFirstLogin().toString())
+				@td(user.getRegisterTime().toString())
+				@td(user.getLastLoginTime().toString())
+				@td(user.getSecondToLastLoginTime.toString())
+				@td(user.getLastAccessTime().toString())
+			</tr>
+		}
+	</table>
+</body>

@@ -16,6 +16,7 @@ public abstract class BaseMain {
 	
 	protected static final String APP_PROCFILE_NAME = "Procfile.dev";
 	protected static final String TEST_PROCFILE_NAME = "Procfile.test";
+	protected static final String CLEAN_PROCFILE_NAME = "Procfile.clean";
 	protected static final String ENV_FILE_NAME = "env.dev";
 	
 	/**
