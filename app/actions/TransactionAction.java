@@ -35,6 +35,7 @@ public class TransactionAction extends BaseAction<Transactioned> {
 				Ebean.rollbackTransaction();
 			}
 			else {
+				//TODO do retry logic
 				Ebean.commitTransaction();
 			}
 		}
