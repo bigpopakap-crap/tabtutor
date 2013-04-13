@@ -11,10 +11,10 @@ import actions.ActionAnnotations.Sessioned;
  * @since 2013-03-21
  *
  */
-public class DevtoolsTestUsersWebController extends DevtoolsWebController {
+public class DevtoolsLoginWebController extends DevtoolsWebController {
 	
 	/** Lists the test users on a page */
-	public static Result list() {
+	public static Result listUsers() {
 		//TODO do this
 		return ok();
 	}
