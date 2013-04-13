@@ -1,5 +1,7 @@
 package actions;
 
+import java.lang.annotation.Annotation;
+
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import actions.ActionAnnotations.AccessTimed;
@@ -30,6 +32,18 @@ public class AccessTimeAction extends BaseAction<AccessTimed> {
 		
 		//delegate
 		return delegate.call(ctx);
+	}
+
+	@Override
+	protected AccessTimed createConfiguration() {
+		return new AccessTimed() {
+			
+			@Override
+			public Class<? extends Annotation> annotationType() {
+				return this.getClass();
+			}
+			
+		};
 	}
 
 }

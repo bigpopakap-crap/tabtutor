@@ -1,5 +1,7 @@
 package actions;
 
+import java.lang.annotation.Annotation;
+
 import play.Logger;
 import play.mvc.Http.Context;
 import play.mvc.Result;
@@ -73,6 +75,18 @@ public class TryCatchAction extends BaseAction<TriedCaught> {
 				}
 			}
 		}
+	}
+
+	@Override
+	protected TriedCaught createConfiguration() {
+		return new TriedCaught() {
+			
+			@Override
+			public Class<? extends Annotation> annotationType() {
+				return this.getClass();
+			}
+
+		};
 	}
 
 }

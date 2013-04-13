@@ -1,9 +1,12 @@
 package actions;
 
+import java.lang.annotation.Annotation;
+
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import actions.ActionAnnotations.ModeProtected;
 import contexts.AppContext;
+import contexts.AppContext.Mode;
 import controllers.exceptions.NotFoundExposedException;
 
 /**
@@ -25,6 +28,23 @@ public class ModeProtectAction extends BaseAction<ModeProtected> {
 		else {
 			return delegate.call(ctx);
 		}
+	}
+
+	@Override
+	protected ModeProtected createConfiguration() {
+		return new ModeProtected() {
+			
+			@Override
+			public Class<? extends Annotation> annotationType() {
+				return this.getClass();
+			}
+			
+			@Override
+			public Mode allowedMode() {
+				return AppContext.Mode.DEVELOPMENT;
+			}
+
+		};
 	}
 	
 }

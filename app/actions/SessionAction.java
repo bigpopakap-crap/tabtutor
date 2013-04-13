@@ -1,5 +1,7 @@
 package actions;
 
+import java.lang.annotation.Annotation;
+
 import models.SessionModel;
 import play.Logger;
 import play.mvc.Http.Context;
@@ -33,6 +35,23 @@ public class SessionAction extends BaseAction<Sessioned> {
 		}
 
 		return delegate.call(ctx);
+	}
+
+	@Override
+	protected Sessioned createConfiguration() {
+		return new Sessioned() {
+			
+			@Override
+			public Class<? extends Annotation> annotationType() {
+				return this.getClass();
+			}
+			
+			@Override
+			public boolean forceRefresh() {
+				return false;
+			}
+
+		};
 	}
 
 }
