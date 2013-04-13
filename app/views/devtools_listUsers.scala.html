@@ -6,6 +6,7 @@
 *@
 @(users: List[UserModel])
 @import contexts.RequestContext;
+@import utils.MessagesEnum;
 @td(value: String) = {
 	<td title="@(value)">@(value)</td>
 }
@@ -13,6 +14,8 @@
 <html>
 <head>
 	@p_preHead()
+	
+	@* TODO this should be replaced with a more general site style *@
 	<style type="text/css">
 		table td {
 			border: solid 1px black;
@@ -40,7 +43,11 @@
 		
 		@for(user <- users) {
 			<tr>
-				<td><a href="@(RequestContext.devtoolsLoginUrl(user.getPk().toString()))">Login</a></td>
+				<td>
+					<a href="@(RequestContext.devtoolsLoginUrl(user.getPk().toString()))">
+						@(MessagesEnum.word_login.get())
+					</a>
+				</td>
 				@td(user.getUsername())
 				@td(user.getEmail())
 				@td(user.getFbId())
