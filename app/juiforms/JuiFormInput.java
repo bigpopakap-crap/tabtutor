@@ -1,7 +1,7 @@
-package juis.forms;
+package juiforms;
 
-import juis.BaseJui;
 import play.api.templates.Html;
+import utils.ObjectUtil;
 
 /**
  * A JUI for an HTML form input element
@@ -10,7 +10,7 @@ import play.api.templates.Html;
  * @since 2013-04014
  * 
  */
-public class JuiFormInput extends BaseJui {
+public class JuiFormInput {
 	
 	private final JuiFormInputType type;		//the input type
 	private final String name;					//the name of the form
@@ -43,6 +43,12 @@ public class JuiFormInput extends BaseJui {
 		this.helpText = helpText;
 		this.placeholder = placeholder;
 		clear();
+	}
+	
+	/** Default toString that returns the field=value mappings */
+	@Override
+	public String toString() {
+		return this.getClass().getCanonicalName() + ":" + ObjectUtil.getFieldMap(this);
 	}
 	
 	public JuiFormInputType getType() { return type; }

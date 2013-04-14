@@ -1,4 +1,4 @@
-package juis.forms;
+package juiforms;
 
 
 import java.util.ArrayList;
@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import juis.BaseJui;
 import play.api.templates.Html;
 import play.mvc.Http.Request;
 import types.HttpMethodType;
+import utils.ObjectUtil;
 import contexts.RequestContext;
 
 /**
@@ -24,7 +24,7 @@ import contexts.RequestContext;
  *
  * @param <T> the object this is a form for
  */
-public abstract class JuiForm<T> extends BaseJui {
+public abstract class JuiForm<T> {
 	
 	private final List<String> elementNames;				//lists element names in the order they should appear
 	private final Map<String, JuiFormInput> elementMap; 	//maps element names to the element objects
@@ -56,6 +56,16 @@ public abstract class JuiForm<T> extends BaseJui {
 		}
 		
 		clear();
+	}
+	
+	/* **************************************************************************
+	 *  BEGIN PUBLIC OVERRIDES
+	 ************************************************************************** */
+	
+	/** Default toString that returns the field=value mappings */
+	@Override
+	public String toString() {
+		return this.getClass().getCanonicalName() + ":" + ObjectUtil.getFieldMap(this);
 	}
 	
 	/* **************************************************************************

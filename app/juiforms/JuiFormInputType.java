@@ -1,4 +1,4 @@
-package juis.forms;
+package juiforms;
 
 /**
  * The supported types of form input elements

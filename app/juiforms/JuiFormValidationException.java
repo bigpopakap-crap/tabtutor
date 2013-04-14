@@ -1,4 +1,4 @@
-package juis.forms;
+package juiforms;
 
 /**
  * Exception to be thrown when a form has validation errors. If this is thrown,
