@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import juis.BaseJui;
 import play.api.templates.Html;
 import play.mvc.Http.Request;
 import types.HttpMethodType;
@@ -22,12 +23,11 @@ import contexts.RequestContext;
  *
  * @param <T> the object this is a form for
  */
-public abstract class JuiForm<T> {
+public abstract class JuiForm<T> extends BaseJui {
 	
-	//TODO add form title?
-	private final List<String> elementNames;			//lists element names in the order they should appear
+	private final List<String> elementNames;				//lists element names in the order they should appear
 	private final Map<String, JuiFormInput> elementMap; 	//maps element names to the element objects
-	private boolean isBound;							//flag to determine whether the form has bound values
+	private boolean isBound;								//flag to determine whether the form has bound values
 
 	//TODO add default CSRF token
 	
@@ -100,10 +100,12 @@ public abstract class JuiForm<T> {
 	
 	/**
 	 * Renders the HTML to represent this form
+	 * TODO add option to display on one line/mult-line?
+	 * 
 	 * @param method the method for the form to use on submit
 	 * @param action the URL for the form to submit to
 	 */
-	public Html render(HttpMethodType method, String action) {
+	public Html render(String title, String subtitle, HttpMethodType method, String action) {
 		//TODO
 		return null;
 	}

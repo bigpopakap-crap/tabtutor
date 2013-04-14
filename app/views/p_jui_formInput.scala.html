@@ -5,10 +5,8 @@
 	Partial JUI associated with an HTML form input (JuiFormInput.java)
 	
 	Params:
-		title - the title of the form
-		subtitle - the subtitle of the form (optional)
-		inputs - the list of input JUIs
+		input - the input JUI to display
 *@
-@(title: String, subtitle: String, inputs: List[juis.forms.JuiFormInput])
+@(input: juis.forms.JuiFormInput)
 @import juis.forms.JuiFormInput
-<input/>
+<div>@(input.toString())</div>

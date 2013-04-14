@@ -1,5 +1,6 @@
 package juis.forms;
 
+import juis.BaseJui;
 import play.api.templates.Html;
 
 /**
@@ -9,7 +10,7 @@ import play.api.templates.Html;
  * @since 2013-04014
  * 
  */
-public class JuiFormInput {
+public class JuiFormInput extends BaseJui {
 	
 	private final JuiFormInputType type;		//the input type
 	private final String name;					//the name of the form
