@@ -4,7 +4,7 @@
 	
 	The page for the list of songs
 *@
-@(songs: List[SongModel])
+@(songs: List[SongModel], songForm: SongModel.SongModelForm)
 @import models.SongModel
 <!DOCTYPE html>
 <html>
@@ -15,7 +15,7 @@
 	@p_topbar()
 	
 	<h1>Add a song</h1>
-	<!-- TODO -->
+	@(songForm.render())
 	
 	<h1>List of songs</h1>
 	<table>

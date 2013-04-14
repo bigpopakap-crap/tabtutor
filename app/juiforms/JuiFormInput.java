@@ -69,10 +69,10 @@ public class JuiFormInput {
 			String error = constraint.validate(this);
 			if (error != null) {
 				setError(error);
-				return false;
 			}
 		}
-		return true;
+		
+		return isError();
 	}
 
 	/** Renders the HTML to represent this form input */

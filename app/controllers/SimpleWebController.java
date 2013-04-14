@@ -3,6 +3,7 @@ package controllers;
 import models.AlbumModel;
 import models.ArtistModel;
 import models.SongModel;
+import models.SongModel.SongModelForm;
 import play.mvc.Result;
 
 /**
@@ -23,8 +24,9 @@ public class SimpleWebController extends BaseWebController {
 	/** Show the song list page */
 	public static Result songs() {
 		return ok(views.html.songList.render(
-			SongModel.getAll())
-		);
+			SongModel.getAll(),
+			new SongModelForm()
+		));
 	}
 	
 	/** Show the artist list page */

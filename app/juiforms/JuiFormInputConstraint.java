@@ -5,8 +5,18 @@ import utils.StringUtil;
 
 
 
+
 public enum JuiFormInputConstraint {
 	
+	REQUIRED() {
+
+		@Override
+		protected String hook_validate(JuiFormInput input) {
+			if (input.getValue().isEmpty()) return MessagesEnum.formError_required.get(input.getName());
+			else return null;
+		}
+		
+	},
 	IS_INTEGER() {
 
 		@Override
@@ -24,7 +34,16 @@ public enum JuiFormInputConstraint {
 	}
 	
 	public final String validate(JuiFormInput input) {
-		if (input.getValue() == null) throw new IllegalStateException("value cannot be null");
+		if (input == null) {
+			throw new IllegalStateException("input cannot be null");
+		}
+		else if (input.getValue() == null) {
+			throw new IllegalStateException("value cannot be null");
+		}
+		//if this is not the required constraint and the value is empty, just skip it
+		else if (this != REQUIRED && input.getValue().isEmpty()) {
+			return null;
+		}
 		
 		//validate against the dependencies
 		for (JuiFormInputConstraint constraint : dependencies) {
