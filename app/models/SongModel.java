@@ -1,5 +1,6 @@
 package models;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -26,11 +27,14 @@ import com.avaje.ebean.annotation.Formula;
 public class SongModel extends BaseModel {
 	
 	private static final long serialVersionUID = -7421630820257999626L;
+	
+	private static final int INVALID_TRACK_NUM = -1;
 
 	/* **************************************************************************
 	 *  FIELDS
 	 ************************************************************************** */
 	
+	//TODO add a field for the year?
 	@Column(name = "pk") @Id public UUID pk;
 	@Column(name = "title") public String title;
 	@Column(name = "trackNum") public int trackNum;
@@ -66,19 +70,48 @@ public class SongModel extends BaseModel {
 	 *  BEGIN CONSTRUCTORS (PRIVATE)
 	 ************************************************************************** */
 
-	//TODO
+	private SongModel(String title, ArtistModel artist, AlbumModel album, int trackNum, boolean isLive, String youtubeId) {
+		this.pk = UUID.randomUUID();
+		this.title = title;
+		this.artist = artist;
+		this.album = album;
+		this.trackNum = trackNum;
+		this.isLive = isLive;
+		this.youtubeId = youtubeId;
+	}
 	
 	/* **************************************************************************
 	 *  BEGIN CREATORS (PUBLIC)
 	 ************************************************************************** */
 	
-	//TODO
+	public static SongModel createAndSave(String title) {
+		return createAndSave(title, null);
+	}
+	
+	public static SongModel createAndSave(String title, ArtistModel artist) {
+		return createAndSave(title, artist, null);
+	}
+	
+	public static SongModel createAndSave(String title, ArtistModel artist, AlbumModel album) {
+		return createAndSave(title, artist, album, INVALID_TRACK_NUM, false);
+	}
+	
+	public static SongModel createAndSave(String title, ArtistModel artist, AlbumModel album, int trackNum, boolean isLive) {
+		return createAndSave(title, artist, album, trackNum, isLive, null);
+	}
+	
+	public static SongModel createAndSave(String title, ArtistModel artist, AlbumModel album, int trackNum, boolean isLive, String youtubeId) {
+		return (SongModel) new SongModel(title, artist, album, trackNum, isLive, youtubeId).doSaveAndRetry();
+	}
 	
 	/* **************************************************************************
 	 *  BEGIN SELECTORS
 	 ************************************************************************** */
 	
-	//TODO
+	/** Get all songs */
+	public static List<SongModel> getAll() {
+		return FINDER.all();
+	}
 	
 	/* **************************************************************************
 	 * BEGIN  UPDATERS

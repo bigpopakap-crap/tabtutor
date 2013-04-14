@@ -1,5 +1,6 @@
 package models;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -52,19 +53,26 @@ public class ArtistModel extends BaseModel {
 	 *  BEGIN CONSTRUCTORS (PRIVATE)
 	 ************************************************************************** */
 
-	//TODO
+	private ArtistModel(String name) {
+		this.name = name;
+	}
 	
 	/* **************************************************************************
 	 *  BEGIN CREATORS (PUBLIC)
 	 ************************************************************************** */
 	
-	//TODO
+	public static ArtistModel createAndSave(String name) {
+		return (ArtistModel) new ArtistModel(name).doDeleteAndRetry();
+	}
 	
 	/* **************************************************************************
 	 *  BEGIN SELECTORS
 	 ************************************************************************** */
 	
-	//TODO
+	/** Get all artists */
+	public static List<ArtistModel> getAll() {
+		return FINDER.all();
+	}
 	
 	/* **************************************************************************
 	 * BEGIN  UPDATERS
