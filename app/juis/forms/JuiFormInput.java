@@ -1,6 +1,5 @@
 package juis.forms;
 
-import juis.Renderable;
 import play.api.templates.Html;
 
 /**
@@ -10,13 +9,14 @@ import play.api.templates.Html;
  * @since 2013-04014
  * 
  */
-public class JuiFormInput implements Renderable {
+public class JuiFormInput {
 	
 	private final JuiFormInputType type;		//the input type
 	private final String name;					//the name of the form
 												//this is also used as an identifying key when binding data
 	private final String label;					//the label for this input
 	private final String helpText;				//help text for this input
+	private final String placeholder;			//placeholder for a text input
 	private String value;						//the value of this input element (can be set)
 	private String error;						//the error stirng of this input (can be set)
 	
@@ -26,7 +26,12 @@ public class JuiFormInput implements Renderable {
 	}
 	
 	/** Creates a new form element */
-	public JuiFormInput(JuiFormInputType type, String name, String label, String helpText) {
+	public JuiFormInput(JuiFormInputType type, String name, String label, String placeholder) {
+		this(type, name, label, placeholder, null);
+	}
+	
+	/** Creates a new form element */
+	public JuiFormInput(JuiFormInputType type, String name, String label, String placeholder, String helpText) {
 		if (type == null) throw new IllegalArgumentException("type cannot be null");
 		if (name == null) throw new IllegalArgumentException("name cannot be null");
 		if (label == null) throw new IllegalArgumentException("helpText cannot be null");
@@ -35,6 +40,7 @@ public class JuiFormInput implements Renderable {
 		this.name = name;
 		this.label = label;
 		this.helpText = helpText;
+		this.placeholder = placeholder;
 		clear();
 	}
 	
@@ -42,6 +48,7 @@ public class JuiFormInput implements Renderable {
 	public String getName() { return name; }
 	public String getLabel() { return label; }
 	public String getHelpText() { return helpText; }
+	public String getPlaceholder() { return placeholder; }
 	public String getValue() { return value; }
 	public String getError() { return error; }
 	
@@ -55,7 +62,7 @@ public class JuiFormInput implements Renderable {
 		setError(null);
 	}
 
-	@Override
+	/** Renders the HTML to represent this form input */
 	public Html render() {
 		// TODO Auto-generated method stub
 		return null;

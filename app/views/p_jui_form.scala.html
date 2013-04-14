@@ -5,7 +5,13 @@
 	Partial JUI associated with an HTML form (JuiForm.java)
 	
 	Params:
+		method - the method to use for this form
+		action - the URL to submit the form
 		input - the input element JUI
 *@
-@(input: JuiFormInput)
+@(method: types.HttpMethodType, action: String, input: juis.forms.JuiFormInput)
+@import types.HttpMethodType
 @import juis.forms.JuiFormInput
+<form>
+	woooo it's a form
+</form>

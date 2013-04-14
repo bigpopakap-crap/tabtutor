@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import juis.Renderable;
 import play.api.templates.Html;
 import play.mvc.Http.Request;
+import types.HttpMethodType;
 import contexts.RequestContext;
 
 /**
@@ -22,7 +22,7 @@ import contexts.RequestContext;
  *
  * @param <T> the object this is a form for
  */
-public abstract class JuiForm<T> implements Renderable {
+public abstract class JuiForm<T> {
 	
 	//TODO add form title?
 	private final List<String> elementNames;			//lists element names in the order they should appear
@@ -98,8 +98,12 @@ public abstract class JuiForm<T> implements Renderable {
 		}
 	}
 	
-	@Override
-	public Html render() {
+	/**
+	 * Renders the HTML to represent this form
+	 * @param method the method for the form to use on submit
+	 * @param action the URL for the form to submit to
+	 */
+	public Html render(HttpMethodType method, String action) {
 		//TODO
 		return null;
 	}
