@@ -1,4 +1,4 @@
-package forms;
+package juis.forms;
 
 /**
  * The supported types of form input elements
@@ -7,7 +7,7 @@ package forms;
  * @since 2013-04-14
  *
  */
-public enum JuiFormElementType {
+public enum JuiFormInputType {
 	
 	BUTTON,
 	EMAIL,

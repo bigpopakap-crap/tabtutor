@@ -1,6 +1,5 @@
-package forms;
+package juis.forms;
 
-import interfaces.Renderable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import juis.Renderable;
 import play.api.templates.Html;
 import play.mvc.Http.Request;
 import contexts.RequestContext;
@@ -22,11 +22,11 @@ import contexts.RequestContext;
  *
  * @param <T> the object this is a form for
  */
-public abstract class JuiFormElement<T> implements Renderable {
+public abstract class JuiForm<T> implements Renderable {
 	
 	//TODO add form title?
 	private final List<String> elementNames;			//lists element names in the order they should appear
-	private final Map<String, JuiFormInputElement> elementMap; 	//maps element names to the element objects
+	private final Map<String, JuiFormInput> elementMap; 	//maps element names to the element objects
 	private boolean isBound;							//flag to determine whether the form has bound values
 
 	//TODO add default CSRF token
@@ -36,18 +36,18 @@ public abstract class JuiFormElement<T> implements Renderable {
 	 * Forms must not have elements with duplicate names
 	 * @throws IllegalStateException any two form elements have the same name
 	 */
-	public JuiFormElement(JuiFormInputElement... elements) throws IllegalStateException {
-		if (elements == null) elements = new JuiFormInputElement[0];
+	public JuiForm(JuiFormInput... elements) throws IllegalStateException {
+		if (elements == null) elements = new JuiFormInput[0];
 		
 		//create the list of element names in order
 		elementNames = new ArrayList<>();
-		for (JuiFormInputElement element : elements) {
+		for (JuiFormInput element : elements) {
 			elementNames.add(element.getName());
 		}
 		
 		//put the elements in a map and make sure there are no duplicate names
 		elementMap = new HashMap<>();
-		for (JuiFormInputElement element : elements) {
+		for (JuiFormInput element : elements) {
 			if (elementMap.containsKey(element.getName())) {
 				throw new IllegalStateException("Duplicate name found: " + element.getName());
 			}
@@ -69,7 +69,7 @@ public abstract class JuiFormElement<T> implements Renderable {
 	/** Clears any bound values */
 	public void clear() {
 		try {
-			for (JuiFormInputElement element : elementMap.values()) {
+			for (JuiFormInput element : elementMap.values()) {
 				element.clear();
 			}
 		}
@@ -79,7 +79,7 @@ public abstract class JuiFormElement<T> implements Renderable {
 	}
 	
 	/** Binds the form to the parameters in the given request */
-	public T bind(Request req) throws JuiFormElementInvalidException {
+	public T bind(Request req) throws JuiFormValidationException {
 		try {
 			bindValues(RequestContext.queryParams());
 			Map<String, String> formValues = getValues();
@@ -90,7 +90,7 @@ public abstract class JuiFormElement<T> implements Renderable {
 			}
 			else {
 				bindErrors(validationErrors);
-				throw new JuiFormElementInvalidException();
+				throw new JuiFormValidationException();
 			}
 		}
 		finally {
@@ -142,7 +142,7 @@ public abstract class JuiFormElement<T> implements Renderable {
 				String key = entry.getKey();
 				String value = entry.getValue();
 				
-				JuiFormInputElement element = elementMap.get(key);
+				JuiFormInput element = elementMap.get(key);
 				if (element != null) {
 					if (isErrors) element.setError(value);
 					else element.setValue(value);
@@ -155,7 +155,7 @@ public abstract class JuiFormElement<T> implements Renderable {
 	private Map<String, String> getValues() {
 		//TODO cache the result of this method
 		Map<String, String> values = new HashMap<String, String>();
-		for (JuiFormInputElement element : elementMap.values()) {
+		for (JuiFormInput element : elementMap.values()) {
 			values.put(element.getName(), element.getValue());
 		}
 		return values;

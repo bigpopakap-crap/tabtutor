@@ -1,4 +1,4 @@
-package interfaces;
+package juis;
 
 import play.api.templates.Html;
 
