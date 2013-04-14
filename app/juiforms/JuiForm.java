@@ -6,10 +6,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import play.api.templates.Html;
-import play.mvc.Http.Request;
 import types.HttpMethodType;
 import utils.ObjectUtil;
 import contexts.RequestContext;
@@ -29,6 +27,7 @@ public abstract class JuiForm<T> {
 	private final List<String> elementNames;				//lists element names in the order they should appear
 	private final Map<String, JuiFormInput> elementMap; 	//maps element names to the element objects
 	private boolean isBound;								//flag to determine whether the form has bound values
+	private boolean isValid;								//flag to determine whether the data bound to the form is valid
 
 	//TODO add default CSRF token
 	
@@ -77,6 +76,12 @@ public abstract class JuiForm<T> {
 		return isBound;
 	}
 	
+	/** Determines whether the data bound to the form is valid.
+	 *  The value of this method means nothing if {@link #isBound()} is false */
+	public boolean isValid() {
+		return isValid;
+	}
+	
 	/** Clears any bound values */
 	public void clear() {
 		try {
@@ -86,21 +91,20 @@ public abstract class JuiForm<T> {
 		}
 		finally {
 			isBound = false;
+			isValid = false;
 		}
 	}
 	
 	/** Binds the form to the parameters in the given request */
-	public T bind(Request req) throws JuiFormValidationException {
+	public T bind() throws JuiFormValidationException {
 		try {
 			bindValues(RequestContext.queryParams());
-			Map<String, String> formValues = getValues();
+			validate();
 			
-			Map<String, String> validationErrors = validate(formValues);
-			if (validationErrors != null) {
-				return bind(formValues);
+			if (isValid()) {
+				return bind(getValues());
 			}
 			else {
-				bindErrors(validationErrors);
 				throw new JuiFormValidationException();
 			}
 		}
@@ -117,7 +121,7 @@ public abstract class JuiForm<T> {
 	 * @param action the URL for the form to submit to
 	 */
 	public Html render(String title, String subtitle, HttpMethodType method, String action) {
-		return views.html.p_jui_form.render(title, subtitle, method, action, getInputs());
+		return views.html.p_jui_form.render(title, subtitle, method, action, getInputElements());
 	}
 	
 	/* **************************************************************************
@@ -125,22 +129,12 @@ public abstract class JuiForm<T> {
 	 ************************************************************************** */
 	
 	/**
-	 * Validates a form, given the data bound to the form.
-	 * This method should return null if there is NO validation error,
-	 * else a map of error messages for each field
-	 * 
-	 * @param data a map from field names to their values
-	 * @return null if there is no validation error, else a map of field
-	 * 			names to the error strings that should be displayed next to them
-	 */
-	protected abstract Map<String, String> validate(Map<String, String> data);
-	
-	/**
 	 * Creates an object, given the data bound to the form.
 	 * 
 	 * Note: this method will only be called on a form that has been
-	 * validated by the {@link #validate(Map)} method. Therefore, it is
-	 * assumed that the data is valid and an object can be created from this form
+	 * validated against the contraints associated with each field.
+	 * Therefore, it is assumed that the data is valid and an object
+	 * can be created from this form
 	 * 
 	 * @param data a map from field names to their values
 	 * @return the object derived from these values
@@ -151,39 +145,26 @@ public abstract class JuiForm<T> {
 	 *  BEGIN PRIVATE HELPERS
 	 ************************************************************************** */
 	
+	/** Validates the fields against the data bound to them.
+	 *  Populates them with error messages, if applicable */
+	private void validate() {
+		int badCount = 0; //use a count instead of just &&ing values together to avoid it skipping executions
+		for (JuiFormInput input : getInputElements()) {
+			if (!input.validate()) {
+				badCount++;
+			}
+		}
+		
+		isValid = (badCount == 0);
+	}
+	
 	/**
 	 * Binds values to this form
 	 * @param values a map of the field names to values
 	 */
 	private void bindValues(Map<String, String> values) {
-		bind(false, values);
-	}
-	
-	/**
-	 * Binds errors to this form
-	 * @param errors a map of the field names to error
-	 */
-	private void bindErrors(Map<String, String> errors) {
-		bind(true, errors);
-	}
-	
-	/**
-	 * Binds values or errors to the form
-	 * @param isErrors flag indicating whether the data represents field values or errors
-	 * @param data a map of fiend names to the values/errors
-	 */
-	private void bind(boolean isErrors, Map<String, String> data) {
-		if (data != null) {
-			for (Entry<String, String> entry : data.entrySet()) {
-				String key = entry.getKey();
-				String value = entry.getValue();
-				
-				JuiFormInput element = elementMap.get(key);
-				if (element != null) {
-					if (isErrors) element.setError(value);
-					else element.setValue(value);
-				}
-			}
+		for (JuiFormInput input : getInputElements()) {
+			input.setValue(values.get(input.getName()));
 		}
 	}
 	
@@ -198,7 +179,7 @@ public abstract class JuiForm<T> {
 	}
 	
 	/** Gets the input elements in order */
-	private List<JuiFormInput> getInputs() {
+	private List<JuiFormInput> getInputElements() {
 		//TODO cache the result of this method (this can probably be calculated in the constructor itself)
 		List<JuiFormInput> inputs = new LinkedList<>();
 		for (String name : elementNames) {

@@ -1,6 +1,7 @@
 package models;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -12,6 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import juiforms.JuiForm;
 
 import com.avaje.ebean.annotation.Formula;
 
@@ -61,6 +64,12 @@ public class SongModel extends BaseModel {
 	private static final Finder<UUID, SongModel> FINDER = new Finder<>(
 		UUID.class, SongModel.class
 	);
+	
+	/* **************************************************************************
+	 *  ASSOCIATED JUIFORMS
+	 ************************************************************************** */
+	
+	
 	
 	/* **************************************************************************
 	 *  BEGIN HOOKS
