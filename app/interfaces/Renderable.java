@@ -11,6 +11,7 @@ import play.api.templates.Html;
  */
 public interface Renderable {
 	
+	/** Generate the HTML to display this object */
 	public Html render();
 
 }

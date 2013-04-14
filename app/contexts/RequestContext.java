@@ -1,6 +1,11 @@
 package contexts;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import play.mvc.Http.Context;
+import play.mvc.Http.Request;
 import controllers.routes;
 
 /**
@@ -12,9 +17,31 @@ import controllers.routes;
  */
 public class RequestContext extends BaseContext {
 	
+	/** Gets the request object from the context */
+	public static Request get() {
+		return Context.current().request();
+	}
+	
 	/** Gets the url requested */
 	public static String url() {
 		return Context.current().request().path();
+	}
+	
+	/** Gets the query params map, ignoring any arrays of values (just takes the first) */
+	public static Map<String, String> queryParams() {
+		//TODO cache the result of this method
+		Map<String, String> params = new HashMap<String, String>();
+		
+		for(Entry<String, String[]> entry : get().queryString().entrySet()) {
+			String key = entry.getKey();
+			String[] value = entry.getValue();
+			
+			if (value != null && value.length > 0) {
+				params.put(key, value[0]);
+			}
+		}
+		
+		return params;
 	}
 	
 	/** Gets the login url that will redirect back to this page
