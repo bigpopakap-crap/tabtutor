@@ -114,8 +114,28 @@ public abstract class JuiForm<T> extends BaseJui {
 	 *  BEGIN ABSTRACT METHODS
 	 ************************************************************************** */
 	
-	protected abstract T bind(Map<String, String> data);
+	/**
+	 * Validates a form, given the data bound to the form.
+	 * This method should return null if there is NO validation error,
+	 * else a map of error messages for each field
+	 * 
+	 * @param data a map from field names to their values
+	 * @return null if there is no validation error, else a map of field
+	 * 			names to the error strings that should be displayed next to them
+	 */
 	protected abstract Map<String, String> validate(Map<String, String> data);
+	
+	/**
+	 * Creates an object, given the data bound to the form.
+	 * 
+	 * Note: this method will only be called on a form that has been
+	 * validated by the {@link #validate(Map)} method. Therefore, it is
+	 * assumed that the data is valid and an object can be created from this form
+	 * 
+	 * @param data a map from field names to their values
+	 * @return the object derived from these values
+	 */
+	protected abstract T bind(Map<String, String> data);
 	
 	/* **************************************************************************
 	 *  BEGIN PRIVATE HELPERS
