@@ -11,13 +11,13 @@
 		action - the URL to submit the form
 		inputs - the input element JUIs in the order they should appear
 *@
-@(title: String, subtitle: String, method: types.HttpMethodType, action: String, inputs: juis.forms.JuiFormInput)
+@(title: String, subtitle: String, method: types.HttpMethodType, action: String, inputs: List[juis.forms.JuiFormInput])
 @import types.HttpMethodType
 @import juis.forms.JuiFormInput
 <form method="@(method.name())" action="@(action)">
 	<h1>@(title)</h1>
 	<h3>@(subtitle)</h3>
 	@for(input <- inputs) {
-		@p_jui_formInput()
+		input.render()
 	}
 </form>

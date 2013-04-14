@@ -3,6 +3,7 @@ package juis.forms;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -106,8 +107,7 @@ public abstract class JuiForm<T> extends BaseJui {
 	 * @param action the URL for the form to submit to
 	 */
 	public Html render(String title, String subtitle, HttpMethodType method, String action) {
-		//TODO
-		return null;
+		return views.html.p_jui_form.render(title, subtitle, method, action, getInputs());
 	}
 	
 	/* **************************************************************************
@@ -165,6 +165,16 @@ public abstract class JuiForm<T> extends BaseJui {
 			values.put(element.getName(), element.getValue());
 		}
 		return values;
+	}
+	
+	/** Gets the input elements in order */
+	private List<JuiFormInput> getInputs() {
+		//TODO cache the result of this method (this can probably be calculated in the constructor itself)
+		List<JuiFormInput> inputs = new LinkedList<>();
+		for (String name : elementNames) {
+			inputs.add(elementMap.get(name));
+		}
+		return inputs;
 	}
 	
 }

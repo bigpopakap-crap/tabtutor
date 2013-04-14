@@ -65,8 +65,7 @@ public class JuiFormInput extends BaseJui {
 
 	/** Renders the HTML to represent this form input */
 	public Html render() {
-		// TODO Auto-generated method stub
-		return null;
+		return views.html.p_jui_formInput.render(this);
 	}
 	
 }
