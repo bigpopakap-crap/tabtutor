@@ -15,6 +15,9 @@
 # --------------------------------------------------------------------- #
 GET     /                           controllers.SimpleWebController.landing()
 GET		/fblogin					controllers.FbAuthWebController.fblogin(code ?= null, state ?= null, targetUrl ?= "/")
+GET		/songs						controllers.SimpleWebController.songs()
+GET		/artists					controllers.SimpleWebController.artists()
+GET		/albums						controllers.SimpleWebController.albums()
 
 # --------------------------------------------------------------------- #
 #	BEGIN /INTERNAL/ADMIN PAGE ROUTING									#
