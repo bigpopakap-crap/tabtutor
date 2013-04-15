@@ -9,4 +9,6 @@
 *@
 @(input: juiforms.JuiFormInput)
 @import juiforms.JuiFormInput
-<div>@(input.toString())</div>
+@(input.getType()) match {
+	case _ => { <div>@(input.toString())</div> }
+}
