@@ -21,18 +21,14 @@
 		@* Call the add() method *@
 		@{RequestStaticResourceContext.add(url); ""}
 		
-		@if(StaticResourceType.JS.isType(url)) {
-			<script type="text/javascript" src="@url"></script>
-		}
-		
-		@if(StaticResourceType.CSS.isType(url)) {
-			<link rel="stylesheet" type="text/css" href="@url"/>
-		}
-		
-		@if(StaticResourceType.getTypeOf(url) == null) {
-			<script type="text/javascript">
-				window.WTF.get('Logger').errorAlert('Unhandled static resource type for url @url');
-			</script>
+		@(StaticResourceType.getTypeOf(url)) match {
+			case StaticResourceType.JS => { <script type="text/javascript" src="@url"></script> }
+			case StaticResourceType.CSS => { <link rel="stylesheet" type="text/css" href="@url"/> }
+			case _ => {
+				<script type="text/javascript">
+					window.WTF.get('Logger').errorAlert('Unhandled static resource type for url @url');
+				</script>
+			}
 		}
 	}
 }
