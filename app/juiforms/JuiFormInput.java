@@ -24,7 +24,7 @@ public class JuiFormInput {
 														//TODO allow multiple errors to be associated with this field?
 	
 	/** Creates a new form element */
-	public JuiFormInput(JuiFormInputType type, String name, String label, String placeholder, String helpText, JuiFormInputConstraint... constraints) {
+	public JuiFormInput(JuiFormInputType type, String name, String label, String placeholder, String helpText, JuiFormInputConstraint[] constraints) {
 		if (type == null) throw new IllegalArgumentException("type cannot be null");
 		if (name == null) throw new IllegalArgumentException("name cannot be null");
 		if (label == null) throw new IllegalArgumentException("helpText cannot be null");
@@ -77,7 +77,7 @@ public class JuiFormInput {
 
 	/** Renders the HTML to represent this form input */
 	public Html render() {
-		return views.html.p_jui_formInput.render(this);
+		return views.html.p_juiFormInput.render(this);
 	}
 	
 }

@@ -36,7 +36,7 @@ public abstract class JuiForm<T> {
 	 * Forms must not have elements with duplicate names
 	 * @throws IllegalStateException any two form elements have the same name
 	 */
-	public JuiForm(JuiFormInput... elements) throws IllegalStateException {
+	public JuiForm(JuiFormInput[] elements) throws IllegalStateException {
 		if (elements == null) elements = new JuiFormInput[0];
 		
 		//create the list of element names in order
@@ -121,7 +121,7 @@ public abstract class JuiForm<T> {
 	 * @param action the URL for the form to submit to
 	 */
 	public Html render(String title, String subtitle, HttpMethodType method, String action) {
-		return views.html.p_jui_form.render(title, subtitle, method, action, getInputElements());
+		return views.html.p_juiForm.render(title, subtitle, method, action, getInputElements());
 	}
 	
 	/* **************************************************************************

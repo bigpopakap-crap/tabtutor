@@ -3,8 +3,9 @@ package controllers;
 import models.AlbumModel;
 import models.ArtistModel;
 import models.SongModel;
-import models.SongModel.SongModelForm;
+import models.forms.SongModelJuiForm;
 import play.mvc.Result;
+import controllers.BaseWebController.NotFoundErrorPageException;
 
 /**
  * This class will route all pages that the user will see as they navigate through the site,
@@ -25,7 +26,7 @@ public class SimpleWebController extends BaseWebController {
 	public static Result songs() {
 		return ok(views.html.songList.render(
 			SongModel.getAll(),
-			new SongModelForm()
+			new SongModelJuiForm()
 		));
 	}
 	
