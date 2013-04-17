@@ -1,6 +1,7 @@
 package controllers;
 
 import models.UserModel;
+import models.forms.DevtoolsUserJuiForm;
 import play.mvc.Result;
 import actions.ActionAnnotations.Sessioned;
 import contexts.SessionContext;
@@ -17,7 +18,10 @@ public class DevtoolsLoginWebController extends DevtoolsWebController {
 	
 	/** Lists the test users on a page */
 	public static Result listUsers() {
-		return ok(views.html.devtools_listUsers.render(UserModel.getAll()));
+		return ok(views.html.devtools_listUsers.render(
+			UserModel.getAll(),
+			new DevtoolsUserJuiForm()
+		));
 	}
 	
 	/** Creates a new test user with the given first and last name */

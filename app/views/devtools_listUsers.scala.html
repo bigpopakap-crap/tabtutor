@@ -4,7 +4,7 @@
 	
 	The page to list users and provide login links for them
 *@
-@(users: List[UserModel])
+@(users: List[UserModel], devtoolsUserForm: models.forms.DevtoolsUserJuiForm)
 @import contexts.RequestContext;
 @import utils.MessagesEnum;
 @td(value: String) = {
@@ -19,6 +19,7 @@
 	@p_topbar()
 	
 	<h1>Create a new user</h1>
+	@(devtoolsUserForm.render())
 	
 	<h1>List of users</h1>
 	<table>

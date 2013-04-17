@@ -13,6 +13,7 @@ import types.HttpMethodType;
 public class SongModelJuiForm extends JuiForm<SongModel> {
 	
 	//TODO make convert these hardcoded strings to messages
+	
 	public SongModelJuiForm() {
 		super(new JuiFormInput[] {
 			new JuiFormInput(JuiFormInputType.TEXT, "title", "Title", "Freebird", "The title of the song", new JuiFormInputConstraint[] {
