@@ -46,7 +46,11 @@
 				@td(user.isFirstLogin().toString())
 				@td(user.getRegisterTime().toString())
 				@td(user.getLastLoginTime().toString())
-				@td(user.getSecondToLastLoginTime.toString())
+				@if(user.getSecondToLastLoginTime() != null) {
+					@td(user.getSecondToLastLoginTime().toString())
+				} else {
+					@td("null")
+				}
 				@td(user.getLastAccessTime().toString())
 			</tr>
 		}

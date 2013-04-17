@@ -34,7 +34,7 @@ CREATE TABLE Song (
 
 CREATE TABLE User (
 	pk t_pk PRIMARY KEY,
-	fbId t_facebookId NOT NULL UNIQUE,
+	fbId t_facebookId UNIQUE,
 	fbIsAuthed BOOLEAN NOT NULL,
 	username t_varcharShort NOT NULL UNIQUE,
 	email t_email NOT NULL,

@@ -107,7 +107,7 @@ public class SessionModel extends BaseModel {
 	 ************************************************************************** */
 	
 	/** Creates a new session and saves it to the DB */
-	public static SessionModel create() {
+	public static SessionModel createAndSave() {
 		SessionModel session = new SessionModel();
 		session.doSaveAndRetry();
 		return session;

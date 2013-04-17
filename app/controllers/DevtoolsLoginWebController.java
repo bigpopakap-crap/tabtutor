@@ -20,18 +20,19 @@ public class DevtoolsLoginWebController extends DevtoolsWebController {
 	}
 	
 	/** Creates a new test user with the given first and last name */
-	@Sessioned(forceRefresh = true)
-	public static Result create(String firstName, String lastName) {
-		//TODO do this
-		return ok();
+	public static Result create(String username, String email) {
+		//create a user with the given username and email
+		//since this is internal, don't really need to do validation here
+		UserModel.createAndSave(null, username, email);
+		return redirect(routes.DevtoolsLoginWebController.listUsers());
 	}
 	
 	/** Logs in as the test user with the given ID and redirects to the given url */
 	//TODO make this use the POST method
 	@Sessioned(forceRefresh = true)
 	public static Result login(String pk, String targetUrl) {
-		//TODO do this
-		return ok();
+		//TODO establish the context and then redirect to the homepage
+		return null;
 	}
 
 }

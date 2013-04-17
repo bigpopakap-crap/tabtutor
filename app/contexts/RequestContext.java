@@ -1,6 +1,7 @@
 package contexts;
 
 import play.mvc.Http.Context;
+import play.mvc.Http.Request;
 import controllers.routes;
 
 /**
@@ -11,6 +12,11 @@ import controllers.routes;
  *
  */
 public class RequestContext extends BaseContext {
+	
+	/** Gets the current request object */
+	public static Request get() {
+		return Context.current().request();
+	}
 	
 	/** Gets the url requested */
 	public static String url() {
