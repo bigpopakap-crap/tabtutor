@@ -3,6 +3,7 @@ package controllers;
 import models.UserModel;
 import play.mvc.Result;
 import actions.ActionAnnotations.Sessioned;
+import contexts.SessionContext;
 
 /**
  * This class handles routes that are related to creating and logging in as
@@ -31,8 +32,12 @@ public class DevtoolsLoginWebController extends DevtoolsWebController {
 	//TODO make this use the POST method
 	@Sessioned(forceRefresh = true)
 	public static Result login(String pk, String targetUrl) {
-		//TODO establish the context and then redirect to the homepage
-		return null;
+		//establish the context and then redirect to the homepage
+		UserModel user = UserModel.getById(pk);
+		if (user != null) {
+			SessionContext.establish(user);
+		}
+		return redirect(targetUrl);
 	}
 
 }
