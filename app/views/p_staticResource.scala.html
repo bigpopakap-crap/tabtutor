@@ -12,6 +12,7 @@
 @import contexts.AppContext;
 @import contexts.RequestStaticResourceContext;
 @import types.StaticResourceType;
+@import play.Logger;
 @include(url: String) = {
 	@if(RequestStaticResourceContext.contains(url)) {
 		<script type="text/javascript">
@@ -25,6 +26,9 @@
 			case StaticResourceType.JS => { <script type="text/javascript" src="@url"></script> }
 			case StaticResourceType.CSS => { <link rel="stylesheet" type="text/css" href="@url"/> }
 			case _ => {
+				@* Log on the server and the client *@
+				@{Logger.warn("Unhandled static resource type for url " + url); ""}
+				
 				<script type="text/javascript">
 					window.WTF.get('Logger').errorAlert('Unhandled static resource type for url @url');
 				</script>
