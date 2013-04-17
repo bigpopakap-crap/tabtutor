@@ -22,6 +22,7 @@ public enum MessagesEnum {
 	word_user("word_user"),
 	formError_required("formError_required"),
 	formError_notInteger("formError_notInteger"),
+	word_login("word_login"),
 	errorPage_title("errorPage_title"),
 	errorPage_internalServerErrorDescription("errorPage_internalServerErrorDescription"),
 	errorPage_pageNotFoundDescription("errorPage_pageNotFoundDescription"),

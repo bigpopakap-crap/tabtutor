@@ -2,8 +2,8 @@ package controllers;
 
 import models.SessionModel;
 import models.UserModel;
-import play.Logger;
 import play.mvc.Result;
+import utils.Logger;
 import actions.ActionAnnotations.Sessioned;
 import api.ApiNoResponseException;
 import api.BaseApiException;
@@ -76,7 +76,7 @@ public class FbAuthWebController extends BaseWebController {
 						}
 						
 						//add this user ID to the session object
-						session.setUserAndUpdate(user);
+						SessionContext.establish(user);
 					}
 					catch (BaseApiException e) {
 						RequestErrorContext.setFbConnectionError(true);

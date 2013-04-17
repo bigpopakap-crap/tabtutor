@@ -1,7 +1,6 @@
 package actions;
 
 import models.SessionModel;
-import play.Logger;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import actions.ActionAnnotations.Sessioned;
@@ -10,11 +9,6 @@ import contexts.SessionContext;
 /**
  * This Action will add a session cookie to the browser, and create
  * any session-related database entries
- * 
- * This is the only class that should directly interact with the session cookie.
- * All other classes should refer directly to the AppContext.Session object. With
- * the exception of this class, the term "session" refers to the AppContext.Session,
- * not the browser cookie
  * 
  * @author bigpopakap
  * @since 2013-02-24
@@ -26,10 +20,7 @@ public class SessionAction extends BaseAction<Sessioned> {
 	protected Result hook_call(Context ctx) throws Throwable {
 		SessionModel session = SessionContext.get(); //use this method because it is cached
 		if (session == null || configuration.forceRefresh()) {
-			//there is no session ID set, so create it and add it to the cookie
-			SessionModel newSession = SessionModel.create();
-			ctx.session().put(SessionModel.SESSION_ID_COOKIE_KEY, newSession.getPk_String());
-			Logger.info("Put session " + newSession.getPk() + " in cookie for IP " + ctx.request().remoteAddress());
+			SessionContext.init(ctx);
 		}
 
 		return delegate.call(ctx);

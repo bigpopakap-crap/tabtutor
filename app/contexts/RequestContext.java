@@ -6,7 +6,6 @@ import java.util.Map.Entry;
 
 import play.mvc.Http.Context;
 import play.mvc.Http.Request;
-
 import controllers.routes;
 
 /**
@@ -18,7 +17,7 @@ import controllers.routes;
  */
 public class RequestContext extends BaseContext {
 	
-	/** Gets the request object from the context */
+	/** Gets the current request object */
 	public static Request get() {
 		return Context.current().request();
 	}
@@ -49,6 +48,11 @@ public class RequestContext extends BaseContext {
 	 *  (as opposed to the url of the Facebook login dialogue, this is the one that initiates it) */
 	public static String loginUrl() {
 		return routes.FbAuthWebController.fblogin(null, null, url()).url();
+	}
+	
+	/** Gets the login url for a test user */
+	public static String devtoolsLoginUrl(String pk) {
+		return routes.DevtoolsLoginWebController.login(pk, url()).url();
 	}
 
 }

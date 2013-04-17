@@ -8,10 +8,11 @@
 		//Public constants for each object
 		this.Level = {
 			NONE: { pri: -1000, name: 'NONE' },
-			DEBUG: { pri: 1, name: 'DEBUG' },
-			INFO: { pri: 2, name: 'INFO' },
-			WARN: { pri: 3, name: 'WARN' },
-			ERROR: { pri: 4, name: 'ERROR' }
+			TRACE: { pri: 1, name: 'TRACE' },
+			DEBUG: { pri: 2, name: 'DEBUG' },
+			INFO: { pri: 3, name: 'INFO' },
+			WARN: { pri: 4, name: 'WARN' },
+			ERROR: { pri: 5, name: 'ERROR' }
 		};
 		
 		//Private constants for each object
@@ -71,12 +72,14 @@
 		this.alert = createLogOrAlertFn(true);
 		
 		//Shortcut methods for logging at specific levels
+		this.trace = function (message) { this.log(this.Level.TRACE, message); };
 		this.debug = function (message) { this.log(this.Level.DEBUG, message); };
 		this.info = function (message) { this.log(this.Level.INFO, message); };
 		this.warn = function (message) { this.log(this.Level.WARN, message); };
 		this.error = function (message) { this.log(this.Level.ERROR, message); };
 		
 		//Shortcut methods for alerting at specific levels
+		this.debugAlert = function (message) { this.alert(this.Level.TRACE, message); };
 		this.debugAlert = function (message) { this.alert(this.Level.DEBUG, message); };
 		this.infoAlert = function (message) { this.alert(this.Level.INFO, message); };
 		this.warnAlert = function (message) { this.alert(this.Level.WARN, message); };

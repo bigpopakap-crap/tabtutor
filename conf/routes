@@ -27,10 +27,10 @@ GET		/albums						controllers.SimpleWebController.albums()
 # --------------------------------------------------------------------- #
 #	BEGIN /INTERNAL/DEVTOOLS PAGE ROUTING								#
 # --------------------------------------------------------------------- #
-GET		/internal/devtools/killserver				controllers.DevtoolsWebController.killserver()
-GET		/internal/devtools/testusers/list			controllers.DevtoolsTestUsersWebController.list()
-POST	/internal/devtools/testusers/create			controllers.DevtoolsTestUsersWebController.create(firstName, lastName)
-POST	/internal/devtools/testusers/login/:id		controllers.DevtoolsTestUsersWebController.login(id, targetUrl ?= "/")
+GET		/internal/devtools/killserver				controllers.DevtoolsWebController.killServer()
+GET		/internal/devtools/login/listusers			controllers.DevtoolsLoginWebController.listUsers()
+GET		/internal/devtools/login/create				controllers.DevtoolsLoginWebController.create(username, email)
+GET		/internal/devtools/login/login/:pk			controllers.DevtoolsLoginWebController.login(pk, targetUrl ?= "/")
 
 # --------------------------------------------------------------------- #
 #	BEGIN /INTERNAL/TEST PAGE ROUTING									#

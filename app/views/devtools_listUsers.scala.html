@@ -1,0 +1,62 @@
+@*
+	Author: bigpopakap
+	Since: 2013-04-12
+	
+	The page to list users and provide login links for them
+*@
+@(users: List[UserModel])
+@import contexts.RequestContext;
+@import utils.MessagesEnum;
+@td(value: String) = {
+	<td title="@(value)">@(value)</td>
+}
+<!DOCTYPE html>
+<html>
+<head>
+	@p_preHead()
+</head>
+<body>
+	@p_topbar()
+	
+	<h1>Create a new user</h1>
+	
+	<h1>List of users</h1>
+	<table>
+		<!-- Header row -->
+		<tr>
+			<th>Login link</th>
+			<th>Username</th>
+			<th>Email</th>
+			<th>FB ID</th>
+			<th>FB isAuthed</th>
+			<th>First login</th>
+			<th>Register</th>
+			<th>Last login</th>
+			<th>Second last login</th>
+			<th>Last access</th>
+		</tr>
+		
+		@for(user <- users) {
+			<tr>
+				<td>
+					<a href="@(RequestContext.devtoolsLoginUrl(user.getPk().toString()))">
+						@(MessagesEnum.word_login.get())
+					</a>
+				</td>
+				@td(user.getUsername())
+				@td(user.getEmail())
+				@td(user.getFbId())
+				@td(user.getFbIsAuthed().toString())
+				@td(user.isFirstLogin().toString())
+				@td(user.getRegisterTime().toString())
+				@td(user.getLastLoginTime().toString())
+				@if(user.getSecondToLastLoginTime() != null) {
+					@td(user.getSecondToLastLoginTime().toString())
+				} else {
+					@td("null")
+				}
+				@td(user.getLastAccessTime().toString())
+			</tr>
+		}
+	</table>
+</body>

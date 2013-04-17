@@ -1,9 +1,9 @@
 package actions;
 
 import models.SessionModel;
-import play.Logger;
 import play.mvc.Http.Context;
 import play.mvc.Result;
+import utils.Logger;
 import actions.ActionAnnotations.Authed;
 import contexts.SessionContext;
 import controllers.FbAuthWebController;
@@ -28,7 +28,7 @@ public class AuthAction extends BaseAction<Authed> {
 		
 		//if it is a real user and we need to force re-auth or the auth info is invalid, redirect to fb login
 		//TODO add ability to force re-authentication: need to worry about getting caught in infinite loop
-		if (!session.hasValidFbAuthInfo()) {
+		if (!session.hasUser()) {
 			Logger.debug("Session needs Facebook auth. Redirecting to the login flow");
 			return FbAuthWebController.fblogin(null, null, ctx.request().path());
 		}

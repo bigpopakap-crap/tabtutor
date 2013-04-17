@@ -4,11 +4,12 @@ import java.util.concurrent.Callable;
 
 import models.SessionModel;
 import models.UserModel;
-import play.Logger;
 import play.i18n.Lang;
 import play.mvc.Http.Context;
+import utils.Logger;
 import utils.Universe.UniverseElement;
 import api.fb.FbApi;
+
 
 /**
  * This class holds methods to query the current session for important objects,
@@ -23,6 +24,20 @@ public abstract class SessionContext extends BaseContext {
 	private static final UniverseElement<String> SESSION_OBJ_CONTEXT_KEY = CONTEXT_KEY_UNIVERSE.register("sessionObjectContextKey");
 	private static final UniverseElement<String> USER_OBJ_CONTEXT_KEY = CONTEXT_KEY_UNIVERSE.register("userObjectContextKey");
 	private static final UniverseElement<String> FBAPI_OBJ_CONTEXT_KEY = CONTEXT_KEY_UNIVERSE.register("fbApiObjectContextKey");
+	
+	/** Creates a new session and establishes a new cookie.
+	 * This is the only place in the app that should deal with the session cookie */
+	public static synchronized void init(Context ctx) {
+		SessionModel newSession = SessionModel.createAndSave();
+		ctx.session().put(SessionModel.SESSION_ID_COOKIE_KEY, newSession.getPk_String());
+		Logger.info("Put session " + newSession.getPk() + " in cookie for IP " + ctx.request().remoteAddress());
+	}
+	
+	/** Establishes the session context as the given user */
+	public static synchronized void establish(UserModel user) {
+		if (!has()) init(Context.current());
+		get().setUserAndUpdate(user);
+	}
 	
 	/** Get the language of the current session context. Useful for templates */
 	public static synchronized Lang lang() {
