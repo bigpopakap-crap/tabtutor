@@ -2,6 +2,10 @@ package models;
 
 import globals.Globals.DevelopmentSwitch;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.List;
@@ -10,9 +14,6 @@ import java.util.concurrent.Callable;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OptimisticLockException;
 
-import models.annotations.CreateTime;
-import models.annotations.ExpireTime;
-import models.annotations.UpdateTime;
 import models.exceptions.FailedOperationException;
 import play.Logger;
 import play.db.ebean.Model;
@@ -279,6 +280,69 @@ public abstract class BaseModel extends Model {
 			field.set(this, date);
 		}
 	}
+	
+	/* ***********************************************************************
+	 *  BEGIN PROTECTED NESTED CLASSES
+	 ************************************************************************* */
+	
+	/**
+	 * To mark a model's field as the one that holds the created time
+	 * This will be updated in {@link BaseModel}
+	 * 
+	 * This should only be associated with {@link Date} fields
+	 * 
+	 * @author bigpopakap
+	 * @since 2013-04-16
+	 *
+	 */
+	@Target(ElementType.FIELD)
+	@Retention(RetentionPolicy.RUNTIME)
+	protected static @interface CreateTime {
+
+	}
+	
+	/**
+	 * To mark a model's field as the one that holds the updated time
+	 * This will be updated in {@link BaseModel}
+	 * 
+	 * Note that this doesn't cover some cases, like updating the time
+	 * when the user logs in, because those cases don't need this column
+	 * to be modified on *ever* single update operation
+	 * 
+	 * This should only be associated with {@link Date} fields
+	 * 
+	 * @author bigpopakap
+	 * @since 2013-04-16
+	 *
+	 */
+	@Target(ElementType.FIELD)
+	@Retention(RetentionPolicy.RUNTIME)
+	protected static @interface UpdateTime {
+
+	}
+	
+	/**
+	 * To mark a model's field as the one that holds the expire time
+	 * This will be updated in {@link BaseModel}
+	 * 
+	 * This should only be associated with {@link Date} fields
+	 * 
+	 * @author bigpopakap
+	 * @since 2013-04-16
+	 *
+	 */
+	@Target(ElementType.FIELD)
+	@Retention(RetentionPolicy.RUNTIME)
+	protected static @interface ExpireTime {
+		
+		/** The number of seconds from the current time to set the expiration time */
+		public int numSeconds();
+		
+		/** Indicates whether the expire time should be extended on a row update */
+		public boolean extendOnUpdate() default false;
+
+	}
+
 	
 	/* ***********************************************************************
 	 *  BEGIN INVALIDATION OF DIRECT METHODS
