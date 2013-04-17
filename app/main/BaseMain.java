@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 import play.Logger;
+import utils.StringUtil;
 
 /**
  * Provides helper methods for the main classes
@@ -34,8 +35,8 @@ public abstract class BaseMain {
 			//TODO detect what OS this is and run the appropriate command
 			//start the process
 			final Process process = Runtime.getRuntime().exec("cmd.exe /c foreman start" +
-															 (procfileName != null ? " -f " + procfileName : "") +
-															 (envFileName != null ? " -e " + envFileName : ""));
+															 (!StringUtil.isNullOrEmpty(procfileName) ? " -f " + procfileName : "") +
+															 (!StringUtil.isNullOrEmpty(envFileName) ? " -e " + envFileName : ""));
 			
 			//get the reader for the child's output and pipe it
 			outputReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
