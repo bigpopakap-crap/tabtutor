@@ -3,6 +3,22 @@
 	Since: 2013-04-17
 	
 	Helper for doing logging on the client and/or server side
+	
+	TODO - test that all view log through this partial
 *@
-@()
-import play.Logger
+@(clientLevel: utils.Logger.Level, clientAlert: Boolean, serverLevel: utils.Logger.Level, msg: String)
+@import utils.Logger
+@import utils.Logger.Level
+@clientLevelEnum(level: Level) = {
+	window.WTF.get('Logger').Level.@(level.name())
+}
+@if(clientLevel != Level.NONE) {
+	<script type="text/javascript">
+		@if(clientAlert) {
+			window.WTF.get('Logger').alert(@clientLevelEnum(clientLevel), '@msg');
+		} else {
+			window.WTF.get('Logger').log(@clientLevelEnum(clientLevel), '@msg');
+		}
+	</script>
+}
+@{ Logger.log(serverLevel, msg); "" }

@@ -9,15 +9,14 @@
 				resoruce they are
 *@
 @(urls: Array[String], devUrls: Array[String] = Array())
-@import contexts.AppContext;
-@import contexts.RequestStaticResourceContext;
-@import types.StaticResourceType;
+@import contexts.AppContext
+@import contexts.RequestStaticResourceContext
+@import types.StaticResourceType
 @import utils.Logger
+@import utils.Logger.Level
 @include(url: String) = {
 	@if(RequestStaticResourceContext.contains(url)) {
-		<script type="text/javascript">
-			window.WTF.get('Logger').info('Skipping already-included resource at @(url)');
-		</script>
+		@p_util_log(Level.INFO, false, Level.NONE, "Skipping already-included resource at " + url)
 	} else {
 		@* Call the add() method *@
 		@{RequestStaticResourceContext.add(url); ""}
@@ -26,12 +25,7 @@
 			case StaticResourceType.JS => { <script type="text/javascript" src="@url"></script> }
 			case StaticResourceType.CSS => { <link rel="stylesheet" type="text/css" href="@url"/> }
 			case _ => {
-				@* Log on the server and the client *@
-				@{Logger.warn("Unhandled static resource type for url " + url); ""}
-				
-				<script type="text/javascript">
-					window.WTF.get('Logger').errorAlert('Unhandled static resource type for url @url');
-				</script>
+				@p_util_log(Level.WARN, true, Level.WARN, "Unhandled static resource type for url " + url)
 			}
 		}
 	}
@@ -41,9 +35,7 @@
 }
 @for(url <- devUrls) {
 	@if(AppContext.Mode.isProduction()) {
-		<script type="text/javascript">
-			window.WTF.get('Logger').info('Skipping dev-only resource @url');
-		</script>
+		@p_util_log(Level.INFO, false, Level.NONE, "Skipping dev-only resource " + url)
 	} else {
 		@include(url = url)
 	}

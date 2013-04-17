@@ -10,6 +10,7 @@ package utils;
 public abstract class Logger {
 	
 	//TODO ensure that classes only use this Logger, not play.Logger or anything else
+	//TODO test that this logging level enum matches the Javascript logger's levels
 
 	/**
 	 * Logging levels
@@ -19,13 +20,13 @@ public abstract class Logger {
 	 *
 	 */
 	public static enum Level {
-		OFF, TRACE, DEBUG, INFO, WARN, ERROR;
+		NONE, TRACE, DEBUG, INFO, WARN, ERROR;
 	}
 	
 	/** Logs a message at the given level. Includes a throwable to print the stack trace */
 	public static synchronized void log(Level level, String msg, Throwable cause) {
 		switch (level) {
-			case OFF:
+			case NONE:
 				break; //don't log
 			case TRACE:
 				if (cause != null) play.Logger.trace(msg, cause);
