@@ -243,6 +243,7 @@ public abstract class BaseModel extends Model {
 		}
 		
 		//update the updates time if this is an update or insert
+		//TODO detect if it's actually being updated, or it's just the same
 		if (opType == BasicDmlModifyingType.INSERT || opType == BasicDmlModifyingType.UPDATE) {
 			List<Field> updateFields = ReflectUtil.getFieldsWithAnnotation(this.getClass(), UpdateTime.class);
 			for (Field updateField : updateFields) {
@@ -258,6 +259,7 @@ public abstract class BaseModel extends Model {
 			for (Field expireField : expireFields) {
 				//this should never be null because it was returned as a field that has an annotation of this class
 				ExpireTime config = expireField.getAnnotation(ExpireTime.class);
+				if (config == null) throw new IllegalStateException("config should never be null");
 				
 				//set the field on all inserts, and updates if requested
 				if (opType == BasicDmlModifyingType.INSERT || (opType == BasicDmlModifyingType.UPDATE && config.extendOnUpdate())) {
@@ -321,6 +323,10 @@ public abstract class BaseModel extends Model {
 	@Retention(RetentionPolicy.RUNTIME)
 	protected static @interface UpdateTime {
 
+		/** If true, does not get updated unless the row actually changes.
+		 *  Otherwise will get updated only when the row actually changes */
+		public boolean ignoreNoOp() default true;
+		
 	}
 	
 	/**
