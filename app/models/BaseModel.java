@@ -2,17 +2,24 @@ package models;
 
 import globals.Globals.DevelopmentSwitch;
 
+import java.lang.reflect.Field;
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OptimisticLockException;
 
+import models.annotations.CreateTime;
+import models.annotations.ExpireTime;
+import models.annotations.UpdateTime;
 import models.exceptions.FailedOperationException;
 import play.Logger;
 import play.db.ebean.Model;
 import types.SqlOperationType.BasicDmlModifyingType;
 import utils.ConcurrentUtil;
-import utils.ObjectUtil;
+import utils.DateUtil;
+import utils.ReflectUtil;
 import contexts.RequestStatsContext;
 
 /**
@@ -39,10 +46,10 @@ public abstract class BaseModel extends Model {
 	 ****************************************** */
 	
 	/**
-	 * Called before the retry of any DML operation.
+	 * Called before the retry of any DML operation (before {@link #hook_preModifyingOperation(BasicDmlModifyingType)})
 	 * Note that this is not called before the first try
 	 * 
-	 * Default implementation is just to log the operation
+	 * Default implementation is just to log the operation retry
 	 * 
 	 * @param opType the type of the operation
 	 */
@@ -50,6 +57,27 @@ public abstract class BaseModel extends Model {
 		//do nothing but log. models can override this if they want to do something
 		Logger.trace("Retrying " + opType.name() + " operation on " + this.getClass().getCanonicalName());
 		RequestStatsContext.get().incrModelOperationRetries();
+	}
+	
+	/**
+	 * Called before any DML operation (after {@link #hook_preModifyingOperationRetry(BasicDmlModifyingType)}, if it's a retry)
+	 * 
+	 * Default implementation is to update any timestamps and expire times
+	 * 
+	 * @see CreateTime
+	 * @see UpdateTime
+	 * @see ExpireTime
+	 * 
+	 * @param opType the type of the operation
+	 */
+	protected void hook_preModifyingOperation(BasicDmlModifyingType opType) {
+		//try updating the timestamps
+		try {
+			updateDateFields(opType);
+		} catch (IllegalArgumentException | IllegalAccessException ex) {
+			//don't do anything, just log the error
+			Logger.error("Exception while updating timestamps in " + this.getClass().getCanonicalName(), ex);
+		}
 	}
 
 	/**
@@ -77,7 +105,7 @@ public abstract class BaseModel extends Model {
 	/** Default toString that returns the field=value mappings */
 	@Override
 	public String toString() {
-		return this.getClass().getCanonicalName() + ":" + ObjectUtil.getFieldMap(this);
+		return this.getClass().getCanonicalName() + ":" + ReflectUtil.getFieldMap(this);
 	}
 	
 	/* ***********************************************************************
@@ -120,9 +148,12 @@ public abstract class BaseModel extends Model {
 			try {
 				for (int i = 1; i <= NUM_OPERATION_RETRIES.get() && !wasSuccessful; i++) {
 					try {
-						//if this is not the first attempt, call the hook
+						//if this is not the first attempt, call the retry hook
 						if (!isFirstTry) hook_preModifyingOperationRetry(opType);
 						isFirstTry = false;
+						
+						//call the pre-op hook
+						hook_preModifyingOperation(opType);
 						
 						//try the operation
 						doOperation.call();
@@ -193,6 +224,59 @@ public abstract class BaseModel extends Model {
 		catch (Exception ex) {
 			//wrap the exception in a RuntimeException
 			throw new RuntimeException(ex);
+		}
+	}
+	
+	/** TODO */
+	private void updateDateFields(BasicDmlModifyingType opType) throws IllegalArgumentException, IllegalAccessException {
+		Date now = DateUtil.now();
+		
+		//update the create times if this is an insert
+		if (opType == BasicDmlModifyingType.INSERT) {
+			List<Field> createFields = ReflectUtil.getFieldsWithAnnotation(this.getClass(), CreateTime.class);
+			for (Field createField : createFields) {
+				setDateField(CreateTime.class, createField, now);
+			}
+		}
+		
+		//update the updates time if this is an update or insert
+		if (opType == BasicDmlModifyingType.INSERT || opType == BasicDmlModifyingType.UPDATE) {
+			List<Field> updateFields = ReflectUtil.getFieldsWithAnnotation(this.getClass(), UpdateTime.class);
+			for (Field updateField : updateFields) {
+				setDateField(UpdateTime.class, updateField, now);
+			}
+		}
+		
+		//update the expire times according
+		if (opType == BasicDmlModifyingType.INSERT || opType == BasicDmlModifyingType.UPDATE) {
+			//this if is here to avoid doing reflection unless there's a chance we might have to
+			
+			List<Field> expireFields = ReflectUtil.getFieldsWithAnnotation(this.getClass(), ExpireTime.class);
+			for (Field expireField : expireFields) {
+				//this should never be null because it was returned as a field that has an annotation of this class
+				ExpireTime config = expireField.getAnnotation(ExpireTime.class);
+				
+				//set the field on all inserts, and updates if requested
+				if (opType == BasicDmlModifyingType.INSERT || (opType == BasicDmlModifyingType.UPDATE && config.extendOnUpdate())) {
+					setDateField(ExpireTime.class, expireField, DateUtil.add(now, config.numSeconds()));
+				}
+			}
+		}
+	}
+
+	/** TODO */
+	private void setDateField(Class<?> ann, Field field, Date date) throws IllegalArgumentException, IllegalAccessException {
+		if (field == null) return; //don't do anything with a null field
+
+		//make sure it is of the correct type before setting it
+		if (field.getType() != Date.class) {
+			Logger.error(ann.getCanonicalName() + " annotation used on field " +
+						 field.getName() + " in " +
+						 this.getClass().getCanonicalName() +
+						 ", and is not a Date type");
+		}
+		else {
+			field.set(this, date);
 		}
 	}
 	
