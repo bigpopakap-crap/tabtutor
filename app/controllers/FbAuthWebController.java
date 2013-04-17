@@ -2,8 +2,8 @@ package controllers;
 
 import models.SessionModel;
 import models.UserModel;
-import play.Logger;
 import play.mvc.Result;
+import utils.Logger;
 import actions.ActionAnnotations.Sessioned;
 import api.ApiNoResponseException;
 import api.BaseApiException;

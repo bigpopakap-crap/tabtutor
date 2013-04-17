@@ -4,11 +4,12 @@ import java.util.concurrent.Callable;
 
 import models.SessionModel;
 import models.UserModel;
-import play.Logger;
 import play.i18n.Lang;
 import play.mvc.Http.Context;
+import utils.Logger;
 import utils.Universe.UniverseElement;
 import api.fb.FbApi;
+
 
 /**
  * This class holds methods to query the current session for important objects,

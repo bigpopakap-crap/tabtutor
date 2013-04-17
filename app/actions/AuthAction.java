@@ -1,9 +1,9 @@
 package actions;
 
 import models.SessionModel;
-import play.Logger;
 import play.mvc.Http.Context;
 import play.mvc.Result;
+import utils.Logger;
 import actions.ActionAnnotations.Authed;
 import contexts.SessionContext;
 import controllers.FbAuthWebController;

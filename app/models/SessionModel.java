@@ -14,9 +14,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import play.Logger;
 import types.SqlOperationType.BasicDmlModifyingType;
 import utils.DateUtil;
+import utils.Logger;
 
 import com.avaje.ebean.annotation.Formula;
 

@@ -14,10 +14,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import play.Logger;
 import utils.DateUtil;
+import utils.Logger;
 
 import com.avaje.ebean.annotation.Formula;
+
 
 /**
 * This Ebean maps to the User table, and represents user metadata

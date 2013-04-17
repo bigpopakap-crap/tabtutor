@@ -1,7 +1,7 @@
 package controllers;
 
-import play.Logger;
 import play.mvc.Result;
+import utils.Logger;
 import actions.ActionAnnotations.ModeProtected;
 
 /**

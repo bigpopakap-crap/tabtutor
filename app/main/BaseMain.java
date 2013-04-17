@@ -3,7 +3,7 @@ package main;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-import play.Logger;
+import utils.Logger;
 import utils.StringUtil;
 
 /**

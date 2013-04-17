@@ -12,7 +12,7 @@
 @import contexts.AppContext;
 @import contexts.RequestStaticResourceContext;
 @import types.StaticResourceType;
-@import play.Logger;
+@import utils.Logger
 @include(url: String) = {
 	@if(RequestStaticResourceContext.contains(url)) {
 		<script type="text/javascript">
