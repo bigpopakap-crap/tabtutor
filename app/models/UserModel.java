@@ -1,6 +1,7 @@
 package models;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -56,8 +57,10 @@ public class UserModel extends BaseModel {
 	public String getUsername() { return username; }
 	public String getFullName() { return fullName; }
 	public String getEmail() { return email; }
+	public Date getRegisterTime() { return registerTime; }
+	public Date getLastAccessTime() { return lastAccessTime; }
 	public Date getLastLoginTime() { return (Date) lastLoginTime.clone(); } //defensive copy
-	public Date getsecondToLastLoginTime() { return (Date) secondToLastLoginTime.clone(); } //defensive copy
+	public Date getSecondToLastLoginTime() { return secondToLastLoginTime != null ? (Date) secondToLastLoginTime.clone() : null; } //defensive copy
 	public boolean isFirstLogin() { return isFirstLogin; }
 	public Set<NotationMetaModel> getAuthoredNotations() { return authoredNotations; }
 	
@@ -78,13 +81,13 @@ public class UserModel extends BaseModel {
 	 * Creates a user with the given information
 	 * Username will be some default value
 	 */
-	private UserModel(String fbId, String fbUsername, String email) {
+	private UserModel(String fbId, String username, String email) {
 		Date now = DateUtil.now();
 		
 		this.pk = UUID.randomUUID();
 		this.fbId = fbId;
-		this.fbIsAuthed = true;
-		this.username = fbUsername;
+		this.fbIsAuthed = (fbId != null);
+		this.username = username;
 		this.email = email;
 		this.registerTime = now;
 		this.lastAccessTime = now;
@@ -97,8 +100,8 @@ public class UserModel extends BaseModel {
 	 ************************************************************************** */
 	
 	/** Creates a new user and saves it to the DB */
-	public static UserModel createAndSave(String fbId, String fbUsername, String email) {
-		UserModel user = new UserModel(fbId, fbUsername, email);
+	public static UserModel createAndSave(String fbId, String username, String email) {
+		UserModel user = new UserModel(fbId, username, email);
 		user.doSaveAndRetry();
 		return user;
 	}
@@ -106,6 +109,11 @@ public class UserModel extends BaseModel {
 	/* **************************************************************************
 	 *  BEGIN SELECTORS
 	 ************************************************************************** */
+	
+	/** Gets all users */
+	public static List<UserModel> getAll() {
+		return FINDER.all();
+	}
 	
 	/** Gets a Session by ID, converts the string to a UUID internally */
 	public static UserModel getById(String id) {
