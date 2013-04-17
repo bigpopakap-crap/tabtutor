@@ -8,8 +8,8 @@
 		detectLogin: if true, will check whether the user is logged in and redirects to the login url
 *@
 @(detectLogin: Boolean = false)
-@import contexts.AppContext;
-@import routes.FbAuthWebController;
+@import contexts.AppContext
+@import contexts.RequestContext
 @p_staticResource(Array(
 	"http://connect.facebook.net/en_us/all.js",
 	"/public/javascripts/initFbSdk.js"
@@ -19,7 +19,7 @@
 	window.WTF.get('initFbSdk')(
 		'@(AppContext.Var.FB_APP_ID)',
 		@detectLogin,
-		'@(routes.FbAuthWebController.fblogin(null, null))'
+		'@(RequestContext.loginUrl())'
 	);
 	
 	//remove the weird hash that the Facebook login adds
