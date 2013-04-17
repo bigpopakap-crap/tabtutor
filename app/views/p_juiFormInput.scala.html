@@ -1,0 +1,14 @@
+@*
+	Author: bigpopakap
+	Since: 2013-04-14
+	
+	Partial JUI associated with an HTML form input (JuiFormInput.java)
+	
+	Params:
+		input - the input JUI to display
+*@
+@(input: juiforms.JuiFormInput)
+@import juiforms.JuiFormInput
+@(input.getType()) match {
+	case _ => { <div>@(input.toString())</div> }
+}

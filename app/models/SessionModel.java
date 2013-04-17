@@ -1,11 +1,16 @@
 package models;
 
 import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -39,22 +44,25 @@ public class SessionModel extends BaseModel {
 	 ************************************************************************** */
 	
 	@Column(name = "pk") @Id public UUID pk;
-	@Column(name = "userPk") public UUID userPk; //TODO how to populate this as the user object reference?
 	@Column(name = "fbToken") public String fbToken;
 	@Column(name = "fbTokenExpireTime") public Date fbTokenExpireTime;
 	@Column(name = "startTime") public Date startTime;
 	@Column(name = "lastAccessTime") public Date lastAccessTime;
 	
-	@Transient @Formula(select = "NOW() > fbTokenExpireTime") public boolean isFbtokenExpired;
+	@OneToOne @JoinColumn(name = "userPk") public UserModel user;
+	@OneToMany(fetch = FetchType.LAZY) @JoinColumn(name = "sessionPk", referencedColumnName = "pk") public Set<SessionCsrfTokenModel> csrfTokens;
+	
+	@Transient @Formula(select = "(NOW() > fbTokenExpireTime)") public boolean isFbtokenExpired;
 	
 	public UUID getPk() { return UUID.fromString(pk.toString()); } //defensive copy
 	public String getPk_String() { return getPk().toString(); }
-	public UUID getUserPk() { return UUID.fromString(userPk.toString()); }
+	public UserModel getUser() { return user; }
 	public String getFbToken() { return fbToken; }
 	public Date getFbTokenExpireTime() { return (Date) fbTokenExpireTime.clone(); } //defensive copy
 	public boolean isFbtokenExpired() { return isFbtokenExpired; }
 	public Date getStartTime() { return (Date) startTime.clone(); } //defensive copy
 	public Date getLastAccessTime() { return (Date) lastAccessTime.clone(); } //defensive copy
+	public Set<SessionCsrfTokenModel> getCsrfTokens() { return csrfTokens; }
 	
 	/** Private helper for DB interaction implementation */
 	private static final Finder<UUID, SessionModel> FINDER = new Finder<>(
@@ -87,7 +95,7 @@ public class SessionModel extends BaseModel {
 		Date now = DateUtil.now();
 		
 		this.pk = UUID.randomUUID();
-		this.userPk = null;
+		this.user = null;
 		this.fbToken = null;
 		this.fbTokenExpireTime = null;
 		this.startTime = now;
@@ -125,13 +133,6 @@ public class SessionModel extends BaseModel {
 		return id != null ? FINDER.byId(id) : null;
 	}
 	
-	/** Gets the user associated with this session, or null if no user has been associated yet */
-	public UserModel getUser() {
-		return hasValidUserPk()
-				? UserModel.getById(userPk)
-				: null;
-	}
-	
 	/* **************************************************************************
 	 *  BEGIN UPDATERS
 	 ************************************************************************** */
@@ -149,8 +150,8 @@ public class SessionModel extends BaseModel {
 	}
 	
 	/** Adds the user pk to the session. Assumes that the given userPk is valid */
-	public void setUserPkAndUpdate(UUID userPk) {
-		this.userPk = userPk;
+	public void setUserAndUpdate(UserModel user) {
+		this.user = user;
 		doUpdateAndRetry();
 	}
 	
@@ -158,7 +159,7 @@ public class SessionModel extends BaseModel {
 	public void setLastAccessTimeAndUpdate() {
 		lastAccessTime = DateUtil.now();
 		doUpdateAndRetry();
-		Logger.debug(getClass().getCanonicalName() + pk + " last access time updated to " + lastAccessTime);
+		Logger.debug(getClass().getCanonicalName() + " " + pk + " last access time updated to " + lastAccessTime);
 	}
 	
 	/* **************************************************************************
@@ -182,8 +183,8 @@ public class SessionModel extends BaseModel {
 	 * @param session the session to check
 	 * @return true if the session has a reference to a user
 	 */
-	public boolean hasValidUserPk() {
-		return userPk != null && UserModel.isValidExistingId(userPk);
+	public boolean hasUser() {
+		return user != null;
 	}
 		
 }

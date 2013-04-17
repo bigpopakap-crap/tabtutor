@@ -20,6 +20,8 @@ public enum MessagesEnum {
 	//TODO define debug language that adds a bunch of stars before and after the string
 	
 	word_user("word_user"),
+	formError_required("formError_required"),
+	formError_notInteger("formError_notInteger"),
 	errorPage_title("errorPage_title"),
 	errorPage_internalServerErrorDescription("errorPage_internalServerErrorDescription"),
 	errorPage_pageNotFoundDescription("errorPage_pageNotFoundDescription"),

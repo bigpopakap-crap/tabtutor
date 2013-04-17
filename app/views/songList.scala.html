@@ -1,0 +1,46 @@
+@*
+	Author: bigpopakap
+	Since: 2013-04-14
+	
+	The page for the list of songs
+*@
+@(songs: List[SongModel], songForm: models.forms.SongModelJuiForm)
+<!DOCTYPE html>
+<html>
+<head>
+	@p_preHead()
+</head>
+<body>
+	@p_topbar()
+	
+	<h1>Add a song</h1>
+	@(songForm.render())
+	
+	<h1>List of songs</h1>
+	<table>
+		<!-- Header row -->
+		<tr>
+			<th>Title</th>
+			<th>Artist</th>
+			<th>Album</th>
+			<th>Track num</th>
+			<th>Is live</th>
+			<th>Has youtube</th>
+			<th>Youtube</th>
+		</tr>
+		
+		<!-- Value rows -->
+		@for(song <- songs) {
+			<tr>
+				<td>song.getTitle()</td>
+				<td>song.getArtist().getName()</td>
+				<td>song.getAlbum().getTitle()</td>
+				<td>song.getTrackNum()</td>
+				<td>song.isLive()</td>
+				<td>song.isYoutubeEnabled()</td>
+				<td>song.getYoutubeId()</td>
+			</tr>
+		}
+	</table>
+</body>
+</html>
