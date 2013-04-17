@@ -36,7 +36,7 @@ public class SongModelJuiForm extends JuiForm<SongModel> {
 	}
 	
 	public Html render() {
-		return super.render("Songs", "The list of songs", HttpMethodType.POST, "/"); //TODO change the action URL
+		return super.render("Add a song", "Yuuuuup", HttpMethodType.POST, "/"); //TODO change the action URL
 	}
 	
 }

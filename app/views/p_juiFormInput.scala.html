@@ -10,5 +10,20 @@
 @(input: juiforms.JuiFormInput)
 @import juiforms.JuiFormInput
 @(input.getType()) match {
-	case _ => { <div>@(input.toString())</div> }
+	case _ => {
+		<div>
+		@(input.getLabel()) (@(input.getHelpText())): 
+		<input
+			type="@(input.getType())"
+			name="@(input.getName())"
+			placeholder="@(input.getPlaceholder())"
+			@if(input.hasValue()) {
+				value="@(input.getValue())"
+			}
+		/>
+		@if(input.hasError()) {
+			Error: @(input.getError())
+		}
+		</div>
+	}
 }

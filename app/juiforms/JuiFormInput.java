@@ -2,6 +2,7 @@ package juiforms;
 
 import play.api.templates.Html;
 import utils.ObjectUtil;
+import utils.StringUtil;
 
 /**
  * A JUI for an HTML form input element
@@ -49,7 +50,9 @@ public class JuiFormInput {
 	public String getLabel() { return label; }
 	public String getHelpText() { return helpText; }
 	public String getPlaceholder() { return placeholder; }
+	public boolean hasValue() { return !StringUtil.isNullOrEmpty(getValue()); }
 	public String getValue() { return value; }
+	public boolean hasError() { return !StringUtil.isNullOrEmpty(getError()); }
 	public String getError() { return error; }
 	
 	public void setValue(String value) { this.value = value; }
