@@ -9,7 +9,7 @@ import java.util.Map;
 
 import play.api.templates.Html;
 import types.HttpMethodType;
-import utils.ObjectUtil;
+import utils.ReflectUtil;
 import contexts.RequestContext;
 
 /**
@@ -64,7 +64,7 @@ public abstract class JuiForm<T> {
 	/** Default toString that returns the field=value mappings */
 	@Override
 	public String toString() {
-		return this.getClass().getCanonicalName() + ":" + ObjectUtil.getFieldMap(this);
+		return this.getClass().getCanonicalName() + ":" + ReflectUtil.getFieldMap(this);
 	}
 	
 	/* **************************************************************************

@@ -1,7 +1,7 @@
 package juiforms;
 
 import play.api.templates.Html;
-import utils.ObjectUtil;
+import utils.ReflectUtil;
 
 /**
  * A JUI for an HTML form input element
@@ -41,7 +41,7 @@ public class JuiFormInput {
 	/** Default toString that returns the field=value mappings */
 	@Override
 	public String toString() {
-		return this.getClass().getCanonicalName() + ":" + ObjectUtil.getFieldMap(this);
+		return this.getClass().getCanonicalName() + ":" + ReflectUtil.getFieldMap(this);
 	}
 	
 	public JuiFormInputType getType() { return type; }
