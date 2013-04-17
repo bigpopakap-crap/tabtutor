@@ -23,7 +23,7 @@ import contexts.SessionContext;
  * @since 2013-02-17
  *
  */
-public class FbAuthWebController extends BaseWebController {
+public class FbLoginWebController extends BaseWebController {
 	
 	//TODO add a redirectUrl parameter so that a user gets back to whatever page they were viewing
 	//TODO use a pop-up instead of redirecting the whole browser to Facebook
