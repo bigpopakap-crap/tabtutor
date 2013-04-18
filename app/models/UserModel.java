@@ -114,7 +114,7 @@ public class UserModel extends BaseModel {
 		return FINDER.all();
 	}
 	
-	/** Gets a Session by ID, converts the string to a UUID internally */
+	/** Gets a User by ID, converts the string to a UUID internally */
 	public static UserModel getById(String id) {
 		try {
 			return getById(id != null ? UUID.fromString(id) : null);
@@ -125,14 +125,19 @@ public class UserModel extends BaseModel {
 		}
 	}
 	
-	/** Gets a Session by ID */
+	/** Gets a User by ID */
 	public static UserModel getById(UUID id) {
 		return id != null ? FINDER.byId(id) : null;
 	}
 
-	/** Gets a Session by fbId */
+	/** Gets a User by fbId */
 	public static UserModel getByFbId(String fbId) {
 		return fbId != null ? FINDER.where().eq("fbId", fbId).findUnique() : null;
+	}
+	
+	/** Gets a User by username */
+	public static UserModel getByUsername(String username) {
+		return username != null ? FINDER.where().eq("username", username).findUnique() : null;
 	}
 	
 	/* **************************************************************************
@@ -166,6 +171,11 @@ public class UserModel extends BaseModel {
 	/** Determines if a User exists with the given fbId */
 	public static boolean isValidExistingFbId(String fbId) {
 		return getByFbId(fbId) != null;
+	}
+	
+	/** Determines if a User exists with the given username */
+	public static boolean isValidExistingUsername(String username) {
+		return getByUsername(username) != null;
 	}
 	
 }

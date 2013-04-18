@@ -2,6 +2,7 @@ package models.forms;
 
 import java.util.Map;
 
+import juiforms.CustomValidator;
 import juiforms.JuiForm;
 import juiforms.JuiFormInput;
 import juiforms.JuiFormInputConstraint;
@@ -25,7 +26,15 @@ public class DevtoolsUserJuiForm extends JuiForm<UserModel> {
 	public DevtoolsUserJuiForm() {
 		super(new JuiFormInput[] {
 			new JuiFormInput(JuiFormInputType.TEXT, "username", "Username", "jonsmellypants24", "Enter the username", new JuiFormInputConstraint[] {
-				JuiFormInputConstraint.REQUIRED
+				JuiFormInputConstraint.REQUIRED,
+				JuiFormInputConstraint.UNIQUE(new CustomValidator<String, Boolean>() {
+					
+					@Override
+					public Boolean call() throws Exception {
+						return !UserModel.isValidExistingUsername(value());
+					}
+
+				})
 			}),
 			new JuiFormInput(JuiFormInputType.EMAIL, "email", "Email", "jonsmellypants@gmail.com", "Enter the email", new JuiFormInputConstraint[] {
 				JuiFormInputConstraint.REQUIRED

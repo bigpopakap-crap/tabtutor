@@ -1,5 +1,6 @@
 word_user=user
 formError_required={0} is required
+formError_notUnique={0} is not available
 formError_notInteger={0} must be an integer
 word_login=login
 errorPage_title=Oops! An error occurred
