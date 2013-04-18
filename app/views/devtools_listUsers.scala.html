@@ -7,7 +7,7 @@
 @(users: List[UserModel], devtoolsUserForm: models.forms.DevtoolsUserJuiForm)
 @import contexts.RequestContext;
 @import utils.MessagesEnum;
-@td(value: String) = {
+@td(value: Object) = {
 	<td title="@(value)">@(value)</td>
 }
 <!DOCTYPE html>
@@ -18,7 +18,6 @@
 <body>
 	@p_topbar()
 	
-	<h1>Create a new user</h1>
 	@(devtoolsUserForm.render())
 	
 	<h1>List of users</h1>
@@ -47,16 +46,12 @@
 				@td(user.getUsername())
 				@td(user.getEmail())
 				@td(user.getFbId())
-				@td(user.getFbIsAuthed().toString())
-				@td(user.isFirstLogin().toString())
-				@td(user.getRegisterTime().toString())
-				@td(user.getLastLoginTime().toString())
-				@if(user.getSecondToLastLoginTime() != null) {
-					@td(user.getSecondToLastLoginTime().toString())
-				} else {
-					@td("null")
-				}
-				@td(user.getLastAccessTime().toString())
+				@td(user.getFbIsAuthed(): java.lang.Boolean)
+				@td(user.isFirstLogin(): java.lang.Boolean)
+				@td(user.getRegisterTime())
+				@td(user.getLastLoginTime())
+				@td(user.getSecondToLastLoginTime())
+				@td(user.getLastAccessTime())
 			</tr>
 		}
 	</table>

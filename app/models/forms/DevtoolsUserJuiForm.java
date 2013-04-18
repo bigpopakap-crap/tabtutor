@@ -35,7 +35,7 @@ public class DevtoolsUserJuiForm extends JuiForm<UserModel> {
 
 	@Override
 	protected UserModel bind(Map<String, String> data) {
-		throw new UnsupportedOperationException("This form isn't used to bind the data, it's handled in the controller itself");
+		return UserModel.createAndSave(null, data.get("username"), data.get("email"));
 	}
 	
 	public Html render() {

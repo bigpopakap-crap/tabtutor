@@ -1,6 +1,6 @@
 word_user=user
-formError_required={1} is required
-formError_notInteger={1} must be an integer
+formError_required={0} is required
+formError_notInteger={0} must be an integer
 word_login=login
 errorPage_title=Oops! An error occurred
 errorPage_internalServerErrorDescription=Please try again later, or submit an error report if the problem persists

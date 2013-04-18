@@ -87,7 +87,7 @@ public class UserModel extends BaseModel {
 		
 		this.pk = UUID.randomUUID();
 		this.fbId = fbId;
-		this.fbIsAuthed = (fbId != null);
+		this.fbIsAuthed = (this.fbId != null);
 		this.username = username;
 		this.email = email;
 		this.registerTime = now;

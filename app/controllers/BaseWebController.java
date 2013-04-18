@@ -6,7 +6,6 @@ import utils.MessagesEnum;
 import actions.ActionAnnotations.AccessTimed;
 import actions.ActionAnnotations.Sessioned;
 import actions.ActionAnnotations.TriedCaught;
-import controllers.exceptions.BaseExposedException;
 
 /**
  * This class should be the parent of all classes that handle requests for the web interface
@@ -18,11 +17,6 @@ import controllers.exceptions.BaseExposedException;
  */
 @TriedCaught @AccessTimed @Sessioned //methods should not forget to include these
 public class BaseWebController extends BaseController {
-	
-	@Override
-	public BaseExposedException getDefaultExposedException(Throwable cause) {
-		return new InternalServerErrorPageException(cause);
-	}
 	
 	/**
 	 * This class is an exposed error specific to the web interface, where every

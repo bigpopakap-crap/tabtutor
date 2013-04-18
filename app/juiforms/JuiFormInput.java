@@ -48,7 +48,9 @@ public class JuiFormInput {
 	public JuiFormInputType getType() { return type; }
 	public String getName() { return name; }
 	public String getLabel() { return label; }
+	public boolean hasHelpText() { return !StringUtil.isNullOrEmpty(getHelpText()); }
 	public String getHelpText() { return helpText; }
+	public boolean hasPlaceholder() { return !StringUtil.isNullOrEmpty(getPlaceholder()); }
 	public String getPlaceholder() { return placeholder; }
 	public boolean hasValue() { return !StringUtil.isNullOrEmpty(getValue()); }
 	public String getValue() { return value; }
@@ -75,7 +77,7 @@ public class JuiFormInput {
 			}
 		}
 		
-		return isError();
+		return !isError();
 	}
 
 	/** Renders the HTML to represent this form input */

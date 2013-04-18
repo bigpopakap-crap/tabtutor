@@ -2,6 +2,7 @@ package juiforms;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,8 +37,16 @@ public abstract class JuiForm<T> {
 	 * Forms must not have elements with duplicate names
 	 * @throws IllegalStateException any two form elements have the same name
 	 */
-	public JuiForm(JuiFormInput[] elements) throws IllegalStateException {
-		if (elements == null) elements = new JuiFormInput[0];
+	public JuiForm(JuiFormInput[] elementArr) throws IllegalStateException {
+		List<JuiFormInput> elements = new LinkedList<>(Arrays.asList(elementArr));
+		
+		//append other automatically-added elements
+		if (appendSubmit()) {
+			elements.add(new JuiFormInput(JuiFormInputType.SUBMIT, "submit", "Submit", null, null, null));
+		}
+		if (appendCsrfToken()) {
+			//TODO
+		}
 		
 		//create the list of element names in order
 		elementNames = new ArrayList<>();
@@ -102,7 +111,19 @@ public abstract class JuiForm<T> {
 			validate();
 			
 			if (isValid()) {
-				return bind(getValues());
+				try {
+					return bind(getValues());
+				}
+				catch (Exception ex) {
+					//something bad happend while creating the element
+					//This should be fixed and not exposed to the user
+					throw new RuntimeException(
+						"Error while binding in " + this.getClass().getCanonicalName() +
+							". Probably an exception thrown while creating a DB object, " +
+							"which means the form is missing some validation it needs, like unique value checking",
+						ex
+					);
+				}
 			}
 			else {
 				throw new JuiFormValidationException();
@@ -125,7 +146,7 @@ public abstract class JuiForm<T> {
 	}
 	
 	/* **************************************************************************
-	 *  BEGIN ABSTRACT METHODS
+	 *  BEGIN ABSTRACT METHODS AND HOOKS
 	 ************************************************************************** */
 	
 	/**
@@ -140,6 +161,22 @@ public abstract class JuiForm<T> {
 	 * @return the object derived from these values
 	 */
 	protected abstract T bind(Map<String, String> data);
+	
+	/**
+	 * Controls whether the form automatically appends a submit button
+	 * Default implementation returns true
+	 */
+	protected boolean appendSubmit() {
+		return true;
+	}
+	
+	/**
+	 * Controls whether the form automatically appends a CSRF token to be validated
+	 * Default implementation returns true
+	 */
+	protected boolean appendCsrfToken() {
+		return true;
+	}
 	
 	/* **************************************************************************
 	 *  BEGIN PRIVATE HELPERS
