@@ -43,6 +43,8 @@ public class UserModel extends BaseModel {
 	@Column(name = "username") public String username;
 	@Column(name = "email") public String email;
 	@Column(name = "registerTime") public Date registerTime;
+	@Column(name = "isTestUser") public boolean isTestUser;
+	@Column(name = "userPk_creator") public UserModel creator;
 	@Column(name = "lastAccessTime") public Date lastAccessTime;
 	@Column(name = "lastLoginTime") public Date lastLoginTime;
 	@Column(name = "secondToLastLoginTime") public Date secondToLastLoginTime;
@@ -59,6 +61,8 @@ public class UserModel extends BaseModel {
 	public String getFullName() { return fullName; }
 	public String getEmail() { return email; }
 	public Date getRegisterTime() { return registerTime; }
+	public UserModel getCreator() { return creator; }
+	public boolean isTestUser() { return isTestUser; }
 	public Date getLastAccessTime() { return lastAccessTime; }
 	public Date getLastLoginTime() { return (Date) lastLoginTime.clone(); } //defensive copy
 	public Date getSecondToLastLoginTime() { return secondToLastLoginTime != null ? (Date) secondToLastLoginTime.clone() : null; } //defensive copy
@@ -82,7 +86,7 @@ public class UserModel extends BaseModel {
 	 * Creates a user with the given information
 	 * Username will be some default value
 	 */
-	private UserModel(String fbId, String username, String email) {
+	private UserModel(String fbId, String username, String email, boolean isTestUser, UserModel creator) {
 		Date now = DateUtil.now();
 		
 		this.pk = UUID.randomUUID();
@@ -91,6 +95,8 @@ public class UserModel extends BaseModel {
 		this.username = username;
 		this.email = email;
 		this.registerTime = now;
+		this.isTestUser = isTestUser;
+		this.creator = creator;
 		this.lastAccessTime = now;
 		this.lastLoginTime = now;
 		this.secondToLastLoginTime = null;
@@ -100,9 +106,22 @@ public class UserModel extends BaseModel {
 	 *  BEGIN CREATORS (PUBLIC)
 	 ************************************************************************** */
 	
-	/** Creates a new user and saves it to the DB */
 	public static UserModel createAndSave(String fbId, String username, String email) {
-		return (UserModel) new UserModel(fbId, username, email).doSaveAndRetry();
+		return createAndSave(fbId, username, email, false, null);
+	}
+	
+	/**
+	 * Creates a new user and saves to the DB
+	 * 
+	 * @param fbId the Facebook ID of the new user, or null
+	 * @param username the username of the new user
+	 * @param email the email of the new user
+	 * @param isTestUser a flag indicating that this is a user created from devtools
+	 * @param creator the user who created this user, or null
+	 * @return the user object that was created and saved
+	 */
+	public static UserModel createAndSave(String fbId, String username, String email, boolean isTestUser, UserModel creator) {
+		return (UserModel) new UserModel(fbId, username, email, isTestUser, creator).doSaveAndRetry();
 	}
 	
 	/* **************************************************************************

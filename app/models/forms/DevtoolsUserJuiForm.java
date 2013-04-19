@@ -10,6 +10,7 @@ import juiforms.JuiFormInputType;
 import models.UserModel;
 import play.api.templates.Html;
 import types.HttpMethodType;
+import contexts.SessionContext;
 import controllers.routes;
 
 /**
@@ -44,7 +45,7 @@ public class DevtoolsUserJuiForm extends JuiForm<UserModel> {
 
 	@Override
 	protected UserModel bind(Map<String, String> data) {
-		return UserModel.createAndSave(null, data.get("username"), data.get("email"));
+		return UserModel.createAndSave(null, data.get("username"), data.get("email"), true, SessionContext.user());
 	}
 	
 	public Html render() {
