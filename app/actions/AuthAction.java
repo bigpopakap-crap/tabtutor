@@ -23,7 +23,7 @@ public class AuthAction extends BaseAction<Authed> {
 	@Override
 	protected Result hook_call(Context ctx) throws Throwable {
 		//get the session object
-		final SessionModel session = SessionContext.get();
+		final SessionModel session = SessionContext.session();
 		if (session == null) throw new IllegalStateException("Session should have been populated by now");
 		
 		//if it is a real user and we need to force re-auth or the auth info is invalid, redirect to fb login

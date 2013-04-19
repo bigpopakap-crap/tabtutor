@@ -35,8 +35,8 @@ public abstract class SessionContext extends BaseContext {
 	
 	/** Establishes the session context as the given user */
 	public static synchronized void establish(UserModel user) {
-		if (!has()) init(Context.current());
-		get().setUserAndUpdate(user);
+		if (!hasSession()) init(Context.current());
+		session().setUserAndUpdate(user);
 	}
 	
 	/** Get the language of the current session context. Useful for templates */
@@ -45,13 +45,13 @@ public abstract class SessionContext extends BaseContext {
 	}
 	
 	/** Get the session model object for the current session */
-	public static synchronized SessionModel get() {
+	public static synchronized SessionModel session() {
 		return getOrLoad(SESSION_OBJ_CONTEXT_KEY, SESSION_LOADER);
 	}
 	
 	/** Determines if there is a session */
-	public static synchronized boolean has() {
-		return get() != null;
+	public static synchronized boolean hasSession() {
+		return session() != null;
 	}
 	
 	/** Get the current logged-in user */
@@ -110,7 +110,7 @@ public abstract class SessionContext extends BaseContext {
 
 		@Override
 		public UserModel call() throws Exception {
-			SessionModel session = get();
+			SessionModel session = session();
 			if (session != null && session.hasUser()) {
 				return session.getUser();
 			}
@@ -126,7 +126,7 @@ public abstract class SessionContext extends BaseContext {
 
 		@Override
 		public FbApi call() throws Exception {
-			SessionModel session = get();
+			SessionModel session = session();
 			if (session != null && session.hasValidFbAuthInfo()) {
 				return new FbApi(session.getFbToken());
 			}
