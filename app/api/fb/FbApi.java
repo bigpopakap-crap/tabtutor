@@ -6,12 +6,12 @@ import java.util.Map;
 import play.libs.WS.Response;
 import play.mvc.Http.Request;
 import types.HttpMethodType;
+import utils.RestUtil;
 import api.ApiErrorCodeException;
 import api.ApiNoResponseException;
 import api.ApiResponseOption;
 import api.BaseApi;
 import contexts.AppContext;
-
 import controllers.routes;
 
 /**
@@ -109,7 +109,7 @@ public class FbApi extends BaseApi<FbJsonResponse> {
 	/** Gets the URL to redirect the user for Facebook login */
 	public static String fbLoginUrl(Request request, String targetUrl) {
 		return new StringBuilder().append(DOMAIN_FB).append(PATH_LOGIN_REDIRECT)
-									.append("?").append(mapToQueryString(
+									.append("?").append(RestUtil.mapToQueryString(
 											QUERY_KEY_CLIENT_ID, AppContext.Var.FB_APP_ID.val(),
 											QUERY_KEY_REDIRECT_URI, fbLoginRedirectUri(request, targetUrl),
 											QUERY_KEY_SCOPE, QUERY_VALUE_SCOPE
@@ -137,7 +137,7 @@ public class FbApi extends BaseApi<FbJsonResponse> {
 		//if the response is an erroneous response
 		
 		//parse the response for the token and expiry
-		Map<String, String> paramMap = queryStringToMap(resp.getBody());
+		Map<String, String> paramMap = RestUtil.queryStringToMap(resp.getBody());
 		return new FbApi(paramMap.get(QUERY_KEY_ACCESS_TOKEN), Integer.parseInt(paramMap.get(QUERY_KEY_ACCESS_TOKEN_EXPIRY)));
 	}
 	
