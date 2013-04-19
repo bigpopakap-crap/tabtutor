@@ -30,6 +30,8 @@
 			<th>FB ID</th>
 			<th>FB isAuthed</th>
 			<th>First login</th>
+			<th>Test user</th>
+			<th>Creator</th>
 			<th>Register</th>
 			<th>Last login</th>
 			<th>Second last login</th>
@@ -48,6 +50,12 @@
 				@td(user.getFbId())
 				@td(user.getFbIsAuthed(): java.lang.Boolean)
 				@td(user.isFirstLogin(): java.lang.Boolean)
+				@td(user.isTestUser(): java.lang.Boolean)
+				@if(user.getCreator() != null) {
+					@td(user.getCreator().getUsername())
+				} else {
+					@td("")
+				}
 				@td(user.getRegisterTime())
 				@td(user.getLastLoginTime())
 				@td(user.getSecondToLastLoginTime())

@@ -54,7 +54,7 @@ public class FbLoginWebController extends BaseWebController {
 				FbApi fbApi = FbApi.accessToken(request(), targetUrl, code);
 				
 				//add this information to the session
-				SessionModel session = SessionContext.get();
+				SessionModel session = SessionContext.session();
 				session.setFbAuthInfoAndUpdate(fbApi.getToken(), fbApi.getTokenExpiry());
 				
 				//ensure that a user is referenced by the session

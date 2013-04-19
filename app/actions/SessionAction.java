@@ -18,7 +18,7 @@ public class SessionAction extends BaseAction<Sessioned> {
 	
 	@Override
 	protected Result hook_call(Context ctx) throws Throwable {
-		SessionModel session = SessionContext.get(); //use this method because it is cached
+		SessionModel session = SessionContext.session(); //use this method because it is cached
 		if (session == null || configuration.forceRefresh()) {
 			SessionContext.init(ctx);
 		}
