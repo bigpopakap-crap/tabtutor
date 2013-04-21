@@ -142,12 +142,30 @@ public abstract class JuiForm<T> {
 	 * @param action the URL for the form to submit to
 	 */
 	public Html render(String title, String subtitle, HttpMethodType method, String action) {
+		//bind default values
+		Map<String, String> defaultValues = new HashMap<String, String>();
+		hook_preRenderBind(defaultValues);
+		bindValues(defaultValues);
+		
 		return views.html.p_juiForm.render(title, subtitle, method, action, getInputElements());
 	}
 	
 	/* **************************************************************************
 	 *  BEGIN ABSTRACT METHODS AND HOOKS
 	 ************************************************************************** */
+	
+	/**
+	 * Called just before the form is rendered, allows the form to specify any
+	 * default values for the fields
+	 * 
+	 * Default implementation is to do nothing
+	 * 
+	 * @param data the name-value map that the method should populate with default
+	 * values. Guaranteed to be an initialized empty map when the method is called
+	 */
+	protected void hook_preRenderBind(Map<String, String> defaultValues) {
+		//do nothing
+	}
 	
 	/**
 	 * Creates an object, given the data bound to the form.

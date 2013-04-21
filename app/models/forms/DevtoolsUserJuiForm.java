@@ -42,6 +42,13 @@ public class DevtoolsUserJuiForm extends JuiForm<UserModel> {
 			})
 		});
 	}
+	
+	@Override
+	protected void hook_preRenderBind(Map<String, String> defaultValues) {
+		if (SessionContext.hasUser()) {
+			defaultValues.put("email", SessionContext.user().getEmail());
+		}
+	}
 
 	@Override
 	protected UserModel bind(Map<String, String> data) {
