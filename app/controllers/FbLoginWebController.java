@@ -11,6 +11,7 @@ import api.fb.FbApi;
 import api.fb.FbJsonResponse;
 import contexts.RequestErrorContext;
 import contexts.SessionContext;
+import controllers.exceptions.web.InternalServerErrorPageException;
 
 /**
  * This class handles all API requests related to Facebook authentication

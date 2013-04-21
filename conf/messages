@@ -9,3 +9,4 @@ errorPage_pageNotFoundDescription=We couldn't find the page you were looking for
 errorPage_toGoBack=to go back
 errorPage_toGoHome=to go home
 errorPage_sampleDescription=This is the description
+errorPage_csrfTokenInvalid=You may have been hacked!

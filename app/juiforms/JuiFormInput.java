@@ -28,7 +28,6 @@ public class JuiFormInput {
 	public JuiFormInput(JuiFormInputType type, String name, String label, String placeholder, String helpText, JuiFormInputConstraint[] constraints) {
 		if (type == null) throw new IllegalArgumentException("type cannot be null");
 		if (name == null) throw new IllegalArgumentException("name cannot be null");
-		if (label == null) throw new IllegalArgumentException("helpText cannot be null");
 		
 		this.type = type;
 		this.name = name;
@@ -47,6 +46,7 @@ public class JuiFormInput {
 	
 	public JuiFormInputType getType() { return type; }
 	public String getName() { return name; }
+	public boolean hasLabel() { return !StringUtil.isNullOrEmpty(getLabel()); }
 	public String getLabel() { return label; }
 	public boolean hasHelpText() { return !StringUtil.isNullOrEmpty(getHelpText()); }
 	public String getHelpText() { return helpText; }

@@ -29,7 +29,8 @@ public enum MessagesEnum {
 	errorPage_pageNotFoundDescription("errorPage_pageNotFoundDescription"),
 	errorPage_toGoBack("errorPage_toGoBack"),
 	errorPage_toGoHome("errorPage_toGoHome"),
-	errorPage_sampleDescription("errorPage_sampleDescription");
+	errorPage_sampleDescription("errorPage_sampleDescription"),
+	errorPage_csrfTokenInvalid("errorPage_csrfTokenInvalid");
 	
 	/** The key used to access the string in the messages files */
 	private final String key;

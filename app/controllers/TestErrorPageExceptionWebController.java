@@ -2,6 +2,11 @@ package controllers;
 
 import play.mvc.Result;
 import utils.MessagesEnum;
+import controllers.exceptions.web.GoBackErrorPageException;
+import controllers.exceptions.web.GoHomeErrorPageException;
+import controllers.exceptions.web.GoToErrorPageException;
+import controllers.exceptions.web.InternalServerErrorPageException;
+import controllers.exceptions.web.NotFoundErrorPageException;
 
 /**
  * Test pages for throwing exposed exceptions
@@ -32,6 +37,13 @@ public class TestErrorPageExceptionWebController extends TestWebController {
 			new RuntimeException(),
 			"/",
 			MessagesEnum.errorPage_toGoHome.get(),
+			MessagesEnum.errorPage_sampleDescription.get()
+		);
+	}
+	
+	public static Result goHomePage() {
+		throw new GoHomeErrorPageException(
+			new RuntimeException(),
 			MessagesEnum.errorPage_sampleDescription.get()
 		);
 	}

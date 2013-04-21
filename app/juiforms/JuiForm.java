@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import models.SessionCsrfTokenModel;
 import play.api.templates.Html;
 import types.HttpMethodType;
 import utils.ObjectUtil;
@@ -41,11 +42,13 @@ public abstract class JuiForm<T> {
 		List<JuiFormInput> elements = new LinkedList<>(Arrays.asList(elementArr));
 		
 		//append other automatically-added elements
+		if (appendCsrfToken()) {
+			elements.add(new JuiFormInput(JuiFormInputType.HIDDEN, "csrf", null, null, null, new JuiFormInputConstraint[] {
+				JuiFormInputConstraint.CSRF_TOKEN
+			}));
+		}
 		if (appendSubmit()) {
 			elements.add(new JuiFormInput(JuiFormInputType.SUBMIT, "submit", "Submit", null, null, null));
-		}
-		if (appendCsrfToken()) {
-			//TODO
 		}
 		
 		//create the list of element names in order
@@ -144,7 +147,7 @@ public abstract class JuiForm<T> {
 	public Html render(String title, String subtitle, HttpMethodType method, String action) {
 		//bind default values
 		Map<String, String> defaultValues = new HashMap<String, String>();
-		hook_preRenderBind(defaultValues);
+		preRenderBind(defaultValues);
 		bindValues(defaultValues);
 		
 		return views.html.p_juiForm.render(title, subtitle, method, action, getInputElements());
@@ -199,6 +202,13 @@ public abstract class JuiForm<T> {
 	/* **************************************************************************
 	 *  BEGIN PRIVATE HELPERS
 	 ************************************************************************** */
+	
+	private void preRenderBind(Map<String, String> defaultValues) {
+		hook_preRenderBind(defaultValues);
+		
+		//create a new token
+		defaultValues.put("csrf", SessionCsrfTokenModel.create().getCsrfToken().toString());
+	}
 	
 	/** Validates the fields against the data bound to them.
 	 *  Populates them with error messages, if applicable */
