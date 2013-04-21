@@ -8,7 +8,7 @@
 		subTitle: the string to include after the app title as the title of the page
 		forceNoDetectLogin: if true, will not redirect to the login url if the user is connected with Facebook
 *@
-@(subTitle: String = "", forceNoDetectLogin: Boolean = false)
+@(subTitle: String = "", detectFbLogin: Boolean = false)
 @import contexts.AppContext
 @import contexts.SessionContext
 @import models.SessionModel
@@ -30,5 +30,5 @@
 	"/public/javascripts/dev/failedRequests.js"
 ))
 @p_fbJsSdk(
-	!forceNoDetectLogin && !(SessionContext.hasSession() && SessionContext.session().hasValidFbAuthInfo())
+	detectFbLogin && !(SessionContext.hasSession() && SessionContext.session().hasValidFbAuthInfo())
 )
