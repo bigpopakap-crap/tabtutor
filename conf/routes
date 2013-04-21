@@ -27,6 +27,7 @@ GET		/albums/list				controllers.AlbumsWebController.list()
 # --------------------------------------------------------------------- #
 #	BEGIN /INTERNAL/DEVTOOLS PAGE ROUTING								#
 # --------------------------------------------------------------------- #
+GET		/internal/devtools							controllers.DevtoolsWebController.directory()
 GET		/internal/devtools/killserver				controllers.DevtoolsWebController.killServer()
 GET		/internal/devtools/login/listusers			controllers.DevtoolsLoginWebController.listUsers()
 GET		/internal/devtools/login/create				controllers.DevtoolsLoginWebController.create(username, email)

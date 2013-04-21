@@ -1,0 +1,8 @@
+.devbar {
+	position: fixed;
+	bottom: 0px;
+	width: 100%;
+	background-color: #EEEEEE;
+	border-top: solid 2px #CCCCCC;
+	padding: 8px;
+}

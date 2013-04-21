@@ -30,5 +30,5 @@
 	"/public/javascripts/dev/failedRequests.js"
 ))
 @p_fbJsSdk(
-	!forceNoDetectLogin && !(SessionContext.has() && SessionContext.get().hasValidFbAuthInfo())
+	!forceNoDetectLogin && !(SessionContext.hasSession() && SessionContext.session().hasValidFbAuthInfo())
 )

@@ -15,6 +15,12 @@ import actions.ActionAnnotations.ModeProtected;
 @ModeProtected
 public class DevtoolsWebController extends BaseWebController {
 	
+	/** Lists all the devtools pages */
+	public static Result directory() {
+		//TODO do this
+		return ok("Not implemented yet");
+	}
+	
 	//TODO make this an admin action so it is also accessible in production by priveleged users
 	/** Kill the server */
 	public static Result killServer() {
