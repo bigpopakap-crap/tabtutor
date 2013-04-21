@@ -57,31 +57,26 @@ public class FbLoginWebController extends BaseWebController {
 				SessionModel session = SessionContext.session();
 				session.setFbAuthInfoAndUpdate(fbApi.getToken(), fbApi.getTokenExpiry());
 				
-				//ensure that a user is referenced by the session
-				if (!SessionContext.hasUser()) {
-					Logger.debug("Session needs a user reference. Fetching Facebook ID and looking up user object");
+				//start by getting the user's Facebook ID from the Facebook API
+				try {
+					//get the response from Facebook and the important fields
+					FbJsonResponse fbJson = fbApi.me().get();
+					String fbId = fbJson.fbId();
+					String fbUsername = fbJson.username();
+					String email = fbJson.email();
 					
-					//start by getting the user's Facebook ID from the Facebook API
-					try {
-						//get the response from Facebook and the important fields
-						FbJsonResponse fbJson = fbApi.me().get();
-						String fbId = fbJson.fbId();
-						String fbUsername = fbJson.username();
-						String email = fbJson.email();
-						
-						//get the user associated with this Facebook ID, or create one
-						UserModel user = UserModel.getByFbId(fbId);
-						if (user == null) {
-							user = UserModel.createAndSave(fbId, fbUsername, email);
-						}
-						
-						//add this user ID to the session object
-						SessionContext.establish(user);
+					//get the user associated with this Facebook ID, or create one
+					UserModel user = UserModel.getByFbId(fbId);
+					if (user == null) {
+						user = UserModel.createAndSave(fbId, fbUsername, email);
 					}
-					catch (BaseApiException e) {
-						RequestErrorContext.setFbConnectionError(true);
-						//TODO need to do anything else to handle this error?
-					}
+					
+					//add this user ID to the session object
+					SessionContext.establish(user);
+				}
+				catch (BaseApiException e) {
+					RequestErrorContext.setFbConnectionError(true);
+					//TODO need to do anything else to handle this error?
 				}
 				
 				//update the user's login time
