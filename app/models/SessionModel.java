@@ -14,9 +14,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import play.Logger;
 import types.SqlOperationType.BasicDmlModifyingType;
 import utils.DateUtil;
+import utils.Logger;
 
 import com.avaje.ebean.annotation.Formula;
 
@@ -107,7 +107,7 @@ public class SessionModel extends BaseModel {
 	 ************************************************************************** */
 	
 	/** Creates a new session and saves it to the DB */
-	public static SessionModel create() {
+	public static SessionModel createAndSave() {
 		SessionModel session = new SessionModel();
 		session.doSaveAndRetry();
 		return session;

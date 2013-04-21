@@ -14,8 +14,8 @@ public class AccessTimeAction extends BaseAction<AccessTimed> {
 	protected Result hook_call(Context ctx) throws Throwable {
 		try {
 			//update the session access time if there is one
-			if (SessionContext.get() != null) {
-				SessionContext.get().setLastAccessTimeAndUpdate();
+			if (SessionContext.session() != null) {
+				SessionContext.session().setLastAccessTimeAndUpdate();
 			}
 			
 			//update the user last access time if there is one

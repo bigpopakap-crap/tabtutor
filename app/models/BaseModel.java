@@ -8,12 +8,13 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.OptimisticLockException;
 
 import models.exceptions.FailedOperationException;
-import play.Logger;
 import play.db.ebean.Model;
 import types.SqlOperationType.BasicDmlModifyingType;
 import utils.ConcurrentUtil;
+import utils.Logger;
 import utils.ObjectUtil;
 import contexts.RequestStatsContext;
+
 
 /**
  * Base class for all models. All models should extend this class
@@ -180,11 +181,13 @@ public abstract class BaseModel extends Model {
 	 * 
 	 * @param opType the type of the operation
 	 * @param doOperation the callable that actually executes the operation (without any retry logic)
+	 * @return this object for convenience
 	 * @throws FailedOperationException if the operation fails after all retries
 	 */
-	private void doOperationAndRetry(BasicDmlModifyingType opType, Callable<Void> doOperation) throws FailedOperationException {
+	private BaseModel doOperationAndRetry(BasicDmlModifyingType opType, Callable<Void> doOperation) throws FailedOperationException {
 		try {
 			ConcurrentUtil.joinThread(new OperationCallable(this, opType, doOperation));
+			return this;
 		}
 		catch (RuntimeException ex) {
 			//just relay that exception
@@ -207,8 +210,8 @@ public abstract class BaseModel extends Model {
 	
 	@Override public void save() { throw new UnsupportedOperationException(BLOCKED_REASON); }
 	private void _save() { super.save(); }
-	protected void doSaveAndRetry() {
-		doOperationAndRetry(BasicDmlModifyingType.INSERT, new Callable<Void>() {
+	protected BaseModel doSaveAndRetry() {
+		return doOperationAndRetry(BasicDmlModifyingType.INSERT, new Callable<Void>() {
 
 			@Override
 			public Void call() throws Exception {
@@ -221,8 +224,8 @@ public abstract class BaseModel extends Model {
 	
 	@Override public void save(String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
 	private void _save(String str) { super.save(str); }
-	protected void doSaveAndRetry(final String str) {
-		doOperationAndRetry(BasicDmlModifyingType.INSERT, new Callable<Void>() {
+	protected BaseModel doSaveAndRetry(final String str) {
+		return doOperationAndRetry(BasicDmlModifyingType.INSERT, new Callable<Void>() {
 
 			@Override
 			public Void call() throws Exception {
@@ -241,8 +244,8 @@ public abstract class BaseModel extends Model {
 	
 	@Override public void update() { throw new UnsupportedOperationException(BLOCKED_REASON); }
 	private void _update() { super.update(); }
-	protected void doUpdateAndRetry() {
-		doOperationAndRetry(BasicDmlModifyingType.UPDATE, new Callable<Void>() {
+	protected BaseModel doUpdateAndRetry() {
+		return doOperationAndRetry(BasicDmlModifyingType.UPDATE, new Callable<Void>() {
 
 			@Override
 			public Void call() throws Exception {
@@ -255,8 +258,8 @@ public abstract class BaseModel extends Model {
 	
 	@Override public void update(Object obj) { throw new UnsupportedOperationException(BLOCKED_REASON); }
 	private void _update(Object obj) { super.update(obj); }
-	protected void doUpdateAndRetry(final Object obj) {
-		doOperationAndRetry(BasicDmlModifyingType.UPDATE, new Callable<Void>() {
+	protected BaseModel doUpdateAndRetry(final Object obj) {
+		return doOperationAndRetry(BasicDmlModifyingType.UPDATE, new Callable<Void>() {
 
 			@Override
 			public Void call() throws Exception {
@@ -269,8 +272,8 @@ public abstract class BaseModel extends Model {
 	
 	@Override public void update(Object obj, String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
 	private void _update(Object obj, String str) { super.update(obj, str); }
-	protected void doUpdateAndRetry(final Object obj, final String str) {
-		doOperationAndRetry(BasicDmlModifyingType.UPDATE, new Callable<Void>() {
+	protected BaseModel doUpdateAndRetry(final Object obj, final String str) {
+		return doOperationAndRetry(BasicDmlModifyingType.UPDATE, new Callable<Void>() {
 
 			@Override
 			public Void call() throws Exception {
@@ -283,8 +286,8 @@ public abstract class BaseModel extends Model {
 	
 	@Override public void update(String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
 	private void _update(String str) { super.update(str); }
-	protected void doUpdateAndRetry(final String str) {
-		doOperationAndRetry(BasicDmlModifyingType.UPDATE, new Callable<Void>() {
+	protected BaseModel doUpdateAndRetry(final String str) {
+		return doOperationAndRetry(BasicDmlModifyingType.UPDATE, new Callable<Void>() {
 
 			@Override
 			public Void call() throws Exception {
@@ -297,8 +300,8 @@ public abstract class BaseModel extends Model {
 	
 	@Override public void delete() { throw new UnsupportedOperationException(BLOCKED_REASON); }
 	private void _delete() { super.delete(); }
-	protected void doDeleteAndRetry() {
-		doOperationAndRetry(BasicDmlModifyingType.DELETE, new Callable<Void>() {
+	protected BaseModel doDeleteAndRetry() {
+		return doOperationAndRetry(BasicDmlModifyingType.DELETE, new Callable<Void>() {
 
 			@Override
 			public Void call() throws Exception {
@@ -311,8 +314,8 @@ public abstract class BaseModel extends Model {
 	
 	@Override public void delete(String str) { throw new UnsupportedOperationException(BLOCKED_REASON); }
 	private void _delete(String str) { super.delete(str); }
-	protected void doDeleteAndRetry(final String str) {
-		doOperationAndRetry(BasicDmlModifyingType.DELETE, new Callable<Void>() {
+	protected BaseModel doDeleteAndRetry(final String str) {
+		return doOperationAndRetry(BasicDmlModifyingType.DELETE, new Callable<Void>() {
 
 			@Override
 			public Void call() throws Exception {

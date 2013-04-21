@@ -1,0 +1,23 @@
+@*
+	Author: bigpopakap
+	Since: 2013-04-14
+	
+	Partial JUI associated with an HTML form (JuiForm.java)
+	
+	Params:
+		title - the title of the form
+		subtitle - the subtitle of the form
+		method - the method to use for this form
+		action - the URL to submit the form
+		inputs - the input element JUIs in the order they should appear
+*@
+@(title: String, subtitle: String, method: types.HttpMethodType, action: String, inputs: List[juiforms.JuiFormInput])
+@import types.HttpMethodType
+@import juiforms.JuiFormInput
+<form method="@(method.name())" action="@(action)">
+	<h1>@(title)</h1>
+	<h3>@(subtitle)</h3>
+	@for(input <- inputs) {
+		@(input.render())
+	}
+</form>

@@ -9,6 +9,11 @@ package utils;
  */
 public abstract class StringUtil {
 	
+	/** Shortcut for (str == null || str.isEmpty()) */
+	public static boolean isNullOrEmpty(String str) {
+		return (str == null || str.isEmpty());
+	}
+	
 	/** Determines if this string represents an Integer */
 	public static boolean isInteger(String str) {
 		if (str == null) return false;

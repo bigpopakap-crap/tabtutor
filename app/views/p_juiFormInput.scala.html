@@ -1,0 +1,39 @@
+@*
+	Author: bigpopakap
+	Since: 2013-04-14
+	
+	Partial JUI associated with an HTML form input (JuiFormInput.java)
+	
+	Params:
+		input - the input JUI to display
+*@
+@(input: juiforms.JuiFormInput)
+@import juiforms.JuiFormInput
+@(input.getType()) match {
+	case _ => {
+		<div>
+		@if(input.hasLabel()) {
+			@(input.getLabel())
+		}
+		@if(input.hasHelpText()) {
+			(@(input.getHelpText()))
+		}
+		@if(input.hasLabel() || input.hasHelpText()) {
+			:
+		}
+		<input
+			type="@(input.getType())"
+			name="@(input.getName())"
+			@if(input.hasPlaceholder()) {
+				placeholder="@(input.getPlaceholder())"
+			}
+			@if(input.hasValue()) {
+				value="@(input.getValue())"
+			}
+		/>
+		@if(input.hasError()) {
+			Error: @(input.getError())
+		}
+		</div>
+	}
+}

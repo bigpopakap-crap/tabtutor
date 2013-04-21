@@ -8,6 +8,8 @@
 @import contexts.SessionContext;
 @p_staticResource(Array("/public/stylesheets/topbar.css"))
 <div id="topbar" class="topbar">
+	<a href="/">Home</a> - 
+
 	@if(SessionContext.hasUser()) {
 		<span>@(SessionContext.user().getUsername())</span>
 	} else {
