@@ -1,6 +1,8 @@
 package controllers;
 
+import juiforms.JuiFormValidationException;
 import models.UserModel;
+import models.forms.DevtoolsUserJuiForm;
 import play.mvc.Result;
 import actions.ActionAnnotations.Sessioned;
 import contexts.SessionContext;
@@ -17,15 +19,20 @@ public class DevtoolsLoginWebController extends DevtoolsWebController {
 	
 	/** Lists the test users on a page */
 	public static Result listUsers() {
-		return ok(views.html.devtools_listUsers.render(UserModel.getAll()));
+		return listUsers(new DevtoolsUserJuiForm());
 	}
 	
 	/** Creates a new test user with the given first and last name */
 	public static Result create(String username, String email) {
-		//create a user with the given username and email
-		//since this is internal, don't really need to do validation here
-		UserModel.createAndSave(null, username, email);
-		return redirect(routes.DevtoolsLoginWebController.listUsers());
+		//use a form object to validate and create a user from this data
+		DevtoolsUserJuiForm devtoolsUserForm = new DevtoolsUserJuiForm();
+		try {
+			devtoolsUserForm.bind();
+			return redirect(routes.DevtoolsLoginWebController.listUsers());
+		} catch (JuiFormValidationException ex) {
+			return listUsers(devtoolsUserForm);
+		}
+		
 	}
 	
 	/** Logs in as the test user with the given ID and redirects to the given url */
@@ -38,6 +45,17 @@ public class DevtoolsLoginWebController extends DevtoolsWebController {
 			SessionContext.establish(user);
 		}
 		return redirect(targetUrl);
+	}
+	
+	/* **************************************************************************
+	 *  PRIVATE HELPERS
+	 ************************************************************************** */
+	
+	private static Result listUsers(DevtoolsUserJuiForm devtoolsUserForm) {
+		return ok(views.html.devtools_listUsers.render(
+			UserModel.getAll(),
+			devtoolsUserForm
+		));
 	}
 
 }

@@ -1,5 +1,6 @@
 package controllers;
 
+import controllers.exceptions.web.NotFoundErrorPageException;
 import play.mvc.Result;
 
 /**

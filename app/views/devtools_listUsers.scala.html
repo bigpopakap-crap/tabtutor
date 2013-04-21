@@ -4,10 +4,10 @@
 	
 	The page to list users and provide login links for them
 *@
-@(users: List[UserModel])
+@(users: List[UserModel], devtoolsUserForm: models.forms.DevtoolsUserJuiForm)
 @import contexts.RequestContext;
 @import utils.MessagesEnum;
-@td(value: String) = {
+@td(value: Object) = {
 	<td title="@(value)">@(value)</td>
 }
 <!DOCTYPE html>
@@ -18,7 +18,7 @@
 <body>
 	@p_topbar()
 	
-	<h1>Create a new user</h1>
+	@(devtoolsUserForm.render())
 	
 	<h1>List of users</h1>
 	<table>
@@ -30,6 +30,8 @@
 			<th>FB ID</th>
 			<th>FB isAuthed</th>
 			<th>First login</th>
+			<th>Test user</th>
+			<th>Creator</th>
 			<th>Register</th>
 			<th>Last login</th>
 			<th>Second last login</th>
@@ -46,17 +48,21 @@
 				@td(user.getUsername())
 				@td(user.getEmail())
 				@td(user.getFbId())
-				@td(user.getFbIsAuthed().toString())
-				@td(user.isFirstLogin().toString())
-				@td(user.getRegisterTime().toString())
-				@td(user.getLastLoginTime().toString())
-				@if(user.getSecondToLastLoginTime() != null) {
-					@td(user.getSecondToLastLoginTime().toString())
+				@td(user.getFbIsAuthed(): java.lang.Boolean)
+				@td(user.isFirstLogin(): java.lang.Boolean)
+				@td(user.isTestUser(): java.lang.Boolean)
+				@if(user.getCreator() != null) {
+					@td(user.getCreator().getUsername())
 				} else {
-					@td("null")
+					@td("")
 				}
-				@td(user.getLastAccessTime().toString())
+				@td(user.getRegisterTime())
+				@td(user.getLastLoginTime())
+				@td(user.getSecondToLastLoginTime())
+				@td(user.getLastAccessTime())
 			</tr>
 		}
 	</table>
+	
+	@p_devtools_devbar()
 </body>

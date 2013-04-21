@@ -39,11 +39,14 @@ CREATE TABLE User (
 	username t_varcharShort NOT NULL UNIQUE,
 	email t_email NOT NULL,
 	registerTime timestamp NOT NULL,
+	isTestUser BOOLEAN NOT NULL,
+	userPk_creator t_pk REFERENCES User(pk),
 	lastAccessTime timestamp NOT NULL,
 	lastLoginTime timestamp NOT NULL,
 	secondToLastLoginTime timestamp,
 	CHECK (lastLoginTime >= registerTime),
-	CHECK ((secondToLastLoginTime IS NULL) OR (lastLoginTime >= secondToLastLoginTime))
+	CHECK ((secondToLastLoginTime IS NULL) OR (lastLoginTime >= secondToLastLoginTime)),
+	CHECK ((userPk_creator IS NULL) OR isTestUser) -- if there is a creator, it must be a test user
 );
 
 CREATE TABLE NotationMeta (
@@ -72,7 +75,7 @@ CREATE TABLE Session (
 );
 
 CREATE TABLE SessionCsrfToken (
-	csrfToken t_csrfToken NOT NULL UNIQUE,
+	csrfToken t_csrfToken PRIMARY KEY,
 	createTime timestamp NOT NULL,
 	expireTime timestamp NOT NULL,
 	sessionPk t_pk NOT NULL REFERENCES Session(pk),

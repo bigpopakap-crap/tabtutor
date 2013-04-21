@@ -2,7 +2,6 @@ package api;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.concurrent.Callable;
 
 import play.libs.F.Promise;
@@ -12,9 +11,8 @@ import play.libs.WS.WSRequestHolder;
 import play.mvc.Http.Status;
 import types.HttpMethodType;
 import utils.ConcurrentUtil;
-import utils.EscapingUtil;
-import utils.EscapingUtil.Escaper;
 import utils.Logger;
+import utils.RestUtil;
 
 /**
  * The base class for classes implementing interactions with 3rd party APIs.
@@ -127,7 +125,7 @@ public abstract class BaseApi<R extends BaseApiResponse<?>> {
 		
 		//generate the parameter map, and convert them to a query string
 		if (params == null) params = new HashMap<>();
-		String paramStr = mapToQueryString(params);
+		String paramStr = RestUtil.mapToQueryString(params);
 		
 		//generate the request promise depending on whether we're using POST or GET
 		WSRequestHolder reqHolder = WS.url(url);
@@ -167,71 +165,6 @@ public abstract class BaseApi<R extends BaseApiResponse<?>> {
 		catch (Exception ex) {
 			throw new ApiNoResponseException(ex);
 		}
-	}
-	
-	/** Converts a map of key-value pairs to a query string without the leading "?" */
-	protected static final String mapToQueryString(Map<String, String> map) {
-		StringBuilder str = new StringBuilder();
-		for (String key : map.keySet()) {
-			str.append(str.length() > 0 ? "&" : "")
-			   .append(EscapingUtil.escape(key, Escaper.URL))
-			   .append("=")
-			   .append(EscapingUtil.escape(map.get(key), Escaper.URL));
-		}
-		return str.toString();
-	}
-	
-	/** 
-	 * The same as {@link #mapToQueryString(Map)}, but the map is represented as
-	 * pairs of strings
-	 * 
-	 * Example: mapToQueryStrign("key1", "val1", "key1", "val1")
-	 * 
-	 * @throws IllegalArgumentException if there are not an even number of arguments
-	 */
-	protected static final String mapToQueryString(String... params) throws IllegalArgumentException {
-		if (params.length % 2 != 0) throw new IllegalArgumentException("There must be an even number of params");
-		
-		Map<String, String> map = new HashMap<>();
-		for (int i = 0; i < params.length; i += 2) {
-			map.put(params[i], params[i + 1]);
-		}
-		
-		return mapToQueryString(map);
-	}
-	
-	/** Converts a query string to a map of key-value pairs
-	 *  The input can be a full URL, or just the params, and may start with a ? or not
-	 *  
-	 *  DOES NOT do url-decoding
-	 *  
-	 *  Note that keys are overwritten as they are found, so if there are multiple
-	 *  of the same key in the query string, the first value is the one that will be kept
-	 *  
-	 *  */
-	protected static final Map<String, String> queryStringToMap(String params) {
-		if (params == null || params.isEmpty()) {
-			return new TreeMap<>();
-		}
-		
-		Map<String, String> map = new HashMap<>();
-		
-		//TODO make this more efficient by using regex
-		//start after the question mark, or at the beginning of the string
-		int startIndex = params.indexOf('?') + 1;
-		if (startIndex >= params.length()) {
-			//there is not more of the string remaining
-			return map;
-		}
-		
-		//split the string by ampersands
-		String[] pairs = params.substring(startIndex).split("&");
-		for (String pair : pairs) {
-			String[] keyValue = pair.split("=");
-			map.put(keyValue[0], keyValue[1]);
-		}
-		
-		return map;
 	}
 	
 }

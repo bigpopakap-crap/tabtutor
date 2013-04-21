@@ -1,5 +1,6 @@
 package models;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -24,6 +25,9 @@ import javax.persistence.Table;
 public class AlbumModel extends BaseModel {
 	
 	private static final long serialVersionUID = 8389995907878983753L;
+	
+	private static final int INVALID_YEAR = -1;
+	private static final int INVALID_NUM_TRACKS = -1;
 
 	/* **************************************************************************
 	 *  FIELDS
@@ -57,19 +61,38 @@ public class AlbumModel extends BaseModel {
 	 *  BEGIN CONSTRUCTORS (PRIVATE)
 	 ************************************************************************** */
 
-	//TODO
+	private AlbumModel(String title, ArtistModel artist, int year, int numTracks) {
+		this.pk = UUID.randomUUID();
+		this.title = title;
+		this.artist = artist;
+		this.year = year;
+		this.numTracks = numTracks;
+	}
 	
 	/* **************************************************************************
 	 *  BEGIN CREATORS (PUBLIC)
 	 ************************************************************************** */
 	
-	//TODO
+	public static AlbumModel createAndSave(String title) {
+		return createAndSave(title, null);
+	}
+	
+	public static AlbumModel createAndSave(String title, ArtistModel artist) {
+		return createAndSave(title, artist, INVALID_YEAR, INVALID_NUM_TRACKS);
+	}
+	
+	public static AlbumModel createAndSave(String title, ArtistModel artist, int year, int numTracks) {
+		return (AlbumModel) new AlbumModel(title, artist, year, numTracks).doSaveAndRetry();
+	}
 	
 	/* **************************************************************************
 	 *  BEGIN SELECTORS
 	 ************************************************************************** */
 	
-	//TODO
+	/** Get all albums */
+	public static List<AlbumModel> getAll() {
+		return FINDER.all();
+	}
 	
 	/* **************************************************************************
 	 * BEGIN  UPDATERS
