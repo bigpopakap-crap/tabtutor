@@ -1,8 +1,10 @@
 package juiforms;
 
+import models.SessionCsrfTokenModel;
 import utils.ConcurrentUtil;
 import utils.MessagesEnum;
 import utils.StringUtil;
+import controllers.exceptions.web.CsrfTokenInvalidErrorPageException;
 
 public abstract class JuiFormInputConstraint {
 	
@@ -19,6 +21,19 @@ public abstract class JuiFormInputConstraint {
 			else return null;
 		}
 
+	};
+	
+	public static final JuiFormInputConstraint CSRF_TOKEN = new JuiFormInputConstraint() {
+		
+		@Override
+		protected String hook_validate(JuiFormInput input) {
+			if (!SessionCsrfTokenModel.isValidToken(input.getValue())) {
+				//throw an exception here instead, because this is bad
+				throw new CsrfTokenInvalidErrorPageException();
+			}
+			else return null;
+		}
+		
 	};
 	
 	/**
