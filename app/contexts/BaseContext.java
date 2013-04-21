@@ -3,6 +3,7 @@ package contexts;
 import java.util.concurrent.Callable;
 
 import play.mvc.Http.Context;
+import utils.ConcurrentUtil;
 import utils.Universe;
 import utils.Universe.UniverseElement;
 
@@ -27,14 +28,7 @@ public abstract class BaseContext {
 		
 		//if not retrieved, load it and store it in the context
 		if (t == null) {
-			try {
-				t = loader.call();
-			}
-			catch (Exception ex) {
-				//set to null so this method just does nothing and returns null
-				t = null;
-			}
-			
+			t = ConcurrentUtil.callQuietly(loader); //let exceptions be thrown
 			set(contextKey, t);
 		}
 		

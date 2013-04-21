@@ -2,8 +2,8 @@ package controllers;
 
 import models.SessionModel;
 import models.UserModel;
-import play.Logger;
 import play.mvc.Result;
+import utils.Logger;
 import actions.ActionAnnotations.Sessioned;
 import api.ApiNoResponseException;
 import api.BaseApiException;
@@ -11,6 +11,7 @@ import api.fb.FbApi;
 import api.fb.FbJsonResponse;
 import contexts.RequestErrorContext;
 import contexts.SessionContext;
+import controllers.exceptions.web.InternalServerErrorPageException;
 
 /**
  * This class handles all API requests related to Facebook authentication
@@ -23,7 +24,7 @@ import contexts.SessionContext;
  * @since 2013-02-17
  *
  */
-public class FbAuthWebController extends BaseWebController {
+public class FbLoginWebController extends BaseWebController {
 	
 	//TODO add a redirectUrl parameter so that a user gets back to whatever page they were viewing
 	//TODO use a pop-up instead of redirecting the whole browser to Facebook
@@ -54,33 +55,29 @@ public class FbAuthWebController extends BaseWebController {
 				FbApi fbApi = FbApi.accessToken(request(), targetUrl, code);
 				
 				//add this information to the session
-				SessionModel session = SessionContext.get();
+				SessionModel session = SessionContext.session();
 				session.setFbAuthInfoAndUpdate(fbApi.getToken(), fbApi.getTokenExpiry());
 				
-				//ensure that a user is referenced by the session
-				if (!SessionContext.hasUser()) {
-					Logger.debug("Session needs a user reference. Fetching Facebook ID and looking up user object");
+				//start by getting the user's Facebook ID from the Facebook API
+				try {
+					//get the response from Facebook and the important fields
+					FbJsonResponse fbJson = fbApi.me().get();
+					String fbId = fbJson.fbId();
+					String fbUsername = fbJson.username();
+					String email = fbJson.email();
 					
-					//start by getting the user's Facebook ID from the Facebook API
-					try {
-						FbJsonResponse fbJson = fbApi.me().get();
-						
-						String fbId = fbJson.fbId();
-						String email = fbJson.email();
-						
-						//get the user associated with this Facebook ID, or create one
-						UserModel user = UserModel.getByFbId(fbId);
-						if (user == null) {
-							user = UserModel.create(fbId, email);
-						}
-						
-						//add this user ID to the session object
-						session.setUserPkAndUpdate(user.getPk());
+					//get the user associated with this Facebook ID, or create one
+					UserModel user = UserModel.getByFbId(fbId);
+					if (user == null) {
+						user = UserModel.createAndSave(fbId, fbUsername, email);
 					}
-					catch (BaseApiException e) {
-						RequestErrorContext.setFbConnectionError(true);
-						//TODO need to do anything else to handle this error?
-					}
+					
+					//add this user ID to the session object
+					SessionContext.establish(user);
+				}
+				catch (BaseApiException e) {
+					RequestErrorContext.setFbConnectionError(true);
+					//TODO need to do anything else to handle this error?
 				}
 				
 				//update the user's login time

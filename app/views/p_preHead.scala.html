@@ -8,27 +8,27 @@
 		subTitle: the string to include after the app title as the title of the page
 		forceNoDetectLogin: if true, will not redirect to the login url if the user is connected with Facebook
 *@
-@(subTitle: String = "", forceNoDetectLogin: Boolean = false)
+@(subTitle: String = "", detectFbLogin: Boolean = false)
 @import contexts.AppContext
 @import contexts.SessionContext
 @import models.SessionModel
 <title>@(AppContext.Var.APP_TITLE)@(subTitle)</title>
 <meta http-equiv="Content-Language" Content="@(SessionContext.lang().code())">
-@p_staticResource(
-	Array(
-		"/public/stylesheets/siteStyle.css",
-		"/public/javascripts/jquery-1.9.1.min.js",
-		"/public/javascripts/initNamespace.js",
-		"/public/javascripts/initLogger.js"
-	),
-	Array(
-		"/public/javascripts/dev/dupeIds.js",
-		"/public/javascripts/dev/failedRequests.js"
-	)
-)
+<!-- First scripts first -->
+@p_staticResource(Array(
+	"/public/stylesheets/siteStyle.css",
+	"/public/javascripts/jquery-1.9.1.min.js",
+	"/public/javascripts/initNamespace.js",
+	"/public/javascripts/initLogger.js"
+))
 <script type="text/javascript">
 	window.WTF.get('Logger').init(@(AppContext.Mode.isProduction()));
 </script>
+<!-- Anything that requires the logger should go here -->
+@p_staticResource(Array(), Array(
+	"/public/javascripts/dev/dupeIds.js",
+	"/public/javascripts/dev/failedRequests.js"
+))
 @p_fbJsSdk(
-	!forceNoDetectLogin && !(SessionContext.has() && SessionContext.get().hasValidFbAuthInfo())
+	detectFbLogin && !(SessionContext.hasSession() && SessionContext.session().hasValidFbAuthInfo())
 )
