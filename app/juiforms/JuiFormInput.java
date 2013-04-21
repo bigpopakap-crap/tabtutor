@@ -2,6 +2,7 @@ package juiforms;
 
 import play.api.templates.Html;
 import utils.ReflectUtil;
+import utils.StringUtil;
 
 /**
  * A JUI for an HTML form input element
@@ -27,7 +28,6 @@ public class JuiFormInput {
 	public JuiFormInput(JuiFormInputType type, String name, String label, String placeholder, String helpText, JuiFormInputConstraint[] constraints) {
 		if (type == null) throw new IllegalArgumentException("type cannot be null");
 		if (name == null) throw new IllegalArgumentException("name cannot be null");
-		if (label == null) throw new IllegalArgumentException("helpText cannot be null");
 		
 		this.type = type;
 		this.name = name;
@@ -46,10 +46,15 @@ public class JuiFormInput {
 	
 	public JuiFormInputType getType() { return type; }
 	public String getName() { return name; }
+	public boolean hasLabel() { return !StringUtil.isNullOrEmpty(getLabel()); }
 	public String getLabel() { return label; }
+	public boolean hasHelpText() { return !StringUtil.isNullOrEmpty(getHelpText()); }
 	public String getHelpText() { return helpText; }
+	public boolean hasPlaceholder() { return !StringUtil.isNullOrEmpty(getPlaceholder()); }
 	public String getPlaceholder() { return placeholder; }
+	public boolean hasValue() { return !StringUtil.isNullOrEmpty(getValue()); }
 	public String getValue() { return value; }
+	public boolean hasError() { return !StringUtil.isNullOrEmpty(getError()); }
 	public String getError() { return error; }
 	
 	public void setValue(String value) { this.value = value; }
@@ -72,7 +77,7 @@ public class JuiFormInput {
 			}
 		}
 		
-		return isError();
+		return !isError();
 	}
 
 	/** Renders the HTML to represent this form input */

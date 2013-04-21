@@ -15,11 +15,11 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.OptimisticLockException;
 
 import models.exceptions.FailedOperationException;
-import play.Logger;
 import play.db.ebean.Model;
 import types.SqlOperationType.BasicDmlModifyingType;
 import utils.ConcurrentUtil;
 import utils.DateUtil;
+import utils.Logger;
 import utils.ReflectUtil;
 import contexts.RequestStatsContext;
 

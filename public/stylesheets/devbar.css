@@ -1,0 +1,15 @@
+.devbar {
+	opacity: 0;
+	position: fixed;
+	bottom: 0px;
+	width: 100%;
+	background-color: #EEEEEE;
+	border-top: solid 2px #CCCCCC;
+	height: 2px;
+}
+
+.devbar:hover {
+	opacity: 1;
+	height: auto;
+	padding: 8px;
+}

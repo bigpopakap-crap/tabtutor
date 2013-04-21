@@ -2,11 +2,13 @@ package juiforms;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import models.SessionCsrfTokenModel;
 import play.api.templates.Html;
 import types.HttpMethodType;
 import utils.ReflectUtil;
@@ -36,8 +38,18 @@ public abstract class JuiForm<T> {
 	 * Forms must not have elements with duplicate names
 	 * @throws IllegalStateException any two form elements have the same name
 	 */
-	public JuiForm(JuiFormInput[] elements) throws IllegalStateException {
-		if (elements == null) elements = new JuiFormInput[0];
+	public JuiForm(JuiFormInput[] elementArr) throws IllegalStateException {
+		List<JuiFormInput> elements = new LinkedList<>(Arrays.asList(elementArr));
+		
+		//append other automatically-added elements
+		if (appendCsrfToken()) {
+			elements.add(new JuiFormInput(JuiFormInputType.HIDDEN, "csrf", null, null, null, new JuiFormInputConstraint[] {
+				JuiFormInputConstraint.CSRF_TOKEN
+			}));
+		}
+		if (appendSubmit()) {
+			elements.add(new JuiFormInput(JuiFormInputType.SUBMIT, "submit", "Submit", null, null, null));
+		}
 		
 		//create the list of element names in order
 		elementNames = new ArrayList<>();
@@ -102,7 +114,19 @@ public abstract class JuiForm<T> {
 			validate();
 			
 			if (isValid()) {
-				return bind(getValues());
+				try {
+					return bind(getValues());
+				}
+				catch (Exception ex) {
+					//something bad happend while creating the element
+					//This should be fixed and not exposed to the user
+					throw new RuntimeException(
+						"Error while binding in " + this.getClass().getCanonicalName() +
+							". Probably an exception thrown while creating a DB object, " +
+							"which means the form is missing some validation it needs, like unique value checking",
+						ex
+					);
+				}
 			}
 			else {
 				throw new JuiFormValidationException();
@@ -121,12 +145,30 @@ public abstract class JuiForm<T> {
 	 * @param action the URL for the form to submit to
 	 */
 	public Html render(String title, String subtitle, HttpMethodType method, String action) {
+		//bind default values
+		Map<String, String> defaultValues = new HashMap<String, String>();
+		preRenderBind(defaultValues);
+		bindValues(defaultValues);
+		
 		return views.html.p_juiForm.render(title, subtitle, method, action, getInputElements());
 	}
 	
 	/* **************************************************************************
-	 *  BEGIN ABSTRACT METHODS
+	 *  BEGIN ABSTRACT METHODS AND HOOKS
 	 ************************************************************************** */
+	
+	/**
+	 * Called just before the form is rendered, allows the form to specify any
+	 * default values for the fields
+	 * 
+	 * Default implementation is to do nothing
+	 * 
+	 * @param data the name-value map that the method should populate with default
+	 * values. Guaranteed to be an initialized empty map when the method is called
+	 */
+	protected void hook_preRenderBind(Map<String, String> defaultValues) {
+		//do nothing
+	}
 	
 	/**
 	 * Creates an object, given the data bound to the form.
@@ -141,9 +183,32 @@ public abstract class JuiForm<T> {
 	 */
 	protected abstract T bind(Map<String, String> data);
 	
+	/**
+	 * Controls whether the form automatically appends a submit button
+	 * Default implementation returns true
+	 */
+	protected boolean appendSubmit() {
+		return true;
+	}
+	
+	/**
+	 * Controls whether the form automatically appends a CSRF token to be validated
+	 * Default implementation returns true
+	 */
+	protected boolean appendCsrfToken() {
+		return true;
+	}
+	
 	/* **************************************************************************
 	 *  BEGIN PRIVATE HELPERS
 	 ************************************************************************** */
+	
+	private void preRenderBind(Map<String, String> defaultValues) {
+		hook_preRenderBind(defaultValues);
+		
+		//create a new token
+		defaultValues.put("csrf", SessionCsrfTokenModel.create().getCsrfToken().toString());
+	}
 	
 	/** Validates the fields against the data bound to them.
 	 *  Populates them with error messages, if applicable */

@@ -14,10 +14,10 @@
 #	BEGIN PAGE ROUTING													#
 # --------------------------------------------------------------------- #
 GET     /                           controllers.SimpleWebController.landing()
-GET		/fblogin					controllers.FbAuthWebController.fblogin(code ?= null, state ?= null, targetUrl ?= "/")
-GET		/songs						controllers.SimpleWebController.songs()
-GET		/artists					controllers.SimpleWebController.artists()
-GET		/albums						controllers.SimpleWebController.albums()
+GET		/fblogin					controllers.FbLoginWebController.fblogin(code ?= null, state ?= null, targetUrl ?= "/")
+GET		/songs/list					controllers.SongsWebController.list()
+GET		/artists/list				controllers.ArtistsWebController.list()
+GET		/albums/list				controllers.AlbumsWebController.list()
 
 # --------------------------------------------------------------------- #
 #	BEGIN /INTERNAL/ADMIN PAGE ROUTING									#
@@ -27,10 +27,11 @@ GET		/albums						controllers.SimpleWebController.albums()
 # --------------------------------------------------------------------- #
 #	BEGIN /INTERNAL/DEVTOOLS PAGE ROUTING								#
 # --------------------------------------------------------------------- #
-GET		/internal/devtools/killserver				controllers.DevtoolsWebController.killserver()
-GET		/internal/devtools/testusers/list			controllers.DevtoolsTestUsersWebController.list()
-POST	/internal/devtools/testusers/create			controllers.DevtoolsTestUsersWebController.create(firstName, lastName)
-POST	/internal/devtools/testusers/login/:id		controllers.DevtoolsTestUsersWebController.login(id, targetUrl ?= "/")
+GET		/internal/devtools							controllers.DevtoolsWebController.directory()
+GET		/internal/devtools/killserver				controllers.DevtoolsWebController.killServer()
+GET		/internal/devtools/login/listusers			controllers.DevtoolsLoginWebController.listUsers()
+GET		/internal/devtools/login/create				controllers.DevtoolsLoginWebController.create(username, email)
+GET		/internal/devtools/login/login/:pk			controllers.DevtoolsLoginWebController.login(pk, targetUrl ?= "/")
 
 # --------------------------------------------------------------------- #
 #	BEGIN /INTERNAL/TEST PAGE ROUTING									#
@@ -39,6 +40,7 @@ GET		/internal/test/errorpageexception/internalservererrorpage	controllers.TestE
 GET		/internal/test/errorpageexception/notfoundpage				controllers.TestErrorPageExceptionWebController.notFoundPage()
 GET		/internal/test/errorpageexception/gobackpage				controllers.TestErrorPageExceptionWebController.goBackPage()
 GET		/internal/test/errorpageexception/gotopage					controllers.TestErrorPageExceptionWebController.goToPage()
+GET		/internal/test/errorpageexception/gohomepage				controllers.TestErrorPageExceptionWebController.goHomePage()
 GET		/internal/test/actions/sessionaction						controllers.TestActionsWebController.sessionAction()
 GET		/internal/test/actions/authaction							controllers.TestActionsWebController.authAction()
 

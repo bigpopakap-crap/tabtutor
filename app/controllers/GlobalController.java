@@ -4,9 +4,9 @@ import java.util.TimeZone;
 
 import play.Application;
 import play.GlobalSettings;
-import play.Logger;
 import play.mvc.Http.RequestHeader;
 import play.mvc.Result;
+import utils.Logger;
 import contexts.AppContext;
 
 /**

@@ -1,6 +1,7 @@
 package models;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -13,10 +14,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import play.Logger;
 import utils.DateUtil;
+import utils.Logger;
 
 import com.avaje.ebean.annotation.Formula;
+
 
 /**
 * This Ebean maps to the User table, and represents user metadata
@@ -41,6 +43,8 @@ public class UserModel extends BaseModel {
 	@Column(name = "username") public String username;
 	@Column(name = "email") public String email;
 	@Column(name = "registerTime") public Date registerTime;
+	@Column(name = "isTestUser") public boolean isTestUser;
+	@Column(name = "userPk_creator") public UserModel creator;
 	@Column(name = "lastAccessTime") public Date lastAccessTime;
 	@Column(name = "lastLoginTime") public Date lastLoginTime;
 	@Column(name = "secondToLastLoginTime") public Date secondToLastLoginTime;
@@ -56,8 +60,12 @@ public class UserModel extends BaseModel {
 	public String getUsername() { return username; }
 	public String getFullName() { return fullName; }
 	public String getEmail() { return email; }
+	public Date getRegisterTime() { return registerTime; }
+	public UserModel getCreator() { return creator; }
+	public boolean isTestUser() { return isTestUser; }
+	public Date getLastAccessTime() { return lastAccessTime; }
 	public Date getLastLoginTime() { return (Date) lastLoginTime.clone(); } //defensive copy
-	public Date getsecondToLastLoginTime() { return (Date) secondToLastLoginTime.clone(); } //defensive copy
+	public Date getSecondToLastLoginTime() { return secondToLastLoginTime != null ? (Date) secondToLastLoginTime.clone() : null; } //defensive copy
 	public boolean isFirstLogin() { return isFirstLogin; }
 	public Set<NotationMetaModel> getAuthoredNotations() { return authoredNotations; }
 	
@@ -78,15 +86,17 @@ public class UserModel extends BaseModel {
 	 * Creates a user with the given information
 	 * Username will be some default value
 	 */
-	private UserModel(String fbId, String fbUsername, String email) {
+	private UserModel(String fbId, String username, String email, boolean isTestUser, UserModel creator) {
 		Date now = DateUtil.now();
 		
 		this.pk = UUID.randomUUID();
 		this.fbId = fbId;
-		this.fbIsAuthed = true;
-		this.username = fbUsername;
+		this.fbIsAuthed = (this.fbId != null);
+		this.username = username;
 		this.email = email;
 		this.registerTime = now;
+		this.isTestUser = isTestUser;
+		this.creator = creator;
 		this.lastAccessTime = now;
 		this.lastLoginTime = now;
 		this.secondToLastLoginTime = null;
@@ -96,16 +106,34 @@ public class UserModel extends BaseModel {
 	 *  BEGIN CREATORS (PUBLIC)
 	 ************************************************************************** */
 	
-	/** Creates a new user and saves it to the DB */
-	public static UserModel createAndSave(String fbId, String fbUsername, String email) {
-		return (UserModel) new UserModel(fbId, fbUsername, email).doSaveAndRetry();
+	public static UserModel createAndSave(String fbId, String username, String email) {
+		return createAndSave(fbId, username, email, false, null);
+	}
+	
+	/**
+	 * Creates a new user and saves to the DB
+	 * 
+	 * @param fbId the Facebook ID of the new user, or null
+	 * @param username the username of the new user
+	 * @param email the email of the new user
+	 * @param isTestUser a flag indicating that this is a user created from devtools
+	 * @param creator the user who created this user, or null
+	 * @return the user object that was created and saved
+	 */
+	public static UserModel createAndSave(String fbId, String username, String email, boolean isTestUser, UserModel creator) {
+		return (UserModel) new UserModel(fbId, username, email, isTestUser, creator).doSaveAndRetry();
 	}
 	
 	/* **************************************************************************
 	 *  BEGIN SELECTORS
 	 ************************************************************************** */
 	
-	/** Gets a Session by ID, converts the string to a UUID internally */
+	/** Gets all users */
+	public static List<UserModel> getAll() {
+		return FINDER.all();
+	}
+	
+	/** Gets a User by ID, converts the string to a UUID internally */
 	public static UserModel getById(String id) {
 		try {
 			return getById(id != null ? UUID.fromString(id) : null);
@@ -116,14 +144,19 @@ public class UserModel extends BaseModel {
 		}
 	}
 	
-	/** Gets a Session by ID */
+	/** Gets a User by ID */
 	public static UserModel getById(UUID id) {
 		return id != null ? FINDER.byId(id) : null;
 	}
 
-	/** Gets a Session by fbId */
+	/** Gets a User by fbId */
 	public static UserModel getByFbId(String fbId) {
 		return fbId != null ? FINDER.where().eq("fbId", fbId).findUnique() : null;
+	}
+	
+	/** Gets a User by username */
+	public static UserModel getByUsername(String username) {
+		return username != null ? FINDER.where().eq("username", username).findUnique() : null;
 	}
 	
 	/* **************************************************************************
@@ -157,6 +190,11 @@ public class UserModel extends BaseModel {
 	/** Determines if a User exists with the given fbId */
 	public static boolean isValidExistingFbId(String fbId) {
 		return getByFbId(fbId) != null;
+	}
+	
+	/** Determines if a User exists with the given username */
+	public static boolean isValidExistingUsername(String username) {
+		return getByUsername(username) != null;
 	}
 	
 }

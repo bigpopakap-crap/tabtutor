@@ -3,3 +3,10 @@ body {
 	margin: 0;
 	padding: 0;
 }
+
+/*TODO make this better */
+table td {
+	border: solid 1px black;
+	padding: 4px;
+	overflow: hidden;
+}
