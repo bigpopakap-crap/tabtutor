@@ -1,7 +1,5 @@
 package actions;
 
-import java.lang.annotation.Annotation;
-
 import models.SessionModel;
 import play.mvc.Http.Context;
 import play.mvc.Result;
@@ -38,18 +36,6 @@ public class AuthAction extends BaseAction<Authed> {
 		else {
 			return delegate.call(ctx);
 		}
-	}
-
-	@Override
-	protected Authed createConfiguration() {
-		return new Authed() {
-			
-			@Override
-			public Class<? extends Annotation> annotationType() {
-				return this.getClass();
-			}
-			
-		};
 	}
 
 }

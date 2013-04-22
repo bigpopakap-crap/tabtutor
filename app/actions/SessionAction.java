@@ -1,7 +1,5 @@
 package actions;
 
-import java.lang.annotation.Annotation;
-
 import models.SessionModel;
 import play.mvc.Http.Context;
 import play.mvc.Result;
@@ -21,28 +19,11 @@ public class SessionAction extends BaseAction<Sessioned> {
 	@Override
 	protected Result hook_call(Context ctx) throws Throwable {
 		SessionModel session = SessionContext.session(); //use this method because it is cached
-		if (session == null || configuration.forceRefresh()) {
+		if (session == null) {
 			SessionContext.init(ctx);
 		}
 
 		return delegate.call(ctx);
-	}
-
-	@Override
-	protected Sessioned createConfiguration() {
-		return new Sessioned() {
-			
-			@Override
-			public Class<? extends Annotation> annotationType() {
-				return this.getClass();
-			}
-			
-			@Override
-			public boolean forceRefresh() {
-				return false;
-			}
-
-		};
 	}
 
 }

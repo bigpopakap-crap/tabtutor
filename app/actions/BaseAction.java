@@ -37,10 +37,6 @@ public abstract class BaseAction<T> extends Action<T> {
 		return true;
 	}
 	
-	//TODO create default instance even better
-	/** Creates a new instance of the associated annotation */
-	protected abstract T createConfiguration();
-	
 	/** Implements the actual action. Must eventually delegate to the delegate */
 	protected abstract Result hook_call(Context ctx) throws Throwable;
 	
@@ -50,12 +46,6 @@ public abstract class BaseAction<T> extends Action<T> {
 		//short circuit if requested
 		if (isIdempotent() && RequestActionContext.has(this)) {
 			return delegate.call(ctx);
-		}
-		
-		//convert the configuration
-		//TODO put in map
-		if (!createConfiguration().getClass().isInstance(configuration)) {
-			configuration = createConfiguration();
 		}
 		
 		//proceed with the action
