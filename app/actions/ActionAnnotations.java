@@ -6,7 +6,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import play.mvc.With;
-import contexts.AppContext;
 
 /**
  * The class holds all action annotation definitions
@@ -61,7 +60,7 @@ public abstract class ActionAnnotations {
 	public static @interface AccessTimed {}
 	
 	/**
-	 * Annotation for applying {@link ModeProtectAction}
+	 * Annotation for applying {@link DevModeProtectAction}
 	 * 
 	 * @author bigpopakap
 	 * @since 2013-03-06
@@ -71,13 +70,11 @@ public abstract class ActionAnnotations {
 		TryCatchAction.class,
 		TransactionAction.class,
 		AccessTimeAction.class,
-		ModeProtectAction.class
+		DevModeProtectAction.class
 	})
 	@Target({ElementType.TYPE, ElementType.METHOD})
 	@Retention(RetentionPolicy.RUNTIME)
-	public static @interface ModeProtected {
-		AppContext.Mode allowedMode() default AppContext.Mode.DEVELOPMENT;
-	}
+	public static @interface DevModeProtected {}
 	
 	/**
 	 * Annotation for applying {@link SessionAction}
@@ -96,9 +93,7 @@ public abstract class ActionAnnotations {
 	})
 	@Target({ElementType.TYPE, ElementType.METHOD})
 	@Retention(RetentionPolicy.RUNTIME)
-	public @interface Sessioned {
-		boolean forceRefresh() default false;
-	}
+	public @interface Sessioned {}
 	
 	/**
 	 * Annotation for applying {@link AuthAction}

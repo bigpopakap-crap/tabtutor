@@ -37,7 +37,7 @@ public class DevtoolsLoginWebController extends DevtoolsWebController {
 	
 	/** Logs in as the test user with the given ID and redirects to the given url */
 	//TODO make this use the POST method
-	@Sessioned(forceRefresh = true)
+	@Sessioned
 	public static Result login(String pk, String targetUrl) {
 		//establish the context and then redirect to the homepage
 		UserModel user = UserModel.getById(pk);
