@@ -6,6 +6,7 @@ import juiforms.JuiForm;
 import juiforms.JuiFormInput;
 import juiforms.JuiFormInputConstraint;
 import juiforms.JuiFormInputType;
+import models.ArtistModel;
 import models.SongModel;
 import play.api.templates.Html;
 import types.HttpMethodType;
@@ -28,10 +29,10 @@ public class SongModelJuiForm extends JuiForm<SongModel> {
 	protected SongModel bind(Map<String, String> data) {
 		return SongModel.createAndSave(
 			data.get("title"),
+			ArtistModel.createAndSave("Artist " + System.currentTimeMillis()), //TODO don't hardcode this
 			null, //TODO don't hardcode this
-			null, //TODO don't hardcode this
-			data.get("trackNum") != null ? Integer.parseInt(data.get("trackNum")) : null,
-			data.get("isLive") != null ? Boolean.parseBoolean(data.get("isLive")) : null,
+			0, //TODO data.get("trackNum") != null ? Integer.parseInt(data.get("trackNum")) : null,
+			false, //TODO data.get("isLive") != null ? Boolean.parseBoolean(data.get("isLive")) : null,
 			data.get("youtubeId")
 		);
 	}

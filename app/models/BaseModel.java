@@ -119,6 +119,8 @@ public abstract class BaseModel extends Model {
 			boolean isFirstTry = true;
 			boolean wasSuccessful = false;
 			try {
+				Throwable failureCause = null; //holds any cause that should be thrown with the failed exception
+				
 				for (int i = 1; i <= NUM_OPERATION_RETRIES.get() && !wasSuccessful; i++) {
 					try {
 						//if this is not the first attempt, call the hook
@@ -131,14 +133,15 @@ public abstract class BaseModel extends Model {
 					}
 					catch (OptimisticLockException ex) {
 						//call the post-op and retry the operation
-						Logger.debug(opType + " operation for " + this.getClass().getCanonicalName() + " failed, retrying...");
+						Logger.debug(opType + " operation for " + model.getClass().getCanonicalName() + " failed, retrying...");
+						failureCause = ex;
 					}
 				}
 				
 				//throw exception if not successful
 				if (!wasSuccessful) {
 					//TODO should the cause be set to null?
-					throw new FailedOperationException(model, opType, null);
+					throw new FailedOperationException(model, opType, failureCause);
 				}
 			}
 			catch (FailedOperationException ex) {
@@ -153,7 +156,7 @@ public abstract class BaseModel extends Model {
 					hook_postModifyingOperation(opType, wasSuccessful);
 				}
 				catch (Exception ex2) {
-					Logger.error("Caught exception in BaseModel post operation hook", ex2);
+					Logger.error("Caught exception in post operation hook for " + model.getClass().getCanonicalName(), ex2);
 				}
 				
 				//wrap the cause exception
@@ -166,7 +169,7 @@ public abstract class BaseModel extends Model {
 					hook_postModifyingOperation(opType, wasSuccessful);
 				}
 				catch (Exception ex) {
-					Logger.error("Caught exception in finally of BaseModel operation ", ex);
+					Logger.error("Caught exception in finally of operation for " + model.getClass().getCanonicalName(), ex);
 				}
 			}
 			

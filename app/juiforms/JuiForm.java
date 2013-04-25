@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import models.SessionCsrfTokenModel;
+import models.exceptions.FailedOperationException;
 import play.api.templates.Html;
 import types.HttpMethodType;
 import utils.ObjectUtil;
@@ -117,8 +118,11 @@ public abstract class JuiForm<T> {
 				try {
 					return bind(getValues());
 				}
+				catch (FailedOperationException ex) {
+					throw new RuntimeException("Database operation failed", ex);
+				}
 				catch (Exception ex) {
-					//something bad happend while creating the element
+					//something bad happened while creating the element
 					//This should be fixed and not exposed to the user
 					throw new RuntimeException(
 						"Error while binding in " + this.getClass().getCanonicalName() +
