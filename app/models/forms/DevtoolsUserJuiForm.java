@@ -26,7 +26,7 @@ public class DevtoolsUserJuiForm extends JuiForm<UserModel> {
 
 	public DevtoolsUserJuiForm() {
 		super(new JuiFormInput[] {
-			new JuiFormInput(JuiFormInputType.TEXT, "username", "Username", "jonsmellypants24", "Enter the username", new JuiFormInputConstraint[] {
+			new JuiFormInput(JuiFormInputType.TEXT, "username", "Username", "jonsmellypants24", "Enter the username", true, new JuiFormInputConstraint[] {
 				JuiFormInputConstraint.REQUIRED,
 				JuiFormInputConstraint.UNIQUE(new CustomValidator<String, Boolean>() {
 					
@@ -37,7 +37,7 @@ public class DevtoolsUserJuiForm extends JuiForm<UserModel> {
 
 				})
 			}),
-			new JuiFormInput(JuiFormInputType.EMAIL, "email", "Email", "jonsmellypants@gmail.com", "Enter the email", new JuiFormInputConstraint[] {
+			new JuiFormInput(JuiFormInputType.EMAIL, "email", "Email", "jonsmellypants@gmail.com", "Enter the email", true, new JuiFormInputConstraint[] {
 				JuiFormInputConstraint.REQUIRED
 			})
 		});

@@ -44,12 +44,12 @@ public abstract class JuiForm<T> {
 		
 		//append other automatically-added elements
 		if (appendCsrfToken()) {
-			elements.add(new JuiFormInput(JuiFormInputType.HIDDEN, "csrf", null, null, null, new JuiFormInputConstraint[] {
+			elements.add(new JuiFormInput(JuiFormInputType.HIDDEN, "csrf", null, null, null, false, new JuiFormInputConstraint[] {
 				JuiFormInputConstraint.CSRF_TOKEN
 			}));
 		}
 		if (appendSubmit()) {
-			elements.add(new JuiFormInput(JuiFormInputType.SUBMIT, "submit", "Submit", null, null, null));
+			elements.add(new JuiFormInput(JuiFormInputType.SUBMIT, "submit", "Submit", null, null, false, null));
 		}
 		
 		//create the list of element names in order
@@ -229,12 +229,14 @@ public abstract class JuiForm<T> {
 	}
 	
 	/**
-	 * Binds values to this form. Does not overwrite existing values
+	 * Binds values to this form. Does not overwrite existing values of fields
+	 * that specify they should keep their submitted value via the {@link JuiFormInput#keepSubmittedValue()} method
+	 * 
 	 * @param values a map of the field names to values
 	 */
 	private void bindValues(Map<String, String> values) {
 		for (JuiFormInput input : getInputElements()) {
-			if (!input.hasValue()) {
+			if (!input.keepSubmittedValue() || !input.hasValue()) {
 				input.setValue(values.get(input.getName()));
 			}
 		}

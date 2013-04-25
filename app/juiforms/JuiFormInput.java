@@ -18,6 +18,7 @@ public class JuiFormInput {
 														//this is also used as an identifying key when binding data
 	private final String label;							//the label for this input
 	private final String helpText;						//help text for this input
+	private final boolean keepSubmittedValue;			//if true, the form will keep the submitted value when rendered back to the user with errors
 	private final String placeholder;					//placeholder for a text input
 	private final JuiFormInputConstraint[] constraints;	//constraints this field should be validated against
 	private String value;								//the value of this input element (can be set)
@@ -25,7 +26,7 @@ public class JuiFormInput {
 														//TODO allow multiple errors to be associated with this field?
 	
 	/** Creates a new form element */
-	public JuiFormInput(JuiFormInputType type, String name, String label, String placeholder, String helpText, JuiFormInputConstraint[] constraints) {
+	public JuiFormInput(JuiFormInputType type, String name, String label, String placeholder, String helpText, boolean keepSubmittedValue, JuiFormInputConstraint[] constraints) {
 		if (type == null) throw new IllegalArgumentException("type cannot be null");
 		if (name == null) throw new IllegalArgumentException("name cannot be null");
 		
@@ -33,6 +34,7 @@ public class JuiFormInput {
 		this.name = name;
 		this.label = label;
 		this.helpText = helpText;
+		this.keepSubmittedValue = keepSubmittedValue;
 		this.placeholder = placeholder;
 		this.constraints = constraints != null ? constraints : new JuiFormInputConstraint[0];
 		clear();
@@ -50,6 +52,7 @@ public class JuiFormInput {
 	public String getLabel() { return label; }
 	public boolean hasHelpText() { return !StringUtil.isNullOrEmpty(getHelpText()); }
 	public String getHelpText() { return helpText; }
+	public boolean keepSubmittedValue() { return keepSubmittedValue; }
 	public boolean hasPlaceholder() { return !StringUtil.isNullOrEmpty(getPlaceholder()); }
 	public String getPlaceholder() { return placeholder; }
 	public boolean hasValue() { return !StringUtil.isNullOrEmpty(getValue()); }

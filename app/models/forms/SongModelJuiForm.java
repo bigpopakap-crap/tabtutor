@@ -18,7 +18,7 @@ public class SongModelJuiForm extends JuiForm<SongModel> {
 	
 	public SongModelJuiForm() {
 		super(new JuiFormInput[] {
-			new JuiFormInput(JuiFormInputType.TEXT, "title", "Title", "Freebird", "The title of the song", new JuiFormInputConstraint[] {
+			new JuiFormInput(JuiFormInputType.TEXT, "title", "Title", "Freebird", "The title of the song", true, new JuiFormInputConstraint[] {
 				JuiFormInputConstraint.REQUIRED
 			})
 			//TODO add other fields

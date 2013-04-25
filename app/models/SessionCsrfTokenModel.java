@@ -90,7 +90,12 @@ public class SessionCsrfTokenModel extends BaseModel {
 	 *  BEGIN VALIDATORS
 	 ************************************************************************** */
 		
-	/** Determines if a User exists with the given ID */
+	/**
+	 * Determines if the given string is a valid CSRF token for this session
+	 * 
+	 * IMPORTANT: this method also deletes the token. This ensures tokens can
+	 * only be used once
+	 */
 	public static boolean isValidToken(String token) {
 		if (!SessionContext.hasSession()) {
 			throw new IllegalStateException("Cannot validate CSRF token when there is no session");
@@ -98,7 +103,12 @@ public class SessionCsrfTokenModel extends BaseModel {
 		
 		//check the database for the token and make sure it matches this session
 		SessionCsrfTokenModel csrfToken = FINDER.where().eq("csrfToken", token).findUnique();
-		return csrfToken != null && SessionContext.session().equals(csrfToken.getSession());
+		boolean matches = csrfToken != null && SessionContext.session().equals(csrfToken.getSession());
+		if (matches) {
+			//delete the token so it can only ever be used once
+			csrfToken.doDeleteAndRetry();
+		}
+		return matches;
 	}
 	
 }
