@@ -50,6 +50,7 @@ public class SongModel extends BaseModel {
 	public UUID getPk() { return UUID.fromString(pk.toString()); } //defensive copy
 	public String getTitle() { return title; }
 	public ArtistModel getArtist() { return artist; }
+	public boolean hasAlbum() { return getAlbum() != null; }
 	public AlbumModel getAlbum() { return album; }
 	public int getTrackNum() { return trackNum; }
 	public boolean isLive() { return isLive; }
