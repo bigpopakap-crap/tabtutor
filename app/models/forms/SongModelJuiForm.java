@@ -9,6 +9,7 @@ import juiforms.JuiFormInputType;
 import models.SongModel;
 import play.api.templates.Html;
 import types.HttpMethodType;
+import controllers.routes;
 
 public class SongModelJuiForm extends JuiForm<SongModel> {
 	
@@ -29,14 +30,14 @@ public class SongModelJuiForm extends JuiForm<SongModel> {
 			data.get("title"),
 			null, //TODO don't hardcode this
 			null, //TODO don't hardcode this
-			Integer.parseInt(data.get("trackNum")),
-			Boolean.parseBoolean(data.get("isLive")),
+			data.get("trackNum") != null ? Integer.parseInt(data.get("trackNum")) : null,
+			data.get("isLive") != null ? Boolean.parseBoolean(data.get("isLive")) : null,
 			data.get("youtubeId")
 		);
 	}
 	
 	public Html render() {
-		return super.render("Add a song", "Yuuuuup", HttpMethodType.POST, "/"); //TODO change the action URL
+		return super.render("Add a song", "Yuuuuup", HttpMethodType.POST, routes.SongsWebController.create().url());
 	}
 	
 }

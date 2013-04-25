@@ -32,7 +32,6 @@ public class DevtoolsLoginWebController extends DevtoolsWebController {
 		} catch (JuiFormValidationException ex) {
 			return listUsers(devtoolsUserForm);
 		}
-		
 	}
 	
 	/** Logs in as the test user with the given ID and redirects to the given url */
@@ -51,6 +50,7 @@ public class DevtoolsLoginWebController extends DevtoolsWebController {
 	 *  PRIVATE HELPERS
 	 ************************************************************************** */
 	
+	/** Displays the list of songs using the given form object */
 	private static Result listUsers(DevtoolsUserJuiForm devtoolsUserForm) {
 		return ok(views.html.devtools_listUsers.render(
 			UserModel.getAll(),
