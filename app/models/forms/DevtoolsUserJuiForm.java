@@ -56,7 +56,7 @@ public class DevtoolsUserJuiForm extends JuiForm<UserModel> {
 	}
 	
 	public Html render() {
-		return super.render("Create a new user", "Bitchin'", HttpMethodType.GET, routes.DevtoolsLoginWebController.create("", "").url());
+		return super.render("Create a new user", "Bitchin'", HttpMethodType.POST, routes.DevtoolsLoginWebController.create().url());
 	}
 
 }

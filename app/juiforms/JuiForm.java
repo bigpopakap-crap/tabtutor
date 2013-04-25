@@ -110,7 +110,7 @@ public abstract class JuiForm<T> {
 	/** Binds the form to the parameters in the given request */
 	public T bind() throws JuiFormValidationException {
 		try {
-			bindValues(RequestContext.queryParams());
+			bindValues(RequestContext.params());
 			validate();
 			
 			if (isValid()) {

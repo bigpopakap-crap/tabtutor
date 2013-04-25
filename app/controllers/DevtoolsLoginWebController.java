@@ -23,7 +23,7 @@ public class DevtoolsLoginWebController extends DevtoolsWebController {
 	}
 	
 	/** Creates a new test user with the given first and last name */
-	public static Result create(String username, String email) {
+	public static Result create() {
 		//use a form object to validate and create a user from this data
 		DevtoolsUserJuiForm devtoolsUserForm = new DevtoolsUserJuiForm();
 		try {

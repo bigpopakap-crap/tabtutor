@@ -21,4 +21,9 @@ public class SongsWebController extends BaseWebController {
 		));
 	}
 	
+	/** Show the song list page after creating the song */
+	public static Result create() {
+		return null;
+	}
+	
 }
