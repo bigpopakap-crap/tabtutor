@@ -111,6 +111,7 @@ public abstract class JuiForm<T> {
 	/** Binds the form to the parameters in the given request */
 	public T bind() throws JuiFormValidationException {
 		try {
+			clear();
 			bindValues(RequestContext.params());
 			validate();
 			
@@ -228,12 +229,14 @@ public abstract class JuiForm<T> {
 	}
 	
 	/**
-	 * Binds values to this form
+	 * Binds values to this form. Does not overwrite existing values
 	 * @param values a map of the field names to values
 	 */
 	private void bindValues(Map<String, String> values) {
 		for (JuiFormInput input : getInputElements()) {
-			input.setValue(values.get(input.getName()));
+			if (!input.hasValue()) {
+				input.setValue(values.get(input.getName()));
+			}
 		}
 	}
 	
