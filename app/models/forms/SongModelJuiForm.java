@@ -13,12 +13,20 @@ import types.HttpMethodType;
 import utils.Message;
 import controllers.routes;
 
+/**
+ * JUI form for creating a new song
+ * 
+ * @author bigpopakap
+ * @since 2013-04-17
+ *
+ */
 public class SongModelJuiForm extends JuiForm<SongModel> {
 	
 	private static final String TITLE_INPUT_NAME = "title";
 	
 	public SongModelJuiForm() {
 		super(new JuiFormInput[] {
+			//song title field
 			new JuiFormInput(
 				JuiFormInputType.TEXT, TITLE_INPUT_NAME, Message.formInput_songTitle_label,
 				Message.formInput_songTitle_placeholder, Message.formInput_songTitle_helpText, true,
