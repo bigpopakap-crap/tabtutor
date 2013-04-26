@@ -236,7 +236,7 @@ public abstract class JuiForm<T> {
 	 */
 	private void bindValues(Map<String, String> values) {
 		for (JuiFormInput input : getInputElements()) {
-			if (!input.keepSubmittedValue() || !input.hasValue()) {
+			if (!(input.keepSubmittedValue() && input.hasValue())) {
 				input.setValue(values.get(input.getName()));
 			}
 		}
