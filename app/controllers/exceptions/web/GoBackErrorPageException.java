@@ -1,6 +1,6 @@
 package controllers.exceptions.web;
 
-import utils.MessagesEnum;
+import utils.Message;
 
 /**
  * Basic error page whose link takes the user to the previous page
@@ -18,7 +18,7 @@ public class GoBackErrorPageException extends GoToErrorPageException {
 	}
 
 	public GoBackErrorPageException(Throwable cause, String description) {
-		super(cause, "javascript:history.back()", MessagesEnum.errorPage_toGoBack.get(), description);
+		super(cause, "javascript:history.back()", Message.errorPage_toGoBack.get(), description);
 	}
 
 }

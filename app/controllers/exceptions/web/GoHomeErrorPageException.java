@@ -1,6 +1,6 @@
 package controllers.exceptions.web;
 
-import utils.MessagesEnum;
+import utils.Message;
 
 /**
  * Basic error page with a link to go home
@@ -18,7 +18,7 @@ public class GoHomeErrorPageException extends GoToErrorPageException {
 	}
 
 	public GoHomeErrorPageException(Throwable cause, String description) {
-		super(cause, "/", MessagesEnum.errorPage_toGoHome.get(), description);
+		super(cause, "/", Message.errorPage_toGoHome.get(), description);
 	}
 	
 }

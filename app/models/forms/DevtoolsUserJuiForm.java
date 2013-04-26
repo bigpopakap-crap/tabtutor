@@ -10,7 +10,7 @@ import juiforms.JuiFormInputType;
 import models.UserModel;
 import play.api.templates.Html;
 import types.HttpMethodType;
-import utils.MessagesEnum;
+import utils.Message;
 import contexts.SessionContext;
 import controllers.routes;
 
@@ -29,8 +29,8 @@ public class DevtoolsUserJuiForm extends JuiForm<UserModel> {
 	public DevtoolsUserJuiForm() {
 		super(new JuiFormInput[] {
 			new JuiFormInput(
-				JuiFormInputType.TEXT, USERNAME_INPUT_NAME, MessagesEnum.formInput_username_label,
-				MessagesEnum.formInput_username_placeholder, MessagesEnum.formInput_username_helpText, true,
+				JuiFormInputType.TEXT, USERNAME_INPUT_NAME, Message.formInput_username_label,
+				Message.formInput_username_placeholder, Message.formInput_username_helpText, true,
 				new JuiFormInputConstraint[] {
 					JuiFormInputConstraint.REQUIRED,
 					JuiFormInputConstraint.UNIQUE(new CustomValidator<String, Boolean>() {
@@ -42,8 +42,8 @@ public class DevtoolsUserJuiForm extends JuiForm<UserModel> {
 				}
 			),
 			new JuiFormInput(
-				JuiFormInputType.EMAIL, EMAIL_INPUT_NAME, MessagesEnum.formInput_email_label,
-				MessagesEnum.formInput_email_placeholder, MessagesEnum.formInput_email_helpText, true,
+				JuiFormInputType.EMAIL, EMAIL_INPUT_NAME, Message.formInput_email_label,
+				Message.formInput_email_placeholder, Message.formInput_email_helpText, true,
 				new JuiFormInputConstraint[] {
 					JuiFormInputConstraint.REQUIRED
 				}

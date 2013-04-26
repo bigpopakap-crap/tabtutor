@@ -10,7 +10,7 @@ import models.ArtistModel;
 import models.SongModel;
 import play.api.templates.Html;
 import types.HttpMethodType;
-import utils.MessagesEnum;
+import utils.Message;
 import controllers.routes;
 
 public class SongModelJuiForm extends JuiForm<SongModel> {
@@ -20,8 +20,8 @@ public class SongModelJuiForm extends JuiForm<SongModel> {
 	public SongModelJuiForm() {
 		super(new JuiFormInput[] {
 			new JuiFormInput(
-				JuiFormInputType.TEXT, TITLE_INPUT_NAME, MessagesEnum.formInput_songTitle_label,
-				MessagesEnum.formInput_songTitle_placeholder, MessagesEnum.formInput_songTitle_helpText, true,
+				JuiFormInputType.TEXT, TITLE_INPUT_NAME, Message.formInput_songTitle_label,
+				Message.formInput_songTitle_placeholder, Message.formInput_songTitle_helpText, true,
 				new JuiFormInputConstraint[] {
 					JuiFormInputConstraint.REQUIRED
 				}

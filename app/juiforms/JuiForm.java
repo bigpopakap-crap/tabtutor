@@ -12,7 +12,7 @@ import models.SessionCsrfTokenModel;
 import models.exceptions.FailedOperationException;
 import play.api.templates.Html;
 import types.HttpMethodType;
-import utils.MessagesEnum;
+import utils.Message;
 import utils.ObjectUtil;
 import contexts.RequestContext;
 
@@ -52,7 +52,7 @@ public abstract class JuiForm<T> {
 			}));
 		}
 		if (appendSubmit()) {
-			elements.add(new JuiFormInput(JuiFormInputType.SUBMIT, SUBMIT_INPUT_NAME, MessagesEnum.formInput_submit_label, null, null, false, null));
+			elements.add(new JuiFormInput(JuiFormInputType.SUBMIT, SUBMIT_INPUT_NAME, Message.formInput_submit_label, null, null, false, null));
 		}
 		
 		//create the list of element names in order
