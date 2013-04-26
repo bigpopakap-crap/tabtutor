@@ -20,10 +20,26 @@ public enum MessagesEnum {
 	//TODO define debug language that adds a bunch of stars before and after the string
 	
 	word_user("word_user"),
+	word_login("word_login"),
+	
 	formError_required("formError_required"),
 	formError_notUnique("formError_notUnique"),
 	formError_notInteger("formError_notInteger"),
-	word_login("word_login"),
+	
+	formInput_submit_label("formInput_submit_label"),
+	
+	formInput_username_label("formInput_username_label"),
+	formInput_username_placeholder("formInput_username_placeholder"),
+	formInput_username_helpText("formInput_username_helpText"),
+	
+	formInput_email_label("formInput_email_label"),
+	formInput_email_placeholder("formInput_email_placeholder"),
+	formInput_email_helpText("formInput_email_helpText"),
+	
+	formInput_songTitle_label("formInput_songTitle_label"),
+	formInput_songTitle_placeholder("formInput_songTitle_placeholder"),
+	formInput_songTitle_helpText("formInput_songTitle_helpText"),
+	
 	errorPage_title("errorPage_title"),
 	errorPage_internalServerErrorDescription("errorPage_internalServerErrorDescription"),
 	errorPage_pageNotFoundDescription("errorPage_pageNotFoundDescription"),

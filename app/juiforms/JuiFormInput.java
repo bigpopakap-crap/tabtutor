@@ -1,6 +1,7 @@
 package juiforms;
 
 import play.api.templates.Html;
+import utils.MessagesEnum;
 import utils.ObjectUtil;
 import utils.StringUtil;
 
@@ -16,17 +17,17 @@ public class JuiFormInput {
 	private final JuiFormInputType type;				//the input type
 	private final String name;							//the name of the form
 														//this is also used as an identifying key when binding data
-	private final String label;							//the label for this input
-	private final String helpText;						//help text for this input
+	private final MessagesEnum label;					//the label for this input
+	private final MessagesEnum helpText;				//help text for this input
 	private final boolean keepSubmittedValue;			//if true, the form will keep the submitted value when rendered back to the user with errors
-	private final String placeholder;					//placeholder for a text input
+	private final MessagesEnum placeholder;				//placeholder for a text input
 	private final JuiFormInputConstraint[] constraints;	//constraints this field should be validated against
 	private String value;								//the value of this input element (can be set)
 	private String error;								//the error string of this input (can be set)
 														//TODO allow multiple errors to be associated with this field?
 	
 	/** Creates a new form element */
-	public JuiFormInput(JuiFormInputType type, String name, String label, String placeholder, String helpText, boolean keepSubmittedValue, JuiFormInputConstraint[] constraints) {
+	public JuiFormInput(JuiFormInputType type, String name, MessagesEnum label, MessagesEnum placeholder, MessagesEnum helpText, boolean keepSubmittedValue, JuiFormInputConstraint[] constraints) {
 		if (type == null) throw new IllegalArgumentException("type cannot be null");
 		if (name == null) throw new IllegalArgumentException("name cannot be null");
 		
@@ -49,12 +50,12 @@ public class JuiFormInput {
 	public JuiFormInputType getType() { return type; }
 	public String getName() { return name; }
 	public boolean hasLabel() { return !StringUtil.isNullOrEmpty(getLabel()); }
-	public String getLabel() { return label; }
+	public String getLabel() { return label != null ? label.get() : null; }
 	public boolean hasHelpText() { return !StringUtil.isNullOrEmpty(getHelpText()); }
-	public String getHelpText() { return helpText; }
+	public String getHelpText() { return helpText != null ? helpText.get() : null; }
 	public boolean keepSubmittedValue() { return keepSubmittedValue; }
 	public boolean hasPlaceholder() { return !StringUtil.isNullOrEmpty(getPlaceholder()); }
-	public String getPlaceholder() { return placeholder; }
+	public String getPlaceholder() { return placeholder != null ? placeholder.get() : null; }
 	public boolean hasValue() { return !StringUtil.isNullOrEmpty(getValue()); }
 	public String getValue() { return value; }
 	public boolean hasError() { return !StringUtil.isNullOrEmpty(getError()); }

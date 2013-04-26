@@ -12,6 +12,7 @@ import models.SessionCsrfTokenModel;
 import models.exceptions.FailedOperationException;
 import play.api.templates.Html;
 import types.HttpMethodType;
+import utils.MessagesEnum;
 import utils.ObjectUtil;
 import contexts.RequestContext;
 
@@ -31,8 +32,10 @@ public abstract class JuiForm<T> {
 	private final Map<String, JuiFormInput> elementMap; 	//maps element names to the element objects
 	private boolean isBound;								//flag to determine whether the form has bound values
 	private boolean isValid;								//flag to determine whether the data bound to the form is valid
-
-	//TODO add default CSRF token
+	
+	//INPUT NAMES
+	private static final String CSRF_TOKEN_INPUT_NAME = "csrf";
+	private static final String SUBMIT_INPUT_NAME = "submit";
 	
 	/**
 	 * Creates a new form object with the given form elements in the order given
@@ -44,12 +47,12 @@ public abstract class JuiForm<T> {
 		
 		//append other automatically-added elements
 		if (appendCsrfToken()) {
-			elements.add(new JuiFormInput(JuiFormInputType.HIDDEN, "csrf", null, null, null, false, new JuiFormInputConstraint[] {
+			elements.add(new JuiFormInput(JuiFormInputType.HIDDEN, CSRF_TOKEN_INPUT_NAME, null, null, null, false, new JuiFormInputConstraint[] {
 				JuiFormInputConstraint.CSRF_TOKEN
 			}));
 		}
 		if (appendSubmit()) {
-			elements.add(new JuiFormInput(JuiFormInputType.SUBMIT, "submit", "Submit", null, null, false, null));
+			elements.add(new JuiFormInput(JuiFormInputType.SUBMIT, SUBMIT_INPUT_NAME, MessagesEnum.formInput_submit_label, null, null, false, null));
 		}
 		
 		//create the list of element names in order
@@ -211,8 +214,10 @@ public abstract class JuiForm<T> {
 	private void preRenderBind(Map<String, String> defaultValues) {
 		hook_preRenderBind(defaultValues);
 		
-		//create a new token
-		defaultValues.put("csrf", SessionCsrfTokenModel.create().getCsrfToken().toString());
+		//create a new CSRF token
+		if (appendCsrfToken()) {
+			defaultValues.put(CSRF_TOKEN_INPUT_NAME, SessionCsrfTokenModel.create().getCsrfToken().toString());
+		}
 	}
 	
 	/** Validates the fields against the data bound to them.

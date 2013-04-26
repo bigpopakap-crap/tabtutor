@@ -1,8 +1,24 @@
 word_user=user
+word_login=login
+
 formError_required={0} is required
 formError_notUnique={0} is not available
 formError_notInteger={0} must be an integer
-word_login=login
+
+formInput_submit_label=Submit
+
+formInput_username_label=Username
+formInput_username_placeholder=jonsmellypants24
+formInput_username_helpText=Enter the username
+
+formInput_email_label=Email
+formInput_email_placeholder=jonsmellypants@gmail.com
+formInput_email_helpText=Enter the email
+
+formInput_songTitle_label=Title
+formInput_songTitle_placeholder=Freebird
+formInput_songTitle_helpText=The title of the song
+
 errorPage_title=Oops! An error occurred
 errorPage_internalServerErrorDescription=Please try again later, or submit an error report if the problem persists
 errorPage_pageNotFoundDescription=We couldn't find the page you were looking for
