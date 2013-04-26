@@ -17,7 +17,7 @@ public abstract class JuiFormInputConstraint {
 			
 		@Override
 		protected Message hook_validate(JuiFormInput input) {
-			if (input == null || !input.hasValue()) return Message.formError_required;
+			if (input == null || !input.hasValue() || StringUtil.isOnlyWhitespace(input.getValue())) return Message.formError_required;
 			else return null;
 		}
 

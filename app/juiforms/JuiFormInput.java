@@ -47,24 +47,69 @@ public class JuiFormInput {
 		return this.getClass().getCanonicalName() + ":" + ObjectUtil.getFieldMap(this);
 	}
 	
-	public JuiFormInputType getType() { return type; }
-	public String getName() { return name; }
-	public boolean hasLabel() { return !StringUtil.isNullOrEmpty(getLabel()); }
-	public String getLabel() { return label != null ? label.get() : null; }
-	public boolean hasHelpText() { return !StringUtil.isNullOrEmpty(getHelpText()); }
-	public String getHelpText() { return helpText != null ? helpText.get() : null; }
-	public boolean keepSubmittedValue() { return keepSubmittedValue; }
-	public boolean hasPlaceholder() { return !StringUtil.isNullOrEmpty(getPlaceholder()); }
-	public String getPlaceholder() { return placeholder != null ? placeholder.get() : null; }
-	public boolean hasValue() { return !StringUtil.isNullOrEmpty(getValue()); }
-	public String getValue() { return value; }
-	public boolean hasError() { return !StringUtil.isNullOrEmpty(getError()); }
-	public String getError() { return error; }
+	public JuiFormInputType getType() {
+		return type;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public boolean hasLabel() {
+		return !StringUtil.isNullOrEmpty(getLabel());
+	}
+
+	public String getLabel() {
+		return label != null ? label.get() : null;
+	}
+
+	public boolean hasHelpText() {
+		return !StringUtil.isNullOrEmpty(getHelpText());
+	}
+
+	public String getHelpText() {
+		return helpText != null ? helpText.get() : null;
+	}
+
+	public boolean keepSubmittedValue() {
+		return keepSubmittedValue;
+	}
+
+	public boolean hasPlaceholder() {
+		return !StringUtil.isNullOrEmpty(getPlaceholder());
+	}
+
+	public String getPlaceholder() {
+		return placeholder != null ? placeholder.get() : null;
+	}
+
+	public boolean hasValue() {
+		return !StringUtil.isNullOrEmpty(getValue());
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public boolean hasError() {
+		return !StringUtil.isNullOrEmpty(getError());
+	}
+
+	public String getError() {
+		return error;
+	}
 	
-	public void setValue(String value) { this.value = value; }
-	private void setError(String error) { this.error = error; }
-	
-	public boolean isError() { return getError() != null; }
+	public void setValue(String value) {
+		//trim the value so whitespace-only is considered an empty string
+		if (value != null) {
+			value = value.trim();
+		}
+		this.value = value;
+	}
+
+	private void setError(String error) {
+		this.error = error;
+	}
 	
 	public void clear() {
 		setValue(null);
@@ -81,7 +126,7 @@ public class JuiFormInput {
 			}
 		}
 		
-		return !isError();
+		return !hasError();
 	}
 
 	/** Renders the HTML to represent this form input */
