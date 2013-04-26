@@ -1,2 +1,45 @@
-@(albums: List[AlbumModel])
-@p_devtools_devbar()
+@*
+	Author: bigpopakap
+	Since: 2013-04-26
+	
+	The page for the list of albums
+*@
+@(albums: List[AlbumModel], albumForm: models.forms.AlbumModelJuiForm)
+<!DOCTYPE html>
+<html>
+<head>
+	@p_preHead()
+</head>
+<body>
+	@p_topbar()
+	
+	@(albumForm.render())
+	
+	<h1>List of albums</h1>
+	<table>
+		<!-- Header row -->
+		<tr>
+			<th>Title</th>
+			<th>Artist</th>
+			<th>Year</th>
+			<th>Num tracks</th>
+		</tr>
+		
+		<!-- Value rows -->
+		@for(album <- albums) {
+			<tr>
+				<td>@(album.getTitle())</td>
+				@if(album.hasArtist()) {
+					<td>@(album.getArtist().getName())</td>
+				} else {
+					<td></td>
+				}
+				<td>@(album.getYear())</td>
+				<td>@(album.getNumTracks())</td>
+			</tr>
+		}
+	</table>
+	
+	@p_devtools_devbar()
+</body>
+</html>

@@ -2,6 +2,7 @@ package controllers;
 
 import actions.ActionAnnotations.AccessTimed;
 import actions.ActionAnnotations.Sessioned;
+import actions.ActionAnnotations.Transactioned;
 import actions.ActionAnnotations.TriedCaught;
 
 /**
@@ -12,7 +13,7 @@ import actions.ActionAnnotations.TriedCaught;
  * @since 2013-02-17
  *
  */
-@TriedCaught @AccessTimed @Sessioned //methods should not forget to include these
+@TriedCaught @Transactioned @AccessTimed @Sessioned //methods should not forget to include these
 public class BaseWebController extends BaseController {
 	
 }

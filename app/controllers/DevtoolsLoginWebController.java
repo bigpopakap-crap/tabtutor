@@ -23,7 +23,7 @@ public class DevtoolsLoginWebController extends DevtoolsWebController {
 	}
 	
 	/** Creates a new test user with the given first and last name */
-	public static Result create(String username, String email) {
+	public static Result create() {
 		//use a form object to validate and create a user from this data
 		DevtoolsUserJuiForm devtoolsUserForm = new DevtoolsUserJuiForm();
 		try {
@@ -32,12 +32,11 @@ public class DevtoolsLoginWebController extends DevtoolsWebController {
 		} catch (JuiFormValidationException ex) {
 			return listUsers(devtoolsUserForm);
 		}
-		
 	}
 	
 	/** Logs in as the test user with the given ID and redirects to the given url */
 	//TODO make this use the POST method
-	@Sessioned(forceRefresh = true)
+	@Sessioned
 	public static Result login(String pk, String targetUrl) {
 		//establish the context and then redirect to the homepage
 		UserModel user = UserModel.getById(pk);
@@ -51,6 +50,7 @@ public class DevtoolsLoginWebController extends DevtoolsWebController {
 	 *  PRIVATE HELPERS
 	 ************************************************************************** */
 	
+	/** Displays the list of songs using the given form object */
 	private static Result listUsers(DevtoolsUserJuiForm devtoolsUserForm) {
 		return ok(views.html.devtools_listUsers.render(
 			UserModel.getAll(),

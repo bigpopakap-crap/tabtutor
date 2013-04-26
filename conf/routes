@@ -16,8 +16,11 @@
 GET     /                           controllers.SimpleWebController.landing()
 GET		/fblogin					controllers.FbLoginWebController.fblogin(code ?= null, state ?= null, targetUrl ?= "/")
 GET		/songs/list					controllers.SongsWebController.list()
+POST	/songs/create				controllers.SongsWebController.create()
 GET		/artists/list				controllers.ArtistsWebController.list()
+POST	/artists/create				controllers.ArtistsWebController.create()
 GET		/albums/list				controllers.AlbumsWebController.list()
+POST	/albums/create				controllers.AlbumsWebController.create()
 
 # --------------------------------------------------------------------- #
 #	BEGIN /INTERNAL/ADMIN PAGE ROUTING									#
@@ -30,7 +33,7 @@ GET		/albums/list				controllers.AlbumsWebController.list()
 GET		/internal/devtools							controllers.DevtoolsWebController.directory()
 GET		/internal/devtools/killserver				controllers.DevtoolsWebController.killServer()
 GET		/internal/devtools/login/listusers			controllers.DevtoolsLoginWebController.listUsers()
-GET		/internal/devtools/login/create				controllers.DevtoolsLoginWebController.create(username, email)
+POST	/internal/devtools/login/create				controllers.DevtoolsLoginWebController.create()
 GET		/internal/devtools/login/login/:pk			controllers.DevtoolsLoginWebController.login(pk, targetUrl ?= "/")
 
 # --------------------------------------------------------------------- #

@@ -31,13 +31,17 @@
 		<!-- Value rows -->
 		@for(song <- songs) {
 			<tr>
-				<td>song.getTitle()</td>
-				<td>song.getArtist().getName()</td>
-				<td>song.getAlbum().getTitle()</td>
-				<td>song.getTrackNum()</td>
-				<td>song.isLive()</td>
-				<td>song.isYoutubeEnabled()</td>
-				<td>song.getYoutubeId()</td>
+				<td>@(song.getTitle())</td>
+				<td>@(song.getArtist().getName())</td>
+				@if(song.hasAlbum()) {
+					<td>@(song.getAlbum().getTitle())</td>
+				} else {
+					<td></td>
+				}
+				<td>@(song.getTrackNum())</td>
+				<td>@(song.isLive())</td>
+				<td>@(song.isYoutubeEnabled())</td>
+				<td>@(song.getYoutubeId())</td>
 			</tr>
 		}
 	</table>

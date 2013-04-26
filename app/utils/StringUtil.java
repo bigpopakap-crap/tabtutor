@@ -14,6 +14,12 @@ public abstract class StringUtil {
 		return (str == null || str.isEmpty());
 	}
 	
+	/** Determines if the string is only whitespace. Must not be null */
+	public static boolean isOnlyWhitespace(String str) {
+		if (str == null) throw new IllegalArgumentException("str cannot be null");
+		return str.trim().isEmpty();
+	}
+	
 	/** Determines if this string represents an Integer */
 	public static boolean isInteger(String str) {
 		if (str == null) return false;

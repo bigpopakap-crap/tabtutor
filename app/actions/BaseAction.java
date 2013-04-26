@@ -66,5 +66,5 @@ public abstract class BaseAction<T> extends Action<T> {
 			Logger.trace("Exiting from " + this.getClass().getCanonicalName());
 		}
 	}
-	
+
 }

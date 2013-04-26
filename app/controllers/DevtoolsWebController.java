@@ -2,7 +2,7 @@ package controllers;
 
 import play.mvc.Result;
 import utils.Logger;
-import actions.ActionAnnotations.ModeProtected;
+import actions.ActionAnnotations.DevModeProtected;
 
 /**
  * This class handles routes (or parents classes that handle routes) which are used as developer tools
@@ -12,7 +12,7 @@ import actions.ActionAnnotations.ModeProtected;
  * @since 2013-03-21
  *
  */
-@ModeProtected
+@DevModeProtected
 public class DevtoolsWebController extends BaseWebController {
 	
 	/** Lists all the devtools pages */

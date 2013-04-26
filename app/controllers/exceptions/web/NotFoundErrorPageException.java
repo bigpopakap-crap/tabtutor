@@ -1,6 +1,6 @@
 package controllers.exceptions.web;
 
-import utils.MessagesEnum;
+import utils.Message;
 
 /**
  * Basic error page whose description is that of a NOT FOUND error, and whose
@@ -15,7 +15,7 @@ public class NotFoundErrorPageException extends GoBackErrorPageException {
 	private static final long serialVersionUID = 1L;
 
 	public NotFoundErrorPageException(Throwable cause) {
-		super(cause, MessagesEnum.errorPage_pageNotFoundDescription.get());
+		super(cause, Message.errorPage_pageNotFoundDescription.get());
 	}
 
 }

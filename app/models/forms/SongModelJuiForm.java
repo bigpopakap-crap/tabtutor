@@ -6,37 +6,55 @@ import juiforms.JuiForm;
 import juiforms.JuiFormInput;
 import juiforms.JuiFormInputConstraint;
 import juiforms.JuiFormInputType;
+import models.ArtistModel;
 import models.SongModel;
 import play.api.templates.Html;
 import types.HttpMethodType;
+import utils.Message;
+import controllers.routes;
 
+/**
+ * JUI form for creating a new song
+ * 
+ * @author bigpopakap
+ * @since 2013-04-17
+ *
+ */
 public class SongModelJuiForm extends JuiForm<SongModel> {
 	
-	//TODO make convert these hardcoded strings to messages
+	private static final String TITLE_INPUT_NAME = "title";
 	
 	public SongModelJuiForm() {
 		super(new JuiFormInput[] {
-			new JuiFormInput(JuiFormInputType.TEXT, "title", "Title", "Freebird", "The title of the song", new JuiFormInputConstraint[] {
-				JuiFormInputConstraint.REQUIRED
-			})
+			//song title field
+			new JuiFormInput(
+				JuiFormInputType.TEXT, TITLE_INPUT_NAME, Message.formInput_songTitle_label,
+				Message.formInput_songTitle_placeholder, Message.formInput_songTitle_helpText, true,
+				new JuiFormInputConstraint[] {
+					JuiFormInputConstraint.REQUIRED
+				}
+			)
 			//TODO add other fields
 		});
 	}
 
+	//TODO don't hardcode these values
 	@Override
 	protected SongModel bind(Map<String, String> data) {
 		return SongModel.createAndSave(
-			data.get("title"),
+			data.get(TITLE_INPUT_NAME),
+			ArtistModel.createAndSave("Artist " + System.currentTimeMillis()), //TODO don't hardcode this
 			null, //TODO don't hardcode this
-			null, //TODO don't hardcode this
-			Integer.parseInt(data.get("trackNum")),
-			Boolean.parseBoolean(data.get("isLive")),
-			data.get("youtubeId")
+			0, //TODO data.get("trackNum") != null ? Integer.parseInt(data.get("trackNum")) : null,
+			false, //TODO data.get("isLive") != null ? Boolean.parseBoolean(data.get("isLive")) : null,
+			null //TODO data.get("youtubeId")
 		);
 	}
 	
+	//TODO convert these hardcoded strings to messages
+	@Override
 	public Html render() {
-		return super.render("Add a song", "Yuuuuup", HttpMethodType.POST, "/"); //TODO change the action URL
+		return super.render("Add a song", "Yuuuuup", HttpMethodType.POST, routes.SongsWebController.create().url());
 	}
 	
 }

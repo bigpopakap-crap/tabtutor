@@ -28,7 +28,7 @@ public class Universe<T> {
 	 * @throws IllegalArgumentException if the value is null
 	 * @throws IllegalStateException if the value is already registered
 	 */
-	public UniverseElement<T> register(T val) throws IllegalArgumentException, IllegalStateException {
+	public synchronized UniverseElement<T> register(T val) throws IllegalArgumentException, IllegalStateException {
 		if (val == null) {
 			throw new IllegalArgumentException("val cannot be null");
 		}
@@ -46,7 +46,7 @@ public class Universe<T> {
 	 * @return the value of the element
 	 * @throws IllegalStateException if the element was not registered with this universe
 	 */
-	public T extract(UniverseElement<T> elem) throws IllegalStateException {
+	public synchronized T extract(UniverseElement<T> elem) throws IllegalStateException {
 		if (elem.universe() != this) {
 			throw new IllegalStateException("elem was not generated from this universe");
 		}
@@ -77,12 +77,12 @@ public class Universe<T> {
 		}
 		
 		/** Gets the universe this element was registered to */
-		private Universe<T> universe() {
+		private synchronized Universe<T> universe() {
 			return universe;
 		}
 		
 		/** Gets the value of the element */
-		private T val() {
+		private synchronized T val() {
 			return val;
 		}
 		

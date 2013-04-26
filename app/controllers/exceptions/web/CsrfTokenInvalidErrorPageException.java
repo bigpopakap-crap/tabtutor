@@ -1,7 +1,6 @@
 package controllers.exceptions.web;
 
-import utils.MessagesEnum;
-
+import utils.Message;
 
 /**
  * Error page when a CSRF validation fails
@@ -15,7 +14,7 @@ public class CsrfTokenInvalidErrorPageException extends GoHomeErrorPageException
 	private static final long serialVersionUID = -3672421677154333902L;
 
 	public CsrfTokenInvalidErrorPageException() {
-		super(null, MessagesEnum.errorPage_csrfTokenInvalid.get());
+		super(null, Message.errorPage_csrfTokenInvalid.get());
 	}
 	
 }

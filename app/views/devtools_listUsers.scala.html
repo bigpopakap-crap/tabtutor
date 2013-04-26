@@ -6,7 +6,7 @@
 *@
 @(users: List[UserModel], devtoolsUserForm: models.forms.DevtoolsUserJuiForm)
 @import contexts.RequestContext;
-@import utils.MessagesEnum;
+@import utils.Message;
 @td(value: Object) = {
 	<td title="@(value)">@(value)</td>
 }
@@ -42,7 +42,7 @@
 			<tr>
 				<td>
 					<a href="@(RequestContext.devtoolsLoginUrl(user.getPk().toString()))">
-						@(MessagesEnum.word_login.get())
+						@(Message.word_login.get())
 					</a>
 				</td>
 				@td(user.getUsername())

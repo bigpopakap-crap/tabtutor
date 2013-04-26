@@ -3,6 +3,7 @@ package api.fb;
 import java.util.HashMap;
 import java.util.Map;
 
+import models.SessionCsrfTokenModel;
 import play.libs.WS.Response;
 import play.mvc.Http.Request;
 import types.HttpMethodType;
@@ -35,6 +36,7 @@ public class FbApi extends BaseApi<FbJsonResponse> {
 	// String variables representing keys to use in query params
 	private static final String QUERY_KEY_CLIENT_ID = "client_id";
 	private static final String QUERY_KEY_CLIENT_SECRET = "client_secret";
+	private static final String QUERY_KEY_STATE = "state";
 	private static final String QUERY_KEY_HTTP_METHOD = "method";
 	private static final String QUERY_KEY_REDIRECT_URI = "redirect_uri";
 	private static final String QUERY_KEY_ACCESS_TOKEN = "access_token";
@@ -112,6 +114,7 @@ public class FbApi extends BaseApi<FbJsonResponse> {
 									.append("?").append(RestUtil.mapToQueryString(
 											QUERY_KEY_CLIENT_ID, AppContext.Var.FB_APP_ID.val(),
 											QUERY_KEY_REDIRECT_URI, fbLoginRedirectUri(request, targetUrl),
+											QUERY_KEY_STATE, SessionCsrfTokenModel.create().getCsrfToken().toString(),
 											QUERY_KEY_SCOPE, QUERY_VALUE_SCOPE
 									))
 									.toString();

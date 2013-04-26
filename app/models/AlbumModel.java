@@ -43,6 +43,7 @@ public class AlbumModel extends BaseModel {
 	
 	public UUID getPk() { return UUID.fromString(pk.toString()); } //defensive copy
 	public String getTitle() { return title; }
+	public boolean hasArtist() { return getArtist() != null; }
 	public ArtistModel getArtist() { return artist; }
 	public int getYear() { return year; }
 	public int getNumTracks() { return numTracks; }
