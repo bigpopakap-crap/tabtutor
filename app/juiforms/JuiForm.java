@@ -1,6 +1,8 @@
 package juiforms;
 
 
+import interfaces.Renderable;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -9,8 +11,10 @@ import java.util.List;
 import java.util.Map;
 
 import models.SessionCsrfTokenModel;
+import models.exceptions.FailedOperationException;
 import play.api.templates.Html;
 import types.HttpMethodType;
+import utils.Message;
 import utils.ObjectUtil;
 import contexts.RequestContext;
 
@@ -24,14 +28,16 @@ import contexts.RequestContext;
  *
  * @param <T> the object this is a form for
  */
-public abstract class JuiForm<T> {
+public abstract class JuiForm<T> implements Renderable {
 	
 	private final List<String> elementNames;				//lists element names in the order they should appear
 	private final Map<String, JuiFormInput> elementMap; 	//maps element names to the element objects
 	private boolean isBound;								//flag to determine whether the form has bound values
 	private boolean isValid;								//flag to determine whether the data bound to the form is valid
-
-	//TODO add default CSRF token
+	
+	//INPUT NAMES
+	private static final String CSRF_TOKEN_INPUT_NAME = "csrf";
+	private static final String SUBMIT_INPUT_NAME = "submit";
 	
 	/**
 	 * Creates a new form object with the given form elements in the order given
@@ -43,12 +49,12 @@ public abstract class JuiForm<T> {
 		
 		//append other automatically-added elements
 		if (appendCsrfToken()) {
-			elements.add(new JuiFormInput(JuiFormInputType.HIDDEN, "csrf", null, null, null, new JuiFormInputConstraint[] {
+			elements.add(new JuiFormInput(JuiFormInputType.HIDDEN, CSRF_TOKEN_INPUT_NAME, null, null, null, false, new JuiFormInputConstraint[] {
 				JuiFormInputConstraint.CSRF_TOKEN
 			}));
 		}
 		if (appendSubmit()) {
-			elements.add(new JuiFormInput(JuiFormInputType.SUBMIT, "submit", "Submit", null, null, null));
+			elements.add(new JuiFormInput(JuiFormInputType.SUBMIT, SUBMIT_INPUT_NAME, Message.formInput_submit_label, null, null, false, null));
 		}
 		
 		//create the list of element names in order
@@ -110,15 +116,19 @@ public abstract class JuiForm<T> {
 	/** Binds the form to the parameters in the given request */
 	public T bind() throws JuiFormValidationException {
 		try {
-			bindValues(RequestContext.queryParams());
+			clear();
+			bindValues(RequestContext.params());
 			validate();
 			
 			if (isValid()) {
 				try {
 					return bind(getValues());
 				}
+				catch (FailedOperationException ex) {
+					throw new RuntimeException("Database operation failed", ex);
+				}
 				catch (Exception ex) {
-					//something bad happend while creating the element
+					//something bad happened while creating the element
 					//This should be fixed and not exposed to the user
 					throw new RuntimeException(
 						"Error while binding in " + this.getClass().getCanonicalName() +
@@ -206,8 +216,10 @@ public abstract class JuiForm<T> {
 	private void preRenderBind(Map<String, String> defaultValues) {
 		hook_preRenderBind(defaultValues);
 		
-		//create a new token
-		defaultValues.put("csrf", SessionCsrfTokenModel.create().getCsrfToken().toString());
+		//create a new CSRF token
+		if (appendCsrfToken()) {
+			defaultValues.put(CSRF_TOKEN_INPUT_NAME, SessionCsrfTokenModel.create().getCsrfToken().toString());
+		}
 	}
 	
 	/** Validates the fields against the data bound to them.
@@ -224,12 +236,16 @@ public abstract class JuiForm<T> {
 	}
 	
 	/**
-	 * Binds values to this form
+	 * Binds values to this form. Does not overwrite existing values of fields
+	 * that specify they should keep their submitted value via the {@link JuiFormInput#keepSubmittedValue()} method
+	 * 
 	 * @param values a map of the field names to values
 	 */
 	private void bindValues(Map<String, String> values) {
 		for (JuiFormInput input : getInputElements()) {
-			input.setValue(values.get(input.getName()));
+			if (!(input.keepSubmittedValue() && input.hasValue())) {
+				input.setValue(values.get(input.getName()));
+			}
 		}
 	}
 	

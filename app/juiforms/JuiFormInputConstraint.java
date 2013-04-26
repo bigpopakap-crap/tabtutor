@@ -2,7 +2,7 @@ package juiforms;
 
 import models.SessionCsrfTokenModel;
 import utils.ConcurrentUtil;
-import utils.MessagesEnum;
+import utils.Message;
 import utils.StringUtil;
 import controllers.exceptions.web.CsrfTokenInvalidErrorPageException;
 
@@ -16,17 +16,18 @@ public abstract class JuiFormInputConstraint {
 	public static final JuiFormInputConstraint REQUIRED = new JuiFormInputConstraint() {
 			
 		@Override
-		protected String hook_validate(JuiFormInput input) {
-			if (input.getValue().isEmpty()) return MessagesEnum.formError_required.get(input.getName());
+		protected Message hook_validate(JuiFormInput input) {
+			if (input == null || !input.hasValue() || StringUtil.isOnlyWhitespace(input.getValue())) return Message.formError_required;
 			else return null;
 		}
 
 	};
 	
-	public static final JuiFormInputConstraint CSRF_TOKEN = new JuiFormInputConstraint() {
+	/** Does CSRF validation */
+	public static final JuiFormInputConstraint CSRF_TOKEN = new JuiFormInputConstraint(REQUIRED) {
 		
 		@Override
-		protected String hook_validate(JuiFormInput input) {
+		protected Message hook_validate(JuiFormInput input) {
 			if (!SessionCsrfTokenModel.isValidToken(input.getValue())) {
 				//throw an exception here instead, because this is bad
 				throw new CsrfTokenInvalidErrorPageException();
@@ -49,7 +50,7 @@ public abstract class JuiFormInputConstraint {
 		return new JuiFormInputConstraint() {
 
 			@Override
-			protected String hook_validate(JuiFormInput input) {
+			protected Message hook_validate(JuiFormInput input) {
 				validator.setValue(input.getValue());
 				
 				//call the validator, let any exceptions bubble up as runtime exceptions
@@ -58,7 +59,7 @@ public abstract class JuiFormInputConstraint {
 					return null;
 				}
 				else {
-					return MessagesEnum.formError_notUnique.get(input.getName());
+					return Message.formError_notUnique;
 				}
 			}
 			
@@ -70,7 +71,7 @@ public abstract class JuiFormInputConstraint {
 		return new JuiFormInputConstraint() {
 			
 			@Override
-			protected String hook_validate(JuiFormInput input) {
+			protected Message hook_validate(JuiFormInput input) {
 				throw new UnsupportedOperationException();
 			}
 		};
@@ -80,8 +81,8 @@ public abstract class JuiFormInputConstraint {
 	public static final JuiFormInputConstraint IS_INTEGER = new JuiFormInputConstraint() {
 
 		@Override
-		protected String hook_validate(JuiFormInput input) {
-			if (!StringUtil.isInteger(input.getValue())) return MessagesEnum.formError_notInteger.get(input.getName());
+		protected Message hook_validate(JuiFormInput input) {
+			if (!StringUtil.isInteger(input.getValue())) return Message.formError_notInteger;
 			else return null;
 		}
 		
@@ -91,12 +92,21 @@ public abstract class JuiFormInputConstraint {
 	 *  CLASS DEFINITION
 	 ************************************************************************** */
 	
+	/** Other constraints on which this one depends */
 	private final JuiFormInputConstraint[] dependencies;
 	
+	/** Create a new constraint with the given dependencies (in order) */
 	private JuiFormInputConstraint(JuiFormInputConstraint... dependencies) {
 		this.dependencies = dependencies != null ? dependencies : new JuiFormInputConstraint[0];
 	}
 	
+	/** 
+	 * Validate the given input field. Does some error checking, but the
+	 * actual implementation is in {@link #hook_validate(JuiFormInput)}
+	 * 
+	 * @param input the field to validate
+	 * @return the error message to display
+	 */
 	public final String validate(JuiFormInput input) {
 		if (input == null) {
 			throw new IllegalStateException("input cannot be null");
@@ -117,9 +127,18 @@ public abstract class JuiFormInputConstraint {
 			}
 		}
 		
-		return hook_validate(input);
+		Message errorMessage = hook_validate(input);
+		return errorMessage != null ? errorMessage.get(input.getName()) : null;
 	}
 	
-	protected abstract String hook_validate(JuiFormInput input);
+	/**
+	 * Implements the validation of the input field
+	 * 
+	 * @param input the field to validate
+	 * @return the {@link Message} representing the error, or null if the input is valid.
+	 * 			The returned message must take 0 or 1 arguments, and when rendered it will be passed
+	 * 			the name of the input field
+	 */
+	protected abstract Message hook_validate(JuiFormInput input);
 
 }

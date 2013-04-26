@@ -1,2 +1,35 @@
-@(artists: List[ArtistModel])
-@p_devtools_devbar()
+@*
+	Author: bigpopakap
+	Since: 2013-04-26
+	
+	The page for the list of artists
+*@
+@(artists: List[ArtistModel], artistForm: models.forms.ArtistModelJuiForm)
+<!DOCTYPE html>
+<html>
+<head>
+	@p_preHead()
+</head>
+<body>
+	@p_topbar()
+	
+	@(artistForm.render())
+	
+	<h1>List of artists</h1>
+	<table>
+		<!-- Header row -->
+		<tr>
+			<th>Name</th>
+		</tr>
+		
+		<!-- Value rows -->
+		@for(artist <- artists) {
+			<tr>
+				<td>@(artist.getName())</td>
+			</tr>
+		}
+	</table>
+	
+	@p_devtools_devbar()
+</body>
+</html>

@@ -62,7 +62,7 @@ public class ArtistModel extends BaseModel {
 	 ************************************************************************** */
 	
 	public static ArtistModel createAndSave(String name) {
-		return (ArtistModel) new ArtistModel(name).doDeleteAndRetry();
+		return (ArtistModel) new ArtistModel(name).doSaveAndRetry();
 	}
 	
 	/* **************************************************************************

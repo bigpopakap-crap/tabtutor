@@ -10,7 +10,7 @@
 		toMessage: the description of the link, must be specified
 *@
 @(description: String, url: String, toMessage: String)
-@import utils.MessagesEnum
+@import utils.Message
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,7 +18,7 @@
 </head>
 <body>
 	@p_topbar()
-	<h1>@(MessagesEnum.errorPage_title.get())</h1>
+	<h1>@(Message.errorPage_title.get())</h1>
 	<p>@description</p>
 	<p>Click <a href="@url">here</a> @toMessage</p>
 	
