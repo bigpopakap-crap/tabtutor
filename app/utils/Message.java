@@ -20,6 +20,10 @@ public abstract class Message {
 	/** The universe used to ensure that message keys are unique. This must be declared before the other values */
 	private static final Universe<String> MESSAGE_KEY_UNIVERSE = new Universe<>();
 	
+	/* **************************************************************************
+	 *  STATIC MESSAGE DECLARATIONS
+	 ************************************************************************** */
+	
 	public static final Message word_user = new Message("word_user") {};
 	public static final Message word_login = new Message("word_login") {};
 	
@@ -40,6 +44,14 @@ public abstract class Message {
 	public static final Message formInput_songTitle_label = new Message("formInput_songTitle_label") {};
 	public static final Message formInput_songTitle_placeholder = new Message("formInput_songTitle_placeholder") {};
 	public static final Message formInput_songTitle_helpText = new Message("formInput_songTitle_helpText") {};
+	
+	public static final Message formInput_artistName_label = new Message("formInput_artistName_label") {};
+	public static final Message formInput_artistName_placeholder = new Message("formInput_artistName_placeholder") {};
+	public static final Message formInput_artistName_helpText = new Message("formInput_artistName_helpText") {};
+	
+	public static final Message formInput_albumTitle_label = new Message("formInput_albumTitle_label") {};
+	public static final Message formInput_albumTitle_placeholder = new Message("formInput_albumTitle_placeholder") {};
+	public static final Message formInput_albumTitle_helpText = new Message("formInput_albumTitle_helpText") {};
 	
 	public static final Message errorPage_title = new Message("errorPage_title") {};
 	public static final Message errorPage_internalServerErrorDescription = new Message("errorPage_internalServerErrorDescription") {};

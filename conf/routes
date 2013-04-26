@@ -18,7 +18,9 @@ GET		/fblogin					controllers.FbLoginWebController.fblogin(code ?= null, state ?
 GET		/songs/list					controllers.SongsWebController.list()
 POST	/songs/create				controllers.SongsWebController.create()
 GET		/artists/list				controllers.ArtistsWebController.list()
+POST	/artists/create				controllers.ArtistsWebController.create()
 GET		/albums/list				controllers.AlbumsWebController.list()
+POST	/albums/create				controllers.AlbumsWebController.create()
 
 # --------------------------------------------------------------------- #
 #	BEGIN /INTERNAL/ADMIN PAGE ROUTING									#

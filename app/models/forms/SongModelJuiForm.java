@@ -52,6 +52,7 @@ public class SongModelJuiForm extends JuiForm<SongModel> {
 	}
 	
 	//TODO convert these hardcoded strings to messages
+	@Override
 	public Html render() {
 		return super.render("Add a song", "Yuuuuup", HttpMethodType.POST, routes.SongsWebController.create().url());
 	}

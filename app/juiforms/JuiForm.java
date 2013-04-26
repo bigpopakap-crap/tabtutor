@@ -1,6 +1,8 @@
 package juiforms;
 
 
+import interfaces.Renderable;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -26,7 +28,7 @@ import contexts.RequestContext;
  *
  * @param <T> the object this is a form for
  */
-public abstract class JuiForm<T> {
+public abstract class JuiForm<T> implements Renderable {
 	
 	private final List<String> elementNames;				//lists element names in the order they should appear
 	private final Map<String, JuiFormInput> elementMap; 	//maps element names to the element objects

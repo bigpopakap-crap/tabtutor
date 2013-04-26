@@ -19,6 +19,14 @@ formInput_songTitle_label=Title
 formInput_songTitle_placeholder=Freebird
 formInput_songTitle_helpText=The title of the song
 
+formInput_artistName_label=Name
+formInput_artistName_placeholder=Radiohead
+formInput_artistName_helpText=The name of the artist/band
+
+formInput_albumTitle_label=Title
+formInput_albumTitle_placeholder=Abbey Road
+formInput_albumTitle_helpText=The title of the album
+
 errorPage_title=Oops! An error occurred
 errorPage_internalServerErrorDescription=Please try again later, or submit an error report if the problem persists
 errorPage_pageNotFoundDescription=We couldn't find the page you were looking for
