@@ -105,7 +105,7 @@ public class FbApi extends BaseApi<FbJsonResponse> {
 	
 	/** Returns the redirect URI to use for Facebook login. TODO quiet this damn compiler error */
 	public static String fbLoginRedirectUri(Request request, String targetUrl) {
-		return routes.FbLoginWebController.fblogin(null, null, targetUrl).absoluteURL(request);
+		return routes.AuthWebController.fblogin(null, null, targetUrl).absoluteURL(request);
 	}
 	
 	/** Gets the URL to redirect the user for Facebook login */

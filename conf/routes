@@ -14,7 +14,8 @@
 #	BEGIN PAGE ROUTING													#
 # --------------------------------------------------------------------- #
 GET     /                           controllers.SimpleWebController.landing()
-GET		/fblogin					controllers.FbLoginWebController.fblogin(code ?= null, state ?= null, targetUrl ?= "/")
+GET		/fblogin					controllers.AuthWebController.fblogin(code ?= null, state ?= null, targetUrl ?= "/")
+GET		/logout						controllers.AuthWebController.logout(targetUrl ?= "/")
 GET		/songs/list					controllers.SongsWebController.list()
 POST	/songs/create				controllers.SongsWebController.create()
 GET		/artists/list				controllers.ArtistsWebController.list()

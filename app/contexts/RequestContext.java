@@ -52,13 +52,12 @@ public class RequestContext extends BaseContext {
 	/** Gets the login url that will redirect back to this page
 	 *  (as opposed to the url of the Facebook login dialogue, this is the one that initiates it) */
 	public static synchronized String loginUrl() {
-		return routes.FbLoginWebController.fblogin(null, null, url()).url();
+		return routes.AuthWebController.fblogin(null, null, url()).url();
 	}
 	
 	/** Gets the logout url that will redirect back to this page */
 	public static synchronized String logoutUrl() {
-		//TODO do this
-		return "#";
+		return routes.AuthWebController.logout(url()).url();
 	}
 	
 	/** Gets the login url for a test user */

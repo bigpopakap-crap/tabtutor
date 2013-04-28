@@ -26,7 +26,7 @@ import controllers.exceptions.web.InternalServerErrorPageException;
  * @since 2013-02-17
  *
  */
-public class FbLoginWebController extends BaseWebController {
+public class AuthWebController extends BaseWebController {
 	
 	//TODO use a pop-up instead of redirecting the whole browser to Facebook
 	//TODO handle the case that they did not authorize the app
@@ -100,6 +100,14 @@ public class FbLoginWebController extends BaseWebController {
 				throw new InternalServerErrorPageException(ex);
 			}
 		}
+	}
+	
+	/** Logs the user out */
+	public static Result logout(String targetUrl) {
+		if (targetUrl == null) targetUrl = "/";
+		SessionContext.unestablish();
+		Logger.debug("Logged out user and edirecting to " + targetUrl);
+		return redirect(targetUrl);
 	}
 	
 }
