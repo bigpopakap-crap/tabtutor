@@ -28,8 +28,13 @@ public abstract class BaseExposedException extends RuntimeException {
 	}
 	
 	public final Result result() {
+		BaseExposedException oldCause = RequestErrorContext.getCause();
+		
 		RequestErrorContext.setCause(this);
-		return hook_result();
+		Result toReturn = hook_result();
+		
+		RequestErrorContext.setCause(oldCause);
+		return toReturn;
 	}
 	
 	/** Returns the result representing this exception that should be sent to the client */
