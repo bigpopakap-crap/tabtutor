@@ -1,5 +1,5 @@
 # --- !Ups
-CREATE TYPE t_pk AS UUID;
+CREATE TYPE t_pk AS VARCHAR(80);
 CREATE TYPE t_yearInt AS SMALLINT;
 CREATE TYPE t_varcharLong AS VARCHAR(255);
 CREATE TYPE t_varcharShort AS VARCHAR(80);
@@ -7,7 +7,7 @@ CREATE TYPE t_email AS t_varcharLong;
 CREATE TYPE t_facebookId AS VARCHAR(80);
 CREATE TYPE t_facebookToken AS t_varcharLong;
 CREATE TYPE t_youtubeId AS VARCHAR(80);
-CREATE TYPE t_csrfToken AS UUID;
+CREATE TYPE t_csrfToken AS t_pk;
 
 CREATE TABLE Artist (
 	pk t_pk PRIMARY KEY,
