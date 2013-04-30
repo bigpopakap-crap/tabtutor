@@ -22,7 +22,7 @@ public abstract class ErrorPageException extends controllers.exceptions.BaseExpo
 	protected abstract Html hook_render();
 	
 	@Override
-	public Result hook_result() {
+	public Result result() {
 		Html page = hook_render();
 		if (page == null) {
 			throw new IllegalStateException("Page cannot be null");

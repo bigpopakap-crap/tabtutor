@@ -9,7 +9,7 @@
 		url: the url to link to, must be specified
 		toMessage: the description of the link, must be specified
 *@
-@(description: String, url: String, toMessage: String)
+@(description: String, url: String, toMessage: String, ex: Throwable)
 @import contexts.AppContext
 @import contexts.RequestErrorContext
 @import utils.ExceptionUtil
@@ -25,14 +25,10 @@
 	<p>@description</p>
 	<p>Click <a href="@url">here</a> @toMessage</p>
 	
-	@if(AppContext.Mode.isDevelopment() && RequestErrorContext.hasCause()) {
+	@if(AppContext.Mode.isDevelopment() && ex != null) {
 		<div>
 			<h2>Stack trace (dev mode only)</h2>
-			<div style="font-family: monospace">
-				@p_util_multiLineString(
-					ExceptionUtil.printStackTrace(RequestErrorContext.getCause())
-				)
-			</div>
+			@p_util_stackTrace(ex)
 		</div>
 	}
 	
