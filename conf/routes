@@ -40,6 +40,7 @@ GET		/internal/devtools/login/login/:pk			controllers.DevtoolsLoginWebController
 # --------------------------------------------------------------------- #
 #	BEGIN /INTERNAL/TEST PAGE ROUTING									#
 # --------------------------------------------------------------------- #
+GET		/internal/test/runtimeexception								controllers.TestWebController.runtimeException()
 GET		/internal/test/errorpageexception/internalservererrorpage	controllers.TestErrorPageExceptionWebController.internalServerErrorPage()
 GET		/internal/test/errorpageexception/notfoundpage				controllers.TestErrorPageExceptionWebController.notFoundPage()
 GET		/internal/test/errorpageexception/gobackpage				controllers.TestErrorPageExceptionWebController.goBackPage()

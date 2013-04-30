@@ -7,7 +7,7 @@ import actions.ActionAnnotations.TriedCaught;
 import contexts.AppContext;
 import contexts.RequestStatsContext;
 import controllers.exceptions.BaseExposedException;
-import controllers.exceptions.InternalServerErrorExposedException;
+import controllers.exceptions.web.InternalServerErrorPageException;
 
 /**
  * This action will catch any exceptions in the delegated action, and
@@ -41,12 +41,7 @@ public class TryCatchAction extends BaseAction<TriedCaught> {
 		catch (Exception ex) {
 			Logger.error("Exception caught in " + this.getClass().getCanonicalName(), ex);
 			//TODO figure out which default error to display to the user
-			if (AppContext.Mode.isProduction()) {
-				return new InternalServerErrorExposedException(ex).result();
-			}
-			else {
-				throw ex;
-			}
+			return new InternalServerErrorPageException(ex).result();
 		}
 		finally {
 			try {
