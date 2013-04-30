@@ -48,13 +48,7 @@ public class SongModel extends BaseModel {
 	
 	@Transient @Formula(select = "(youtubeId IS NOT NULL)") public boolean isYoutubeEnabled;
 	
-	public Pk getPk() {
-		try {
-			return pk.clone(); //defensive copy
-		} catch (CloneNotSupportedException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
+	public Pk getPk() { return pk.clone(); } //defensive copy
 	public String getTitle() { return title; }
 	public ArtistModel getArtist() { return artist; }
 	public boolean hasAlbum() { return getAlbum() != null; }

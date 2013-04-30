@@ -54,13 +54,7 @@ public class SessionModel extends BaseModel {
 	
 	@Transient @Formula(select = "(NOW() > fbTokenExpireTime)") public boolean isFbtokenExpired;
 	
-	public Pk getPk() {
-		try {
-			return pk.clone(); //defensive copy
-		} catch (CloneNotSupportedException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
+	public Pk getPk() { return pk.clone(); } //defensive copy
 	public String getPk_String() { return getPk().toString(); }
 	public UserModel getUser() { return user; }
 	public String getFbToken() { return fbToken; }

@@ -47,13 +47,7 @@ public class NotationMetaModel extends BaseModel {
 	
 	@Transient @Formula(select = "(CASE WHEN ratingDenomenator = 0 THEN 0 ELSE (CAST(ratingNumerator AS NUMERIC) / ratingDenomenator))") public double rating;
 	
-	public Pk getPk() {
-		try {
-			return pk.clone(); //defensive copy
-		} catch (CloneNotSupportedException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
+	public Pk getPk() { return pk.clone(); } //defensive copy
 	public InstrumentType getInstrument() { return instrument; }
 	public SkillLevelType getSkillLevel() { return skillLevel; }
 	public NotationType getNotationType() { return notationType; }

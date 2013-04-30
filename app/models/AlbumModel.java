@@ -42,13 +42,7 @@ public class AlbumModel extends BaseModel {
 	@ManyToOne @JoinColumn(name = "artistPk", referencedColumnName = "pk") public ArtistModel artist;
 	@OneToMany(fetch = FetchType.LAZY) @JoinColumn(name = "albumPk", referencedColumnName = "pk") public Set<SongModel> songs; //TODO use ordered list?
 	
-	public Pk getPk() {
-		try {
-			return pk.clone(); //defensive copy
-		} catch (CloneNotSupportedException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
+	public Pk getPk() { return pk.clone(); } //defensive copy
 	public String getTitle() { return title; }
 	public boolean hasArtist() { return getArtist() != null; }
 	public ArtistModel getArtist() { return artist; }

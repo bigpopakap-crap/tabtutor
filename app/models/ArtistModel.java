@@ -36,13 +36,7 @@ public class ArtistModel extends BaseModel {
 	@OneToMany(fetch = FetchType.LAZY) @JoinColumn(name = "artistPk", referencedColumnName = "pk") public Set<AlbumModel> albums; //TODO use ordered list?
 	@OneToMany(fetch = FetchType.LAZY) @JoinColumn(name = "artistPk", referencedColumnName = "pk") public Set<SongModel> songs; //TODO use ordered list?
 	
-	public Pk getPk() {
-		try {
-			return pk.clone(); //defensive copy
-		} catch (CloneNotSupportedException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
+	public Pk getPk() { return pk.clone(); } //defensive copy
 	public String getName() { return name; }
 	public Set<AlbumModel> getAlbums() { return albums; }
 	public Set<SongModel> getSongs() { return songs; }

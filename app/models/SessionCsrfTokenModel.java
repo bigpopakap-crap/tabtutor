@@ -45,13 +45,7 @@ public class SessionCsrfTokenModel extends BaseModel {
 	@Transient @Formula(select = "(NOW() > expireTime)") public boolean isExpired;
 	
 	public SessionModel getSession() { return session; }
-	public Pk getCsrfToken() {
-		try {
-			return csrfToken.clone(); //defensive copy
-		} catch (CloneNotSupportedException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
+	public Pk getCsrfToken() { return csrfToken.clone(); } //defensive copy
 	public Date getCreateTime() { return (Date) createTime.clone(); } //defensive copy
 	public Date getExpireTime() { return (Date) expireTime.clone(); } //defensive copy
 	public boolean isExpired() { return isExpired; }
