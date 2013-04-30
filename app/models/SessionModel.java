@@ -13,10 +13,10 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import models.helpers.Pk;
 import types.SqlOperationType.BasicDmlModifyingType;
 import utils.DateUtil;
 import utils.Logger;
-import utils.Pk;
 
 import com.avaje.ebean.annotation.Formula;
 
@@ -49,7 +49,7 @@ public class SessionModel extends BaseModel {
 	@Column(name = "startTime") public Date startTime;
 	@Column(name = "lastAccessTime") public Date lastAccessTime;
 	
-	@OneToOne @JoinColumn(name = "userPk") public UserModel user;
+	@OneToOne @JoinColumn(name = "userPk", referencedColumnName = "pk") public UserModel user;
 	@OneToMany(fetch = FetchType.LAZY) @JoinColumn(name = "sessionPk", referencedColumnName = "pk") public Set<SessionCsrfTokenModel> csrfTokens;
 	
 	@Transient @Formula(select = "(NOW() > fbTokenExpireTime)") public boolean isFbtokenExpired;

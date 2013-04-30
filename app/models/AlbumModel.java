@@ -12,7 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import utils.Pk;
+import models.helpers.Pk;
+
 
 /**
 * This Ebean maps to the Album table, and represents album metadata

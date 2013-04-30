@@ -8,10 +8,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import models.helpers.Pk;
 import types.objects.InstrumentType;
 import types.objects.NotationType;
 import types.objects.SkillLevelType;
-import utils.Pk;
 
 import com.avaje.ebean.annotation.Formula;
 

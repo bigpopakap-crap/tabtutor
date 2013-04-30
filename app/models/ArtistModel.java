@@ -11,7 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import utils.Pk;
+import models.helpers.Pk;
+
 
 /**
 * This Ebean maps to the Artist table, and represents artist metadata

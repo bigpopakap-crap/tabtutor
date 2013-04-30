@@ -1,7 +1,9 @@
-package utils;
+package models.helpers;
 
 import java.nio.ByteBuffer;
 import java.util.UUID;
+
+import javax.persistence.Embeddable;
 
 import org.apache.commons.codec.binary.Base64;
 
@@ -13,6 +15,7 @@ import org.apache.commons.codec.binary.Base64;
  * @since 2013-04-29
  *
  */
+@Embeddable
 public class Pk implements CharSequence, Cloneable {
 	
 	/** The string that defines the pk */
@@ -20,7 +23,7 @@ public class Pk implements CharSequence, Cloneable {
 	
 	/** Creates a Base 64 pk from the given UUID */
 	private Pk(UUID pk) {
-		this(uuidToBase64(pk));
+		this(uuidToString(pk));
 	}
 	
 	/** Uses the given pk */
@@ -43,13 +46,35 @@ public class Pk implements CharSequence, Cloneable {
 		return new Pk(pk);
 	}
 	
+	public String getPk() {
+		return pk;
+	}
+	
 	/* **************************************************************************
 	 *  BEGIN INTERFACE OVERRIDES
 	 ************************************************************************** */
 	
 	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		else if (!this.getClass().isInstance(obj)) {
+			return false;
+		}
+		else {
+			return getPk().equals(((Pk) obj).getPk());
+		}
+	}
+	
+	@Override
+	public int hashCode() {
+		return pk.hashCode();
+	}
+	
+	@Override
 	public String toString() {
-		return pk;
+		return getPk();
 	}
 
 	@Override
@@ -69,12 +94,18 @@ public class Pk implements CharSequence, Cloneable {
 	
 	@Override
 	public Pk clone() {
-		return new Pk(pk);
+		return new Pk(getPk());
 	}
 	
 	/* **************************************************************************
 	 *  BEGIN PRIVATE HELPERS
 	 ************************************************************************** */
+	
+	/** Convert the UUID to the representation desired for primary keys */
+	private static String uuidToString(UUID uuid) {
+		if (uuid == null) throw new IllegalArgumentException("uuid cannot be null");
+		return uuid.toString().replace("-", "");
+	}
 	
 	/** Converts UUID to Base64
 	 *  From http://stackoverflow.com/questions/772802/storing-uuid-as-base64-string/ */

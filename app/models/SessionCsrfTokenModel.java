@@ -12,8 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import models.helpers.Pk;
 import utils.DateUtil;
-import utils.Pk;
 
 import com.avaje.ebean.annotation.Formula;
 
