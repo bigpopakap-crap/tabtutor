@@ -1,0 +1,16 @@
+@*
+	Author: bigpopakap
+	Since: 2013-04-29
+	
+	Displays a stack trace in HTML
+	
+	Params:
+		ex - the Throwable to display
+*@
+@(ex: Throwable)
+@import utils.ExceptionUtil
+<div style="font-family: monospace">
+	@for(line <- ExceptionUtil.printStackTrace(ex).split("\n")) {
+		<div>@(line.replaceAll("\t", ". .. "))</div>
+	}
+</div>
