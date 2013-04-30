@@ -7,13 +7,13 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import types.objects.InstrumentType;
 import types.objects.NotationType;
 import types.objects.SkillLevelType;
+import utils.Pk;
 
 import com.avaje.ebean.annotation.Formula;
 
@@ -35,7 +35,7 @@ public class NotationMetaModel extends BaseModel {
 	 *  FIELDS
 	 ************************************************************************** */
 	
-	@Column(name = "pk") @Id public UUID pk;
+	@Column(name = "pk") @Id public Pk pk;
 	@Column(name = "instrument") public InstrumentType instrument;
 	@Column(name = "skillLevel") public SkillLevelType skillLevel;
 	@Column(name = "notationType") public NotationType notationType;
@@ -49,7 +49,13 @@ public class NotationMetaModel extends BaseModel {
 	
 	@Transient @Formula(select = "(CASE WHEN ratingDenomenator = 0 THEN 0 ELSE (CAST(ratingNumerator AS NUMERIC) / ratingDenomenator))") public double rating;
 	
-	public UUID getPk() { return UUID.fromString(pk.toString()); } //defensive copy
+	public Pk getPk() {
+		try {
+			return pk.clone(); //defensive copy
+		} catch (CloneNotSupportedException ex) {
+			throw new RuntimeException(ex);
+		}
+	}
 	public InstrumentType getInstrument() { return instrument; }
 	public SkillLevelType getSkillLevel() { return skillLevel; }
 	public NotationType getNotationType() { return notationType; }

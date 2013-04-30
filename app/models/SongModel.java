@@ -13,6 +13,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import utils.Pk;
+
 import com.avaje.ebean.annotation.Formula;
 
 /**
@@ -35,7 +37,7 @@ public class SongModel extends BaseModel {
 	 ************************************************************************** */
 	
 	//TODO add a field for the year?
-	@Column(name = "pk") @Id public UUID pk;
+	@Column(name = "pk") @Id public Pk pk;
 	@Column(name = "title") public String title;
 	@Column(name = "trackNum") public int trackNum;
 	@Column(name = "isLive") public boolean isLive;
@@ -47,7 +49,13 @@ public class SongModel extends BaseModel {
 	
 	@Transient @Formula(select = "(youtubeId IS NOT NULL)") public boolean isYoutubeEnabled;
 	
-	public UUID getPk() { return UUID.fromString(pk.toString()); } //defensive copy
+	public Pk getPk() {
+		try {
+			return pk.clone(); //defensive copy
+		} catch (CloneNotSupportedException ex) {
+			throw new RuntimeException(ex);
+		}
+	}
 	public String getTitle() { return title; }
 	public ArtistModel getArtist() { return artist; }
 	public boolean hasAlbum() { return getAlbum() != null; }
@@ -72,7 +80,7 @@ public class SongModel extends BaseModel {
 	 ************************************************************************** */
 
 	private SongModel(String title, ArtistModel artist, AlbumModel album, int trackNum, boolean isLive, String youtubeId) {
-		this.pk = UUID.randomUUID();
+		this.pk = Pk.randomPk();
 		this.title = title;
 		this.artist = artist;
 		this.album = album;

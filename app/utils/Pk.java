@@ -59,7 +59,7 @@ public class Pk implements CharSequence, Cloneable {
 	}
 	
 	@Override
-	protected Object clone() throws CloneNotSupportedException {
+	public Pk clone() throws CloneNotSupportedException {
 		return new Pk(pk);
 	}
 	

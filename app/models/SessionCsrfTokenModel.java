@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import utils.DateUtil;
+import utils.Pk;
 
 import com.avaje.ebean.annotation.Formula;
 
@@ -36,7 +37,7 @@ public class SessionCsrfTokenModel extends BaseModel {
 
 	private static final long serialVersionUID = 1065279771090088334L;
 	
-	@Column(name = "csrfToken") @Id public UUID csrfToken;
+	@Column(name = "csrfToken") @Id public Pk csrfToken;
 	@Column(name = "createTime") public Date createTime;
 	@Column(name = "expireTime") public Date expireTime;
 	
@@ -45,7 +46,13 @@ public class SessionCsrfTokenModel extends BaseModel {
 	@Transient @Formula(select = "(NOW() > expireTime)") public boolean isExpired;
 	
 	public SessionModel getSession() { return session; }
-	public UUID getCsrfToken() { return UUID.fromString(csrfToken.toString()); } //defensive copy
+	public Pk getCsrfToken() {
+		try {
+			return csrfToken.clone(); //defensive copy
+		} catch (CloneNotSupportedException ex) {
+			throw new RuntimeException(ex);
+		}
+	}
 	public Date getCreateTime() { return (Date) createTime.clone(); } //defensive copy
 	public Date getExpireTime() { return (Date) expireTime.clone(); } //defensive copy
 	public boolean isExpired() { return isExpired; }
@@ -67,7 +74,7 @@ public class SessionCsrfTokenModel extends BaseModel {
 		Date now = DateUtil.now();
 		
 		this.session = session;
-		this.csrfToken = UUID.randomUUID();
+		this.csrfToken = Pk.randomPk();
 		this.createTime = now;
 		this.expireTime = DateUtil.add(now, CSRF_TOKEN_LIFETIME_SECONDS.get());
 	}

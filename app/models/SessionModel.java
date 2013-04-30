@@ -17,6 +17,7 @@ import javax.persistence.Transient;
 import types.SqlOperationType.BasicDmlModifyingType;
 import utils.DateUtil;
 import utils.Logger;
+import utils.Pk;
 
 import com.avaje.ebean.annotation.Formula;
 
@@ -43,7 +44,7 @@ public class SessionModel extends BaseModel {
 	 *  BEGIN FIELDS
 	 ************************************************************************** */
 	
-	@Column(name = "pk") @Id public UUID pk;
+	@Column(name = "pk") @Id public Pk pk;
 	@Column(name = "fbToken") public String fbToken;
 	@Column(name = "fbTokenExpireTime") public Date fbTokenExpireTime;
 	@Column(name = "startTime") public Date startTime;
@@ -54,7 +55,13 @@ public class SessionModel extends BaseModel {
 	
 	@Transient @Formula(select = "(NOW() > fbTokenExpireTime)") public boolean isFbtokenExpired;
 	
-	public UUID getPk() { return UUID.fromString(pk.toString()); } //defensive copy
+	public Pk getPk() {
+		try {
+			return pk.clone(); //defensive copy
+		} catch (CloneNotSupportedException ex) {
+			throw new RuntimeException(ex);
+		}
+	}
 	public String getPk_String() { return getPk().toString(); }
 	public UserModel getUser() { return user; }
 	public String getFbToken() { return fbToken; }
@@ -94,7 +101,7 @@ public class SessionModel extends BaseModel {
 	private SessionModel() {
 		Date now = DateUtil.now();
 		
-		this.pk = UUID.randomUUID();
+		this.pk = Pk.randomPk();
 		this.user = null;
 		this.fbToken = null;
 		this.fbTokenExpireTime = null;

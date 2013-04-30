@@ -16,6 +16,7 @@ import javax.persistence.Transient;
 
 import utils.DateUtil;
 import utils.Logger;
+import utils.Pk;
 
 import com.avaje.ebean.annotation.Formula;
 
@@ -37,7 +38,7 @@ public class UserModel extends BaseModel {
 	 *  FIELDS
 	 ************************************************************************** */
 	
-	@Column(name = "pk") @Id public UUID pk;
+	@Column(name = "pk") @Id public Pk pk;
 	@Column(name = "fbId") public String fbId;
 	@Column(name = "fbIsAuthed") public boolean fbIsAuthed;
 	@Column(name = "username") public String username;
@@ -54,7 +55,13 @@ public class UserModel extends BaseModel {
 	@Transient @Formula(select = "(firstName || ' ' || lastName)") public String fullName;
 	@Transient @Formula(select = "(lastLoginTime IS NULL OR secondToLastLoginTime IS NULL)") public boolean isFirstLogin;
 	
-	public UUID getPk() { return UUID.fromString(pk.toString()); } //defensive copy
+	public Pk getPk() {
+		try {
+			return pk.clone(); //defensive copy
+		} catch (CloneNotSupportedException ex) {
+			throw new RuntimeException(ex);
+		}
+	}
 	public String getFbId() { return fbId; }
 	public boolean getFbIsAuthed() { return fbIsAuthed; }
 	public String getUsername() { return username; }
@@ -89,7 +96,7 @@ public class UserModel extends BaseModel {
 	private UserModel(String fbId, String username, String email, boolean isTestUser, UserModel creator) {
 		Date now = DateUtil.now();
 		
-		this.pk = UUID.randomUUID();
+		this.pk = Pk.randomPk();
 		this.fbId = fbId;
 		this.fbIsAuthed = (this.fbId != null);
 		this.username = username;

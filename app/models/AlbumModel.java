@@ -13,6 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import utils.Pk;
+
 /**
 * This Ebean maps to the Album table, and represents album metadata
 * 
@@ -33,7 +35,7 @@ public class AlbumModel extends BaseModel {
 	 *  FIELDS
 	 ************************************************************************** */
 	
-	@Column(name = "pk") @Id public UUID pk;
+	@Column(name = "pk") @Id public Pk pk;
 	@Column(name = "title") public String title;
 	@Column(name = "year") public int year;
 	@Column(name = "numTracks") public int numTracks;
@@ -41,7 +43,13 @@ public class AlbumModel extends BaseModel {
 	@ManyToOne @JoinColumn(name = "artistPk", referencedColumnName = "pk") public ArtistModel artist;
 	@OneToMany(fetch = FetchType.LAZY) @JoinColumn(name = "albumPk", referencedColumnName = "pk") public Set<SongModel> songs; //TODO use ordered list?
 	
-	public UUID getPk() { return UUID.fromString(pk.toString()); } //defensive copy
+	public Pk getPk() {
+		try {
+			return pk.clone(); //defensive copy
+		} catch (CloneNotSupportedException ex) {
+			throw new RuntimeException(ex);
+		}
+	}
 	public String getTitle() { return title; }
 	public boolean hasArtist() { return getArtist() != null; }
 	public ArtistModel getArtist() { return artist; }
@@ -63,7 +71,7 @@ public class AlbumModel extends BaseModel {
 	 ************************************************************************** */
 
 	private AlbumModel(String title, ArtistModel artist, int year, int numTracks) {
-		this.pk = UUID.randomUUID();
+		this.pk = Pk.randomPk();
 		this.title = title;
 		this.artist = artist;
 		this.year = year;
