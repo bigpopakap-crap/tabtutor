@@ -24,7 +24,7 @@ public abstract class RequestErrorContext extends BaseContext {
 	/** Returns true if there was an error accessing Facebook for this session context */
 	public static synchronized boolean fbConnectionError() {
 		//any value set is considered true
-		return getOrLoad(FB_CONNECTION_ERROR_CONTEXT_KEY, REQUEST_ACTION_LIST_CALLABLE);
+		return getOrLoad(FB_CONNECTION_ERROR_CONTEXT_KEY, FB_CONNECTION_ERROR_CALLABLE);
 	}
 	
 	/** Sets whether or not there was an FB connection error in the request context */
@@ -38,7 +38,7 @@ public abstract class RequestErrorContext extends BaseContext {
 	 * BEGIN PRIVATE HELPERS
 	 *************************************************************** */
 	
-	private static final Callable<Boolean> REQUEST_ACTION_LIST_CALLABLE = new Callable<Boolean>() {
+	private static final Callable<Boolean> FB_CONNECTION_ERROR_CALLABLE = new Callable<Boolean>() {
 
 		@Override
 		public Boolean call() throws Exception {

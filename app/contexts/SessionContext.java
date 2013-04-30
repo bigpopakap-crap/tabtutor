@@ -39,6 +39,11 @@ public abstract class SessionContext extends BaseContext {
 		session().setUserAndUpdate(user);
 	}
 	
+	/** Unestablishes the context for no user. Basically, log out */
+	public static synchronized void unestablish() {
+		establish(null);
+	}
+	
 	/** Get the language of the current session context. Useful for templates */
 	public static synchronized Lang lang() {
 		return Context.current().lang();

@@ -6,7 +6,7 @@ import play.mvc.Result;
 import utils.Logger;
 import actions.ActionAnnotations.Authed;
 import contexts.SessionContext;
-import controllers.FbLoginWebController;
+import controllers.AuthWebController;
 
 /**
  * This Action will log the user in through Facebook, and ensure that the authentication
@@ -30,7 +30,7 @@ public class AuthAction extends BaseAction<Authed> {
 		//TODO add ability to force re-authentication: need to worry about getting caught in infinite loop
 		if (!session.hasUser()) {
 			Logger.debug("Session needs Facebook auth. Redirecting to the login flow");
-			return FbLoginWebController.fblogin(null, null, ctx.request().path());
+			return AuthWebController.fblogin(null, null, ctx.request().path());
 		}
 		//TODO find a way to force a permission access level
 		else {
