@@ -26,12 +26,21 @@ public class Pk implements CharSequence, Cloneable {
 	/** Uses the given pk */
 	private Pk(String pk) {
 		if (pk == null) throw new IllegalArgumentException("pk cannot be null");
+		
+		//TODO verify that this  is a valid pk
+		//throw new IllegalArgumentException("pk is not a valid pk");
+		
 		this.pk = pk;
 	}
 	
 	/** Creates a random Pk by creating a random UUID and converting it to base 64 */
 	public static Pk randomPk() {
 		return new Pk(UUID.randomUUID());
+	}
+	
+	/** Creates a new Pk from the String representing another Pk */
+	public static Pk fromString(String pk) {
+		return new Pk(pk);
 	}
 	
 	/* **************************************************************************

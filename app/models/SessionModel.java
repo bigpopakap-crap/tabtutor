@@ -2,7 +2,6 @@ package models;
 
 import java.util.Date;
 import java.util.Set;
-import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -72,8 +71,8 @@ public class SessionModel extends BaseModel {
 	public Set<SessionCsrfTokenModel> getCsrfTokens() { return csrfTokens; }
 	
 	/** Private helper for DB interaction implementation */
-	private static final Finder<UUID, SessionModel> FINDER = new Finder<>(
-		UUID.class, SessionModel.class
+	private static final Finder<Pk, SessionModel> FINDER = new Finder<>(
+		Pk.class, SessionModel.class
 	);
 	
 	/* **************************************************************************
@@ -124,20 +123,20 @@ public class SessionModel extends BaseModel {
 	 *  BEGIN SELECTORS
 	 ************************************************************************** */
 	
-	/** Gets a Session by ID, converts the string to a UUID internally */
-	public static SessionModel getById(String id) {
+	/** Gets a Session by ID, converts the string to a Pk internally */
+	public static SessionModel getByPk(String pk) {
 		try {
-			return getById(id != null ? UUID.fromString(id) : null);
+			return getByPk(pk != null ? Pk.fromString(pk) : null);
 		}
 		catch (IllegalArgumentException ex) {
-			//the string was not a valid UUID
+			//the string was not a valid Pk
 			return null;
 		}
 	}
 	
 	/** Gets a Session by ID */
-	public static SessionModel getById(UUID id) {
-		return id != null ? FINDER.byId(id) : null;
+	public static SessionModel getByPk(Pk pk) {
+		return pk != null ? FINDER.byId(pk) : null;
 	}
 	
 	/* **************************************************************************
@@ -175,7 +174,7 @@ public class SessionModel extends BaseModel {
 		
 	/** Determines if the given ID is valid and it exists in the database */
 	public static boolean isValidExistingId(String id) {
-		return getById(id) != null;
+		return getByPk(id) != null;
 	}
 	
 	/**

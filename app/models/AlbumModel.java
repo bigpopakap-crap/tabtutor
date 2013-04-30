@@ -2,7 +2,6 @@ package models;
 
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -58,8 +57,8 @@ public class AlbumModel extends BaseModel {
 	public Set<SongModel> getSongs() { return songs; }
 	
 	/** Private helper for DB interaction implementation */
-	private static final Finder<UUID, AlbumModel> FINDER = new Finder<>(
-		UUID.class, AlbumModel.class
+	private static final Finder<Pk, AlbumModel> FINDER = new Finder<>(
+		Pk.class, AlbumModel.class
 	);
 	
 	/* **************************************************************************

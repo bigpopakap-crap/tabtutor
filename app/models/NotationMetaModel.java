@@ -1,7 +1,5 @@
 package models;
 
-import java.util.UUID;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -64,8 +62,8 @@ public class NotationMetaModel extends BaseModel {
 	public double getRating() { return rating; }
 	
 	/** Private helper for DB interaction implementation */
-	private static final Finder<UUID, NotationMetaModel> FINDER = new Finder<>(
-		UUID.class, NotationMetaModel.class
+	private static final Finder<Pk, NotationMetaModel> FINDER = new Finder<>(
+		Pk.class, NotationMetaModel.class
 	);
 	
 	/* **************************************************************************

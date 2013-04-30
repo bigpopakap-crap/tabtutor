@@ -3,7 +3,6 @@ package models;
 import globals.Globals.DevelopmentSwitch;
 
 import java.util.Date;
-import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -58,8 +57,8 @@ public class SessionCsrfTokenModel extends BaseModel {
 	public boolean isExpired() { return isExpired; }
 	
 	/** Private helper for DB interaction implementation */
-	private static final Finder<UUID, SessionCsrfTokenModel> FINDER = new Finder<>(
-		UUID.class, SessionCsrfTokenModel.class
+	private static final Finder<Pk, SessionCsrfTokenModel> FINDER = new Finder<>(
+		Pk.class, SessionCsrfTokenModel.class
 	);
 	
 	/* **************************************************************************

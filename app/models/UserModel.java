@@ -3,7 +3,6 @@ package models;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -77,8 +76,8 @@ public class UserModel extends BaseModel {
 	public Set<NotationMetaModel> getAuthoredNotations() { return authoredNotations; }
 	
 	/** Private helper for DB interaction implementation */
-	private static final Finder<UUID, UserModel> FINDER = new Finder<>(
-		UUID.class, UserModel.class
+	private static final Finder<Pk, UserModel> FINDER = new Finder<>(
+		Pk.class, UserModel.class
 	);
 	
 	/* **************************************************************************
@@ -140,20 +139,20 @@ public class UserModel extends BaseModel {
 		return FINDER.all();
 	}
 	
-	/** Gets a User by ID, converts the string to a UUID internally */
-	public static UserModel getById(String id) {
+	/** Gets a User by ID, converts the string to a Pk internally */
+	public static UserModel getByPk(String pk) {
 		try {
-			return getById(id != null ? UUID.fromString(id) : null);
+			return getByPk(pk != null ? Pk.fromString(pk) : null);
 		}
 		catch (IllegalArgumentException ex) {
-			//the string was not a valid UUID
+			//the string was not a valid Pk
 			return null;
 		}
 	}
 	
 	/** Gets a User by ID */
-	public static UserModel getById(UUID id) {
-		return id != null ? FINDER.byId(id) : null;
+	public static UserModel getByPk(Pk pk) {
+		return pk != null ? FINDER.byId(pk) : null;
 	}
 
 	/** Gets a User by fbId */
@@ -190,8 +189,8 @@ public class UserModel extends BaseModel {
 	 ************************************************************************** */
 		
 	/** Determines if a User exists with the given ID */
-	public static boolean isValidExistingId(UUID id) {
-		return getById(id) != null;
+	public static boolean isValidExistingPk(Pk pk) {
+		return getByPk(pk) != null;
 	}
 	
 	/** Determines if a User exists with the given fbId */

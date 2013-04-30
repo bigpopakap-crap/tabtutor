@@ -101,7 +101,7 @@ public abstract class SessionContext extends BaseContext {
 		public SessionModel call() throws Exception {
 			String sessionId = Context.current().session().get(SessionModel.SESSION_ID_COOKIE_KEY);
 			if (sessionId != null && SessionModel.isValidExistingId(sessionId)) {
-				return SessionModel.getById(sessionId);
+				return SessionModel.getByPk(sessionId);
 			}
 			else {
 				return null;

@@ -2,7 +2,6 @@ package models;
 
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -67,8 +66,8 @@ public class SongModel extends BaseModel {
 	public Set<NotationMetaModel> getNotations() { return notations; }
 	
 	/** Private helper for DB interaction implementation */
-	private static final Finder<UUID, SongModel> FINDER = new Finder<>(
-		UUID.class, SongModel.class
+	private static final Finder<Pk, SongModel> FINDER = new Finder<>(
+		Pk.class, SongModel.class
 	);
 	
 	/* **************************************************************************
