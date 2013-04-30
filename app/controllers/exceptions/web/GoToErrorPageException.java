@@ -39,7 +39,7 @@ public class GoToErrorPageException extends ErrorPageException {
 
 	@Override
 	protected Html hook_render() {
-		return views.html.errorPage.render(description, url, toMessage);
+		return views.html.errorPage.render(description, url, toMessage, this);
 	}
 	
 }

@@ -29,7 +29,7 @@ public class NotFoundExposedException extends BaseExposedException {
 	}
 	
 	@Override
-	public Result hook_result() {
+	public Result result() {
 		return message != null ? Results.notFound(message) : Results.notFound();
 	}
 

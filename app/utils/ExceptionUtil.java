@@ -13,6 +13,8 @@ import java.io.StringWriter;
 public abstract class ExceptionUtil {
 	
 	public static String printStackTrace(Throwable t) {
+		if (t == null) return "";
+		
 		StringWriter stringWriter = null;
 		PrintWriter printWriter = null;
 		try {

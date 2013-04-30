@@ -3,7 +3,6 @@ package contexts;
 import java.util.concurrent.Callable;
 
 import utils.Universe.UniverseElement;
-import controllers.exceptions.BaseExposedException;
 
 /**
  * This class can be used to store any errors and error messages for the duration of the
@@ -21,22 +20,6 @@ import controllers.exceptions.BaseExposedException;
 public abstract class RequestErrorContext extends BaseContext {
 	
 	private static final UniverseElement<String> FB_CONNECTION_ERROR_CONTEXT_KEY = CONTEXT_KEY_UNIVERSE.register("fbConnectionErrorContextKey");
-	private static final UniverseElement<String> CAUSE_ERROR_CONTEXT_KEY = CONTEXT_KEY_UNIVERSE.register("causeErrorContextKey");
-	
-	/** Gets any exception thrown with this request, or null if there is none */
-	public static synchronized BaseExposedException getCause() {
-		return getOrLoad(CAUSE_ERROR_CONTEXT_KEY, CAUSE_CALLABLE);
-	}
-	
-	/** Determines if the current request has an exception associated with it */
-	public static synchronized boolean hasCause() {
-		return getCause() != null;
-	}
-	
-	/** Sets the exception to be associated with this request */
-	public static synchronized void setCause(BaseExposedException ex) {
-		set(CAUSE_ERROR_CONTEXT_KEY, ex);
-	}
 	
 	/** Returns true if there was an error accessing Facebook for this session context */
 	public static synchronized boolean fbConnectionError() {
@@ -60,15 +43,6 @@ public abstract class RequestErrorContext extends BaseContext {
 		@Override
 		public Boolean call() throws Exception {
 			return false;
-		}
-		
-	};
-	
-	private static final Callable<BaseExposedException> CAUSE_CALLABLE = new Callable<BaseExposedException>() {
-
-		@Override
-		public BaseExposedException call() throws Exception {
-			return null;
 		}
 		
 	};
