@@ -1,0 +1,13 @@
+@*
+	Author: bigpopakap
+	Since: 2013-04-29
+	
+	Splits a multi-line string into multiple <p> tags
+	
+	Params:
+		str - the String to display
+*@
+@(str: String)
+@for(line <- str.split("\n")) {
+	<div>@(line.replaceAll("\t", " --- "))</div>
+}

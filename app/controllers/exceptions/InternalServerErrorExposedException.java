@@ -29,7 +29,7 @@ public class InternalServerErrorExposedException extends BaseExposedException {
 	}
 	
 	@Override
-	public Result result() {
+	public Result hook_result() {
 		return message != null ? Results.notFound(message) : Results.notFound();
 	}
 

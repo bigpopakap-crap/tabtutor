@@ -1,5 +1,6 @@
 package controllers;
 
+import play.mvc.Result;
 import actions.ActionAnnotations.DevModeProtected;
 
 /**
@@ -14,5 +15,10 @@ import actions.ActionAnnotations.DevModeProtected;
 public class TestWebController extends BaseWebController {
 	
 	//TODO write a test to make sure that if an exception is thrown during routing, the database transaction is rolled back
+	
+	/** Simply throws a runtime exception */
+	public static Result runtimeException() {
+		throw new RuntimeException("Sucks to suck");
+	}
 
 }

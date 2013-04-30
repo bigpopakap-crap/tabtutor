@@ -1,6 +1,7 @@
 package controllers.exceptions;
 
 import play.mvc.Result;
+import contexts.RequestErrorContext;
 
 /**
  * This is the base exception class for exeptions that should be surfaced to the
@@ -26,7 +27,12 @@ public abstract class BaseExposedException extends RuntimeException {
 		super(cause);
 	}
 	
+	public final Result result() {
+		RequestErrorContext.setCause(this);
+		return hook_result();
+	}
+	
 	/** Returns the result representing this exception that should be sent to the client */
-	public abstract Result result();
+	protected abstract Result hook_result();
 
 }

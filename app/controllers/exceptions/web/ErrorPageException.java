@@ -15,16 +15,18 @@ public abstract class ErrorPageException extends controllers.exceptions.BaseExpo
 	
 	private static final long serialVersionUID = -8551848133552601737L;
 	
-	private final Html page;
-
-	public ErrorPageException(Throwable cause, Html page) {
+	public ErrorPageException(Throwable cause) {
 		super(cause);
-		if (page == null) throw new IllegalArgumentException("Page cannot be null");
-		this.page = page;
 	}
 	
+	protected abstract Html hook_render();
+	
 	@Override
-	public Result result() {
+	public Result hook_result() {
+		Html page = hook_render();
+		if (page == null) {
+			throw new IllegalStateException("Page cannot be null");
+		}
 		return Results.ok(page);
 	}
 
