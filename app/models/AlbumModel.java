@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+
 /**
 * This Ebean maps to the Album table, and represents album metadata
 * 

@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+
 /**
 * This Ebean maps to the Artist table, and represents artist metadata
 * 
@@ -54,6 +55,7 @@ public class ArtistModel extends BaseModel {
 	 ************************************************************************** */
 
 	private ArtistModel(String name) {
+		this.pk = UUID.randomUUID();
 		this.name = name;
 	}
 	

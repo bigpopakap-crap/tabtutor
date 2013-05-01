@@ -39,7 +39,7 @@ public class DevtoolsLoginWebController extends DevtoolsWebController {
 	@Sessioned
 	public static Result login(String pk, String targetUrl) {
 		//establish the context and then redirect to the homepage
-		UserModel user = UserModel.getById(pk);
+		UserModel user = UserModel.getByPk(pk);
 		if (user != null) {
 			SessionContext.establish(user);
 		}
