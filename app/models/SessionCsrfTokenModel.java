@@ -3,6 +3,7 @@ package models;
 import globals.Globals.DevelopmentSwitch;
 
 import java.util.Date;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,7 +13,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import models.helpers.UuidBasedPk;
 import utils.DateUtil;
 
 import com.avaje.ebean.annotation.Formula;
@@ -36,7 +36,7 @@ public class SessionCsrfTokenModel extends BaseModel {
 
 	private static final long serialVersionUID = 1065279771090088334L;
 	
-	@Column(name = "csrfToken") @Id public UuidBasedPk csrfToken;
+	@Column(name = "csrfToken") @Id public UUID csrfToken;
 	@Column(name = "createTime") public Date createTime;
 	@Column(name = "expireTime") public Date expireTime;
 	
@@ -45,14 +45,14 @@ public class SessionCsrfTokenModel extends BaseModel {
 	@Transient @Formula(select = "(NOW() > expireTime)") public boolean isExpired;
 	
 	public SessionModel getSession() { return session; }
-	public UuidBasedPk getCsrfToken() { return csrfToken.clone(); } //defensive copy
+	public UUID getCsrfToken() { return UUID.fromString(csrfToken.toString()); } //defensive copy
 	public Date getCreateTime() { return (Date) createTime.clone(); } //defensive copy
 	public Date getExpireTime() { return (Date) expireTime.clone(); } //defensive copy
 	public boolean isExpired() { return isExpired; }
 	
 	/** Private helper for DB interaction implementation */
-	private static final Finder<UuidBasedPk, SessionCsrfTokenModel> FINDER = new Finder<>(
-		UuidBasedPk.class, SessionCsrfTokenModel.class
+	private static final Finder<UUID, SessionCsrfTokenModel> FINDER = new Finder<>(
+		UUID.class, SessionCsrfTokenModel.class
 	);
 	
 	/* **************************************************************************
@@ -67,7 +67,7 @@ public class SessionCsrfTokenModel extends BaseModel {
 		Date now = DateUtil.now();
 		
 		this.session = session;
-		this.csrfToken = UuidBasedPk.randomPk();
+		this.csrfToken = UUID.randomUUID();
 		this.createTime = now;
 		this.expireTime = DateUtil.add(now, CSRF_TOKEN_LIFETIME_SECONDS.get());
 	}

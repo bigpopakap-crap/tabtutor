@@ -2,6 +2,7 @@ package models;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,8 +12,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import models.helpers.UuidBasedPk;
 
 import com.avaje.ebean.annotation.Formula;
 
@@ -36,7 +35,7 @@ public class SongModel extends BaseModel {
 	 ************************************************************************** */
 	
 	//TODO add a field for the year?
-	@Column(name = "pk") @Id public UuidBasedPk pk;
+	@Column(name = "pk") @Id public UUID pk;
 	@Column(name = "title") public String title;
 	@Column(name = "trackNum") public int trackNum;
 	@Column(name = "isLive") public boolean isLive;
@@ -48,7 +47,7 @@ public class SongModel extends BaseModel {
 	
 	@Transient @Formula(select = "(youtubeId IS NOT NULL)") public boolean isYoutubeEnabled;
 	
-	public UuidBasedPk getPk() { return pk.clone(); } //defensive copy
+	public UUID getPk() { return UUID.fromString(pk.toString()); } //defensive copy
 	public String getTitle() { return title; }
 	public ArtistModel getArtist() { return artist; }
 	public boolean hasAlbum() { return getAlbum() != null; }
@@ -60,8 +59,8 @@ public class SongModel extends BaseModel {
 	public Set<NotationMetaModel> getNotations() { return notations; }
 	
 	/** Private helper for DB interaction implementation */
-	private static final Finder<UuidBasedPk, SongModel> FINDER = new Finder<>(
-		UuidBasedPk.class, SongModel.class
+	private static final Finder<UUID, SongModel> FINDER = new Finder<>(
+		UUID.class, SongModel.class
 	);
 	
 	/* **************************************************************************
@@ -73,7 +72,7 @@ public class SongModel extends BaseModel {
 	 ************************************************************************** */
 
 	private SongModel(String title, ArtistModel artist, AlbumModel album, int trackNum, boolean isLive, String youtubeId) {
-		this.pk = UuidBasedPk.randomPk();
+		this.pk = UUID.randomUUID();
 		this.title = title;
 		this.artist = artist;
 		this.album = album;

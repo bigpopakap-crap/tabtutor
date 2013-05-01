@@ -2,6 +2,7 @@ package models;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,8 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import models.helpers.UuidBasedPk;
 
 
 /**
@@ -35,7 +34,7 @@ public class AlbumModel extends BaseModel {
 	 *  FIELDS
 	 ************************************************************************** */
 	
-	@Column(name = "pk") @Id public UuidBasedPk pk;
+	@Column(name = "pk") @Id public UUID pk;
 	@Column(name = "title") public String title;
 	@Column(name = "year") public int year;
 	@Column(name = "numTracks") public int numTracks;
@@ -43,7 +42,7 @@ public class AlbumModel extends BaseModel {
 	@ManyToOne @JoinColumn(name = "artistPk", referencedColumnName = "pk") public ArtistModel artist;
 	@OneToMany(fetch = FetchType.LAZY) @JoinColumn(name = "albumPk", referencedColumnName = "pk") public Set<SongModel> songs; //TODO use ordered list?
 	
-	public UuidBasedPk getPk() { return pk.clone(); } //defensive copy
+	public UUID getPk() { return UUID.fromString(pk.toString()); } //defensive copy
 	public String getTitle() { return title; }
 	public boolean hasArtist() { return getArtist() != null; }
 	public ArtistModel getArtist() { return artist; }
@@ -52,8 +51,8 @@ public class AlbumModel extends BaseModel {
 	public Set<SongModel> getSongs() { return songs; }
 	
 	/** Private helper for DB interaction implementation */
-	private static final Finder<UuidBasedPk, AlbumModel> FINDER = new Finder<>(
-		UuidBasedPk.class, AlbumModel.class
+	private static final Finder<UUID, AlbumModel> FINDER = new Finder<>(
+		UUID.class, AlbumModel.class
 	);
 	
 	/* **************************************************************************
@@ -65,7 +64,7 @@ public class AlbumModel extends BaseModel {
 	 ************************************************************************** */
 
 	private AlbumModel(String title, ArtistModel artist, int year, int numTracks) {
-		this.pk = UuidBasedPk.randomPk();
+		this.pk = UUID.randomUUID();
 		this.title = title;
 		this.artist = artist;
 		this.year = year;

@@ -2,6 +2,7 @@ package models;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,8 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import models.helpers.UuidBasedPk;
 
 
 /**
@@ -31,20 +30,20 @@ public class ArtistModel extends BaseModel {
 	 *  FIELDS
 	 ************************************************************************** */
 	
-	@Column(name = "pk") @Id public UuidBasedPk pk;
+	@Column(name = "pk") @Id public UUID pk;
 	@Column(name = "name") public String name;
 	
 	@OneToMany(fetch = FetchType.LAZY) @JoinColumn(name = "artistPk", referencedColumnName = "pk") public Set<AlbumModel> albums; //TODO use ordered list?
 	@OneToMany(fetch = FetchType.LAZY) @JoinColumn(name = "artistPk", referencedColumnName = "pk") public Set<SongModel> songs; //TODO use ordered list?
 	
-	public UuidBasedPk getPk() { return pk.clone(); } //defensive copy
+	public UUID getPk() { return UUID.fromString(pk.toString()); } //defensive copy
 	public String getName() { return name; }
 	public Set<AlbumModel> getAlbums() { return albums; }
 	public Set<SongModel> getSongs() { return songs; }
 	
 	/** Private helper for DB interaction implementation */
-	private static final Finder<UuidBasedPk, ArtistModel> FINDER = new Finder<>(
-		UuidBasedPk.class, ArtistModel.class
+	private static final Finder<UUID, ArtistModel> FINDER = new Finder<>(
+		UUID.class, ArtistModel.class
 	);
 	
 	/* **************************************************************************
@@ -56,7 +55,7 @@ public class ArtistModel extends BaseModel {
 	 ************************************************************************** */
 
 	private ArtistModel(String name) {
-		this.pk = UuidBasedPk.randomPk();
+		this.pk = UUID.randomUUID();
 		this.name = name;
 	}
 	
