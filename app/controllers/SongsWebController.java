@@ -21,16 +21,6 @@ public class SongsWebController extends BaseWebController {
 		return list(new SongModelJuiForm());
 	}
 	
-	/** Redirect to the song detail page with the correct title */
-	public static Result detailRedirect(String pk) {
-		//ensure that such a song exists and redirect to the url including the title
-		SongModel song = SongModel.getByPk(pk);
-		if (song == null) {
-			throw new NotFoundErrorPageException(null);
-		}
-		return redirect(detailUrl(song));
-	}
-	
 	/** Show the song detail page */
 	public static Result detail(String pk, String title) {
 		//check that the title is the correct one for that pk
@@ -39,7 +29,7 @@ public class SongsWebController extends BaseWebController {
 			throw new NotFoundErrorPageException(null);
 		}
 		//TODO don't hardcode the replaceAll
-		else if (!song.getTitle().replaceAll("\\s", "-").equals(title)) {
+		else if (!song.getTitle().replaceAll("\\s", "-").equals(title)) { //this takes care of null title
 			return redirect(detailUrl(song));
 		}
 		

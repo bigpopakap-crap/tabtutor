@@ -21,16 +21,6 @@ public class ArtistsWebController extends BaseWebController {
 		return list(new ArtistModelJuiForm());
 	}
 	
-	/** Redirect to the artist detail page with the correct title */
-	public static Result detailRedirect(String pk) {
-		//ensure that such an artist exists and redirect to the url including the title
-		ArtistModel artist = ArtistModel.getByPk(pk);
-		if (artist == null) {
-			throw new NotFoundErrorPageException(null);
-		}
-		return redirect(detailUrl(artist));
-	}
-	
 	/** Show the artist detail page */
 	public static Result detail(String pk, String name) {
 		//check that the title is the correct one for that pk
@@ -39,7 +29,7 @@ public class ArtistsWebController extends BaseWebController {
 			throw new NotFoundErrorPageException(null);
 		}
 		//TODO don't hardcode the replaceAll
-		else if (!artist.getName().replaceAll("\\s", "-").equals(name)) {
+		else if (!artist.getName().replaceAll("\\s", "-").equals(name)) { //this takes care of null title
 			return redirect(detailUrl(artist));
 		}
 		

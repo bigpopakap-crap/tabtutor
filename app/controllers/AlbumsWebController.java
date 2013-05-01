@@ -21,16 +21,6 @@ public class AlbumsWebController extends BaseWebController {
 		return list(new AlbumModelJuiForm());
 	}
 	
-	/** Redirect to the album detail page with the correct title */
-	public static Result detailRedirect(String pk) {
-		//ensure that such an album exists and redirect to the url including the title
-		AlbumModel album = AlbumModel.getByPk(pk);
-		if (album == null) {
-			throw new NotFoundErrorPageException(null);
-		}
-		return redirect(detailUrl(album));
-	}
-	
 	/** Show the album detail page */
 	public static Result detail(String pk, String title) {
 		//check that the title is the correct one for that pk
@@ -39,7 +29,7 @@ public class AlbumsWebController extends BaseWebController {
 			throw new NotFoundErrorPageException(null);
 		}
 		//TODO don't hardcode the replaceAll
-		else if (!album.getTitle().replaceAll("\\s", "-").equals(title)) {
+		else if (!album.getTitle().replaceAll("\\s", "-").equals(title)) { //this takes care of null title
 			return redirect(detailUrl(album));
 		}
 		
