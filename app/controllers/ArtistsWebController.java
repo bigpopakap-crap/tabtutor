@@ -29,7 +29,7 @@ public class ArtistsWebController extends BaseWebController {
 			throw new NotFoundErrorPageException(null);
 		}
 		//TODO don't hardcode the replaceAll
-		else if (!artist.getName().replaceAll("\\s", "-").equals(name)) { //this takes care of null title
+		else if (!artist.getName().replaceAll("\\s", "-").equals(name)) { //this takes care of null name
 			return redirect(detailUrl(artist));
 		}
 		
