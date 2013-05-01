@@ -13,7 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import models.helpers.Pk;
+import models.helpers.UuidBasedPk;
 import utils.DateUtil;
 import utils.Logger;
 
@@ -37,7 +37,7 @@ public class UserModel extends BaseModel {
 	 *  FIELDS
 	 ************************************************************************** */
 	
-	@Column(name = "pk") @Id public Pk pk;
+	@Column(name = "pk") @Id public UuidBasedPk pk;
 	@Column(name = "fbId") public String fbId;
 	@Column(name = "fbIsAuthed") public boolean fbIsAuthed;
 	@Column(name = "username") public String username;
@@ -54,7 +54,7 @@ public class UserModel extends BaseModel {
 	@Transient @Formula(select = "(firstName || ' ' || lastName)") public String fullName;
 	@Transient @Formula(select = "(lastLoginTime IS NULL OR secondToLastLoginTime IS NULL)") public boolean isFirstLogin;
 	
-	public Pk getPk() { return pk.clone(); } //defensive copy
+	public UuidBasedPk getPk() { return pk.clone(); } //defensive copy
 	public String getFbId() { return fbId; }
 	public boolean getFbIsAuthed() { return fbIsAuthed; }
 	public String getUsername() { return username; }
@@ -70,8 +70,8 @@ public class UserModel extends BaseModel {
 	public Set<NotationMetaModel> getAuthoredNotations() { return authoredNotations; }
 	
 	/** Private helper for DB interaction implementation */
-	private static final Finder<Pk, UserModel> FINDER = new Finder<>(
-		Pk.class, UserModel.class
+	private static final Finder<UuidBasedPk, UserModel> FINDER = new Finder<>(
+		UuidBasedPk.class, UserModel.class
 	);
 	
 	/* **************************************************************************
@@ -89,7 +89,7 @@ public class UserModel extends BaseModel {
 	private UserModel(String fbId, String username, String email, boolean isTestUser, UserModel creator) {
 		Date now = DateUtil.now();
 		
-		this.pk = Pk.randomPk();
+		this.pk = UuidBasedPk.randomPk();
 		this.fbId = fbId;
 		this.fbIsAuthed = (this.fbId != null);
 		this.username = username;
@@ -136,7 +136,7 @@ public class UserModel extends BaseModel {
 	/** Gets a User by ID, converts the string to a Pk internally */
 	public static UserModel getByPk(String pk) {
 		try {
-			return getByPk(pk != null ? Pk.fromString(pk) : null);
+			return getByPk(pk != null ? UuidBasedPk.fromString(pk) : null);
 		}
 		catch (IllegalArgumentException ex) {
 			//the string was not a valid Pk
@@ -145,7 +145,7 @@ public class UserModel extends BaseModel {
 	}
 	
 	/** Gets a User by ID */
-	public static UserModel getByPk(Pk pk) {
+	public static UserModel getByPk(UuidBasedPk pk) {
 		return pk != null ? FINDER.byId(pk) : null;
 	}
 
@@ -183,7 +183,7 @@ public class UserModel extends BaseModel {
 	 ************************************************************************** */
 		
 	/** Determines if a User exists with the given ID */
-	public static boolean isValidExistingPk(Pk pk) {
+	public static boolean isValidExistingPk(UuidBasedPk pk) {
 		return getByPk(pk) != null;
 	}
 	

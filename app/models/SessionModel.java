@@ -13,7 +13,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import models.helpers.Pk;
+import models.helpers.UuidBasedPk;
 import types.SqlOperationType.BasicDmlModifyingType;
 import utils.DateUtil;
 import utils.Logger;
@@ -43,7 +43,7 @@ public class SessionModel extends BaseModel {
 	 *  BEGIN FIELDS
 	 ************************************************************************** */
 	
-	@Column(name = "pk") @Id public Pk pk;
+	@Column(name = "pk") @Id public UuidBasedPk pk;
 	@Column(name = "fbToken") public String fbToken;
 	@Column(name = "fbTokenExpireTime") public Date fbTokenExpireTime;
 	@Column(name = "startTime") public Date startTime;
@@ -54,7 +54,7 @@ public class SessionModel extends BaseModel {
 	
 	@Transient @Formula(select = "(NOW() > fbTokenExpireTime)") public boolean isFbtokenExpired;
 	
-	public Pk getPk() { return pk.clone(); } //defensive copy
+	public UuidBasedPk getPk() { return pk.clone(); } //defensive copy
 	public String getPk_String() { return getPk().toString(); }
 	public UserModel getUser() { return user; }
 	public String getFbToken() { return fbToken; }
@@ -65,8 +65,8 @@ public class SessionModel extends BaseModel {
 	public Set<SessionCsrfTokenModel> getCsrfTokens() { return csrfTokens; }
 	
 	/** Private helper for DB interaction implementation */
-	private static final Finder<Pk, SessionModel> FINDER = new Finder<>(
-		Pk.class, SessionModel.class
+	private static final Finder<UuidBasedPk, SessionModel> FINDER = new Finder<>(
+		UuidBasedPk.class, SessionModel.class
 	);
 	
 	/* **************************************************************************
@@ -94,7 +94,7 @@ public class SessionModel extends BaseModel {
 	private SessionModel() {
 		Date now = DateUtil.now();
 		
-		this.pk = Pk.randomPk();
+		this.pk = UuidBasedPk.randomPk();
 		this.user = null;
 		this.fbToken = null;
 		this.fbTokenExpireTime = null;
@@ -120,7 +120,7 @@ public class SessionModel extends BaseModel {
 	/** Gets a Session by ID, converts the string to a Pk internally */
 	public static SessionModel getByPk(String pk) {
 		try {
-			return getByPk(pk != null ? Pk.fromString(pk) : null);
+			return getByPk(pk != null ? UuidBasedPk.fromString(pk) : null);
 		}
 		catch (IllegalArgumentException ex) {
 			//the string was not a valid Pk
@@ -129,7 +129,7 @@ public class SessionModel extends BaseModel {
 	}
 	
 	/** Gets a Session by ID */
-	public static SessionModel getByPk(Pk pk) {
+	public static SessionModel getByPk(UuidBasedPk pk) {
 		return pk != null ? FINDER.byId(pk) : null;
 	}
 	

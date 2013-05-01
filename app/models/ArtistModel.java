@@ -11,7 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import models.helpers.Pk;
+import models.helpers.UuidBasedPk;
 
 
 /**
@@ -31,20 +31,20 @@ public class ArtistModel extends BaseModel {
 	 *  FIELDS
 	 ************************************************************************** */
 	
-	@Column(name = "pk") @Id public Pk pk;
+	@Column(name = "pk") @Id public UuidBasedPk pk;
 	@Column(name = "name") public String name;
 	
 	@OneToMany(fetch = FetchType.LAZY) @JoinColumn(name = "artistPk", referencedColumnName = "pk") public Set<AlbumModel> albums; //TODO use ordered list?
 	@OneToMany(fetch = FetchType.LAZY) @JoinColumn(name = "artistPk", referencedColumnName = "pk") public Set<SongModel> songs; //TODO use ordered list?
 	
-	public Pk getPk() { return pk.clone(); } //defensive copy
+	public UuidBasedPk getPk() { return pk.clone(); } //defensive copy
 	public String getName() { return name; }
 	public Set<AlbumModel> getAlbums() { return albums; }
 	public Set<SongModel> getSongs() { return songs; }
 	
 	/** Private helper for DB interaction implementation */
-	private static final Finder<Pk, ArtistModel> FINDER = new Finder<>(
-		Pk.class, ArtistModel.class
+	private static final Finder<UuidBasedPk, ArtistModel> FINDER = new Finder<>(
+		UuidBasedPk.class, ArtistModel.class
 	);
 	
 	/* **************************************************************************
@@ -56,6 +56,7 @@ public class ArtistModel extends BaseModel {
 	 ************************************************************************** */
 
 	private ArtistModel(String name) {
+		this.pk = UuidBasedPk.randomPk();
 		this.name = name;
 	}
 	

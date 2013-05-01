@@ -12,7 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import models.helpers.Pk;
+import models.helpers.UuidBasedPk;
 
 import com.avaje.ebean.annotation.Formula;
 
@@ -36,7 +36,7 @@ public class SongModel extends BaseModel {
 	 ************************************************************************** */
 	
 	//TODO add a field for the year?
-	@Column(name = "pk") @Id public Pk pk;
+	@Column(name = "pk") @Id public UuidBasedPk pk;
 	@Column(name = "title") public String title;
 	@Column(name = "trackNum") public int trackNum;
 	@Column(name = "isLive") public boolean isLive;
@@ -48,7 +48,7 @@ public class SongModel extends BaseModel {
 	
 	@Transient @Formula(select = "(youtubeId IS NOT NULL)") public boolean isYoutubeEnabled;
 	
-	public Pk getPk() { return pk.clone(); } //defensive copy
+	public UuidBasedPk getPk() { return pk.clone(); } //defensive copy
 	public String getTitle() { return title; }
 	public ArtistModel getArtist() { return artist; }
 	public boolean hasAlbum() { return getAlbum() != null; }
@@ -60,8 +60,8 @@ public class SongModel extends BaseModel {
 	public Set<NotationMetaModel> getNotations() { return notations; }
 	
 	/** Private helper for DB interaction implementation */
-	private static final Finder<Pk, SongModel> FINDER = new Finder<>(
-		Pk.class, SongModel.class
+	private static final Finder<UuidBasedPk, SongModel> FINDER = new Finder<>(
+		UuidBasedPk.class, SongModel.class
 	);
 	
 	/* **************************************************************************
@@ -73,7 +73,7 @@ public class SongModel extends BaseModel {
 	 ************************************************************************** */
 
 	private SongModel(String title, ArtistModel artist, AlbumModel album, int trackNum, boolean isLive, String youtubeId) {
-		this.pk = Pk.randomPk();
+		this.pk = UuidBasedPk.randomPk();
 		this.title = title;
 		this.artist = artist;
 		this.album = album;

@@ -10,12 +10,12 @@ CREATE TYPE t_youtubeId AS VARCHAR(80);
 CREATE TYPE t_csrfToken AS t_pk;
 
 CREATE TABLE Artist (
-	pk t_pk PRIMARY KEY,
+	pk t_pk PRIMARY KEY NOT NULL,
 	name t_varcharLong NOT NULL
 );
 
 CREATE TABLE Album (
-	pk t_pk PRIMARY KEY,
+	pk t_pk PRIMARY KEY NOT NULL,
 	title t_varcharLong NOT NULL,
 	year t_yearInt,
 	numTracks SMALLINT,
@@ -23,7 +23,7 @@ CREATE TABLE Album (
 );
 
 CREATE TABLE Song (
-	pk t_pk PRIMARY KEY,
+	pk t_pk PRIMARY KEY NOT NULL,
 	title t_varcharLong NOT NULL,
 	trackNum SMALLINT,
 	isLive BOOLEAN NOT NULL,
@@ -33,7 +33,7 @@ CREATE TABLE Song (
 );
 
 CREATE TABLE User (
-	pk t_pk PRIMARY KEY,
+	pk t_pk PRIMARY KEY NOT NULL,
 	fbId t_facebookId UNIQUE,
 	fbIsAuthed BOOLEAN NOT NULL,
 	username t_varcharShort NOT NULL UNIQUE,
@@ -50,7 +50,7 @@ CREATE TABLE User (
 );
 
 CREATE TABLE NotationMeta (
-	pk t_pk PRIMARY KEY,
+	pk t_pk PRIMARY KEY NOT NULL,
 	instrument t_varcharShort NOT NULL,
 	skillLevel t_varcharShort NOT NULL,
 	notationType t_varcharShort NOT NULL,
@@ -61,7 +61,7 @@ CREATE TABLE NotationMeta (
 );
 
 CREATE TABLE Session (
-	pk t_pk PRIMARY KEY,
+	pk t_pk PRIMARY KEY NOT NULL,
 	fbToken t_facebookToken,
 	fbTokenExpireTime timestamp,
 	startTime timestamp NOT NULL,
@@ -75,7 +75,7 @@ CREATE TABLE Session (
 );
 
 CREATE TABLE SessionCsrfToken (
-	csrfToken t_csrfToken PRIMARY KEY,
+	csrfToken t_csrfToken PRIMARY KEY NOT NULL,
 	createTime timestamp NOT NULL,
 	expireTime timestamp NOT NULL,
 	sessionPk t_pk NOT NULL REFERENCES Session(pk),
