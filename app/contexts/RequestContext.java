@@ -35,7 +35,7 @@ public class RequestContext extends BaseContext {
 	}
 	
 	/** Gets the query params map, ignoring any arrays of values (just takes the first) */
-	public static synchronized Map<String, String> params() {
+	public static synchronized Map<String, String> paramsMap() {
 		//TODO cache the result of this method
 		HttpMethodType method = method();
 		switch (method) {
@@ -47,6 +47,11 @@ public class RequestContext extends BaseContext {
 			default:
 				throw new IllegalStateException("Uhandled method type: " + method);
 		}
+	}
+	
+	/** Gets the query params as a string (with no leading ?) */
+	public static synchronized String paramsString() {
+		return RestUtil.mapToQueryString(paramsMap());
 	}
 	
 	/** Gets the login url that will redirect back to this page

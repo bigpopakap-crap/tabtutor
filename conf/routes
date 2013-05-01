@@ -11,9 +11,13 @@
 # --------------------------------------------------------------------- #
 
 # --------------------------------------------------------------------- #
-#	FORCED NOT FOUND PAGE												#
+#	HIGHEST PRIORITY PAGES												#
 # --------------------------------------------------------------------- #
+#Specific page-not-found page
 GET		/notfound					controllers.SimpleWebController.pageNotFound(path ?= null)
+
+#Remove trailing slashes
+GET		/*path/						controllers.SimpleWebController.untrail(path)
 
 # --------------------------------------------------------------------- #
 #	BEGIN PAGE ROUTING													#
