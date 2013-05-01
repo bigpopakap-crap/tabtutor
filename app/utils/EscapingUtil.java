@@ -2,6 +2,7 @@ package utils;
 
 import java.net.URLEncoder;
 
+
 /**
  * This class contains utility methods for escaping strings for various environments
  * 
@@ -56,6 +57,15 @@ public abstract class EscapingUtil {
 				return URLEncoder.encode(str);
 			}
 		},
+		
+		/** Escapes a param to be used descriptively in a URL. Replaces spaces with dashes */
+		URL_DESCRIPTIVE_PARAM {
+			@Override
+			protected String escape(String str) {
+				return str.replaceAll("\\s", "-");
+			}
+		},
+		
 		/** HTML attribute escaper */
 		HTML_ATTR {},
 		

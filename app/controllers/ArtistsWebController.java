@@ -5,6 +5,8 @@ import models.ArtistModel;
 import models.forms.ArtistModelJuiForm;
 import play.Logger;
 import play.mvc.Result;
+import utils.EscapingUtil;
+import utils.EscapingUtil.Escaper;
 import controllers.exceptions.web.NotFoundErrorPageException;
 
 /**
@@ -28,8 +30,7 @@ public class ArtistsWebController extends BaseWebController {
 		if (artist == null) {
 			throw new NotFoundErrorPageException(null);
 		}
-		//TODO don't hardcode the replaceAll
-		else if (!artist.getName().replaceAll("\\s", "-").equals(name)) { //this takes care of null name
+		else if (!EscapingUtil.escape(artist.getName(), Escaper.URL_DESCRIPTIVE_PARAM).equals(name)) { //this takes care of null name
 			return redirect(detailUrl(artist));
 		}
 		
@@ -56,8 +57,10 @@ public class ArtistsWebController extends BaseWebController {
 	 *  the detail URL because it will populate the correct name */
 	public static String detailUrl(ArtistModel artist) {
 		if (artist != null) {
-			//TODO don't hardcode the replaceAll
-			return routes.ArtistsWebController.detail(artist.getPk().toString(), artist.getName().replaceAll("\\s", "-")).url();
+			return routes.ArtistsWebController.detail(
+				artist.getPk().toString(),
+				EscapingUtil.escape(artist.getName(), Escaper.URL_DESCRIPTIVE_PARAM)
+			).url();
 		}
 		else {
 			//don't throw exception, simply return a path that will not work

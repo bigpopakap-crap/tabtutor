@@ -5,6 +5,8 @@ import models.SongModel;
 import models.forms.SongModelJuiForm;
 import play.Logger;
 import play.mvc.Result;
+import utils.EscapingUtil;
+import utils.EscapingUtil.Escaper;
 import controllers.exceptions.web.NotFoundErrorPageException;
 
 /**
@@ -28,8 +30,7 @@ public class SongsWebController extends BaseWebController {
 		if (song == null) {
 			throw new NotFoundErrorPageException(null);
 		}
-		//TODO don't hardcode the replaceAll
-		else if (!song.getTitle().replaceAll("\\s", "-").equals(title)) { //this takes care of null title
+		else if (!EscapingUtil.escape(song.getTitle(), Escaper.URL_DESCRIPTIVE_PARAM).equals(title)) { //this takes care of null title
 			return redirect(detailUrl(song));
 		}
 		
@@ -56,8 +57,10 @@ public class SongsWebController extends BaseWebController {
 	 *  the detail URL because it will populate the correct title */
 	public static String detailUrl(SongModel song) {
 		if (song != null) {
-			//TODO don't hardcode the replaceAll
-			return routes.SongsWebController.detail(song.getPk().toString(), song.getTitle().replaceAll("\\s", "-")).url();
+			return routes.SongsWebController.detail(
+				song.getPk().toString(),
+				EscapingUtil.escape(song.getTitle(), Escaper.URL_DESCRIPTIVE_PARAM)
+			).url();
 		}
 		else {
 			//don't throw exception, simply return a path that will not work

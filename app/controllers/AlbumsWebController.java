@@ -5,6 +5,8 @@ import models.AlbumModel;
 import models.forms.AlbumModelJuiForm;
 import play.Logger;
 import play.mvc.Result;
+import utils.EscapingUtil;
+import utils.EscapingUtil.Escaper;
 import controllers.exceptions.web.NotFoundErrorPageException;
 
 /**
@@ -28,8 +30,7 @@ public class AlbumsWebController extends BaseWebController {
 		if (album == null) {
 			throw new NotFoundErrorPageException(null);
 		}
-		//TODO don't hardcode the replaceAll
-		else if (!album.getTitle().replaceAll("\\s", "-").equals(title)) { //this takes care of null title
+		else if (!EscapingUtil.escape(album.getTitle(), Escaper.URL_DESCRIPTIVE_PARAM).equals(title)) { //this takes care of null title
 			return redirect(detailUrl(album));
 		}
 		
@@ -56,8 +57,10 @@ public class AlbumsWebController extends BaseWebController {
 	 *  the detail URL because it will populate the correct title */
 	public static String detailUrl(AlbumModel album) {
 		if (album != null) {
-			//TODO don't hardcode the replaceAll
-			return routes.AlbumsWebController.detail(album.getPk().toString(), album.getTitle().replaceAll("\\s", "-")).url();
+			return routes.AlbumsWebController.detail(
+				album.getPk().toString(),
+				EscapingUtil.escape(album.getTitle(), Escaper.URL_DESCRIPTIVE_PARAM)
+			).url();
 		}
 		else {
 			//don't throw exception, simply return a path that will not work
