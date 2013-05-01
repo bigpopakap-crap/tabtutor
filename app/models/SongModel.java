@@ -109,6 +109,22 @@ public class SongModel extends BaseModel {
 	 *  BEGIN SELECTORS
 	 ************************************************************************** */
 	
+	/** Gets a Song by ID, converts the string to a UUID internally */
+	public static SongModel getByPk(String pk) {
+		try {
+			return getByPk(pk != null ? UUID.fromString(pk) : null);
+		}
+		catch (IllegalArgumentException ex) {
+			//the string was not a valid UUID
+			return null;
+		}
+	}
+	
+	/** Gets a Song by ID */
+	public static SongModel getByPk(UUID pk) {
+		return pk != null ? FINDER.byId(pk) : null;
+	}
+	
 	/** Get all songs */
 	public static List<SongModel> getAll() {
 		return FINDER.all();

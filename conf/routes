@@ -11,16 +11,30 @@
 # --------------------------------------------------------------------- #
 
 # --------------------------------------------------------------------- #
+#	FORCED NOT FOUND PAGE												#
+# --------------------------------------------------------------------- #
+GET		/notfound					controllers.SimpleWebController.pageNotFound(path ?= null)
+
+# --------------------------------------------------------------------- #
 #	BEGIN PAGE ROUTING													#
 # --------------------------------------------------------------------- #
 GET     /                           controllers.SimpleWebController.landing()
 GET		/fblogin					controllers.AuthWebController.fblogin(code ?= null, state ?= null, targetUrl ?= "/")
 GET		/logout						controllers.AuthWebController.logout(targetUrl ?= "/")
-GET		/songs/list					controllers.SongsWebController.list()
+
+GET		/songs						controllers.SongsWebController.list()
+GET		/songs/:pk					controllers.SongsWebController.detailRedirect(pk)
+GET		/songs/:pk/:title			controllers.SongsWebController.detail(pk, title)
 POST	/songs/create				controllers.SongsWebController.create()
-GET		/artists/list				controllers.ArtistsWebController.list()
+
+GET		/artists					controllers.ArtistsWebController.list()
+GET		/artists/:pk				controllers.ArtistsWebController.detailRedirect(pk)
+GET		/artists/:pk/:name			controllers.ArtistsWebController.detail(pk, name)
 POST	/artists/create				controllers.ArtistsWebController.create()
-GET		/albums/list				controllers.AlbumsWebController.list()
+
+GET		/albums						controllers.AlbumsWebController.list()
+GET		/albums/:pk					controllers.AlbumsWebController.detailRedirect(pk)
+GET		/albums/:pk/:title			controllers.AlbumsWebController.detail(pk, title)
 POST	/albums/create				controllers.AlbumsWebController.create()
 
 # --------------------------------------------------------------------- #

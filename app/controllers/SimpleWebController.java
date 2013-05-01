@@ -1,7 +1,7 @@
 package controllers;
 
-import controllers.exceptions.web.NotFoundErrorPageException;
 import play.mvc.Result;
+import controllers.exceptions.web.NotFoundErrorPageException;
 
 /**
  * This class will route all pages that the user will see as they navigate through the site,

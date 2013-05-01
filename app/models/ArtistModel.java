@@ -69,6 +69,22 @@ public class ArtistModel extends BaseModel {
 	 *  BEGIN SELECTORS
 	 ************************************************************************** */
 	
+	/** Gets a Artist by ID, converts the string to a UUID internally */
+	public static ArtistModel getByPk(String pk) {
+		try {
+			return getByPk(pk != null ? UUID.fromString(pk) : null);
+		}
+		catch (IllegalArgumentException ex) {
+			//the string was not a valid UUID
+			return null;
+		}
+	}
+	
+	/** Gets a Artist by ID */
+	public static ArtistModel getByPk(UUID pk) {
+		return pk != null ? FINDER.byId(pk) : null;
+	}
+	
 	/** Get all artists */
 	public static List<ArtistModel> getAll() {
 		return FINDER.all();
