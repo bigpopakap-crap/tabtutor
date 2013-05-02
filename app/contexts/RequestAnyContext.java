@@ -1,11 +1,14 @@
 package contexts;
 
+import helpers.Universe;
+import helpers.Universe.UniverseElement;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-import utils.Universe;
-import utils.Universe.UniverseElement;
+import contexts.base.BaseContext;
+
 
 /**
  * A class that allows other to add any random variables they want
@@ -14,7 +17,7 @@ import utils.Universe.UniverseElement;
  * @since 2013-04-09
  *
  */
-public class AnyContext extends BaseContext {
+public class RequestAnyContext extends BaseContext {
 	
 	private static final UniverseElement<String> ANY_CONTEXT_OBJ_KEY = CONTEXT_KEY_UNIVERSE.register("anyContextMapKey");
 	public static final Universe<String> ANY_CONTEXT_KEY_UNIVERSE = new Universe<>();

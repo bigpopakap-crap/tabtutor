@@ -1,6 +1,6 @@
 package starter;
 
-import models.BaseModel;
+import models.base.BaseModel;
 import base.BaseFuncTest;
 
 /**

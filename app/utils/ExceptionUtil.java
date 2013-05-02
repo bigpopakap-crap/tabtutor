@@ -1,5 +1,7 @@
 package utils;
 
+import helpers.Logger;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 

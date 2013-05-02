@@ -1,7 +1,7 @@
 package juiforms;
 
+import helpers.Message;
 import play.api.templates.Html;
-import utils.Message;
 import utils.ReflectUtil;
 import utils.StringUtil;
 

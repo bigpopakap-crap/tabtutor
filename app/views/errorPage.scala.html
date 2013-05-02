@@ -13,7 +13,7 @@
 @import contexts.AppContext
 @import contexts.RequestErrorContext
 @import utils.ExceptionUtil
-@import utils.Message
+@import helpers.Message
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,7 +27,7 @@
 	
 	@if(AppContext.Mode.isDevelopment() && ex != null) {
 		<div>
-			<h2>Stack trace (dev mode only)</h2>
+			<div style="font-weight: bold">Stack trace</div>
 			@p_util_stackTrace(ex)
 		</div>
 	}

@@ -1,8 +1,8 @@
 package controllers;
 
+import helpers.Logger;
 import play.mvc.Result;
-import utils.Logger;
-import actions.ActionAnnotations.DevModeProtected;
+import actions.annotations.ActionAnnotations.DevModeProtected;
 
 /**
  * This class handles routes (or parents classes that handle routes) which are used as developer tools

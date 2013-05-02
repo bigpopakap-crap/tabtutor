@@ -6,9 +6,9 @@
 	
 	TODO - test that all view log through this partial
 *@
-@(clientLevel: utils.Logger.Level, clientAlert: Boolean, serverLevel: utils.Logger.Level, msg: String)
-@import utils.Logger
-@import utils.Logger.Level
+@(clientLevel: helpers.Logger.Level, clientAlert: Boolean, serverLevel: helpers.Logger.Level, msg: String)
+@import helpers.Logger
+@import helpers.Logger.Level
 @clientLevelEnum(level: Level) = {
 	window.WTF.get('Logger').Level.@(level.name())
 }

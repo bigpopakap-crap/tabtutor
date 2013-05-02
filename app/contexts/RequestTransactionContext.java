@@ -1,5 +1,7 @@
 package contexts;
 
+import contexts.base.BaseContext;
+
 /**
  * Context that holds the default transaction for each request
  * 

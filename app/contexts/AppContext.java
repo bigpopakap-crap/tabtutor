@@ -2,6 +2,8 @@ package contexts;
 
 import java.util.TimeZone;
 
+import contexts.base.BaseContext;
+
 import play.Play;
 
 /**

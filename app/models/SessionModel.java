@@ -1,5 +1,7 @@
 package models;
 
+import helpers.Logger;
+
 import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
@@ -14,9 +16,11 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import models.annotations.CreateTime;
+import models.base.BaseModel;
+
 import types.SqlOperationType.BasicDmlModifyingType;
 import utils.DateUtil;
-import utils.Logger;
 
 import com.avaje.ebean.annotation.Formula;
 

@@ -1,12 +1,13 @@
 package actions;
 
+import helpers.Logger;
+
 import java.util.Collections;
 import java.util.Set;
 
 import play.mvc.Action;
 import play.mvc.Http.Context;
 import play.mvc.Result;
-import utils.Logger;
 import contexts.RequestActionContext;
 
 /**

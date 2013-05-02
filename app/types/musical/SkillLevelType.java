@@ -1,4 +1,4 @@
-package types.objects;
+package types.musical;
 
 /**
  * Represents the skill levels that songs can be written for

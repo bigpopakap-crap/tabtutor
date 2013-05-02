@@ -10,10 +10,11 @@
 @(ex: Throwable)
 @import contexts.AppContext
 @import utils.ExceptionUtil
-@import utils.Logger.Level
+@import helpers.Logger.Level
 @if(AppContext.Mode.isDevelopment()) {
 	@if(ex != null) {
 		<div style="font-family: monospace">
+			<div>(dev mode only)</div>
 			@for(line <- ExceptionUtil.printStackTrace(ex).split("\n")) {
 				<div>@(line.replaceAll("\t", ". .. "))</div>
 			}

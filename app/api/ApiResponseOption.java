@@ -1,6 +1,7 @@
 package api;
 
 
+
 /**
  * This class represents an API response option that should be returned from
  * and API classs. It will hold either the response, or an exception to be thrown

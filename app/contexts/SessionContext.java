@@ -1,14 +1,17 @@
 package contexts;
 
+import helpers.Logger;
+import helpers.Universe;
+import helpers.Universe.UniverseElement;
+
 import java.util.concurrent.Callable;
+
+import contexts.base.BaseContext;
 
 import models.SessionModel;
 import models.UserModel;
 import play.i18n.Lang;
 import play.mvc.Http.Context;
-import utils.Logger;
-import utils.Universe;
-import utils.Universe.UniverseElement;
 import api.fb.FbApi;
 
 

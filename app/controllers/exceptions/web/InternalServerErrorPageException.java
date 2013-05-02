@@ -1,6 +1,6 @@
 package controllers.exceptions.web;
 
-import utils.Message;
+import helpers.Message;
 
 /**
  * Basic error page whose description is that of a INTERNAL SERVER error, and whose

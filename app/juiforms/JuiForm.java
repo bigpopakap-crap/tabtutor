@@ -1,6 +1,7 @@
 package juiforms;
 
 
+import helpers.Message;
 import interfaces.Renderable;
 
 import java.util.ArrayList;
@@ -14,7 +15,6 @@ import models.SessionCsrfTokenModel;
 import models.exceptions.FailedOperationException;
 import play.api.templates.Html;
 import types.HttpMethodType;
-import utils.Message;
 import utils.ReflectUtil;
 import contexts.RequestContext;
 

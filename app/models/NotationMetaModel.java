@@ -10,9 +10,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import types.objects.InstrumentType;
-import types.objects.NotationType;
-import types.objects.SkillLevelType;
+import models.base.BaseModel;
+
+import types.musical.InstrumentType;
+import types.musical.NotationType;
+import types.musical.SkillLevelType;
 
 import com.avaje.ebean.annotation.Formula;
 

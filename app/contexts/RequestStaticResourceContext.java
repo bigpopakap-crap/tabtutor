@@ -1,10 +1,13 @@
 package contexts;
 
+import helpers.Universe.UniverseElement;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
-import utils.Universe.UniverseElement;
+import contexts.base.BaseContext;
+
 
 /**
  * Context for the request that holds which static resources the returned HTML page

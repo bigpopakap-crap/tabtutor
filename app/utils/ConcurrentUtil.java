@@ -1,6 +1,7 @@
 package utils;
 
-import globals.Globals.DevelopmentSwitch;
+import helpers.DevelopmentSwitch;
+import helpers.Logger;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;

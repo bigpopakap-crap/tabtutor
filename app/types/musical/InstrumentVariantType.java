@@ -1,4 +1,4 @@
-package types.objects;
+package types.musical;
 
 /**
  * Represents all variants to the basic instrument type

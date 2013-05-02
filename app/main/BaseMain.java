@@ -1,9 +1,10 @@
 package main;
 
+import helpers.Logger;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-import utils.Logger;
 import utils.StringUtil;
 
 /**

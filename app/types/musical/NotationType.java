@@ -1,4 +1,4 @@
-package types.objects;
+package types.musical;
 
 /**
  * Represents the various possible notations for music to be written in

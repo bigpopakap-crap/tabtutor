@@ -1,6 +1,6 @@
 package controllers.exceptions.web;
 
-import utils.Message;
+import helpers.Message;
 
 /**
  * Error page when a CSRF validation fails

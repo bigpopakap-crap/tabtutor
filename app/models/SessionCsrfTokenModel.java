@@ -1,6 +1,6 @@
 package models;
 
-import globals.Globals.DevelopmentSwitch;
+import helpers.DevelopmentSwitch;
 
 import java.util.Date;
 import java.util.UUID;
@@ -12,6 +12,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import models.annotations.CreateTime;
+import models.annotations.ExpireTime;
+import models.base.BaseModel;
 
 import utils.DateUtil;
 

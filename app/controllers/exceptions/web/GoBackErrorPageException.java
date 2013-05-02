@@ -1,6 +1,6 @@
 package controllers.exceptions.web;
 
-import utils.Message;
+import helpers.Message;
 
 /**
  * Basic error page whose link takes the user to the previous page

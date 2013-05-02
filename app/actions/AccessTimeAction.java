@@ -2,7 +2,7 @@ package actions;
 
 import play.mvc.Http.Context;
 import play.mvc.Result;
-import actions.ActionAnnotations.AccessTimed;
+import actions.annotations.ActionAnnotations.AccessTimed;
 import contexts.AppContext;
 import contexts.SessionContext;
 

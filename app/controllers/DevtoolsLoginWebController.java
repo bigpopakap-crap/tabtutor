@@ -4,7 +4,7 @@ import juiforms.JuiFormValidationException;
 import models.UserModel;
 import models.forms.DevtoolsUserJuiForm;
 import play.mvc.Result;
-import actions.ActionAnnotations.Sessioned;
+import actions.annotations.ActionAnnotations.Sessioned;
 import contexts.SessionContext;
 
 /**

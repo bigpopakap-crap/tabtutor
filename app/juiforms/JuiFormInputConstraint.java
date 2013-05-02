@@ -1,8 +1,8 @@
 package juiforms;
 
+import helpers.Message;
 import models.SessionCsrfTokenModel;
 import utils.ConcurrentUtil;
-import utils.Message;
 import utils.StringUtil;
 import controllers.exceptions.web.CsrfTokenInvalidErrorPageException;
 
