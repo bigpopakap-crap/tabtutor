@@ -1,8 +1,11 @@
 package contexts;
 
+import helpers.Universe.UniverseElement;
+
 import java.util.concurrent.Callable;
 
-import utils.Universe.UniverseElement;
+import contexts.base.BaseContext;
+
 
 /**
  * This class can be used to store any errors and error messages for the duration of the

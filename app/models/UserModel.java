@@ -1,5 +1,7 @@
 package models;
 
+import helpers.Logger;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -14,8 +16,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import models.annotations.CreateTime;
+import models.base.BaseModel;
+
 import utils.DateUtil;
-import utils.Logger;
 
 import com.avaje.ebean.annotation.Formula;
 
@@ -42,7 +46,7 @@ public class UserModel extends BaseModel {
 	@Column(name = "fbIsAuthed") public boolean fbIsAuthed;
 	@Column(name = "username") public String username;
 	@Column(name = "email") public String email;
-	@Column(name = "registerTime") public Date registerTime;
+	@Column(name = "registerTime") @CreateTime public Date registerTime;
 	@Column(name = "isTestUser") public boolean isTestUser;
 	@Column(name = "userPk_creator") public UserModel creator;
 	@Column(name = "lastAccessTime") public Date lastAccessTime;

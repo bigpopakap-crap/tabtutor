@@ -1,8 +1,8 @@
 package controllers;
 
 import play.mvc.Result;
-import actions.ActionAnnotations.Authed;
-import actions.ActionAnnotations.Sessioned;
+import actions.annotations.ActionAnnotations.Authed;
+import actions.annotations.ActionAnnotations.Sessioned;
 
 /**
  * Test pages that use various annotations

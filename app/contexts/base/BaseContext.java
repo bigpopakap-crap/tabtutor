@@ -1,11 +1,12 @@
-package contexts;
+package contexts.base;
+
+import helpers.Universe;
+import helpers.Universe.UniverseElement;
 
 import java.util.concurrent.Callable;
 
 import play.mvc.Http.Context;
 import utils.ConcurrentUtil;
-import utils.Universe;
-import utils.Universe.UniverseElement;
 
 /**
  * Parent class of all context classes

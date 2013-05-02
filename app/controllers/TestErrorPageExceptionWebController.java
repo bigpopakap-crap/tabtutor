@@ -1,7 +1,7 @@
 package controllers;
 
+import helpers.Message;
 import play.mvc.Result;
-import utils.Message;
 import controllers.exceptions.web.GoBackErrorPageException;
 import controllers.exceptions.web.GoHomeErrorPageException;
 import controllers.exceptions.web.GoToErrorPageException;

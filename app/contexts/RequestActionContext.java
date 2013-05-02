@@ -1,11 +1,14 @@
 package contexts;
 
+import helpers.Universe.UniverseElement;
+
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import utils.Universe.UniverseElement;
+import contexts.base.BaseContext;
+
 import actions.BaseAction;
 
 /**

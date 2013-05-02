@@ -13,6 +13,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import models.base.BaseModel;
+
 import com.avaje.ebean.annotation.Formula;
 
 /**

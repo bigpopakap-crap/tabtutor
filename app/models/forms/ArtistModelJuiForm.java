@@ -1,5 +1,7 @@
 package models.forms;
 
+import helpers.Message;
+
 import java.util.Map;
 
 import controllers.routes;
@@ -11,7 +13,6 @@ import juiforms.JuiFormInputType;
 import models.ArtistModel;
 import play.api.templates.Html;
 import types.HttpMethodType;
-import utils.Message;
 
 /**
  * JUI form for creating a new artist

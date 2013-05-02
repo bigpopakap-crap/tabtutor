@@ -1,11 +1,14 @@
 package contexts;
 
+import helpers.Universe.UniverseElement;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
+import contexts.base.BaseContext;
+
 import utils.DateUtil;
-import utils.Universe.UniverseElement;
 
 /**
  * Class for gathering stats about the request

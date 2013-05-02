@@ -12,8 +12,7 @@
 @import contexts.AppContext
 @import contexts.RequestStaticResourceContext
 @import types.StaticResourceType
-@import utils.Logger
-@import utils.Logger.Level
+@import helpers.Logger.Level
 @include(url: String) = {
 	@if(RequestStaticResourceContext.contains(url)) {
 		@p_util_log(Level.INFO, false, Level.NONE, "Skipping already-included resource at " + url)

@@ -1,5 +1,7 @@
 package models.forms;
 
+import helpers.Message;
+
 import java.util.Map;
 
 import juiforms.CustomValidator;
@@ -10,7 +12,6 @@ import juiforms.JuiFormInputType;
 import models.UserModel;
 import play.api.templates.Html;
 import types.HttpMethodType;
-import utils.Message;
 import contexts.SessionContext;
 import controllers.routes;
 

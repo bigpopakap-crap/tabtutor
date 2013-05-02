@@ -1,4 +1,4 @@
-package utils;
+package helpers;
 
 /**
  * Singleton Logger for the app

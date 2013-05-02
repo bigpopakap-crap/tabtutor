@@ -3,7 +3,7 @@ package actions;
 import models.SessionModel;
 import play.mvc.Http.Context;
 import play.mvc.Result;
-import actions.ActionAnnotations.Sessioned;
+import actions.annotations.ActionAnnotations.Sessioned;
 import contexts.SessionContext;
 
 /**

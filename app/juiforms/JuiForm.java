@@ -1,6 +1,7 @@
 package juiforms;
 
 
+import helpers.Message;
 import interfaces.Renderable;
 
 import java.util.ArrayList;
@@ -14,8 +15,7 @@ import models.SessionCsrfTokenModel;
 import models.exceptions.FailedOperationException;
 import play.api.templates.Html;
 import types.HttpMethodType;
-import utils.Message;
-import utils.ObjectUtil;
+import utils.ReflectUtil;
 import contexts.RequestContext;
 
 /**
@@ -82,7 +82,7 @@ public abstract class JuiForm<T> implements Renderable {
 	/** Default toString that returns the field=value mappings */
 	@Override
 	public String toString() {
-		return this.getClass().getCanonicalName() + ":" + ObjectUtil.getFieldMap(this);
+		return this.getClass().getCanonicalName() + ":" + ReflectUtil.getFieldMap(this);
 	}
 	
 	/* **************************************************************************

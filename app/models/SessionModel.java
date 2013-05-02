@@ -1,5 +1,7 @@
 package models;
 
+import helpers.Logger;
+
 import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
@@ -14,9 +16,11 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import models.annotations.CreateTime;
+import models.base.BaseModel;
+
 import types.SqlOperationType.BasicDmlModifyingType;
 import utils.DateUtil;
-import utils.Logger;
 
 import com.avaje.ebean.annotation.Formula;
 
@@ -35,8 +39,6 @@ public class SessionModel extends BaseModel {
 	
 	//TODO figure out how to clean up old sessions
 	
-	/** The key to use in the cookie for the session ID */
-	public static final String SESSION_ID_COOKIE_KEY = "wtfspk";
 	private static final long serialVersionUID = -6111608082703517322L;
 	
 	/* **************************************************************************
@@ -46,7 +48,7 @@ public class SessionModel extends BaseModel {
 	@Column(name = "pk") @Id public UUID pk;
 	@Column(name = "fbToken") public String fbToken;
 	@Column(name = "fbTokenExpireTime") public Date fbTokenExpireTime;
-	@Column(name = "startTime") public Date startTime;
+	@Column(name = "startTime") @CreateTime public Date startTime;
 	@Column(name = "lastAccessTime") public Date lastAccessTime;
 	
 	@OneToOne @JoinColumn(name = "userPk") public UserModel user;

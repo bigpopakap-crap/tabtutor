@@ -1,10 +1,10 @@
 package actions;
 
+import helpers.Logger;
 import models.SessionModel;
 import play.mvc.Http.Context;
 import play.mvc.Result;
-import utils.Logger;
-import actions.ActionAnnotations.Authed;
+import actions.annotations.ActionAnnotations.Authed;
 import contexts.SessionContext;
 import controllers.AuthWebController;
 

@@ -1,9 +1,9 @@
 package actions;
 
+import helpers.Logger;
 import play.mvc.Http.Context;
 import play.mvc.Result;
-import utils.Logger;
-import actions.ActionAnnotations.TriedCaught;
+import actions.annotations.ActionAnnotations.TriedCaught;
 import contexts.AppContext;
 import contexts.RequestStatsContext;
 import controllers.exceptions.BaseExposedException;

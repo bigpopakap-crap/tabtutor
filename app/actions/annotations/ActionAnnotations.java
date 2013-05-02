@@ -1,4 +1,4 @@
-package actions;
+package actions.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -6,9 +6,18 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import play.mvc.With;
+import actions.AccessTimeAction;
+import actions.AuthAction;
+import actions.DevModeProtectAction;
+import actions.SessionAction;
+import actions.TransactionAction;
+import actions.TryCatchAction;
 
 /**
  * The class holds all action annotation definitions
+ * 
+ * IMPORTANT! Do not break up the classes in this file into their own files.
+ * Keeping them together like this helps to show the order in which they must be applied to requests
  * 
  * @author bigpopakap
  * @since 2013-03-22

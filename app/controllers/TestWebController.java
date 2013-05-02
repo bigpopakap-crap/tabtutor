@@ -1,7 +1,7 @@
 package controllers;
 
 import play.mvc.Result;
-import actions.ActionAnnotations.DevModeProtected;
+import actions.annotations.ActionAnnotations.DevModeProtected;
 
 /**
  * This class handles routes (or parents classes that handle routes) which are used by tests for various purposes

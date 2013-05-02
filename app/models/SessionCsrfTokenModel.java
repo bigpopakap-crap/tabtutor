@@ -1,6 +1,6 @@
 package models;
 
-import globals.Globals.DevelopmentSwitch;
+import helpers.DevelopmentSwitch;
 
 import java.util.Date;
 import java.util.UUID;
@@ -12,6 +12,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import models.annotations.CreateTime;
+import models.annotations.ExpireTime;
+import models.base.BaseModel;
 
 import utils.DateUtil;
 
@@ -30,15 +34,16 @@ import contexts.SessionContext;
 @Table(name = "SessionCsrfToken")
 public class SessionCsrfTokenModel extends BaseModel {
 	
-	public static final DevelopmentSwitch<Integer> CSRF_TOKEN_LIFETIME_SECONDS = new DevelopmentSwitch<>(5 * 60);
+	private static final int CSRF_TOKEN_LIFETIME_SECONDS_PRIMITIVE = 5 * 60;
+	public static final DevelopmentSwitch<Integer> CSRF_TOKEN_LIFETIME_SECONDS = new DevelopmentSwitch<>(CSRF_TOKEN_LIFETIME_SECONDS_PRIMITIVE);
 	
 	//TODO figure out how to clean up expired tokens
 
 	private static final long serialVersionUID = 1065279771090088334L;
 	
 	@Column(name = "csrfToken") @Id public UUID csrfToken;
-	@Column(name = "createTime") public Date createTime;
-	@Column(name = "expireTime") public Date expireTime;
+	@Column(name = "createTime") @CreateTime public Date createTime;
+	@Column(name = "expireTime") @ExpireTime(numSeconds = CSRF_TOKEN_LIFETIME_SECONDS_PRIMITIVE) public Date expireTime;
 	
 	@ManyToOne @JoinColumn(name = "sessionPk", referencedColumnName = "pk") public SessionModel session;
 	

@@ -1,17 +1,20 @@
 package utils;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
- * Utils for dealing with objects
+ * Utils for Java reflection
  * 
  * @author bigpopakap
  * @since 2013-03-31
  *
  */
-public class ObjectUtil {
+public class ReflectUtil {
 	
 	/**
 	 * Returns a map of field names to values for this object
@@ -35,6 +38,22 @@ public class ObjectUtil {
 		}
 		
 		return map;
+	}
+	
+	/**
+	 * Gets the *first* field of the class with the given annotation
+	 * @return the field, or null if no field is found
+	 */
+	public static List<Field> getFieldsWithAnnotation(Class<?> c, Class<? extends Annotation> ann) {
+		List<Field> fields = new LinkedList<>();
+		
+		for (Field field : c.getFields()) {
+			if (field.getAnnotation(ann) != null) {
+				fields.add(field);
+			}
+		}
+		
+		return fields;
 	}
 
 }

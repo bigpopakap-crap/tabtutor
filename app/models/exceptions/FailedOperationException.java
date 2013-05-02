@@ -1,6 +1,6 @@
 package models.exceptions;
 
-import models.BaseModel;
+import models.base.BaseModel;
 import types.SqlOperationType;
 
 /**

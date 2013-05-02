@@ -1,8 +1,8 @@
 package juiforms;
 
+import helpers.Message;
 import play.api.templates.Html;
-import utils.Message;
-import utils.ObjectUtil;
+import utils.ReflectUtil;
 import utils.StringUtil;
 
 /**
@@ -57,7 +57,7 @@ public class JuiFormInput {
 	/** Default toString that returns the field=value mappings */
 	@Override
 	public String toString() {
-		return this.getClass().getCanonicalName() + ":" + ObjectUtil.getFieldMap(this);
+		return this.getClass().getCanonicalName() + ":" + ReflectUtil.getFieldMap(this);
 	}
 	
 	/** Get the type of the input */

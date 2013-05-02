@@ -1,8 +1,8 @@
-package utils;
+package helpers;
 
+import helpers.Universe.UniverseElement;
 import play.i18n.Lang;
 import play.i18n.Messages;
-import utils.Universe.UniverseElement;
 import contexts.SessionContext;
 
 /**

@@ -7,6 +7,7 @@ import play.mvc.Http.Context;
 import play.mvc.Http.Request;
 import types.HttpMethodType;
 import utils.RestUtil;
+import contexts.base.BaseContext;
 import controllers.routes;
 
 /**

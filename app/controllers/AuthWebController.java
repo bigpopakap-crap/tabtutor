@@ -1,11 +1,11 @@
 package controllers;
 
+import helpers.Logger;
 import models.SessionCsrfTokenModel;
 import models.SessionModel;
 import models.UserModel;
 import play.mvc.Result;
-import utils.Logger;
-import actions.ActionAnnotations.Sessioned;
+import actions.annotations.ActionAnnotations.Sessioned;
 import api.ApiNoResponseException;
 import api.BaseApiException;
 import api.fb.FbApi;

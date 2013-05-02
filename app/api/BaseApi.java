@@ -1,8 +1,11 @@
 package api;
 
+import helpers.Logger;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
+
 
 import play.libs.F.Promise;
 import play.libs.WS;
@@ -11,7 +14,6 @@ import play.libs.WS.WSRequestHolder;
 import play.mvc.Http.Status;
 import types.HttpMethodType;
 import utils.ConcurrentUtil;
-import utils.Logger;
 import utils.RestUtil;
 
 /**

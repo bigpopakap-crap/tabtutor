@@ -1,5 +1,7 @@
 package models.forms;
 
+import helpers.Message;
+
 import java.util.Map;
 
 import juiforms.JuiForm;
@@ -10,7 +12,6 @@ import models.ArtistModel;
 import models.SongModel;
 import play.api.templates.Html;
 import types.HttpMethodType;
-import utils.Message;
 import controllers.routes;
 
 /**

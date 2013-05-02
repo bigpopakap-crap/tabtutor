@@ -1,9 +1,9 @@
 package controllers;
 
-import actions.ActionAnnotations.AccessTimed;
-import actions.ActionAnnotations.Sessioned;
-import actions.ActionAnnotations.Transactioned;
-import actions.ActionAnnotations.TriedCaught;
+import actions.annotations.ActionAnnotations.AccessTimed;
+import actions.annotations.ActionAnnotations.Sessioned;
+import actions.annotations.ActionAnnotations.Transactioned;
+import actions.annotations.ActionAnnotations.TriedCaught;
 
 /**
  * This class should be the parent of all classes that handle requests for the web interface
