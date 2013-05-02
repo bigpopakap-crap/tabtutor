@@ -7,6 +7,7 @@ import models.UserModel;
 import play.i18n.Lang;
 import play.mvc.Http.Context;
 import utils.Logger;
+import utils.Universe;
 import utils.Universe.UniverseElement;
 import api.fb.FbApi;
 
@@ -25,11 +26,14 @@ public abstract class SessionContext extends BaseContext {
 	private static final UniverseElement<String> USER_OBJ_CONTEXT_KEY = CONTEXT_KEY_UNIVERSE.register("userObjectContextKey");
 	private static final UniverseElement<String> FBAPI_OBJ_CONTEXT_KEY = CONTEXT_KEY_UNIVERSE.register("fbApiObjectContextKey");
 	
+	private static final Universe<String> SESSION_COOKIE_KEY_UNIVERSE = new Universe<>();
+	private static final UniverseElement<String> SESSION_ID_COOKIE_KEY = SESSION_COOKIE_KEY_UNIVERSE.register("wtfspk"); // The key to use in the cookie for the session ID
+	
 	/** Creates a new session and establishes a new cookie.
 	 * This is the only place in the app that should deal with the session cookie */
 	public static synchronized void init(Context ctx) {
 		SessionModel newSession = SessionModel.createAndSave();
-		ctx.session().put(SessionModel.SESSION_ID_COOKIE_KEY, newSession.getPk_String());
+		ctx.session().put(SESSION_COOKIE_KEY_UNIVERSE.extract(SESSION_ID_COOKIE_KEY), newSession.getPk_String());
 		Logger.info("Put session " + newSession.getPk() + " in cookie for IP " + ctx.request().remoteAddress());
 	}
 	
@@ -99,7 +103,7 @@ public abstract class SessionContext extends BaseContext {
 
 		@Override
 		public SessionModel call() throws Exception {
-			String sessionId = Context.current().session().get(SessionModel.SESSION_ID_COOKIE_KEY);
+			String sessionId = Context.current().session().get(SESSION_COOKIE_KEY_UNIVERSE.extract(SESSION_ID_COOKIE_KEY));
 			if (sessionId != null && SessionModel.isValidExistingId(sessionId)) {
 				return SessionModel.getByPk(sessionId);
 			}
@@ -141,5 +145,5 @@ public abstract class SessionContext extends BaseContext {
 		}
 		
 	};
-	
+
 }
