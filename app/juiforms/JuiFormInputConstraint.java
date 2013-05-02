@@ -4,7 +4,7 @@ import helpers.Message;
 import models.SessionCsrfTokenModel;
 import utils.ConcurrentUtil;
 import utils.StringUtil;
-import controllers.exceptions.web.CsrfTokenInvalidErrorPageException;
+import controllers.exceptions.CsrfTokenInvalidExposedException;
 
 /**
  * Constraints that can be added to form inputs. These provide an implementation for
@@ -39,7 +39,7 @@ public abstract class JuiFormInputConstraint {
 		protected Message hook_validate(JuiFormInput input) {
 			if (!SessionCsrfTokenModel.isValidToken(input.getValue())) {
 				//throw an exception here instead, because this is bad
-				throw new CsrfTokenInvalidErrorPageException();
+				throw new CsrfTokenInvalidExposedException();
 			}
 			else return null;
 		}

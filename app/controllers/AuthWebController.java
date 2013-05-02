@@ -12,8 +12,8 @@ import api.fb.FbApi;
 import api.fb.FbJsonResponse;
 import contexts.RequestErrorContext;
 import contexts.SessionContext;
-import controllers.exceptions.web.CsrfTokenInvalidErrorPageException;
-import controllers.exceptions.web.InternalServerErrorPageException;
+import controllers.exceptions.CsrfTokenInvalidExposedException;
+import controllers.exceptions.InternalServerExposedException;
 
 /**
  * This class handles all API requests related to Facebook authentication
@@ -52,7 +52,7 @@ public class AuthWebController extends BaseWebController {
 		else {
 			//test the CSRF token
 			if (!SessionCsrfTokenModel.isValidToken(state)) {
-				throw new CsrfTokenInvalidErrorPageException();
+				throw new CsrfTokenInvalidExposedException();
 			}
 			
 			try {
@@ -97,7 +97,7 @@ public class AuthWebController extends BaseWebController {
 			}
 			catch (ApiNoResponseException ex) {
 				//TODO how should this be handled?
-				throw new InternalServerErrorPageException(ex);
+				throw new InternalServerExposedException(ex);
 			}
 		}
 	}

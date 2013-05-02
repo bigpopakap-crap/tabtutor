@@ -7,7 +7,7 @@ import play.Logger;
 import play.mvc.Result;
 import utils.EscapingUtil;
 import utils.EscapingUtil.Escaper;
-import controllers.exceptions.web.NotFoundErrorPageException;
+import controllers.exceptions.NotFoundExposedException;
 
 /**
  * Controller for all things related so albums: listing, creating, modifying, etc.
@@ -28,7 +28,7 @@ public class AlbumsWebController extends BaseWebController {
 		//check that the title is the correct one for that pk
 		AlbumModel album = AlbumModel.getByPk(pk);
 		if (album == null) {
-			throw new NotFoundErrorPageException(null);
+			throw new NotFoundExposedException(null);
 		}
 		else if (!EscapingUtil.escape(album.getTitle(), Escaper.URL_DESCRIPTIVE_PARAM).equals(title)) { //this takes care of null title
 			return redirect(detailUrl(album));

@@ -3,7 +3,7 @@ package controllers;
 import play.mvc.Result;
 import utils.StringUtil;
 import contexts.RequestContext;
-import controllers.exceptions.web.NotFoundErrorPageException;
+import controllers.exceptions.NotFoundExposedException;
 
 /**
  * This class will route all pages that the user will see as they navigate through the site,
@@ -23,7 +23,7 @@ public class SimpleWebController extends BaseWebController {
 	/** Show the error page for when no other page was found */
 	public static Result pageNotFound(String path) {
 		//do nothing with the path, just throw a page not found error page exception
-		throw new NotFoundErrorPageException(null);
+		throw new NotFoundExposedException(null);
 	}
 	
 	/** Redirect to the path without the trailing slash */

@@ -18,7 +18,6 @@ import javax.persistence.Transient;
 
 import models.annotations.CreateTime;
 import models.base.BaseModel;
-
 import types.SqlOperationType.BasicDmlModifyingType;
 import utils.DateUtil;
 
@@ -74,6 +73,14 @@ public class SessionModel extends BaseModel {
 	/* **************************************************************************
 	 *  BEGIN HOOKS
 	 ************************************************************************** */
+	
+	@Override
+	protected void hook_preModifyingOperation(BasicDmlModifyingType opType, boolean isFirstTry) {
+		if (opType == BasicDmlModifyingType.INSERT) {
+			//make sure the access time is after the start time
+			lastAccessTime = startTime;
+		}
+	}
 	
 	@Override
 	protected void hook_postModifyingOperation(BasicDmlModifyingType opType, boolean wasSuccessful) {

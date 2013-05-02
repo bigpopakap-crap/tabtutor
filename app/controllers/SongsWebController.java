@@ -7,7 +7,7 @@ import play.Logger;
 import play.mvc.Result;
 import utils.EscapingUtil;
 import utils.EscapingUtil.Escaper;
-import controllers.exceptions.web.NotFoundErrorPageException;
+import controllers.exceptions.NotFoundExposedException;
 
 /**
  * Controller for all things related so songs: listing, creating, modifying, etc.
@@ -28,7 +28,7 @@ public class SongsWebController extends BaseWebController {
 		//check that the title is the correct one for that pk
 		SongModel song = SongModel.getByPk(pk);
 		if (song == null) {
-			throw new NotFoundErrorPageException(null);
+			throw new NotFoundExposedException(null);
 		}
 		else if (!EscapingUtil.escape(song.getTitle(), Escaper.URL_DESCRIPTIVE_PARAM).equals(title)) { //this takes care of null title
 			return redirect(detailUrl(song));

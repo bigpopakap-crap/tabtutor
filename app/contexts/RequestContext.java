@@ -30,6 +30,17 @@ public class RequestContext extends BaseContext {
 		return HttpMethodType.valueOf(request().method());
 	}
 	
+	/** Determines if this request is through the API or not */
+	public static synchronized boolean isApi() {
+		//TODO actually implement this
+		return false;
+	}
+	
+	/** Determines if this request is through the web interface or not */
+	public static synchronized boolean isWeb() {
+		return !isApi();
+	}
+	
 	/** Gets the url requested */
 	public static synchronized String url() {
 		return Context.current().request().path();
