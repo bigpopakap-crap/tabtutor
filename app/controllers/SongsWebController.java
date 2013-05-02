@@ -3,7 +3,11 @@ package controllers;
 import juiforms.JuiFormValidationException;
 import models.SongModel;
 import models.forms.SongModelJuiForm;
+import play.Logger;
 import play.mvc.Result;
+import utils.EscapingUtil;
+import utils.EscapingUtil.Escaper;
+import controllers.exceptions.web.NotFoundErrorPageException;
 
 /**
  * Controller for all things related so songs: listing, creating, modifying, etc.
@@ -19,6 +23,20 @@ public class SongsWebController extends BaseWebController {
 		return list(new SongModelJuiForm());
 	}
 	
+	/** Show the song detail page */
+	public static Result detail(String pk, String title) {
+		//check that the title is the correct one for that pk
+		SongModel song = SongModel.getByPk(pk);
+		if (song == null) {
+			throw new NotFoundErrorPageException(null);
+		}
+		else if (!EscapingUtil.escape(song.getTitle(), Escaper.URL_DESCRIPTIVE_PARAM).equals(title)) { //this takes care of null title
+			return redirect(detailUrl(song));
+		}
+		
+		return ok("Detail page for song " + song);
+	}
+	
 	/** Show the song list page after creating the song */
 	public static Result create() {
 		SongModelJuiForm songModelForm = new SongModelJuiForm();
@@ -28,6 +46,26 @@ public class SongsWebController extends BaseWebController {
 		}
 		catch (JuiFormValidationException ex) {
 			return list(songModelForm);
+		}
+	}
+	
+	/* **************************************************************************
+	 *  PUBLIC HELPERS
+	 ************************************************************************** */
+	
+	/** Gets the URL of the detail page for this song. This is the best way of getting
+	 *  the detail URL because it will populate the correct title */
+	public static String detailUrl(SongModel song) {
+		if (song != null) {
+			return routes.SongsWebController.detail(
+				song.getPk().toString(),
+				EscapingUtil.escape(song.getTitle(), Escaper.URL_DESCRIPTIVE_PARAM)
+			).url();
+		}
+		else {
+			//don't throw exception, simply return a path that will not work
+			Logger.warn("Called with null argument", new RuntimeException("song cannot be null"));
+			return routes.SimpleWebController.pageNotFound(null).url();
 		}
 	}
 	

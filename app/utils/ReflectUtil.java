@@ -29,11 +29,11 @@ public class ReflectUtil {
 			field.setAccessible(true); //this is okay because we're just reading values
 			
 			try {
-				map.put(field.getName(), field.get(o).toString());
+				map.put(field.getName(), String.valueOf(field.get(o)));
 			}
 			catch (Exception ex) {
 				//put a default string here
-				map.put(field.getName(), "?");
+				map.put(field.getName(), "EX!" + ex.getClass().getSimpleName() + "!");
 			}
 		}
 		

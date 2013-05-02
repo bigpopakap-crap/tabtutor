@@ -117,20 +117,20 @@ public class SessionModel extends BaseModel {
 	 *  BEGIN SELECTORS
 	 ************************************************************************** */
 	
-	/** Gets a Session by ID, converts the string to a UUID internally */
-	public static SessionModel getById(String id) {
+	/** Gets a Session by ID, converts the string to a Pk internally */
+	public static SessionModel getByPk(String pk) {
 		try {
-			return getById(id != null ? UUID.fromString(id) : null);
+			return getByPk(pk != null ? UUID.fromString(pk) : null);
 		}
 		catch (IllegalArgumentException ex) {
-			//the string was not a valid UUID
+			//the string was not a valid Pk
 			return null;
 		}
 	}
 	
 	/** Gets a Session by ID */
-	public static SessionModel getById(UUID id) {
-		return id != null ? FINDER.byId(id) : null;
+	public static SessionModel getByPk(UUID pk) {
+		return pk != null ? FINDER.byId(pk) : null;
 	}
 	
 	/* **************************************************************************
@@ -168,7 +168,7 @@ public class SessionModel extends BaseModel {
 		
 	/** Determines if the given ID is valid and it exists in the database */
 	public static boolean isValidExistingId(String id) {
-		return getById(id) != null;
+		return getByPk(id) != null;
 	}
 	
 	/**

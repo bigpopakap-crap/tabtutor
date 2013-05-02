@@ -117,7 +117,7 @@ public abstract class JuiForm<T> implements Renderable {
 	public T bind() throws JuiFormValidationException {
 		try {
 			clear();
-			bindValues(RequestContext.params());
+			bindValues(RequestContext.paramsMap());
 			validate();
 			
 			if (isValid()) {

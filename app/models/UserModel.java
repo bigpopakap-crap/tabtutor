@@ -133,20 +133,20 @@ public class UserModel extends BaseModel {
 		return FINDER.all();
 	}
 	
-	/** Gets a User by ID, converts the string to a UUID internally */
-	public static UserModel getById(String id) {
+	/** Gets a User by ID, converts the string to a Pk internally */
+	public static UserModel getByPk(String pk) {
 		try {
-			return getById(id != null ? UUID.fromString(id) : null);
+			return getByPk(pk != null ? UUID.fromString(pk) : null);
 		}
 		catch (IllegalArgumentException ex) {
-			//the string was not a valid UUID
+			//the string was not a valid Pk
 			return null;
 		}
 	}
 	
 	/** Gets a User by ID */
-	public static UserModel getById(UUID id) {
-		return id != null ? FINDER.byId(id) : null;
+	public static UserModel getByPk(UUID pk) {
+		return pk != null ? FINDER.byId(pk) : null;
 	}
 
 	/** Gets a User by fbId */
@@ -183,8 +183,8 @@ public class UserModel extends BaseModel {
 	 ************************************************************************** */
 		
 	/** Determines if a User exists with the given ID */
-	public static boolean isValidExistingId(UUID id) {
-		return getById(id) != null;
+	public static boolean isValidExistingPk(UUID pk) {
+		return getByPk(pk) != null;
 	}
 	
 	/** Determines if a User exists with the given fbId */

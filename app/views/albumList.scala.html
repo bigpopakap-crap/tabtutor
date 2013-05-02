@@ -5,6 +5,7 @@
 	The page for the list of albums
 *@
 @(albums: List[AlbumModel], albumForm: models.forms.AlbumModelJuiForm)
+@import controllers.AlbumsWebController
 <!DOCTYPE html>
 <html>
 <head>
@@ -28,7 +29,7 @@
 		<!-- Value rows -->
 		@for(album <- albums) {
 			<tr>
-				<td>@(album.getTitle())</td>
+				<td><a href="@(AlbumsWebController.detailUrl(album))">@(album.getTitle())</a></td>
 				@if(album.hasArtist()) {
 					<td>@(album.getArtist().getName())</td>
 				} else {

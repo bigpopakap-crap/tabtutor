@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+
 /**
 * This Ebean maps to the Album table, and represents album metadata
 * 
@@ -89,6 +90,22 @@ public class AlbumModel extends BaseModel {
 	/* **************************************************************************
 	 *  BEGIN SELECTORS
 	 ************************************************************************** */
+	
+	/** Gets a Album by ID, converts the string to a UUID internally */
+	public static AlbumModel getByPk(String pk) {
+		try {
+			return getByPk(pk != null ? UUID.fromString(pk) : null);
+		}
+		catch (IllegalArgumentException ex) {
+			//the string was not a valid UUID
+			return null;
+		}
+	}
+	
+	/** Gets a Album by ID */
+	public static AlbumModel getByPk(UUID pk) {
+		return pk != null ? FINDER.byId(pk) : null;
+	}
 	
 	/** Get all albums */
 	public static List<AlbumModel> getAll() {

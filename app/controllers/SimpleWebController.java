@@ -1,7 +1,9 @@
 package controllers;
 
-import controllers.exceptions.web.NotFoundErrorPageException;
 import play.mvc.Result;
+import utils.StringUtil;
+import contexts.RequestContext;
+import controllers.exceptions.web.NotFoundErrorPageException;
 
 /**
  * This class will route all pages that the user will see as they navigate through the site,
@@ -22,6 +24,12 @@ public class SimpleWebController extends BaseWebController {
 	public static Result pageNotFound(String path) {
 		//do nothing with the path, just throw a page not found error page exception
 		throw new NotFoundErrorPageException(null);
+	}
+	
+	/** Redirect to the path without the trailing slash */
+	public static Result untrail(String path) {
+		String params = RequestContext.paramsString();
+		return movedPermanently("/" + path + (StringUtil.isNullOrEmpty(params) ? "" : "?" + params));
 	}
 	
 }

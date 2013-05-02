@@ -11,16 +11,37 @@
 # --------------------------------------------------------------------- #
 
 # --------------------------------------------------------------------- #
+#	HIGHEST PRIORITY PAGES												#
+# --------------------------------------------------------------------- #
+#Specific page-not-found page
+GET		/notfound					controllers.SimpleWebController.pageNotFound(path ?= null)
+
+#Remove trailing slashes
+GET		/*path/						controllers.SimpleWebController.untrail(path)
+
+# --------------------------------------------------------------------- #
 #	BEGIN PAGE ROUTING													#
 # --------------------------------------------------------------------- #
 GET     /                           controllers.SimpleWebController.landing()
 GET		/fblogin					controllers.AuthWebController.fblogin(code ?= null, state ?= null, targetUrl ?= "/")
 GET		/logout						controllers.AuthWebController.logout(targetUrl ?= "/")
-GET		/songs/list					controllers.SongsWebController.list()
+
+GET		/songs						controllers.SongsWebController.list()
+GET		/songs/:pk/:title			controllers.SongsWebController.detail(pk, title)
+#order is important between the line above and line below
+GET		/songs/:pk					controllers.SongsWebController.detail(pk, title ?= null)
 POST	/songs/create				controllers.SongsWebController.create()
-GET		/artists/list				controllers.ArtistsWebController.list()
+
+GET		/artists					controllers.ArtistsWebController.list()
+GET		/artists/:pk/:name			controllers.ArtistsWebController.detail(pk, name)
+#order is important between the line above and line below
+GET		/artists/:pk				controllers.ArtistsWebController.detail(pk, name ?= null)
 POST	/artists/create				controllers.ArtistsWebController.create()
-GET		/albums/list				controllers.AlbumsWebController.list()
+
+GET		/albums						controllers.AlbumsWebController.list()
+GET		/albums/:pk/:title			controllers.AlbumsWebController.detail(pk, title)
+#order is important between the line above and line below
+GET		/albums/:pk					controllers.AlbumsWebController.detail(pk, title ?= null)
 POST	/albums/create				controllers.AlbumsWebController.create()
 
 # --------------------------------------------------------------------- #

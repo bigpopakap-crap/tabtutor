@@ -47,38 +47,51 @@ public abstract class BaseModel extends Model {
 	 ****************************************** */
 	
 	/**
-	 * Called before the retry of any DML operation (before {@link #hook_preModifyingOperation(BasicDmlModifyingType)})
-	 * Note that this is not called before the first try
+	 * Called before an operation retry. This wraps the call to the hook, {@link #hook_preModifyingOperationRetry(BasicDmlModifyingType)}
 	 * 
-	 * Default implementation is just to log the operation retry
+	 * Updates the date fields by calling {@link #updateDateFields(BasicDmlModifyingType)}
 	 * 
 	 * @param opType the type of the operation
 	 */
-	protected void hook_preModifyingOperationRetry(BasicDmlModifyingType opType) {
-		//do nothing but log. models can override this if they want to do something
+	protected void preModifyingOperationRetry(BasicDmlModifyingType opType) {
+		//log the retry, increment the number of retries and call the hook
 		Logger.trace("Retrying " + opType.name() + " operation on " + this.getClass().getCanonicalName());
 		RequestStatsContext.get().incrModelOperationRetries();
+		
+		//update the date fields
+		try {
+			updateDateFields(opType);
+		} catch (Exception ex) {
+			//don't do anything, just log the error
+			Logger.error("Exception while updating timestamps in " + this.getClass().getCanonicalName(), ex);
+		}
+		
+		hook_preModifyingOperation(opType);
 	}
 	
 	/**
-	 * Called before any DML operation (after {@link #hook_preModifyingOperationRetry(BasicDmlModifyingType)}, if it's a retry)
+	 * Called before the retry of any DML operation.
+	 * Note that this is not called before the first try
 	 * 
-	 * Default implementation is to update any timestamps and expire times
+	 * Default implementation is to do nothing
 	 * 
-	 * @see CreateTime
-	 * @see UpdateTime
-	 * @see ExpireTime
+	 * This is wrapped by the base model's method, {@link #preModifyingOperationRetry(BasicDmlModifyingType)}
 	 * 
 	 * @param opType the type of the operation
 	 */
 	protected void hook_preModifyingOperation(BasicDmlModifyingType opType) {
-		//try updating the timestamps
-		try {
-			updateDateFields(opType);
-		} catch (IllegalArgumentException | IllegalAccessException ex) {
-			//don't do anything, just log the error
-			Logger.error("Exception while updating timestamps in " + this.getClass().getCanonicalName(), ex);
-		}
+		//do nothing
+	}
+	
+	/**
+	 * Called before an operation retry. This wraps the call to the hook, {@link #hook_preModifyingOperationRetry(BasicDmlModifyingType)}
+	 * @param opType the type of the operation
+	 */
+	private void postModifyingOperation(BasicDmlModifyingType opType, boolean wasSuccessful) {
+		//log the operation, increment the number of failures and call the hook
+		Logger.trace(opType.name() + " operation on " + this.getClass().getCanonicalName() + (wasSuccessful ? " was successful" : " failed"));
+		if (!wasSuccessful) RequestStatsContext.get().incrModelOperationFailures();
+		hook_postModifyingOperation(opType, wasSuccessful);
 	}
 
 	/**
@@ -87,16 +100,16 @@ public abstract class BaseModel extends Model {
 	 * This is called after all retries have completed, not before each retry.
 	 * For that functionality, see {@link #hook_preModifyingOperationRetry(BasicDmlModifyingType)}
 	 * 
-	 * Default implementation is just to log the operation
+	 * Default implementation is to nothing
+	 * 
+	 * This is wrapped by the base model's method, {@link #postModifyingOperation(BasicDmlModifyingType, boolean)}
 	 * 
 	 * @param opType the type of the operation
 	 * @param wasSuccessful true if the operation succeeded, false if it failed.
 	 * 							Failure means that it failed after all retries
 	 */
 	protected void hook_postModifyingOperation(BasicDmlModifyingType opType, boolean wasSuccessful) {
-		//do nothing but log. models can override this if they want to do something
-		Logger.trace(opType.name() + " operation on " + this.getClass().getCanonicalName() + (wasSuccessful ? " was successful" : " failed"));
-		if (!wasSuccessful) RequestStatsContext.get().incrModelOperationFailures();
+		//do nothing
 	}
 	
 	/* ***********************************************************************
@@ -152,7 +165,7 @@ public abstract class BaseModel extends Model {
 				for (int i = 1; i <= NUM_OPERATION_RETRIES.get() && !wasSuccessful; i++) {
 					try {
 						//if this is not the first attempt, call the retry hook
-						if (!isFirstTry) hook_preModifyingOperationRetry(opType);
+						if (!isFirstTry) preModifyingOperationRetry(opType);
 						isFirstTry = false;
 						
 						//call the pre-op hook
@@ -184,7 +197,7 @@ public abstract class BaseModel extends Model {
 				if (wasSuccessful) throw new IllegalStateException("wasSuccessful should never be true in this block", ex);
 				
 				try {
-					hook_postModifyingOperation(opType, wasSuccessful);
+					postModifyingOperation(opType, wasSuccessful);
 				}
 				catch (Exception ex2) {
 					Logger.error("Caught exception in post operation hook for " + model.getClass().getCanonicalName(), ex2);
@@ -197,7 +210,7 @@ public abstract class BaseModel extends Model {
 				//catch exceptions here so callers don't think the operation failed when it didn't
 				try {
 					//we've done all the retries, check if the operation was successful
-					hook_postModifyingOperation(opType, wasSuccessful);
+					postModifyingOperation(opType, wasSuccessful);
 				}
 				catch (Exception ex) {
 					Logger.error("Caught exception in finally of operation for " + model.getClass().getCanonicalName(), ex);
@@ -273,15 +286,18 @@ public abstract class BaseModel extends Model {
 	}
 
 	/** TODO */
-	private void setDateField(Class<?> ann, Field field, Date date) throws IllegalArgumentException, IllegalAccessException {
+	private void setDateField(Class<?> ann, Field field, Date date) throws IllegalArgumentException, IllegalStateException, IllegalAccessException {
 		if (field == null) return; //don't do anything with a null field
+		if (ann == null) throw new IllegalArgumentException("ann cannot be null");
+		if (date == null) throw new IllegalArgumentException("date cannot be null");
 
 		//make sure it is of the correct type before setting it
-		if (field.getType() != Date.class) {
-			Logger.error(ann.getCanonicalName() + " annotation used on field " +
-						 field.getName() + " in " +
-						 this.getClass().getCanonicalName() +
-						 ", and is not a Date type");
+		if (field.getType().isAssignableFrom(date.getClass())) {
+			throw new IllegalStateException(ann.getCanonicalName() + " annotation used on field " +
+						 field.getName() +
+						 " in " + this.getClass().getCanonicalName() +
+						 " and is of type " + field.getType().getCanonicalName() +
+						 ", which is not assignable from the intended value type " + date.getClass().getCanonicalName());
 		}
 		else {
 			field.set(this, date);

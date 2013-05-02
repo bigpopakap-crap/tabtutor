@@ -8,9 +8,17 @@
 		ex - the Throwable to display
 *@
 @(ex: Throwable)
+@import contexts.AppContext
 @import utils.ExceptionUtil
-<div style="font-family: monospace">
-	@for(line <- ExceptionUtil.printStackTrace(ex).split("\n")) {
-		<div>@(line.replaceAll("\t", ". .. "))</div>
+@import utils.Logger.Level
+@if(AppContext.Mode.isDevelopment()) {
+	@if(ex != null) {
+		<div style="font-family: monospace">
+			@for(line <- ExceptionUtil.printStackTrace(ex).split("\n")) {
+				<div>@(line.replaceAll("\t", ". .. "))</div>
+			}
+		</div>
 	}
-</div>
+} else {
+	@p_util_log(Level.NONE, false, Level.WARN, "Tried to print stack trace to HTML outside of Dev mode: " + ex)
+}
