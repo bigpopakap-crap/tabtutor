@@ -6,6 +6,15 @@ import utils.ConcurrentUtil;
 import utils.StringUtil;
 import controllers.exceptions.web.CsrfTokenInvalidErrorPageException;
 
+/**
+ * Constraints that can be added to form inputs. These provide an implementation for
+ * verifying them on the server side, and can have UI couterparts that can be enforced
+ * by Javascript
+ * 
+ * @author bigpopakap@gmail.com
+ * @since 2013-04-14
+ *
+ */
 public abstract class JuiFormInputConstraint {
 	
 	/* **************************************************************************
