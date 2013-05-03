@@ -1,4 +1,4 @@
-package ops.base;
+package operations.base;
 
 /**
  * Base class for all operations. An operation is an action that the app

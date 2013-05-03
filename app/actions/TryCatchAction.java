@@ -1,11 +1,12 @@
 package actions;
 
-import oops.BaseOops;
 import oops.InternalServerOops;
+import oops.base.BaseOops;
 import helpers.Logger;
 import play.mvc.Http.Context;
 import play.mvc.Result;
-import actions.annotations.ActionAnnotations.TriedCaught;
+import actions.base.BaseAction;
+import actions.base.ActionAnnotations.TriedCaught;
 import contexts.AppContext;
 import contexts.RequestStatsContext;
 

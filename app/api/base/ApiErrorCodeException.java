@@ -1,4 +1,4 @@
-package api;
+package api.base;
 
 /**
  * General API exception for when the service does responds with an

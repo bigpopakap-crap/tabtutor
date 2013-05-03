@@ -1,10 +1,11 @@
 package oops;
 
+import oops.base.BaseOops;
+import oops.base.OopsPageRenderUtil;
 import helpers.Message;
 import play.api.templates.Html;
 import play.mvc.Result;
 import play.mvc.Results;
-import controllers.exceptions.utils.ErrorPageRenderUtil;
 
 /**
  * Error page when a CSRF validation fails
@@ -23,7 +24,7 @@ public class CsrfTokenInvalidOops extends BaseOops {
 
 	@Override
 	protected Html hook_renderWebResult() {
-		return ErrorPageRenderUtil.goHome(this, getMessage());
+		return OopsPageRenderUtil.goHome(this, getMessage());
 	}
 
 	@Override

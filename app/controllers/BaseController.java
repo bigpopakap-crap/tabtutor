@@ -1,6 +1,6 @@
 package controllers;
 
-import oops.BaseOops;
+import oops.base.BaseOops;
 import play.mvc.Controller;
 
 /**

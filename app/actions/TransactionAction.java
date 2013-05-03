@@ -2,7 +2,8 @@ package actions;
 
 import play.mvc.Http.Context;
 import play.mvc.Result;
-import actions.annotations.ActionAnnotations.Transactioned;
+import actions.base.BaseAction;
+import actions.base.ActionAnnotations.Transactioned;
 
 import com.avaje.ebean.Ebean;
 

@@ -1,4 +1,4 @@
-package ops.base;
+package operations.base;
 
 import oops.NotAuthedOops;
 import helpers.DependentOperation;

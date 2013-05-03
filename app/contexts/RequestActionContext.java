@@ -9,7 +9,7 @@ import java.util.concurrent.Callable;
 
 import contexts.base.BaseContext;
 
-import actions.BaseAction;
+import actions.base.BaseAction;
 
 /**
  * This class holds information about which actions have been applied

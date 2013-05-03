@@ -4,7 +4,8 @@ import helpers.Logger;
 import models.SessionModel;
 import play.mvc.Http.Context;
 import play.mvc.Result;
-import actions.annotations.ActionAnnotations.Authed;
+import actions.base.BaseAction;
+import actions.base.ActionAnnotations.Authed;
 import contexts.SessionContext;
 import controllers.AuthWebController;
 

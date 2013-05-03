@@ -1,11 +1,12 @@
 package oops;
 
+import oops.base.BaseOops;
+import oops.base.OopsPageRenderUtil;
 import helpers.Message;
 import play.api.templates.Html;
 import play.mvc.Result;
 import play.mvc.Results;
 import contexts.RequestContext;
-import controllers.exceptions.utils.ErrorPageRenderUtil;
 
 public class NotAuthedOops extends BaseOops {
 
@@ -17,7 +18,7 @@ public class NotAuthedOops extends BaseOops {
 
 	@Override
 	protected Html hook_renderWebResult() {
-		return ErrorPageRenderUtil.goTo(this, RequestContext.loginUrl(), Message.errorPage_toSignIn.get(), Message.errorPage_notAuthedDescription.get());
+		return OopsPageRenderUtil.goTo(this, RequestContext.loginUrl(), Message.errorPage_toSignIn.get(), Message.errorPage_notAuthedDescription.get());
 	}
 
 	@Override

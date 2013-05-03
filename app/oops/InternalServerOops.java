@@ -1,9 +1,10 @@
 package oops;
 
+import oops.base.BaseOops;
+import oops.base.OopsPageRenderUtil;
 import play.api.templates.Html;
 import play.mvc.Result;
 import play.mvc.Results;
-import controllers.exceptions.utils.ErrorPageRenderUtil;
 
 
 /**
@@ -28,7 +29,7 @@ public class InternalServerOops extends BaseOops {
 
 	@Override
 	protected Html hook_renderWebResult() {
-		return ErrorPageRenderUtil.goBack(this, getMessage());
+		return OopsPageRenderUtil.goBack(this, getMessage());
 	}
 
 	@Override

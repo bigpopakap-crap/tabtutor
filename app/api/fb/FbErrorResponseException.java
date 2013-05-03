@@ -1,6 +1,6 @@
 package api.fb;
 
-import api.BaseApiException;
+import api.base.BaseApiException;
 
 /**
  * Exception to be thrown representing an error response from Facebook
