@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import models.base.BaseModel;
+import models.helps.OperationReq;
 
 import com.avaje.ebean.annotation.Formula;
 
@@ -104,6 +105,9 @@ public class SongModel extends BaseModel {
 	}
 	
 	public static SongModel createAndSave(String title, ArtistModel artist, AlbumModel album, int trackNum, boolean isLive, String youtubeId) {
+		OperationReq.requireAndThrow(
+			OperationReq.IS_LOGGED_IN
+		);
 		return (SongModel) new SongModel(title, artist, album, trackNum, isLive, youtubeId).doSaveAndRetry();
 	}
 	

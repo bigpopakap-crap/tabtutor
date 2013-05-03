@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import models.base.BaseModel;
+import models.helps.OperationReq;
 
 
 /**
@@ -86,6 +87,9 @@ public class AlbumModel extends BaseModel {
 	}
 	
 	public static AlbumModel createAndSave(String title, ArtistModel artist, int year, int numTracks) {
+		OperationReq.requireAndThrow(
+			OperationReq.IS_LOGGED_IN
+		);
 		return (AlbumModel) new AlbumModel(title, artist, year, numTracks).doSaveAndRetry();
 	}
 	

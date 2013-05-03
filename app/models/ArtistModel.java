@@ -13,6 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import models.base.BaseModel;
+import models.helps.OperationReq;
 
 
 /**
@@ -66,6 +67,9 @@ public class ArtistModel extends BaseModel {
 	 ************************************************************************** */
 	
 	public static ArtistModel createAndSave(String name) {
+		OperationReq.requireAndThrow(
+			OperationReq.IS_LOGGED_IN
+		);
 		return (ArtistModel) new ArtistModel(name).doSaveAndRetry();
 	}
 	

@@ -18,10 +18,12 @@ import javax.persistence.Transient;
 
 import models.annotations.CreateTime;
 import models.base.BaseModel;
-
+import models.helps.OperationReq;
 import utils.DateUtil;
 
 import com.avaje.ebean.annotation.Formula;
+
+import contexts.SessionContext;
 
 
 /**
@@ -125,6 +127,23 @@ public class UserModel extends BaseModel {
 	 * @return the user object that was created and saved
 	 */
 	public static UserModel createAndSave(String fbId, String username, String email, boolean isTestUser, UserModel creator) {
+		//make sure that if there's a creator, then it is a test user
+		if (creator != null && !isTestUser) {
+			throw new IllegalStateException("If there is a creator, this must be a test user");
+		}
+		
+		if (creator != null || isTestUser) {
+			//make sure the creator is the one in the session
+			if (creator != null && creator != SessionContext.user()) {
+				throw new IllegalStateException("The creator must the user who is logged in");
+			}
+			
+			//only allow admins (or anyone in dev mode) to perform this operation
+			OperationReq.requireAndThrow(
+				OperationReq.IS_DEV_MODE_OR_ADMIN_USER
+			);
+		}
+		
 		return (UserModel) new UserModel(fbId, username, email, isTestUser, creator).doSaveAndRetry();
 	}
 	

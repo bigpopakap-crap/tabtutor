@@ -33,6 +33,7 @@ errorPage_internalServerErrorDescription=Please try again later, or submit an er
 errorPage_pageNotFoundDescription=We couldn't find the page you were looking for
 errorPage_csrfTokenInvalidDescription=You may have been hacked!
 errorPage_notAuthedDescription=You must be logged in to do that
+errorPage_insufficientPrivilegesDescription=You don't have the privileges to do that
 errorPage_toGoBack=to go back
 errorPage_toGoHome=to go home
 errorPage_toSignIn=to sign in or register via Facebook

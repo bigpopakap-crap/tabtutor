@@ -11,6 +11,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import oops.base.BaseOops;
+
 import models.SessionCsrfTokenModel;
 import models.exceptions.FailedOperationException;
 import play.api.templates.Html;
@@ -123,6 +125,10 @@ public abstract class JuiForm<T> implements Renderable {
 			if (isValid()) {
 				try {
 					return bind(getValues());
+				}
+				catch (BaseOops	ex) {
+					//relay the oops
+					throw ex;
 				}
 				catch (FailedOperationException ex) {
 					throw new RuntimeException("Database operation failed", ex);
