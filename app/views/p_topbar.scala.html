@@ -4,8 +4,9 @@
 	
 	Topbar common to all pages
 *@
-@import contexts.RequestContext;
-@import contexts.SessionContext;
+@import contexts.RequestContext
+@import contexts.SessionContext
+@import helpers.Message
 @p_staticResource(Array("/public/stylesheets/topbar.css"))
 <div id="topbar" class="topbar">
 	<a href="/">Home</a> - 
@@ -13,6 +14,6 @@
 	@if(SessionContext.hasUser()) {
 		<span>@(SessionContext.user().getUsername())</span>
 	} else {
-		<a href="@(RequestContext.loginUrl())">Login</a>
+		<a href="@(RequestContext.loginUrl())">@(Message.word_sign_in.get())</a>
 	}
 </div>

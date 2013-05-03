@@ -18,7 +18,7 @@ public class CsrfTokenInvalidExposedException extends BaseExposedException {
 	private static final long serialVersionUID = -3672421677154333902L;
 
 	public CsrfTokenInvalidExposedException() {
-		super(null, Message.errorPage_csrfTokenInvalid.get());
+		super(null, Message.errorPage_csrfTokenInvalidDescription.get());
 	}
 
 	@Override

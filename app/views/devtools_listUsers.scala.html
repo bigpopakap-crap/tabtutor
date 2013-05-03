@@ -5,8 +5,8 @@
 	The page to list users and provide login links for them
 *@
 @(users: List[UserModel], devtoolsUserForm: models.forms.DevtoolsUserJuiForm)
-@import contexts.RequestContext;
-@import helpers.Message;
+@import contexts.RequestContext
+@import helpers.Message
 @td(value: Object) = {
 	<td title="@(value)">@(value)</td>
 }
@@ -42,7 +42,7 @@
 			<tr>
 				<td>
 					<a href="@(RequestContext.devtoolsLoginUrl(user.getPk().toString()))">
-						@(Message.word_login.get())
+						@(Message.word_sign_in.get())
 					</a>
 				</td>
 				@td(user.getUsername())

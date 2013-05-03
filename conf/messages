@@ -1,5 +1,5 @@
 word_user=user
-word_login=login
+word_sign_in=Sign in
 
 formError_required={0} is required
 formError_notUnique={0} is not available
@@ -28,9 +28,11 @@ formInput_albumTitle_placeholder=Abbey Road
 formInput_albumTitle_helpText=The title of the album
 
 errorPage_title=Oops! An error occurred
+errorPage_sampleDescription=This is the description
 errorPage_internalServerErrorDescription=Please try again later, or submit an error report if the problem persists
 errorPage_pageNotFoundDescription=We couldn't find the page you were looking for
+errorPage_csrfTokenInvalidDescription=You may have been hacked!
+errorPage_notAuthedDescription=You must be logged in to do that
 errorPage_toGoBack=to go back
 errorPage_toGoHome=to go home
-errorPage_sampleDescription=This is the description
-errorPage_csrfTokenInvalid=You may have been hacked!
+errorPage_toSignIn=to sign in or register via Facebook

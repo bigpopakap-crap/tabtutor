@@ -25,7 +25,7 @@ public abstract class Message {
 	 ************************************************************************** */
 	
 	public static final Message word_user = new Message("word_user") {};
-	public static final Message word_login = new Message("word_login") {};
+	public static final Message word_sign_in = new Message("word_sign_in") {};
 	
 	public static final Message formError_required = new Message("formError_required") {};
 	public static final Message formError_notUnique = new Message("formError_notUnique") {};
@@ -54,12 +54,14 @@ public abstract class Message {
 	public static final Message formInput_albumTitle_helpText = new Message("formInput_albumTitle_helpText") {};
 	
 	public static final Message errorPage_title = new Message("errorPage_title") {};
+	public static final Message errorPage_sampleDescription = new Message("errorPage_sampleDescription") {};
 	public static final Message errorPage_internalServerErrorDescription = new Message("errorPage_internalServerErrorDescription") {};
 	public static final Message errorPage_pageNotFoundDescription = new Message("errorPage_pageNotFoundDescription") {};
+	public static final Message errorPage_csrfTokenInvalidDescription = new Message("errorPage_csrfTokenInvalidDescription") {};
+	public static final Message errorPage_notAuthedDescription = new Message("errorPage_notAuthedDescription") {};
 	public static final Message errorPage_toGoBack = new Message("errorPage_toGoBack") {};
 	public static final Message errorPage_toGoHome = new Message("errorPage_toGoHome") {};
-	public static final Message errorPage_sampleDescription = new Message("errorPage_sampleDescription") {};
-	public static final Message errorPage_csrfTokenInvalid = new Message("errorPage_csrfTokenInvalid") {};
+	public static final Message errorPage_toSignIn = new Message("errorPage_toSignIn") {};
 	
 	/* **************************************************************************
 	 *  CLASS DEFINITION
