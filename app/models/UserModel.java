@@ -1,6 +1,7 @@
 package models;
 
 import helpers.Logger;
+import helpers.OperationReq;
 
 import java.util.Date;
 import java.util.List;
@@ -18,7 +19,6 @@ import javax.persistence.Transient;
 
 import models.annotations.CreateTime;
 import models.base.BaseModel;
-import models.helps.OperationReq;
 import utils.DateUtil;
 
 import com.avaje.ebean.annotation.Formula;

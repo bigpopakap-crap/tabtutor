@@ -1,6 +1,5 @@
-package models.helps;
+package helpers;
 
-import helpers.DependentOperation;
 import oops.NotAdminOops;
 import oops.NotAdminOops.ExposeType;
 import oops.NotAuthedOops;

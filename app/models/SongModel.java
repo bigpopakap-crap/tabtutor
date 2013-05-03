@@ -1,5 +1,7 @@
 package models;
 
+import helpers.OperationReq;
+
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -14,7 +16,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import models.base.BaseModel;
-import models.helps.OperationReq;
 
 import com.avaje.ebean.annotation.Formula;
 
