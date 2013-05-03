@@ -5,10 +5,17 @@ import java.util.List;
 import juiforms.JuiFormValidationException;
 import models.SongModel;
 import models.forms.SongModelJuiForm;
-import operations.base.BaseOperation;
+import operations.base.BaseOperator;
 import operations.base.OperationRequirement;
 
-public class SongOperation extends BaseOperation {
+/**
+ * Class that holds all operations the app can perform related to songs
+ * 
+ * @author bigpopakap
+ * @since 2013-05-02
+ *
+ */
+public abstract class SongsOperator extends BaseOperator {
 	
 	/** Get all songs */
 	public static List<SongModel> getAll() {

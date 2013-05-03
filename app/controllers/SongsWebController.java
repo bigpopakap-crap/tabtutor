@@ -4,7 +4,7 @@ import juiforms.JuiFormValidationException;
 import models.SongModel;
 import models.forms.SongModelJuiForm;
 import oops.NotFoundOops;
-import operations.SongOperation;
+import operations.SongsOperator;
 import play.Logger;
 import play.mvc.Result;
 import utils.EscapingUtil;
@@ -27,7 +27,7 @@ public class SongsWebController extends BaseWebController {
 	/** Show the song detail page */
 	public static Result detail(String pk, String title) {
 		//check that the title is the correct one for that pk
-		SongModel song = SongOperation.getByPk(pk);
+		SongModel song = SongsOperator.getByPk(pk);
 		if (song == null) {
 			throw new NotFoundOops(null);
 		}
@@ -42,7 +42,7 @@ public class SongsWebController extends BaseWebController {
 	public static Result create() {
 		SongModelJuiForm songModelForm = new SongModelJuiForm();
 		try {
-			SongOperation.create(songModelForm);
+			SongsOperator.create(songModelForm);
 			return redirect(routes.SongsWebController.list());
 		}
 		catch (JuiFormValidationException ex) {
@@ -77,7 +77,7 @@ public class SongsWebController extends BaseWebController {
 	/** Displays the list of songs using the given form object */
 	private static Result list(SongModelJuiForm songModelForm) {
 		return ok(views.html.songList.render(
-			SongOperation.getAll(),
+			SongsOperator.getAll(),
 			songModelForm
 		));
 	}

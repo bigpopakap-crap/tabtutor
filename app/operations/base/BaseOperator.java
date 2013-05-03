@@ -9,7 +9,7 @@ package operations.base;
  * @since 2013-05-02
  *
  */
-public abstract class BaseOperation {
+public abstract class BaseOperator {
 	
 	//TODO test that controllers only call the operations and not the models directly
 
