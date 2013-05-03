@@ -1,10 +1,10 @@
 package actions;
 
+import oops.NotFoundOops;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import actions.annotations.ActionAnnotations.DevModeProtected;
 import contexts.AppContext;
-import controllers.exceptions.NotFoundExposedException;
 
 /**
  * This action will catch throw an exception if the app is not running in the
@@ -20,7 +20,7 @@ public class DevModeProtectAction extends BaseAction<DevModeProtected> {
 	protected Result hook_call(Context ctx) throws Throwable {
 		if (!AppContext.Mode.isDevelopment()) {
 			//TODO figure out which default error to show to the user
-			throw new NotFoundExposedException(null);
+			throw new NotFoundOops(null);
 		}
 		else {
 			return delegate.call(ctx);

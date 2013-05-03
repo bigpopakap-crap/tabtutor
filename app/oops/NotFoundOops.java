@@ -1,4 +1,4 @@
-package controllers.exceptions;
+package oops;
 
 import helpers.Message;
 import play.api.templates.Html;
@@ -14,11 +14,11 @@ import controllers.exceptions.utils.ErrorPageRenderUtil;
  * @since 2013-03-27
  *
  */
-public class NotFoundExposedException extends BaseExposedException {
+public class NotFoundOops extends BaseOops {
 
 	private static final long serialVersionUID = 1L;
 
-	public NotFoundExposedException(Throwable cause) {
+	public NotFoundOops(Throwable cause) {
 		super(cause, Message.errorPage_pageNotFoundDescription.get());
 	}
 

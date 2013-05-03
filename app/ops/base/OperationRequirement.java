@@ -1,8 +1,8 @@
 package ops.base;
 
+import oops.NotAuthedOops;
 import helpers.DependentOperation;
 import contexts.SessionContext;
-import controllers.exceptions.NotAuthedExposedException;
 
 /**
  * Represents constraints that can be applied and checked before 
@@ -17,12 +17,12 @@ public abstract class OperationRequirement extends DependentOperation<Void, Void
 	 *  STATIC DEFINITIONS
 	 ************************************************************************** */
 	
-	public static final OperationRequirement IS_LOGGED_IN = new OperationRequirement() {
+	public static final OperationRequirement LOGGED_IN = new OperationRequirement() {
 		@Override
 		protected Void hook_postDependenciesOperate(Void input) {
 			//ignore the input, just make sure there is a user logged in
 			if (!SessionContext.hasUser()) {
-				throw new NotAuthedExposedException();
+				throw new NotAuthedOops();
 			}
 			
 			//shut up the compiler

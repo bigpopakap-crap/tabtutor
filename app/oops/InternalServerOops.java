@@ -1,4 +1,4 @@
-package controllers.exceptions;
+package oops;
 
 import play.api.templates.Html;
 import play.mvc.Result;
@@ -14,15 +14,15 @@ import controllers.exceptions.utils.ErrorPageRenderUtil;
  * @since 2013-03-27
  *
  */
-public class InternalServerExposedException extends BaseExposedException {
+public class InternalServerOops extends BaseOops {
 
 	private static final long serialVersionUID = 1L;
 
-	public InternalServerExposedException(Throwable cause) {
+	public InternalServerOops(Throwable cause) {
 		super(cause);
 	}
 	
-	public InternalServerExposedException(Throwable cause, String message) {
+	public InternalServerOops(Throwable cause, String message) {
 		super(cause, message);
 	}
 

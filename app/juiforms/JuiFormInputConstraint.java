@@ -1,11 +1,11 @@
 package juiforms;
 
+import oops.CsrfTokenInvalidOops;
 import helpers.DependentOperation;
 import helpers.Message;
 import models.SessionCsrfTokenModel;
 import utils.ConcurrentUtil;
 import utils.StringUtil;
-import controllers.exceptions.CsrfTokenInvalidExposedException;
 
 /**
  * Constraints that can be added to form inputs. These provide an implementation for
@@ -40,7 +40,7 @@ public abstract class JuiFormInputConstraint extends DependentOperation<JuiFormI
 		protected Message hook_postDependenciesOperate(JuiFormInput input) {
 			if (!SessionCsrfTokenModel.isValidToken(input.getValue())) {
 				//throw an exception here instead, because this is bad
-				throw new CsrfTokenInvalidExposedException();
+				throw new CsrfTokenInvalidOops();
 			}
 			else return null;
 		}

@@ -1,13 +1,13 @@
 package actions;
 
+import oops.BaseOops;
+import oops.InternalServerOops;
 import helpers.Logger;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import actions.annotations.ActionAnnotations.TriedCaught;
 import contexts.AppContext;
 import contexts.RequestStatsContext;
-import controllers.exceptions.BaseExposedException;
-import controllers.exceptions.InternalServerExposedException;
 
 /**
  * This action will catch any exceptions in the delegated action, and
@@ -34,13 +34,13 @@ public class TryCatchAction extends BaseAction<TriedCaught> {
 			//delegate to the actual handler
 			return delegate.call(ctx);
 		}
-		catch (BaseExposedException ex) {
+		catch (BaseOops ex) {
 			Logger.warn("Exposed exception caught in " + this.getClass().getCanonicalName(), ex);
 			return ex.result();
 		}
 		catch (Exception ex) {
 			Logger.error("Exception caught in " + this.getClass().getCanonicalName(), ex);
-			return new InternalServerExposedException(ex).result();
+			return new InternalServerOops(ex).result();
 		}
 		finally {
 			try {

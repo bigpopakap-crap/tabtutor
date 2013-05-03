@@ -1,5 +1,6 @@
 package controllers;
 
+import oops.NotFoundOops;
 import juiforms.JuiFormValidationException;
 import models.ArtistModel;
 import models.forms.ArtistModelJuiForm;
@@ -7,7 +8,6 @@ import play.Logger;
 import play.mvc.Result;
 import utils.EscapingUtil;
 import utils.EscapingUtil.Escaper;
-import controllers.exceptions.NotFoundExposedException;
 
 /**
  * Controller for all things related so artists: listing, creating, modifying, etc.
@@ -28,7 +28,7 @@ public class ArtistsWebController extends BaseWebController {
 		//check that the title is the correct one for that pk
 		ArtistModel artist = ArtistModel.getByPk(pk);
 		if (artist == null) {
-			throw new NotFoundExposedException(null);
+			throw new NotFoundOops(null);
 		}
 		else if (!EscapingUtil.escape(artist.getName(), Escaper.URL_DESCRIPTIVE_PARAM).equals(name)) { //this takes care of null name
 			return redirect(detailUrl(artist));

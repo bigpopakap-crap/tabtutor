@@ -1,5 +1,6 @@
 package controllers;
 
+import oops.NotFoundOops;
 import juiforms.JuiFormValidationException;
 import models.AlbumModel;
 import models.forms.AlbumModelJuiForm;
@@ -7,7 +8,6 @@ import play.Logger;
 import play.mvc.Result;
 import utils.EscapingUtil;
 import utils.EscapingUtil.Escaper;
-import controllers.exceptions.NotFoundExposedException;
 
 /**
  * Controller for all things related so albums: listing, creating, modifying, etc.
@@ -28,7 +28,7 @@ public class AlbumsWebController extends BaseWebController {
 		//check that the title is the correct one for that pk
 		AlbumModel album = AlbumModel.getByPk(pk);
 		if (album == null) {
-			throw new NotFoundExposedException(null);
+			throw new NotFoundOops(null);
 		}
 		else if (!EscapingUtil.escape(album.getTitle(), Escaper.URL_DESCRIPTIVE_PARAM).equals(title)) { //this takes care of null title
 			return redirect(detailUrl(album));

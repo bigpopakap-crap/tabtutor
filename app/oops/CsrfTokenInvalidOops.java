@@ -1,4 +1,4 @@
-package controllers.exceptions;
+package oops;
 
 import helpers.Message;
 import play.api.templates.Html;
@@ -13,11 +13,11 @@ import controllers.exceptions.utils.ErrorPageRenderUtil;
  * @since 2013-04-21
  *
  */
-public class CsrfTokenInvalidExposedException extends BaseExposedException {
+public class CsrfTokenInvalidOops extends BaseOops {
 
 	private static final long serialVersionUID = -3672421677154333902L;
 
-	public CsrfTokenInvalidExposedException() {
+	public CsrfTokenInvalidOops() {
 		super(null, Message.errorPage_csrfTokenInvalidDescription.get());
 	}
 
