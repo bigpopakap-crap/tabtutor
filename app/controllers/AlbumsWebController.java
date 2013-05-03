@@ -4,6 +4,7 @@ import juiforms.JuiFormValidationException;
 import models.AlbumModel;
 import models.forms.AlbumModelJuiForm;
 import oops.NotFoundOops;
+import operations.AlbumsOperator;
 import play.Logger;
 import play.mvc.Result;
 import utils.EscapingUtil;
@@ -26,7 +27,7 @@ public class AlbumsWebController extends BaseWebController {
 	/** Show the album detail page */
 	public static Result detail(String pk, String title) {
 		//check that the title is the correct one for that pk
-		AlbumModel album = AlbumModel.getByPk(pk);
+		AlbumModel album = AlbumsOperator.getByPk(pk);
 		if (album == null) {
 			throw new NotFoundOops(null);
 		}
@@ -41,7 +42,7 @@ public class AlbumsWebController extends BaseWebController {
 	public static Result create() {
 		AlbumModelJuiForm albumModelForm = new AlbumModelJuiForm();
 		try {
-			albumModelForm.bind();
+			AlbumsOperator.create(albumModelForm);
 			return redirect(routes.AlbumsWebController.list());
 		}
 		catch (JuiFormValidationException ex) {
@@ -76,7 +77,7 @@ public class AlbumsWebController extends BaseWebController {
 	/** Displays the list of songs using the given form object */
 	private static Result list(AlbumModelJuiForm albumModelForm) {
 		return ok(views.html.albumList.render(
-			AlbumModel.getAll(),
+			AlbumsOperator.getAll(),
 			albumModelForm
 		));
 	}
