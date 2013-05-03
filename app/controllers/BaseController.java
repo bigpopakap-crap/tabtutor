@@ -1,7 +1,7 @@
 package controllers;
 
+import oops.BaseOops;
 import play.mvc.Controller;
-import controllers.exceptions.BaseExposedException;
 
 /**
  * This class should be the parent of all controllers

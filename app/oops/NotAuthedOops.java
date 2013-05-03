@@ -1,4 +1,4 @@
-package controllers.exceptions;
+package oops;
 
 import helpers.Message;
 import play.api.templates.Html;
@@ -7,11 +7,11 @@ import play.mvc.Results;
 import contexts.RequestContext;
 import controllers.exceptions.utils.ErrorPageRenderUtil;
 
-public class NotAuthedExposedException extends BaseExposedException {
+public class NotAuthedOops extends BaseOops {
 
 	private static final long serialVersionUID = -7098751117037866137L;
 
-	public NotAuthedExposedException() {
+	public NotAuthedOops() {
 		super(null);
 	}
 

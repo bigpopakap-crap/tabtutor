@@ -1,4 +1,4 @@
-package controllers.exceptions;
+package oops;
 
 import play.Logger;
 import play.api.templates.Html;
@@ -19,19 +19,19 @@ import contexts.RequestContext;
  * @since 2013-03-06
  *
  */
-public abstract class BaseExposedException extends RuntimeException {
+public abstract class BaseOops extends RuntimeException {
 
 	private static final long serialVersionUID = -935805780499802623L;
 	
 	//do *NOT* support a no-argument constructor in order to force classes to specify a cause
 	
 	/** Only define this constructor so all subclasses are forced to specify the cause */
-	public BaseExposedException(Throwable cause) {
+	public BaseOops(Throwable cause) {
 		super(cause);
 	}
 	
 	/** Only define this constructor so all subclasses are forced to specify the cause */
-	public BaseExposedException(Throwable cause, String message) {
+	public BaseOops(Throwable cause, String message) {
 		super(message, cause);
 	}
 	

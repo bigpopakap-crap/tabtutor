@@ -1,8 +1,8 @@
 package controllers;
 
+import oops.InternalServerOops;
+import oops.NotFoundOops;
 import play.mvc.Result;
-import controllers.exceptions.InternalServerExposedException;
-import controllers.exceptions.NotFoundExposedException;
 
 /**
  * Test pages for throwing exposed exceptions
@@ -14,11 +14,11 @@ import controllers.exceptions.NotFoundExposedException;
 public class TestErrorPageExceptionWebController extends TestWebController {
 	
 	public static Result internalServerErrorPage() {
-		throw new InternalServerExposedException(new RuntimeException());
+		throw new InternalServerOops(new RuntimeException());
 	}
 	
 	public static Result notFoundPage() {
-		throw new NotFoundExposedException(new RuntimeException());
+		throw new NotFoundOops(new RuntimeException());
 	}
 
 }
