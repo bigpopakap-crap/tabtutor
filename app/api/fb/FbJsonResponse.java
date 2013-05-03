@@ -4,7 +4,7 @@ import java.util.Map;
 
 import play.libs.WS.Response;
 import types.HttpMethodType;
-import api.BaseApiJsonResponse;
+import api.base.BaseApiJsonResponse;
 
 /**
  * Wraps a JSON response from Facebook and provides some helper methods to access

@@ -8,10 +8,10 @@ import play.libs.WS.Response;
 import play.mvc.Http.Request;
 import types.HttpMethodType;
 import utils.RestUtil;
-import api.ApiErrorCodeException;
-import api.ApiNoResponseException;
-import api.ApiResponseOption;
-import api.BaseApi;
+import api.base.ApiErrorCodeException;
+import api.base.ApiNoResponseException;
+import api.base.ApiResponseOption;
+import api.base.BaseApi;
 import contexts.AppContext;
 import controllers.routes;
 

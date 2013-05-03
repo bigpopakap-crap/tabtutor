@@ -1,4 +1,4 @@
-package controllers.exceptions.utils;
+package oops.base;
 
 import helpers.Message;
 import play.api.templates.Html;
@@ -10,7 +10,7 @@ import play.api.templates.Html;
  * @since 2013-05-02
  *
  */
-public abstract class ErrorPageRenderUtil {
+public abstract class OopsPageRenderUtil {
 	
 	/**
 	 * This is the basic error page the provides a link to go to some other URL

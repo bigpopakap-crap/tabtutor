@@ -1,4 +1,4 @@
-package actions;
+package actions.base;
 
 import helpers.Logger;
 

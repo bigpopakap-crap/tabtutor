@@ -1,10 +1,11 @@
 package oops;
 
+import oops.base.BaseOops;
+import oops.base.OopsPageRenderUtil;
 import helpers.Message;
 import play.api.templates.Html;
 import play.mvc.Result;
 import play.mvc.Results;
-import controllers.exceptions.utils.ErrorPageRenderUtil;
 
 /**
  * Basic error page whose description is that of a NOT FOUND error, and whose
@@ -24,7 +25,7 @@ public class NotFoundOops extends BaseOops {
 
 	@Override
 	protected Html hook_renderWebResult() {
-		return ErrorPageRenderUtil.goBack(this, getMessage());
+		return OopsPageRenderUtil.goBack(this, getMessage());
 	}
 
 	@Override

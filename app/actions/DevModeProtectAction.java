@@ -3,7 +3,8 @@ package actions;
 import oops.NotFoundOops;
 import play.mvc.Http.Context;
 import play.mvc.Result;
-import actions.annotations.ActionAnnotations.DevModeProtected;
+import actions.base.BaseAction;
+import actions.base.ActionAnnotations.DevModeProtected;
 import contexts.AppContext;
 
 /**

@@ -1,4 +1,4 @@
-package oops;
+package oops.base;
 
 import play.Logger;
 import play.api.templates.Html;
