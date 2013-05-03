@@ -1,11 +1,12 @@
 package operations.base;
 
-import oops.NotAuthedOops;
 import helpers.DependentOperation;
+import oops.NotAuthedOops;
 import contexts.SessionContext;
 
 /**
- * Represents constraints that can be applied and checked before 
+ * Represents requirements that can be applied and checked before this requirement,
+ * which should be used to validate operations before they are performed
  * 
  * @author bigpopakap
  * @since 2013-05-02
