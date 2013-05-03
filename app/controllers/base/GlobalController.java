@@ -1,4 +1,4 @@
-package controllers;
+package controllers.base;
 
 import helpers.Logger;
 

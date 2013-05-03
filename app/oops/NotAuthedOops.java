@@ -1,8 +1,8 @@
 package oops;
 
+import helpers.Message;
 import oops.base.BaseOops;
 import oops.base.OopsPageRenderUtil;
-import helpers.Message;
 import play.api.templates.Html;
 import play.mvc.Result;
 import play.mvc.Results;
@@ -11,7 +11,7 @@ import contexts.RequestContext;
 public class NotAuthedOops extends BaseOops {
 
 	private static final long serialVersionUID = -7098751117037866137L;
-
+	
 	public NotAuthedOops() {
 		super(null);
 	}

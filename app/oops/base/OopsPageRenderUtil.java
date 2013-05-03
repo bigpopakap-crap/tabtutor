@@ -28,6 +28,7 @@ public abstract class OopsPageRenderUtil {
 	
 	/** A page to go back to the previous page */
 	public static Html goBack(Throwable ex, String description) {
+		//TODO use a better mechanism for going back a page
 		return goTo(ex, "javascript:history.back()", Message.errorPage_toGoBack.get(), description);
 	}
 	

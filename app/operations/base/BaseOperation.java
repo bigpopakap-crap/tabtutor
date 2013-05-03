@@ -10,5 +10,7 @@ package operations.base;
  *
  */
 public abstract class BaseOperation {
+	
+	//TODO test that controllers only call the operations and not the models directly
 
 }

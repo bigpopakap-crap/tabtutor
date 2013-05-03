@@ -36,7 +36,7 @@ public abstract class OperationRequirement extends DependentOperation<Void, Void
 	 ************************************************************************** */
 	
 	/** Does the validation of all of the given constraints in order */
-	public static void validate(OperationRequirement... constraints) {
+	public static void require(OperationRequirement... constraints) {
 		for (OperationRequirement contraint : constraints) {
 			contraint.validate();
 		}
