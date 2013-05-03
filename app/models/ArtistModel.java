@@ -1,5 +1,7 @@
 package models;
 
+import helpers.OperationReq;
+
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -66,6 +68,9 @@ public class ArtistModel extends BaseModel {
 	 ************************************************************************** */
 	
 	public static ArtistModel createAndSave(String name) {
+		OperationReq.requireAndThrow(
+			OperationReq.IS_LOGGED_IN
+		);
 		return (ArtistModel) new ArtistModel(name).doSaveAndRetry();
 	}
 	

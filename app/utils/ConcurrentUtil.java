@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
 
+import oops.base.BaseOops;
 import play.mvc.Http.Context;
 
 /**
@@ -101,6 +102,10 @@ public abstract class ConcurrentUtil {
 	public static <T> T callQuietly(Callable<T> callable) {
 		try {
 			return callable.call();
+		}
+		catch (BaseOops ex) {
+			//this is the same as a runtime exception, but whatever. Still including it explicitly
+			throw ex;
 		}
 		catch (RuntimeException ex) {
 			throw ex;

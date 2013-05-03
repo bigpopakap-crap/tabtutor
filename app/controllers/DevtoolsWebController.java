@@ -1,5 +1,6 @@
 package controllers;
 
+import controllers.base.BaseWebController;
 import helpers.Logger;
 import play.mvc.Result;
 import actions.base.ActionAnnotations.DevModeProtected;

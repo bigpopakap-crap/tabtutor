@@ -59,6 +59,7 @@ public abstract class Message {
 	public static final Message errorPage_pageNotFoundDescription = new Message("errorPage_pageNotFoundDescription") {};
 	public static final Message errorPage_csrfTokenInvalidDescription = new Message("errorPage_csrfTokenInvalidDescription") {};
 	public static final Message errorPage_notAuthedDescription = new Message("errorPage_notAuthedDescription") {};
+	public static final Message errorPage_insufficientPrivilegesDescription = new Message("errorPage_insufficientPrivilegesDescription") {};
 	public static final Message errorPage_toGoBack = new Message("errorPage_toGoBack") {};
 	public static final Message errorPage_toGoHome = new Message("errorPage_toGoHome") {};
 	public static final Message errorPage_toSignIn = new Message("errorPage_toSignIn") {};

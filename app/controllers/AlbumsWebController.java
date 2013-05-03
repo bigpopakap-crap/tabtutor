@@ -1,9 +1,10 @@
 package controllers;
 
-import oops.NotFoundOops;
+import controllers.base.BaseWebController;
 import juiforms.JuiFormValidationException;
 import models.AlbumModel;
 import models.forms.AlbumModelJuiForm;
+import oops.NotFoundOops;
 import play.Logger;
 import play.mvc.Result;
 import utils.EscapingUtil;

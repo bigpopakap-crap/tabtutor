@@ -1,5 +1,7 @@
 package models;
 
+import helpers.OperationReq;
+
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -104,6 +106,9 @@ public class SongModel extends BaseModel {
 	}
 	
 	public static SongModel createAndSave(String title, ArtistModel artist, AlbumModel album, int trackNum, boolean isLive, String youtubeId) {
+		OperationReq.requireAndThrow(
+			OperationReq.IS_LOGGED_IN
+		);
 		return (SongModel) new SongModel(title, artist, album, trackNum, isLive, youtubeId).doSaveAndRetry();
 	}
 	

@@ -3,8 +3,8 @@ package actions;
 import oops.NotFoundOops;
 import play.mvc.Http.Context;
 import play.mvc.Result;
-import actions.base.BaseAction;
 import actions.base.ActionAnnotations.DevModeProtected;
+import actions.base.BaseAction;
 import contexts.AppContext;
 
 /**
@@ -19,8 +19,8 @@ public class DevModeProtectAction extends BaseAction<DevModeProtected> {
 	
 	@Override
 	protected Result hook_call(Context ctx) throws Throwable {
+		//TODO use OperationReqs for this?
 		if (!AppContext.Mode.isDevelopment()) {
-			//TODO figure out which default error to show to the user
 			throw new NotFoundOops(null);
 		}
 		else {

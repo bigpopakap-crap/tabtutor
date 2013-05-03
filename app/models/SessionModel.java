@@ -76,8 +76,8 @@ public class SessionModel extends BaseModel {
 	
 	@Override
 	protected void hook_preModifyingOperation(BasicDmlModifyingType opType, boolean isFirstTry) {
-		if (opType == BasicDmlModifyingType.INSERT) {
-			//make sure the access time is after the start time
+		if (isFirstTry && opType == BasicDmlModifyingType.INSERT) {
+			//make sure the access time is not before the start time
 			lastAccessTime = startTime;
 		}
 	}
@@ -117,9 +117,7 @@ public class SessionModel extends BaseModel {
 	
 	/** Creates a new session and saves it to the DB */
 	public static SessionModel createAndSave() {
-		SessionModel session = new SessionModel();
-		session.doSaveAndRetry();
-		return session;
+		return (SessionModel) new SessionModel().doSaveAndRetry();
 	}
 	
 	/* **************************************************************************

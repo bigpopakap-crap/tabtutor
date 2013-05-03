@@ -1,9 +1,9 @@
 package juiforms;
 
-import oops.CsrfTokenInvalidOops;
 import helpers.DependentOperation;
 import helpers.Message;
 import models.SessionCsrfTokenModel;
+import oops.CsrfTokenInvalidOops;
 import utils.ConcurrentUtil;
 import utils.StringUtil;
 
@@ -24,27 +24,23 @@ public abstract class JuiFormInputConstraint extends DependentOperation<JuiFormI
 	
 	/** Makes an input field required */
 	public static final JuiFormInputConstraint REQUIRED = new JuiFormInputConstraint() {
-			
 		@Override
-		protected Message hook_postDependenciesOperate(JuiFormInput input) {
+		protected Message hook_validate(JuiFormInput input) {
 			if (input == null || !input.hasValue() || StringUtil.isOnlyWhitespace(input.getValue())) return Message.formError_required;
 			else return null;
 		}
-
 	};
 	
 	/** Does CSRF validation */
 	public static final JuiFormInputConstraint CSRF_TOKEN = new JuiFormInputConstraint(REQUIRED) {
-		
 		@Override
-		protected Message hook_postDependenciesOperate(JuiFormInput input) {
+		protected Message hook_validate(JuiFormInput input) {
 			if (!SessionCsrfTokenModel.isValidToken(input.getValue())) {
 				//throw an exception here instead, because this is bad
 				throw new CsrfTokenInvalidOops();
 			}
 			else return null;
 		}
-		
 	};
 	
 	/**
@@ -58,9 +54,8 @@ public abstract class JuiFormInputConstraint extends DependentOperation<JuiFormI
 	 */
 	public static final JuiFormInputConstraint UNIQUE(final CustomValidator<String, Boolean> validator) {
 		return new JuiFormInputConstraint() {
-
 			@Override
-			protected Message hook_postDependenciesOperate(JuiFormInput input) {
+			protected Message hook_validate(JuiFormInput input) {
 				validator.setValue(input.getValue());
 				
 				//call the validator, let any exceptions bubble up as runtime exceptions
@@ -72,16 +67,14 @@ public abstract class JuiFormInputConstraint extends DependentOperation<JuiFormI
 					return Message.formError_notUnique;
 				}
 			}
-			
 		};
 	}
 	
 	/** Ensures that the value has at least the given length */
 	public static final JuiFormInputConstraint MIN_LENGTH(int len) {
 		return new JuiFormInputConstraint() {
-			
 			@Override
-			protected Message hook_postDependenciesOperate(JuiFormInput input) {
+			protected Message hook_validate(JuiFormInput input) {
 				throw new UnsupportedOperationException();
 			}
 		};
@@ -89,13 +82,11 @@ public abstract class JuiFormInputConstraint extends DependentOperation<JuiFormI
 	
 	/** Ensures that the value represents an integer */
 	public static final JuiFormInputConstraint IS_INTEGER = new JuiFormInputConstraint() {
-
 		@Override
-		protected Message hook_postDependenciesOperate(JuiFormInput input) {
+		protected Message hook_validate(JuiFormInput input) {
 			if (!StringUtil.isInteger(input.getValue())) return Message.formError_notInteger;
 			else return null;
 		}
-		
 	};
 	
 	/* **************************************************************************
@@ -129,5 +120,21 @@ public abstract class JuiFormInputConstraint extends DependentOperation<JuiFormI
 		Message errorMessage = operate(input);
 		return errorMessage != null ? errorMessage.get(input.getName()) : null;
 	}
+	
+	//overriding this method just so that the new method to override (the one called here) has a more descriptive name
+	@Override
+	protected final Message hook_postDependenciesOperate(JuiFormInput input) {
+		return hook_validate(input);
+	}
+	
+	/**
+	 * Implements the validation of the input field
+	 * 
+	 * @param input the field to validate
+	 * @return the {@link Message} representing the error, or null if the input is valid.
+	 * 			The returned message must take 0 or 1 arguments, and when rendered it will be passed
+	 * 			the name of the input field
+	 */
+	protected abstract Message hook_validate(JuiFormInput input);
 	
 }
