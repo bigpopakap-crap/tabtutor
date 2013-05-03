@@ -1,5 +1,6 @@
 package controllers;
 
+import controllers.base.BaseWebController;
 import oops.NotFoundOops;
 import juiforms.JuiFormValidationException;
 import models.ArtistModel;

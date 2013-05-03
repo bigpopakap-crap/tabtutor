@@ -14,6 +14,7 @@ import api.fb.FbApi;
 import api.fb.FbJsonResponse;
 import contexts.RequestErrorContext;
 import contexts.SessionContext;
+import controllers.base.BaseWebController;
 
 /**
  * This class handles all API requests related to Facebook authentication

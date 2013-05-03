@@ -1,4 +1,4 @@
-package controllers;
+package controllers.base;
 
 import actions.base.ActionAnnotations.AccessTimed;
 import actions.base.ActionAnnotations.Sessioned;

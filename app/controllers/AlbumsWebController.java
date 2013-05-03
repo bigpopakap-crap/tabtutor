@@ -1,5 +1,6 @@
 package controllers;
 
+import controllers.base.BaseWebController;
 import juiforms.JuiFormValidationException;
 import models.AlbumModel;
 import models.forms.AlbumModelJuiForm;
