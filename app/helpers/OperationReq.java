@@ -1,7 +1,6 @@
 package helpers;
 
-import oops.NotAdminOops;
-import oops.NotAdminOops.ExposeType;
+import oops.NotAdminAsNotFoundOops;
 import oops.NotAuthedOops;
 import contexts.AppContext;
 import contexts.SessionContext;
@@ -36,7 +35,7 @@ public abstract class OperationReq extends DependentOperation<Void, Void> {
 			boolean isDev = AppContext.Mode.isDevelopment();
 			boolean isAdmin = SessionContext.hasUser() && SessionContext.user().getUsername().equals("bigpopakap"); //TODO don't hardcode
 			if (!isDev && !isAdmin) {
-				throw new NotAdminOops(ExposeType.NOT_FOUND);
+				throw new NotAdminAsNotFoundOops(null);
 			}
 		}
 	};

@@ -24,7 +24,7 @@ public class CsrfTokenInvalidOops extends BaseOops {
 
 	@Override
 	protected Html hook_renderWebResult() {
-		return OopsPageRenderUtil.goHome(this, getMessage());
+		return OopsPageRenderUtil.renderGoHomePage(this, getMessage());
 	}
 
 	@Override

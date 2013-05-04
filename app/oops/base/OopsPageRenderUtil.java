@@ -2,6 +2,7 @@ package oops.base;
 
 import helpers.Message;
 import play.api.templates.Html;
+import contexts.RequestContext;
 
 /**
  * A class that has utilities to render various error pages
@@ -20,21 +21,31 @@ public abstract class OopsPageRenderUtil {
 	 * @param toMessage a message to be used after the link to explain where it goes (required)
 	 * 					Where it's placed: "Click <a>here</a> *toMessage*
 	 */
-	public static Html goTo(Throwable ex, String url, String toMessage, String description) {
+	public static Html renderGoToPage(Throwable ex, String url, String toMessage, String description) {
 		if (url == null) throw new IllegalArgumentException("Url cannot be null in error page");
 		if (toMessage == null) throw new IllegalArgumentException("toMessage cannot be null in error page");
 		return views.html.errorPage.render(description, url, toMessage, ex);
 	}
 	
 	/** A page to go back to the previous page */
-	public static Html goBack(Throwable ex, String description) {
+	public static Html renderGoBackPage(Throwable ex, String description) {
 		//TODO use a better mechanism for going back a page
-		return goTo(ex, "javascript:history.back()", Message.errorPage_toGoBack.get(), description);
+		return renderGoToPage(ex, "javascript:history.back()", Message.errorPage_toGoBack.get(), description);
 	}
 	
 	/** A page with a link to go back home */
-	public static Html goHome(Throwable ex, String description) {
-		return goTo(ex, "/", Message.errorPage_toGoHome.get(), description);
+	public static Html renderGoHomePage(Throwable ex, String description) {
+		return renderGoToPage(ex, "/", Message.errorPage_toGoHome.get(), description);
 	}
-
+	
+	/** A page displaying a "not found" error */
+	public static Html renderNotFoundPage(Throwable ex) {
+		return renderGoBackPage(ex, Message.errorPage_pageNotFoundDescription.get());
+	}
+	
+	/** A page telling the user they need to be logged in */
+	public static Html renderNotAuthedPage(Throwable ex) {
+		return renderGoToPage(ex, RequestContext.loginUrl(), Message.errorPage_toSignIn.get(), Message.errorPage_notAuthedDescription.get());
+	}
+	
 }

@@ -1,6 +1,5 @@
 package oops;
 
-import helpers.Message;
 import oops.base.BaseOops;
 import oops.base.OopsPageRenderUtil;
 import play.api.templates.Html;
@@ -20,12 +19,12 @@ public class NotFoundOops extends BaseOops {
 	private static final long serialVersionUID = 1L;
 
 	public NotFoundOops(Throwable cause) {
-		super(cause, Message.errorPage_pageNotFoundDescription.get());
+		super(cause);
 	}
 
 	@Override
 	protected Html hook_renderWebResult() {
-		return OopsPageRenderUtil.goBack(this, getMessage());
+		return OopsPageRenderUtil.renderNotFoundPage(this);
 	}
 
 	@Override
