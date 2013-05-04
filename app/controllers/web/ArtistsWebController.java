@@ -77,7 +77,7 @@ public class ArtistsWebController extends BaseWebController {
 	
 	/** Displays the list of songs using the given form object */
 	private static Result list(ArtistModelJuiForm artistModelForm) {
-		return ok(views.html.artistList.render(
+		return ok(views.html.pages.artistList.render(
 			ArtistModel.getAll(),
 			artistModelForm
 		));

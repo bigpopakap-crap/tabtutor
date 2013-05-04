@@ -9,10 +9,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-	@p_preHead()
+	@parts.preHead()
 </head>
 <body>
-	@p_topbar()
+	@parts.topbar()
 	
 	@(songForm.render())
 	
@@ -47,6 +47,6 @@
 		}
 	</table>
 	
-	@p_devtools_devbar()
+	@parts.devtools.devbar()
 </body>
 </html>

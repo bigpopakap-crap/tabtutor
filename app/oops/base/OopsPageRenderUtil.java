@@ -26,7 +26,7 @@ public final class OopsPageRenderUtil {
 	public static Html renderGoToPage(Throwable ex, String url, String toMessage, String description) {
 		if (url == null) throw new IllegalArgumentException("Url cannot be null in error page");
 		if (toMessage == null) throw new IllegalArgumentException("toMessage cannot be null in error page");
-		return views.html.errorPage.render(description, url, toMessage, ex);
+		return views.html.pages.errorPage.render(description, url, toMessage, ex);
 	}
 	
 	/** A page to go back to the previous page */

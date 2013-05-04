@@ -15,7 +15,7 @@
 @import helpers.Logger.Level
 @include(url: String) = {
 	@if(RequestStaticResourceContext.contains(url)) {
-		@p_util_log(Level.INFO, false, Level.NONE, "Skipping already-included resource at " + url)
+		@parts.utils.log(Level.INFO, false, Level.NONE, "Skipping already-included resource at " + url)
 	} else {
 		@* Call the add() method *@
 		@{RequestStaticResourceContext.add(url); ""}
@@ -24,7 +24,7 @@
 			case StaticResourceType.JS => { <script type="text/javascript" src="@url"></script> }
 			case StaticResourceType.CSS => { <link rel="stylesheet" type="text/css" href="@url"/> }
 			case _ => {
-				@p_util_log(Level.WARN, true, Level.WARN, "Unhandled static resource type for url " + url)
+				@parts.utils.log(Level.WARN, true, Level.WARN, "Unhandled static resource type for url " + url)
 			}
 		}
 	}
@@ -34,7 +34,7 @@
 }
 @for(url <- devUrls) {
 	@if(AppContext.Mode.isProduction()) {
-		@p_util_log(Level.INFO, false, Level.NONE, "Skipping dev-only resource " + url)
+		@parts.utils.log(Level.INFO, false, Level.NONE, "Skipping dev-only resource " + url)
 	} else {
 		@include(url = url)
 	}

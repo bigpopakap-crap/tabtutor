@@ -18,7 +18,7 @@ public class SimpleWebController extends BaseWebController {
 
 	/** Show the landing page */
 	public static Result landing() {
-		return ok(views.html.landing.render());
+		return ok(views.html.pages.landing.render());
 	}
 	
 	/** Show the error page for when no other page was found */

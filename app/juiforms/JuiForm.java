@@ -166,7 +166,7 @@ public abstract class JuiForm<T> implements Renderable {
 		preRenderBind(defaultValues);
 		bindValues(defaultValues);
 		
-		return views.html.p_juiForm.render(title, subtitle, method, action, getInputElements());
+		return views.html.parts.juiForm.render(title, subtitle, method, action, getInputElements());
 	}
 	
 	/* **************************************************************************

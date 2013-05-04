@@ -8,7 +8,6 @@ import play.Logger;
 import play.mvc.Result;
 import utils.EscapingUtil;
 import utils.EscapingUtil.Escaper;
-import controllers.routes;
 import controllers.web.base.BaseWebController;
 
 /**
@@ -77,7 +76,7 @@ public class AlbumsWebController extends BaseWebController {
 	
 	/** Displays the list of songs using the given form object */
 	private static Result list(AlbumModelJuiForm albumModelForm) {
-		return ok(views.html.albumList.render(
+		return ok(views.html.pages.albumList.render(
 			AlbumModel.getAll(),
 			albumModelForm
 		));

@@ -164,7 +164,7 @@ public class JuiFormInput {
 
 	/** Renders the HTML to represent this form input */
 	public Html render() {
-		return views.html.p_juiFormInput.render(this);
+		return views.html.parts.juiFormInput.render(this);
 	}
 	
 }

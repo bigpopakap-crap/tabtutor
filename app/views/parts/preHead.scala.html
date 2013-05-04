@@ -15,7 +15,7 @@
 <title>@(AppContext.Var.APP_TITLE)@(subTitle)</title>
 <meta http-equiv="Content-Language" Content="@(SessionContext.lang().code())">
 <!-- First scripts first -->
-@p_staticResource(Array(
+@parts.staticResource(Array(
 	"/public/stylesheets/siteStyle.css",
 	"/public/javascripts/jquery-1.9.1.min.js",
 	"/public/javascripts/initNamespace.js",
@@ -25,10 +25,10 @@
 	window.WTF.get('Logger').init(@(AppContext.Mode.isProduction()));
 </script>
 <!-- Anything that requires the logger should go here -->
-@p_staticResource(Array(), Array(
+@parts.staticResource(Array(), Array(
 	"/public/javascripts/dev/dupeIds.js",
 	"/public/javascripts/dev/failedRequests.js"
 ))
-@p_fbJsSdk(
+@parts.fbJsSdk(
 	detectFbLogin && !(SessionContext.hasSession() && SessionContext.session().hasValidFbAuthInfo())
 )

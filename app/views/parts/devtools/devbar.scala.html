@@ -9,7 +9,7 @@
 @import contexts.SessionContext
 @import controllers.web.devtools.routes
 @if(AppContext.Mode.isDevelopment()) {
-	@p_staticResource(Array(), Array("/public/stylesheets/devbar.css"))
+	@parts.staticResource(Array(), Array("/public/stylesheets/devbar.css"))
 	<div id="devbar" class="devbar">
 		@if(SessionContext.hasUser()) {
 			<span style="border-right: solid 1px black; margin-right: 12px">

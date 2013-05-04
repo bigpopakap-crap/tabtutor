@@ -8,16 +8,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-	@p_preHead()
+	@parts.preHead()
 </head>
 <body>
-	@p_topbar()
+	@parts.topbar()
 	Welcome!
 	
 	<a href="@(controllers.web.routes.SongsWebController.list())">Songs</a>
 	<a href="@(controllers.web.routes.ArtistsWebController.list())">Artists</a>
 	<a href="@(controllers.web.routes.AlbumsWebController.list())">Albums</a>
 	
-	@p_devtools_devbar()
+	@parts.devtools.devbar()
 </body>
 </html>

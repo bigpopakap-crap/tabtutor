@@ -52,7 +52,7 @@ public class DevtoolsLoginWebController extends DevtoolsWebController {
 	
 	/** Displays the list of songs using the given form object */
 	private static Result listUsers(DevtoolsUserJuiForm devtoolsUserForm) {
-		return ok(views.html.devtools_listUsers.render(
+		return ok(views.html.pages.devtools.userList.render(
 			UserModel.getAll(),
 			devtoolsUserForm
 		));
