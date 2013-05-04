@@ -68,9 +68,7 @@ public class ArtistModel extends BaseModel {
 	 ************************************************************************** */
 	
 	public static ArtistModel createAndSave(String name) {
-		OperationReq.requireAndThrow(
-			OperationReq.IS_LOGGED_IN
-		);
+		OperationReq.IS_LOGGED_IN.verifyAndThrow();
 		return (ArtistModel) new ArtistModel(name).doSaveAndRetry();
 	}
 	

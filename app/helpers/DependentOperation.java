@@ -27,7 +27,7 @@ public abstract class DependentOperation<I, O> {
 	/**
 	 * Does the dependencies and the operation on the given input
 	 * @see #hook_preDependenciesOperate(Object)
-	 * @see #hook_postDependenciesOperate(Object)
+	 * @see #hook_operatePostDependencies(Object)
 	 */
 	protected final O operate(I input) {
 		//call the dependencies
@@ -39,7 +39,7 @@ public abstract class DependentOperation<I, O> {
 		}
 		
 		//call the post dependency operation
-		return hook_postDependenciesOperate(input);
+		return hook_operatePostDependencies(input);
 	}
 	
 	/**
@@ -47,6 +47,6 @@ public abstract class DependentOperation<I, O> {
 	 * returned null). This will be the final return value of the operation
 	 * if it is indeed called
 	 */
-	protected abstract O hook_postDependenciesOperate(I input);
+	protected abstract O hook_operatePostDependencies(I input);
 
 }

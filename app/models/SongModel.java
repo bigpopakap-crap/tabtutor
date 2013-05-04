@@ -106,9 +106,7 @@ public class SongModel extends BaseModel {
 	}
 	
 	public static SongModel createAndSave(String title, ArtistModel artist, AlbumModel album, int trackNum, boolean isLive, String youtubeId) {
-		OperationReq.requireAndThrow(
-			OperationReq.IS_LOGGED_IN
-		);
+		OperationReq.IS_LOGGED_IN.verifyAndThrow();
 		return (SongModel) new SongModel(title, artist, album, trackNum, isLive, youtubeId).doSaveAndRetry();
 	}
 	

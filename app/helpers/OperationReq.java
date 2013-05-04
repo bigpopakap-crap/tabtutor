@@ -2,8 +2,11 @@ package helpers;
 
 import oops.NotAdminAsNotFoundOops;
 import oops.NotAuthedOops;
+import oops.NotFoundOops;
+import oops.base.BaseOops;
 import contexts.AppContext;
 import contexts.SessionContext;
+
 
 /**
  * Represents requirements that can be applied and checked before this requirement,
@@ -13,9 +16,7 @@ import contexts.SessionContext;
  * @since 2013-05-02
  *
  */
-public abstract class OperationReq extends DependentOperation<Void, Void> {
-	
-	private OperationReq() {} //prevent instantiation
+public abstract class OperationReq extends DependentOperation<Void, Boolean> {
 	
 	/* **************************************************************************
 	 *  STATIC DEFINITIONS
@@ -23,65 +24,176 @@ public abstract class OperationReq extends DependentOperation<Void, Void> {
 	
 	public static final OperationReq IS_LOGGED_IN = new OperationReq() {
 		@Override
-		protected void hook_requireAndThrow() {
-			//ignore the input, just make sure there is a user logged in
-			if (!SessionContext.hasUser()) {
-				throw new NotAuthedOops();
-			}
+		protected boolean hook_verify() {
+			return SessionContext.hasUser();
+		}
+		@Override
+		protected void hook_throwDefaultOops() throws BaseOops {
+			throw new NotAuthedOops();
 		}
 	};
 	
-	public static final OperationReq IS_DEV_MODE_OR_ADMIN_USER = new OperationReq() {
+	public static final OperationReq IS_DEV_MODE = new OperationReq() {
 		@Override
-		protected void hook_requireAndThrow() {
-			boolean isDev = AppContext.Mode.isDevelopment();
-			boolean isAdmin = SessionContext.hasUser() && SessionContext.user().getUsername().equals("bigpopakap"); //TODO don't hardcode
-			if (!isDev && !isAdmin) {
-				throw new NotAdminAsNotFoundOops(null);
-			}
+		protected boolean hook_verify() {
+			return AppContext.Mode.isDevelopment();
+		}
+		@Override
+		protected void hook_throwDefaultOops() throws BaseOops {
+			throw new NotFoundOops(null);
 		}
 	};
+	
+	public static final OperationReq IS_ADMIN_USER = new OperationReq(IS_LOGGED_IN) {
+		@Override
+		protected boolean hook_verify() {
+			return SessionContext.user().getUsername().equals("bigpopakap"); //TODO don't hardcode this
+		}
+		@Override
+		protected void hook_throwDefaultOops() throws BaseOops {
+			throw new NotAdminAsNotFoundOops(null);
+		}
+	};
+	
+	public static final OperationReq IS_DEV_MODE_OR_ADMIN_USER = or(IS_DEV_MODE, IS_ADMIN_USER);
 	
 	/* **************************************************************************
-	 *  STATIC METHODS
+	 *  PUBLIC HELPERS
 	 ************************************************************************** */
 	
-	/**
-	 * Does the validation of all of the given constraints in order
-	 * @see #requireAndThrow()
-	 */
-	public static void requireAndThrow(OperationReq... constraints) {
-		for (OperationReq contraint : constraints) {
-			contraint.requireAndThrow();
+	public static OperationReq verifyReqAnd(OperationReq... reqs) {
+		if (reqs ==  null) reqs = new OperationReq[0];
+		
+		for (OperationReq req : reqs) {
+			if (!req.verify()) {
+				return req;
+			}
+		}
+		
+		return null;
+	}
+	
+	public static void verifyThrowAnd(OperationReq... reqs) {
+		OperationReq failed = verifyReqAnd(reqs);
+		if (failed != null) {
+			failed.throwDefaultOops();
 		}
 	}
 	
+	public static boolean verifyBooleanAnd(OperationReq... reqs) {
+		return verifyReqAnd(reqs) == null;
+	}
+	
+	public static boolean verifyBooleanOr(OperationReq... reqs) {
+		if (reqs ==  null) reqs = new OperationReq[0];
+		
+		for (OperationReq req : reqs) {
+			if (req.verify()) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	/* **************************************************************************
-	 *  CLASS DEFINITION
+	 *  BEGIN CLASS DEFINITION
 	 ************************************************************************** */
+	
+	/* BEGIN PRIVATE COMPOSERS ************************************************ */
+	
+	private static OperationReq and(final OperationReq... reqs) {
+		return new OperationReq() {
+			@Override
+			protected boolean hook_verify() {
+				return verifyBooleanAnd(reqs);
+			}
+			@Override
+			protected void hook_throwDefaultOops() throws BaseOops {
+				verifyThrowAnd(reqs);
+			}
+		};
+	}
+	
+	private static OperationReq or(final OperationReq... reqs) {
+		return new OperationReq() {
+			@Override
+			protected boolean hook_verify() {
+				return verifyBooleanOr(reqs);
+			}
+			@Override
+			protected void hook_throwDefaultOops() throws BaseOops {
+				//if this check failed, and there is a first req, throw its exception
+				if (!verify() && reqs != null && reqs.length > 0 && reqs[0] != null) {
+					reqs[0].throwDefaultOops();
+				}
+			}
+		};
+	}
+	
+	/* BEGIN ABSTRACT METHODS AND CONSTRUCTORS TO IMPLEMENT ******************* */
 	
 	/** Create a new constraint with the given dependencies */
-	public OperationReq(OperationReq... dependencies) {
+	private OperationReq(OperationReq... dependencies) {
 		super(dependencies);
-	}
-	
-	/**
-	 * Does the validation for this constraint and its dependencies
-	 * 
-	 * These requirements will not return anything, they will simply throw an exception if the
-	 * requirement is not met
-	 */
-	private void requireAndThrow() {
-		operate(null);
 	}
 	
 	//override this so the new method to be overridden (the one called here) can be more descriptively named
 	@Override
-	protected final Void hook_postDependenciesOperate(Void input) {
-		hook_requireAndThrow();
-		return null;
+	protected final Boolean hook_operatePostDependencies(Void input) {
+		return hook_verify();
 	}
 	
-	protected abstract void hook_requireAndThrow();
+	/* BEGIN PUBLIC METHOD DECLARATIONS  *************************************** */
+	
+	/** @return true if the requirement passes, false otherwise */
+	public boolean verify() {
+		return operate(null);
+	}
+	
+	/** Tests the requirement, and throws the default {@link BaseOops} if the req is not passed */
+	public void verifyAndThrow() throws BaseOops {
+		if (!verify()) {
+			throwDefaultOops();
+		}
+	}
+	
+	/* BEGIN PRIVATE HELPERS ************************************************** */
+	
+	/** Throws the default {@link BaseOops} for this requirement */
+	private void throwDefaultOops() throws BaseOops {
+		//throw the oops
+		try {
+			hook_throwDefaultOops();
+		}
+		catch (Exception ex) {
+			//make sure the requirement is false, otherwise it makes no sense to be throwing
+			if (verify()) {
+				//don't throw an exception, just log
+				Logger.warn("Throwing " + BaseOops.class.getCanonicalName() +
+							" for " + this.getClass().getCanonicalName() +
+							" whose conditions have been met");
+			}
+			
+			throw ex;
+		}
+		
+		//if the hook doesn't throw one, throw an exception here
+		throw new IllegalStateException("Previous line should have thrown an exception");
+	}
+	
+	/* BEGIN ABSTRACT METHOD DECLARATIONS  ************************************ */
+	
+	/**
+	 * Implements the verification method that checks the requirement passes
+	 * @return true if the requirement passes, false otherwise
+	 */
+	protected abstract boolean hook_verify();
+	
+	/**
+	 * Implements the throwing of the default {@link BaseOops} for this requirement
+	 * @throws BaseOops always
+	 */
+	protected abstract void hook_throwDefaultOops() throws BaseOops;
 	
 }

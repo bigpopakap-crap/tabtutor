@@ -139,9 +139,7 @@ public class UserModel extends BaseModel {
 			}
 			
 			//only allow admins (or anyone in dev mode) to perform this operation
-			OperationReq.requireAndThrow(
-				OperationReq.IS_DEV_MODE_OR_ADMIN_USER
-			);
+			OperationReq.IS_DEV_MODE_OR_ADMIN_USER.verifyAndThrow();
 		}
 		
 		return (UserModel) new UserModel(fbId, username, email, isTestUser, creator).doSaveAndRetry();

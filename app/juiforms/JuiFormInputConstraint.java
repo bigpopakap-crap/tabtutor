@@ -123,7 +123,7 @@ public abstract class JuiFormInputConstraint extends DependentOperation<JuiFormI
 	
 	//overriding this method just so that the new method to override (the one called here) has a more descriptive name
 	@Override
-	protected final Message hook_postDependenciesOperate(JuiFormInput input) {
+	protected final Message hook_operatePostDependencies(JuiFormInput input) {
 		return hook_validate(input);
 	}
 	
