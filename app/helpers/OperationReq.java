@@ -15,6 +15,8 @@ import contexts.SessionContext;
  */
 public abstract class OperationReq extends DependentOperation<Void, Void> {
 	
+	private OperationReq() {} //prevent instantiation
+	
 	/* **************************************************************************
 	 *  STATIC DEFINITIONS
 	 ************************************************************************** */

@@ -12,7 +12,7 @@ import contexts.SessionContext;
  * @since 2013-03-07
  *
  */
-public abstract class Message {
+public class Message {
 	
 	//TODO test that no other class refers to the Messages class directly, except this class
 	//TODO define debug language that adds a bunch of stars before and after the string

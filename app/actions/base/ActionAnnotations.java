@@ -23,7 +23,9 @@ import actions.TryCatchAction;
  * @since 2013-03-22
  *
  */
-public abstract class ActionAnnotations {
+public final class ActionAnnotations {
+	
+	private ActionAnnotations() {} //prevent instantiation
 	
 	/**
 	 * Annotation for applying {@link TryCatchAction}

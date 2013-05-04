@@ -20,7 +20,9 @@ import play.mvc.Http.Context;
  * @since 2013-03-23
  *
  */
-public abstract class ConcurrentUtil {
+public final class ConcurrentUtil {
+	
+	private ConcurrentUtil() {} //prevent instantiation
 	
 	/** Setting to false will not use threads for these method calls for debugging purposes
 	 *  This value is ignored and treated as true if in production mode */

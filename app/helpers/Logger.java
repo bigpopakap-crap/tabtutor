@@ -7,10 +7,12 @@ package helpers;
  * @since 2013-04-17
  *
  */
-public abstract class Logger {
+public final class Logger {
 	
 	//TODO ensure that classes only use this Logger, not play.Logger or anything else
 	//TODO test that this logging level enum matches the Javascript logger's levels
+	
+	private Logger() {} //prevent instantiation
 
 	/**
 	 * Logging levels

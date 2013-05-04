@@ -7,7 +7,9 @@ package main;
  * @since 2013-04-04
  *
  */
-public class MainTest extends BaseMain {
+public final class MainTest extends BaseMain {
+	
+	private MainTest() {} //prevent instantiation
 	
 	/** Runs the tests */
 	public static void main(String[] args) {

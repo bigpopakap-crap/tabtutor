@@ -7,7 +7,9 @@ package utils;
  * @since 2013-04-07
  *
  */
-public abstract class StringUtil {
+public final class StringUtil {
+	
+	private StringUtil() {} //prevent instantiation
 	
 	/** Shortcut for (str == null || str.isEmpty()) */
 	public static boolean isNullOrEmpty(String str) {

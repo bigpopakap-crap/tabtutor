@@ -14,7 +14,9 @@ import utils.EscapingUtil.Escaper;
  * @since 2013-04-19
  *
  */
-public abstract class RestUtil {
+public final class RestUtil {
+	
+	private RestUtil() {} //prevent instantiation
 	
 	/** Converts a map of key-value pairs to a query string without the leading "?" */
 	public static String mapToQueryString(Map<String, String> map) {

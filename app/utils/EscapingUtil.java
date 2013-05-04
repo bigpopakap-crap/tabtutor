@@ -10,9 +10,11 @@ import java.net.URLEncoder;
  * @since 2013-02-19
  *
  */
-public abstract class EscapingUtil {
+public final class EscapingUtil {
 	
 	//TODO unit test this class
+	
+	private EscapingUtil() {} //prevent instantiation
 	
 	/**
 	 * Escapes the given strings for the given environment

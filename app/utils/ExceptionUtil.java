@@ -12,8 +12,14 @@ import java.io.StringWriter;
  * @since 2013-04-29
  *
  */
-public abstract class ExceptionUtil {
+public final class ExceptionUtil {
 	
+	private ExceptionUtil() {} //prevent instantiation
+	
+	/**
+	 * Gets the stack trace of the given exception as a String, in the
+	 * same format as {@link Throwable#printStackTrace()}
+	 */
 	public static String printStackTrace(Throwable t) {
 		if (t == null) return "";
 		

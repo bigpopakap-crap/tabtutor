@@ -2,9 +2,8 @@ package contexts;
 
 import java.util.TimeZone;
 
-import contexts.base.BaseContext;
-
 import play.Play;
+import contexts.base.BaseContext;
 
 /**
  * This class holds system environment information (the app context), which includes
@@ -17,7 +16,9 @@ import play.Play;
  * @since 2013-02-16
  *
  */
-public abstract class AppContext extends BaseContext {
+public final class AppContext extends BaseContext {
+	
+	private AppContext() {} //prevent instantiation
 
 	/**
 	 * This enum holds all config/environment vars that the app should access

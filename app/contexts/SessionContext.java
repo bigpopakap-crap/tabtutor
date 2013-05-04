@@ -6,14 +6,12 @@ import helpers.Universe.UniverseElement;
 
 import java.util.concurrent.Callable;
 
-import contexts.base.BaseContext;
-
 import models.SessionModel;
 import models.UserModel;
 import play.i18n.Lang;
 import play.mvc.Http.Context;
 import api.fb.FbApi;
-
+import contexts.base.BaseContext;
 
 /**
  * This class holds methods to query the current session for important objects,
@@ -23,7 +21,9 @@ import api.fb.FbApi;
  * @since 2013-03-02
  *
  */
-public abstract class SessionContext extends BaseContext {
+public final class SessionContext extends BaseContext {
+	
+	private SessionContext() {} //prevent instantiation
 	
 	private static final UniverseElement<String> SESSION_OBJ_CONTEXT_KEY = CONTEXT_KEY_UNIVERSE.register("sessionObjectContextKey");
 	private static final UniverseElement<String> USER_OBJ_CONTEXT_KEY = CONTEXT_KEY_UNIVERSE.register("userObjectContextKey");

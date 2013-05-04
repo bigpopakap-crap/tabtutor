@@ -20,7 +20,9 @@ import contexts.base.BaseContext;
  * @since 2013-03-10
  *
  */
-public abstract class RequestErrorContext extends BaseContext {
+public final class RequestErrorContext extends BaseContext {
+	
+	private RequestErrorContext() {}; //prevent instantiation
 	
 	private static final UniverseElement<String> FB_CONNECTION_ERROR_CONTEXT_KEY = CONTEXT_KEY_UNIVERSE.register("fbConnectionErrorContextKey");
 	

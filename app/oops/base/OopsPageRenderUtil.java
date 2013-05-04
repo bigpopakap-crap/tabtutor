@@ -11,7 +11,9 @@ import contexts.RequestContext;
  * @since 2013-05-02
  *
  */
-public abstract class OopsPageRenderUtil {
+public final class OopsPageRenderUtil {
+	
+	private OopsPageRenderUtil() {} //prevent instantiation
 	
 	/**
 	 * This is the basic error page the provides a link to go to some other URL

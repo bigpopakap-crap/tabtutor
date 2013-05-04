@@ -13,6 +13,8 @@ package globals;
  * @since 2013-02-23
  *
  */
-public abstract class Globals {
+public final class Globals {
+	
+	private Globals() {} //prevent instantiation
 	
 }

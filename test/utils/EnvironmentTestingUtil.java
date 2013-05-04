@@ -9,7 +9,9 @@ import org.junit.Assert;
  * @since 2013-02-26
  *
  */
-public abstract class EnvironmentTestingUtil {
+public final class EnvironmentTestingUtil {
+	
+	private EnvironmentTestingUtil() {} //prevent instantiation
 	
 	/** Helps test that a minimum set of system environment variables are actually defined */
 	public static void helpTestExpectedEnvironmentVariables(String... expectedEnvKeys) {
