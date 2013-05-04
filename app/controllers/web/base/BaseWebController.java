@@ -1,5 +1,6 @@
-package controllers.base;
+package controllers.web.base;
 
+import controllers.base.BaseController;
 import actions.base.ActionAnnotations.AccessTimed;
 import actions.base.ActionAnnotations.Sessioned;
 import actions.base.ActionAnnotations.Transactioned;

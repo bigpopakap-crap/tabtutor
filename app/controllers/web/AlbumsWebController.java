@@ -1,6 +1,5 @@
-package controllers;
+package controllers.web;
 
-import controllers.base.BaseWebController;
 import juiforms.JuiFormValidationException;
 import models.AlbumModel;
 import models.forms.AlbumModelJuiForm;
@@ -9,6 +8,8 @@ import play.Logger;
 import play.mvc.Result;
 import utils.EscapingUtil;
 import utils.EscapingUtil.Escaper;
+import controllers.routes;
+import controllers.web.base.BaseWebController;
 
 /**
  * Controller for all things related so albums: listing, creating, modifying, etc.
@@ -43,7 +44,7 @@ public class AlbumsWebController extends BaseWebController {
 		AlbumModelJuiForm albumModelForm = new AlbumModelJuiForm();
 		try {
 			albumModelForm.bind();
-			return redirect(routes.AlbumsWebController.list());
+			return redirect(controllers.web.routes.AlbumsWebController.list());
 		}
 		catch (JuiFormValidationException ex) {
 			return list(albumModelForm);
@@ -58,7 +59,7 @@ public class AlbumsWebController extends BaseWebController {
 	 *  the detail URL because it will populate the correct title */
 	public static String detailUrl(AlbumModel album) {
 		if (album != null) {
-			return routes.AlbumsWebController.detail(
+			return controllers.web.routes.AlbumsWebController.detail(
 				album.getPk().toString(),
 				EscapingUtil.escape(album.getTitle(), Escaper.URL_DESCRIPTIVE_PARAM)
 			).url();
@@ -66,7 +67,7 @@ public class AlbumsWebController extends BaseWebController {
 		else {
 			//don't throw exception, simply return a path that will not work
 			Logger.warn("Called with null argument", new RuntimeException("album cannot be null"));
-			return routes.SimpleWebController.pageNotFound(null).url();
+			return controllers.web.routes.SimpleWebController.pageNotFound(null).url();
 		}
 	}
 	

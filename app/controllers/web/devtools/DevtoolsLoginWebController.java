@@ -1,4 +1,4 @@
-package controllers;
+package controllers.web.devtools;
 
 import juiforms.JuiFormValidationException;
 import models.UserModel;
@@ -28,7 +28,7 @@ public class DevtoolsLoginWebController extends DevtoolsWebController {
 		DevtoolsUserJuiForm devtoolsUserForm = new DevtoolsUserJuiForm();
 		try {
 			devtoolsUserForm.bind();
-			return redirect(routes.DevtoolsLoginWebController.listUsers());
+			return redirect(controllers.web.devtools.routes.DevtoolsLoginWebController.listUsers());
 		} catch (JuiFormValidationException ex) {
 			return listUsers(devtoolsUserForm);
 		}

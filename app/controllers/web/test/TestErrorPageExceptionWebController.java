@@ -1,4 +1,4 @@
-package controllers;
+package controllers.web.test;
 
 import oops.InternalServerOops;
 import oops.NotFoundOops;

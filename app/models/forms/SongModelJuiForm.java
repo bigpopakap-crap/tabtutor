@@ -12,7 +12,6 @@ import models.ArtistModel;
 import models.SongModel;
 import play.api.templates.Html;
 import types.HttpMethodType;
-import controllers.routes;
 
 /**
  * JUI form for creating a new song
@@ -55,7 +54,12 @@ public class SongModelJuiForm extends JuiForm<SongModel> {
 	//TODO convert these hardcoded strings to messages
 	@Override
 	public Html render() {
-		return super.render("Add a song", "Yuuuuup", HttpMethodType.POST, routes.SongsWebController.create().url());
+		return super.render(
+			"Add a song",
+			"Yuuuuup",
+			HttpMethodType.POST,
+			controllers.web.routes.SongsWebController.create().url()
+		);
 	}
 	
 }

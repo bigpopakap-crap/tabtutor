@@ -1,9 +1,9 @@
-package controllers;
+package controllers.web.devtools;
 
 import helpers.Logger;
 import play.mvc.Result;
 import actions.base.ActionAnnotations.DevModeProtected;
-import controllers.base.BaseWebController;
+import controllers.web.base.BaseWebController;
 
 /**
  * This class handles routes (or parents classes that handle routes) which are used as developer tools

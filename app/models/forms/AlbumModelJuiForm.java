@@ -46,7 +46,12 @@ public class AlbumModelJuiForm extends JuiForm<AlbumModel> {
 	//TODO convert these hardcoded strings to messages
 	@Override
 	public Html render() {
-		return super.render("Create an album", "tru dat", HttpMethodType.POST, routes.AlbumsWebController.create().url());
+		return super.render(
+			"Create an album",
+			"tru dat",
+			HttpMethodType.POST,
+			controllers.web.routes.AlbumsWebController.create().url()
+		);
 	}
 
 }

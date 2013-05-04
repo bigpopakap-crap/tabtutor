@@ -7,7 +7,7 @@ import play.mvc.Result;
 import actions.base.BaseAction;
 import actions.base.ActionAnnotations.Authed;
 import contexts.SessionContext;
-import controllers.AuthWebController;
+import controllers.web.AuthWebController;
 
 /**
  * This Action will log the user in through Facebook, and ensure that the authentication

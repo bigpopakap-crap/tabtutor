@@ -1,6 +1,7 @@
-package controllers;
+package controllers.web;
 
-import controllers.base.BaseWebController;
+import controllers.routes;
+import controllers.web.base.BaseWebController;
 import juiforms.JuiFormValidationException;
 import models.SongModel;
 import models.forms.SongModelJuiForm;
@@ -43,7 +44,7 @@ public class SongsWebController extends BaseWebController {
 		SongModelJuiForm songModelForm = new SongModelJuiForm();
 		try {
 			songModelForm.bind();
-			return redirect(routes.SongsWebController.list());
+			return redirect(controllers.web.routes.SongsWebController.list());
 		}
 		catch (JuiFormValidationException ex) {
 			return list(songModelForm);
@@ -58,7 +59,7 @@ public class SongsWebController extends BaseWebController {
 	 *  the detail URL because it will populate the correct title */
 	public static String detailUrl(SongModel song) {
 		if (song != null) {
-			return routes.SongsWebController.detail(
+			return controllers.web.routes.SongsWebController.detail(
 				song.getPk().toString(),
 				EscapingUtil.escape(song.getTitle(), Escaper.URL_DESCRIPTIVE_PARAM)
 			).url();
@@ -66,7 +67,7 @@ public class SongsWebController extends BaseWebController {
 		else {
 			//don't throw exception, simply return a path that will not work
 			Logger.warn("Called with null argument", new RuntimeException("song cannot be null"));
-			return routes.SimpleWebController.pageNotFound(null).url();
+			return controllers.web.routes.SimpleWebController.pageNotFound(null).url();
 		}
 	}
 	

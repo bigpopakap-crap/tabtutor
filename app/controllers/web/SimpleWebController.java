@@ -1,10 +1,10 @@
-package controllers;
+package controllers.web;
 
 import oops.NotFoundOops;
 import play.mvc.Result;
 import utils.StringUtil;
 import contexts.RequestContext;
-import controllers.base.BaseWebController;
+import controllers.web.base.BaseWebController;
 
 /**
  * This class will route all pages that the user will see as they navigate through the site,

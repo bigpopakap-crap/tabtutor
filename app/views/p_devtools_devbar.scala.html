@@ -4,10 +4,10 @@
 	
 	Devbar that provides easy actions for developers
 *@
-@import contexts.AppContext;
-@import contexts.RequestContext;
-@import contexts.SessionContext;
-@import controllers.routes;
+@import contexts.AppContext
+@import contexts.RequestContext
+@import contexts.SessionContext
+@import controllers.web.devtools.routes
 @if(AppContext.Mode.isDevelopment()) {
 	@p_staticResource(Array(), Array("/public/stylesheets/devbar.css"))
 	<div id="devbar" class="devbar">
@@ -23,8 +23,8 @@
 		
 		<span><a href="@(RequestContext.loginUrl())">FbLogin</a> - </span>
 		<span><a href="@(RequestContext.logoutUrl())">Logout</a> - </span>
-		<span><a href="@(routes.DevtoolsWebController.directory())">Devtools</a> - </span>
-		<span><a href="@(routes.DevtoolsLoginWebController.listUsers())">User List</a> - </span>
-		<span><a href="@(routes.DevtoolsWebController.killServer())">KillServer</a></span>
+		<span><a href="@(controllers.web.devtools.routes.DevtoolsWebController.directory())">Devtools</a> - </span>
+		<span><a href="@(controllers.web.devtools.routes.DevtoolsLoginWebController.listUsers())">User List</a> - </span>
+		<span><a href="@(controllers.web.devtools.routes.DevtoolsWebController.killServer())">KillServer</a></span>
 	</div>
 }

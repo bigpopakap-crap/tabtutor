@@ -1,4 +1,4 @@
-package controllers;
+package controllers.web;
 
 import oops.CsrfTokenInvalidOops;
 import oops.InternalServerOops;
@@ -14,7 +14,7 @@ import api.fb.FbApi;
 import api.fb.FbJsonResponse;
 import contexts.RequestErrorContext;
 import contexts.SessionContext;
-import controllers.base.BaseWebController;
+import controllers.web.base.BaseWebController;
 
 /**
  * This class handles all API requests related to Facebook authentication

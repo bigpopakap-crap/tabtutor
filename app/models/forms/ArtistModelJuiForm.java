@@ -46,7 +46,12 @@ public class ArtistModelJuiForm extends JuiForm<ArtistModel> {
 	//TODO convert these hardcoded strings to messages
 	@Override
 	public Html render() {
-		return super.render("Create new artist", "spring breeeeaaakk", HttpMethodType.POST, routes.ArtistsWebController.create().url());
+		return super.render(
+			"Create new artist",
+			"spring breeeeaaakk",
+			HttpMethodType.POST,
+			controllers.web.routes.ArtistsWebController.create().url()
+		);
 	}
 
 }

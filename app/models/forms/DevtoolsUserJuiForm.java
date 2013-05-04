@@ -13,7 +13,6 @@ import models.UserModel;
 import play.api.templates.Html;
 import types.HttpMethodType;
 import contexts.SessionContext;
-import controllers.routes;
 
 /**
  * Form for the devtools page that can create test users
@@ -66,7 +65,12 @@ public class DevtoolsUserJuiForm extends JuiForm<UserModel> {
 	
 	//TODO convert these hardcoded strings to messages
 	public Html render() {
-		return super.render("Create a new user", "Bitchin'", HttpMethodType.POST, routes.DevtoolsLoginWebController.create().url());
+		return super.render(
+			"Create a new user",
+			"Bitchin'",
+			HttpMethodType.POST,
+			controllers.web.devtools.routes.DevtoolsLoginWebController.create().url()
+		);
 	}
 
 }

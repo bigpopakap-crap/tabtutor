@@ -4,7 +4,7 @@
 	
 	The landing page
 *@
-@import controllers.routes
+@import controllers.web.routes
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,9 +14,9 @@
 	@p_topbar()
 	Welcome!
 	
-	<a href="@(routes.SongsWebController.list())">Songs</a>
-	<a href="@(routes.ArtistsWebController.list())">Artists</a>
-	<a href="@(routes.AlbumsWebController.list())">Albums</a>
+	<a href="@(controllers.web.routes.SongsWebController.list())">Songs</a>
+	<a href="@(controllers.web.routes.ArtistsWebController.list())">Artists</a>
+	<a href="@(controllers.web.routes.AlbumsWebController.list())">Albums</a>
 	
 	@p_devtools_devbar()
 </body>

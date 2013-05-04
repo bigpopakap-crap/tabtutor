@@ -1,4 +1,4 @@
-package controllers;
+package controllers.web.test;
 
 import play.mvc.Result;
 import actions.base.ActionAnnotations.Authed;

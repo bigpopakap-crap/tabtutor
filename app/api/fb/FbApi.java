@@ -13,7 +13,6 @@ import api.base.ApiNoResponseException;
 import api.base.ApiResponseOption;
 import api.base.BaseApi;
 import contexts.AppContext;
-import controllers.routes;
 
 /**
  * This class implements interactions with the Facebook REST API
@@ -105,7 +104,7 @@ public class FbApi extends BaseApi<FbJsonResponse> {
 	
 	/** Returns the redirect URI to use for Facebook login. TODO quiet this damn compiler error */
 	public static String fbLoginRedirectUri(Request request, String targetUrl) {
-		return routes.AuthWebController.fblogin(null, null, targetUrl).absoluteURL(request);
+		return controllers.web.routes.AuthWebController.fblogin(null, null, targetUrl).absoluteURL(request);
 	}
 	
 	/** Gets the URL to redirect the user for Facebook login */

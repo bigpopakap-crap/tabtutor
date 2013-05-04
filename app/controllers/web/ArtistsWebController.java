@@ -1,6 +1,7 @@
-package controllers;
+package controllers.web;
 
-import controllers.base.BaseWebController;
+import controllers.routes;
+import controllers.web.base.BaseWebController;
 import oops.NotFoundOops;
 import juiforms.JuiFormValidationException;
 import models.ArtistModel;
@@ -43,7 +44,7 @@ public class ArtistsWebController extends BaseWebController {
 		ArtistModelJuiForm artistModelForm = new ArtistModelJuiForm();
 		try {
 			artistModelForm.bind();
-			return redirect(routes.ArtistsWebController.list());
+			return redirect(controllers.web.routes.ArtistsWebController.list());
 		}
 		catch (JuiFormValidationException ex) {
 			return list(artistModelForm);
@@ -58,7 +59,7 @@ public class ArtistsWebController extends BaseWebController {
 	 *  the detail URL because it will populate the correct name */
 	public static String detailUrl(ArtistModel artist) {
 		if (artist != null) {
-			return routes.ArtistsWebController.detail(
+			return controllers.web.routes.ArtistsWebController.detail(
 				artist.getPk().toString(),
 				EscapingUtil.escape(artist.getName(), Escaper.URL_DESCRIPTIVE_PARAM)
 			).url();
@@ -66,7 +67,7 @@ public class ArtistsWebController extends BaseWebController {
 		else {
 			//don't throw exception, simply return a path that will not work
 			Logger.warn("Called with null argument", new RuntimeException("artist cannot be null"));
-			return routes.SimpleWebController.pageNotFound(null).url();
+			return controllers.web.routes.SimpleWebController.pageNotFound(null).url();
 		}
 	}
 	

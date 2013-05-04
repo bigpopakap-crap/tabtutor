@@ -14,29 +14,29 @@
 #	HIGHEST PRIORITY PAGES												#
 # --------------------------------------------------------------------- #
 #Specific page-not-found page
-GET		/notfound					controllers.SimpleWebController.pageNotFound(path ?= null)
+GET		/notfound					controllers.web.SimpleWebController.pageNotFound(path ?= null)
 
 #Remove trailing slashes
-GET		/*path/						controllers.SimpleWebController.untrail(path)
+GET		/*path/						controllers.web.SimpleWebController.untrail(path)
 
 # --------------------------------------------------------------------- #
 #	BEGIN PAGE ROUTING													#
 # --------------------------------------------------------------------- #
-GET     /                           controllers.SimpleWebController.landing()
-GET		/fblogin					controllers.AuthWebController.fblogin(code ?= null, state ?= null, targetUrl ?= "/")
-GET		/logout						controllers.AuthWebController.logout(targetUrl ?= "/")
+GET     /                           controllers.web.SimpleWebController.landing()
+GET		/fblogin					controllers.web.AuthWebController.fblogin(code ?= null, state ?= null, targetUrl ?= "/")
+GET		/logout						controllers.web.AuthWebController.logout(targetUrl ?= "/")
 
-GET		/songs						controllers.SongsWebController.list()
-GET		/songs/:pk/:title			controllers.SongsWebController.detail(pk, title)
-POST	/songs/create				controllers.SongsWebController.create()
+GET		/songs						controllers.web.SongsWebController.list()
+GET		/songs/:pk/:title			controllers.web.SongsWebController.detail(pk, title)
+POST	/songs/create				controllers.web.SongsWebController.create()
 
-GET		/artists					controllers.ArtistsWebController.list()
-GET		/artists/:pk/:name			controllers.ArtistsWebController.detail(pk, name)
-POST	/artists/create				controllers.ArtistsWebController.create()
+GET		/artists					controllers.web.ArtistsWebController.list()
+GET		/artists/:pk/:name			controllers.web.ArtistsWebController.detail(pk, name)
+POST	/artists/create				controllers.web.ArtistsWebController.create()
 
-GET		/albums						controllers.AlbumsWebController.list()
-GET		/albums/:pk/:title			controllers.AlbumsWebController.detail(pk, title)
-POST	/albums/create				controllers.AlbumsWebController.create()
+GET		/albums						controllers.web.AlbumsWebController.list()
+GET		/albums/:pk/:title			controllers.web.AlbumsWebController.detail(pk, title)
+POST	/albums/create				controllers.web.AlbumsWebController.create()
 
 # --------------------------------------------------------------------- #
 #	BEGIN /INTERNAL/ADMIN PAGE ROUTING									#
@@ -46,20 +46,20 @@ POST	/albums/create				controllers.AlbumsWebController.create()
 # --------------------------------------------------------------------- #
 #	BEGIN /INTERNAL/DEVTOOLS PAGE ROUTING								#
 # --------------------------------------------------------------------- #
-GET		/internal/devtools							controllers.DevtoolsWebController.directory()
-GET		/internal/devtools/killserver				controllers.DevtoolsWebController.killServer()
-GET		/internal/devtools/login/listusers			controllers.DevtoolsLoginWebController.listUsers()
-POST	/internal/devtools/login/create				controllers.DevtoolsLoginWebController.create()
-GET		/internal/devtools/login/login/:pk			controllers.DevtoolsLoginWebController.login(pk, targetUrl ?= "/")
+GET		/internal/devtools							controllers.web.devtools.DevtoolsWebController.directory()
+GET		/internal/devtools/killserver				controllers.web.devtools.DevtoolsWebController.killServer()
+GET		/internal/devtools/login/listusers			controllers.web.devtools.DevtoolsLoginWebController.listUsers()
+POST	/internal/devtools/login/create				controllers.web.devtools.DevtoolsLoginWebController.create()
+GET		/internal/devtools/login/login/:pk			controllers.web.devtools.DevtoolsLoginWebController.login(pk, targetUrl ?= "/")
 
 # --------------------------------------------------------------------- #
 #	BEGIN /INTERNAL/TEST PAGE ROUTING									#
 # --------------------------------------------------------------------- #
-GET		/internal/test/runtimeexception								controllers.TestWebController.runtimeException()
-GET		/internal/test/errorpageexception/internalservererrorpage	controllers.TestErrorPageExceptionWebController.internalServerErrorPage()
-GET		/internal/test/errorpageexception/notfoundpage				controllers.TestErrorPageExceptionWebController.notFoundPage()
-GET		/internal/test/actions/sessionaction						controllers.TestActionsWebController.sessionAction()
-GET		/internal/test/actions/authaction							controllers.TestActionsWebController.authAction()
+GET		/internal/test/runtimeexception								controllers.web.test.TestWebController.runtimeException()
+GET		/internal/test/errorpageexception/internalservererrorpage	controllers.web.test.TestErrorPageExceptionWebController.internalServerErrorPage()
+GET		/internal/test/errorpageexception/notfoundpage				controllers.web.test.TestErrorPageExceptionWebController.notFoundPage()
+GET		/internal/test/actions/sessionaction						controllers.web.test.TestActionsWebController.sessionAction()
+GET		/internal/test/actions/authaction							controllers.web.test.TestActionsWebController.authAction()
 
 # --------------------------------------------------------------------- #
 #	BEGIN /API ROUTING													#
@@ -75,4 +75,4 @@ GET     /public/*file               controllers.Assets.at(path="/public", file)
 # --------------------------------------------------------------------- #
 #	CATCH-ALL NOT FOUND PAGE											#
 # --------------------------------------------------------------------- #
-GET		/*path						controllers.SimpleWebController.pageNotFound(path)
+GET		/*path						controllers.web.SimpleWebController.pageNotFound(path)
