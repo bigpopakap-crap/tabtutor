@@ -1,8 +1,8 @@
 package controllers;
 
-import controllers.base.BaseWebController;
 import play.mvc.Result;
 import actions.base.ActionAnnotations.DevModeProtected;
+import controllers.base.BaseWebController;
 
 /**
  * This class handles routes (or parents classes that handle routes) which are used by tests for various purposes

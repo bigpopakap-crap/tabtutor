@@ -1,11 +1,10 @@
 package actions;
 
-import oops.NotFoundOops;
+import helpers.OperationReq;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import actions.base.ActionAnnotations.DevModeProtected;
 import actions.base.BaseAction;
-import contexts.AppContext;
 
 /**
  * This action will catch throw an exception if the app is not running in the
@@ -19,13 +18,8 @@ public class DevModeProtectAction extends BaseAction<DevModeProtected> {
 	
 	@Override
 	protected Result hook_call(Context ctx) throws Throwable {
-		//TODO use OperationReqs for this?
-		if (!AppContext.Mode.isDevelopment()) {
-			throw new NotFoundOops(null);
-		}
-		else {
-			return delegate.call(ctx);
-		}
+		OperationReq.IS_DEV_MODE.verifyAndThrow();
+		return delegate.call(ctx);
 	}
 	
 }
