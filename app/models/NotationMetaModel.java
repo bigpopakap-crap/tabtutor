@@ -11,7 +11,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import models.base.BaseModel;
-
 import types.musical.Instrument;
 import types.musical.NotationType;
 import types.musical.SkillLevel;
@@ -43,7 +42,6 @@ public class NotationMetaModel extends BaseModel {
 	@Column(name = "ratingNumerator") public int ratingNumerator;
 	@Column(name = "ratingDenomenator") public int ratingDenomenator;
 	//TODO add reference to the actual notation data
-	//TODO use proper foreign object reference for instrument type list
 	
 	@ManyToOne @JoinColumn(name = "songPk", referencedColumnName = "pk") public SongModel song;
 	@ManyToOne @JoinColumn(name = "userPk_author", referencedColumnName = "pk") public UserModel author;
