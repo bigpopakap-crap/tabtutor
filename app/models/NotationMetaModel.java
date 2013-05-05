@@ -12,9 +12,9 @@ import javax.persistence.Transient;
 
 import models.base.BaseModel;
 
-import types.musical.InstrumentType;
+import types.musical.Instrument;
 import types.musical.NotationType;
-import types.musical.SkillLevelType;
+import types.musical.SkillLevel;
 
 import com.avaje.ebean.annotation.Formula;
 
@@ -37,8 +37,8 @@ public class NotationMetaModel extends BaseModel {
 	 ************************************************************************** */
 	
 	@Column(name = "pk") @Id public UUID pk;
-	@Column(name = "instrument") public InstrumentType instrument;
-	@Column(name = "skillLevel") public SkillLevelType skillLevel;
+	@Column(name = "instrument") public Instrument instrument;
+	@Column(name = "skillLevel") public SkillLevel skillLevel;
 	@Column(name = "notationType") public NotationType notationType;
 	@Column(name = "ratingNumerator") public int ratingNumerator;
 	@Column(name = "ratingDenomenator") public int ratingDenomenator;
@@ -51,8 +51,8 @@ public class NotationMetaModel extends BaseModel {
 	@Transient @Formula(select = "(CASE WHEN ratingDenomenator = 0 THEN 0 ELSE (CAST(ratingNumerator AS NUMERIC) / ratingDenomenator))") public double rating;
 	
 	public UUID getPk() { return UUID.fromString(pk.toString()); } //defensive copy
-	public InstrumentType getInstrument() { return instrument; }
-	public SkillLevelType getSkillLevel() { return skillLevel; }
+	public Instrument getInstrument() { return instrument; }
+	public SkillLevel getSkillLevel() { return skillLevel; }
 	public NotationType getNotationType() { return notationType; }
 	public SongModel getSong() { return song; }
 	public UserModel getAuthor() { return author; }

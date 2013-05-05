@@ -7,7 +7,7 @@ package types.musical;
  * @since 2013-04-07
  *
  */
-public enum InstrumentVariantType {
+public enum InstrumentVariant {
 	
 	ACOUSTIC,
 	ELECTRIC,
