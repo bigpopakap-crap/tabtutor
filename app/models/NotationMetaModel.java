@@ -18,8 +18,8 @@ import types.musical.SkillLevel;
 import com.avaje.ebean.annotation.Formula;
 
 /**
-* This Ebean maps to the Staff table, and represents staff metadata
-* A "staff" is the notation for a particular instrument
+* This Ebean maps to the Notation table, and represents notation metadata
+* A "notation" is the notation for a particular instrument for a particular song
 * 
 * @author bigpopakap
 * @since 2013-04-07
