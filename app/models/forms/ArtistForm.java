@@ -21,11 +21,11 @@ import types.HttpMethodType;
  * @since 2013-04-26
  *
  */
-public class ArtistModelJuiForm extends JuiForm<ArtistModel> {
+public class ArtistForm extends JuiForm<ArtistModel> {
 	
 	private static final String NAME_INPUT_NAME = "name";
 
-	public ArtistModelJuiForm() {
+	public ArtistForm() {
 		super(new JuiFormInput[] {
 			//artist name
 			new JuiFormInput(
