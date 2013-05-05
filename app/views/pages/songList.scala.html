@@ -28,7 +28,6 @@
 			<th>Is live</th>
 			<th>Has youtube</th>
 			<th>Youtube</th>
-			<th>Edit</th>
 		</tr>
 		
 		<!-- Value rows -->
@@ -45,7 +44,6 @@
 				<td>@(song.isLive())</td>
 				<td>@(song.isYoutubeEnabled())</td>
 				<td>@(song.getYoutubeId())</td>
-				<td><a href="@(SongsWebController.editPageUrl(song))">@(Message.word_edit)</a></td>
 			</tr>
 		}
 	</table>

@@ -37,11 +37,6 @@ public class SongsWebController extends BaseWebController {
 		return ok("Detail page for song " + song);
 	}
 	
-	/** Show the edit page */
-	public static Result editPage(String pk, String title) {
-		return null; //TODO
-	}
-	
 	/** Show the song list page after creating the song */
 	public static Result create() {
 		SongForm songModelForm = new SongForm();
@@ -63,16 +58,6 @@ public class SongsWebController extends BaseWebController {
 	public static String detailPageUrl(SongModel song) {
 		if (song == null) throw new IllegalArgumentException("song cannot be null");
 		return controllers.web.routes.SongsWebController.detailPage(
-			song.getPk().toString(),
-			EscapingUtil.escape(song.getTitle(), Escaper.URL_DESCRIPTIVE_PARAM)
-		).url();
-	}
-	
-	/** Gets the URL of the edit page for the given song. This it the best way of getting
-	 *  the detail URL because it will populate the correct title */
-	public static String editPageUrl(SongModel song) {
-		if (song == null) throw new IllegalArgumentException("song cannot be null");
-		return controllers.web.routes.SongsWebController.editPage(
 			song.getPk().toString(),
 			EscapingUtil.escape(song.getTitle(), Escaper.URL_DESCRIPTIVE_PARAM)
 		).url();

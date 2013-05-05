@@ -28,7 +28,6 @@ GET		/logout						controllers.web.AuthWebController.logout(targetUrl ?= "/")
 
 GET		/songs						controllers.web.SongsWebController.listPage()
 GET		/songs/:pk/:title			controllers.web.SongsWebController.detailPage(pk, title)
-GET		/songs/:pk/:title/edit		controllers.web.SongsWebController.editPage(pk, title)
 POST	/songs/new					controllers.web.SongsWebController.create()
 
 GET		/artists					controllers.web.ArtistsWebController.listPage()
