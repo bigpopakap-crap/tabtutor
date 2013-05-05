@@ -9,6 +9,7 @@ package types.musical;
  */
 public enum NotationType {
 	
+	LYRICS,
 	CHORDS,
 	TAB,
 	STAFF;

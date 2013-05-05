@@ -20,11 +20,11 @@ import controllers.routes;
  * @since 2013-04-26
  *
  */
-public class AlbumModelJuiForm extends JuiForm<AlbumModel> {
+public class AlbumForm extends JuiForm<AlbumModel> {
 	
 	private static final String TITLE_INPUT_NAME = "title";
 
-	public AlbumModelJuiForm() {
+	public AlbumForm() {
 		super(new JuiFormInput[] {
 			//album title
 			new JuiFormInput(

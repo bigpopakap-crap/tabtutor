@@ -20,11 +20,11 @@ import types.HttpMethodType;
  * @since 2013-04-17
  *
  */
-public class SongModelJuiForm extends JuiForm<SongModel> {
+public class SongForm extends JuiForm<SongModel> {
 	
 	private static final String TITLE_INPUT_NAME = "title";
 	
-	public SongModelJuiForm() {
+	public SongForm() {
 		super(new JuiFormInput[] {
 			//song title field
 			new JuiFormInput(

@@ -4,7 +4,7 @@ import controllers.routes;
 import controllers.web.base.BaseWebController;
 import juiforms.JuiFormValidationException;
 import models.SongModel;
-import models.forms.SongModelJuiForm;
+import models.forms.SongForm;
 import oops.NotFoundOops;
 import play.Logger;
 import play.mvc.Result;
@@ -22,7 +22,7 @@ public class SongsWebController extends BaseWebController {
 	
 	/** Show the song list page */
 	public static Result list() {
-		return list(new SongModelJuiForm());
+		return list(new SongForm());
 	}
 	
 	/** Show the song detail page */
@@ -41,7 +41,7 @@ public class SongsWebController extends BaseWebController {
 	
 	/** Show the song list page after creating the song */
 	public static Result create() {
-		SongModelJuiForm songModelForm = new SongModelJuiForm();
+		SongForm songModelForm = new SongForm();
 		try {
 			songModelForm.bind();
 			return redirect(controllers.web.routes.SongsWebController.list());
@@ -76,7 +76,7 @@ public class SongsWebController extends BaseWebController {
 	 ************************************************************************** */
 	
 	/** Displays the list of songs using the given form object */
-	private static Result list(SongModelJuiForm songModelForm) {
+	private static Result list(SongForm songModelForm) {
 		return ok(views.html.pages.songList.render(
 			SongModel.getAll(),
 			songModelForm

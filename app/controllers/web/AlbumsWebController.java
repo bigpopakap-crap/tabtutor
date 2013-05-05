@@ -2,7 +2,7 @@ package controllers.web;
 
 import juiforms.JuiFormValidationException;
 import models.AlbumModel;
-import models.forms.AlbumModelJuiForm;
+import models.forms.AlbumForm;
 import oops.NotFoundOops;
 import play.Logger;
 import play.mvc.Result;
@@ -21,7 +21,7 @@ public class AlbumsWebController extends BaseWebController {
 	
 	/** Show the album list page */
 	public static Result list() {
-		return list(new AlbumModelJuiForm());
+		return list(new AlbumForm());
 	}
 	
 	/** Show the album detail page */
@@ -40,7 +40,7 @@ public class AlbumsWebController extends BaseWebController {
 	
 	/** Show the album list page after creating the album */
 	public static Result create() {
-		AlbumModelJuiForm albumModelForm = new AlbumModelJuiForm();
+		AlbumForm albumModelForm = new AlbumForm();
 		try {
 			albumModelForm.bind();
 			return redirect(controllers.web.routes.AlbumsWebController.list());
@@ -75,7 +75,7 @@ public class AlbumsWebController extends BaseWebController {
 	 ************************************************************************** */
 	
 	/** Displays the list of songs using the given form object */
-	private static Result list(AlbumModelJuiForm albumModelForm) {
+	private static Result list(AlbumForm albumModelForm) {
 		return ok(views.html.pages.albumList.render(
 			AlbumModel.getAll(),
 			albumModelForm

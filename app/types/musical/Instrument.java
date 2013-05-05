@@ -7,7 +7,7 @@ package types.musical;
  * @since 2013-04-07
  *
  */
-public enum InstrumentType {
+public enum Instrument {
 	
 	GUITAR,
 	BASS_GUITAR,

@@ -1,15 +1,14 @@
 package controllers.web;
 
-import controllers.routes;
-import controllers.web.base.BaseWebController;
-import oops.NotFoundOops;
 import juiforms.JuiFormValidationException;
 import models.ArtistModel;
-import models.forms.ArtistModelJuiForm;
+import models.forms.ArtistForm;
+import oops.NotFoundOops;
 import play.Logger;
 import play.mvc.Result;
 import utils.EscapingUtil;
 import utils.EscapingUtil.Escaper;
+import controllers.web.base.BaseWebController;
 
 /**
  * Controller for all things related so artists: listing, creating, modifying, etc.
@@ -22,7 +21,7 @@ public class ArtistsWebController extends BaseWebController {
 	
 	/** Show the artist list page */
 	public static Result list() {
-		return list(new ArtistModelJuiForm());
+		return list(new ArtistForm());
 	}
 	
 	/** Show the artist detail page */
@@ -41,7 +40,7 @@ public class ArtistsWebController extends BaseWebController {
 	
 	/** Show the artist list page after creating the artist */
 	public static Result create() {
-		ArtistModelJuiForm artistModelForm = new ArtistModelJuiForm();
+		ArtistForm artistModelForm = new ArtistForm();
 		try {
 			artistModelForm.bind();
 			return redirect(controllers.web.routes.ArtistsWebController.list());
@@ -76,7 +75,7 @@ public class ArtistsWebController extends BaseWebController {
 	 ************************************************************************** */
 	
 	/** Displays the list of songs using the given form object */
-	private static Result list(ArtistModelJuiForm artistModelForm) {
+	private static Result list(ArtistForm artistModelForm) {
 		return ok(views.html.pages.artistList.render(
 			ArtistModel.getAll(),
 			artistModelForm
