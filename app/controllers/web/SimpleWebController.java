@@ -17,12 +17,12 @@ import controllers.web.base.BaseWebController;
 public class SimpleWebController extends BaseWebController {
 
 	/** Show the landing page */
-	public static Result landing() {
+	public static Result landingPage() {
 		return ok(views.html.pages.landing.render());
 	}
 	
 	/** Show the error page for when no other page was found */
-	public static Result pageNotFound(String path) {
+	public static Result notFoundPage(String path) {
 		//do nothing with the path, just throw a page not found error page exception
 		throw new NotFoundOops(null);
 	}

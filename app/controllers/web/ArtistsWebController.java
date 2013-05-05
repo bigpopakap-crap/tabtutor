@@ -20,12 +20,12 @@ import controllers.web.base.BaseWebController;
 public class ArtistsWebController extends BaseWebController {
 	
 	/** Show the artist list page */
-	public static Result list() {
+	public static Result listPage() {
 		return list(new ArtistForm());
 	}
 	
 	/** Show the artist detail page */
-	public static Result detail(String pk, String name) {
+	public static Result detailPage(String pk, String name) {
 		//check that the title is the correct one for that pk
 		ArtistModel artist = ArtistModel.getByPk(pk);
 		if (artist == null) {
@@ -43,7 +43,7 @@ public class ArtistsWebController extends BaseWebController {
 		ArtistForm artistModelForm = new ArtistForm();
 		try {
 			artistModelForm.bind();
-			return redirect(controllers.web.routes.ArtistsWebController.list());
+			return redirect(controllers.web.routes.ArtistsWebController.listPage());
 		}
 		catch (JuiFormValidationException ex) {
 			return list(artistModelForm);
@@ -58,7 +58,7 @@ public class ArtistsWebController extends BaseWebController {
 	 *  the detail URL because it will populate the correct name */
 	public static String detailUrl(ArtistModel artist) {
 		if (artist != null) {
-			return controllers.web.routes.ArtistsWebController.detail(
+			return controllers.web.routes.ArtistsWebController.detailPage(
 				artist.getPk().toString(),
 				EscapingUtil.escape(artist.getName(), Escaper.URL_DESCRIPTIVE_PARAM)
 			).url();
@@ -66,7 +66,7 @@ public class ArtistsWebController extends BaseWebController {
 		else {
 			//don't throw exception, simply return a path that will not work
 			Logger.warn("Called with null argument", new RuntimeException("artist cannot be null"));
-			return controllers.web.routes.SimpleWebController.pageNotFound(null).url();
+			return controllers.web.routes.SimpleWebController.notFoundPage(null).url();
 		}
 	}
 	

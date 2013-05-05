@@ -18,7 +18,7 @@ import contexts.SessionContext;
 public class DevtoolsLoginWebController extends DevtoolsWebController {
 	
 	/** Lists the test users on a page */
-	public static Result listUsers() {
+	public static Result userListPage() {
 		return listUsers(new DevtoolsUserJuiForm());
 	}
 	
@@ -28,7 +28,7 @@ public class DevtoolsLoginWebController extends DevtoolsWebController {
 		DevtoolsUserJuiForm devtoolsUserForm = new DevtoolsUserJuiForm();
 		try {
 			devtoolsUserForm.bind();
-			return redirect(controllers.web.devtools.routes.DevtoolsLoginWebController.listUsers());
+			return redirect(controllers.web.devtools.routes.DevtoolsLoginWebController.userListPage());
 		} catch (JuiFormValidationException ex) {
 			return listUsers(devtoolsUserForm);
 		}

@@ -14,7 +14,7 @@
 #	HIGHEST PRIORITY PAGES												#
 # --------------------------------------------------------------------- #
 #Specific page-not-found page
-GET		/notfound					controllers.web.SimpleWebController.pageNotFound(path ?= null)
+GET		/notfound					controllers.web.SimpleWebController.notFoundPage(path ?= null)
 
 #Remove trailing slashes
 GET		/*path/						controllers.web.SimpleWebController.untrail(path)
@@ -22,20 +22,21 @@ GET		/*path/						controllers.web.SimpleWebController.untrail(path)
 # --------------------------------------------------------------------- #
 #	BEGIN PAGE ROUTING													#
 # --------------------------------------------------------------------- #
-GET     /                           controllers.web.SimpleWebController.landing()
+GET     /                           controllers.web.SimpleWebController.landingPage()
 GET		/fblogin					controllers.web.AuthWebController.fblogin(code ?= null, state ?= null, targetUrl ?= "/")
 GET		/logout						controllers.web.AuthWebController.logout(targetUrl ?= "/")
 
-GET		/songs						controllers.web.SongsWebController.list()
-GET		/songs/:pk/:title			controllers.web.SongsWebController.detail(pk, title)
+GET		/songs						controllers.web.SongsWebController.listPage()
+GET		/songs/:pk/:title			controllers.web.SongsWebController.detailPage(pk, title)
+GET		/songs/:pk/:title/edit		controllers.web.SongsWebController.editPage(pk, title)
 POST	/songs/new					controllers.web.SongsWebController.create()
 
-GET		/artists					controllers.web.ArtistsWebController.list()
-GET		/artists/:pk/:name			controllers.web.ArtistsWebController.detail(pk, name)
+GET		/artists					controllers.web.ArtistsWebController.listPage()
+GET		/artists/:pk/:name			controllers.web.ArtistsWebController.detailPage(pk, name)
 POST	/artists/new				controllers.web.ArtistsWebController.create()
 
-GET		/albums						controllers.web.AlbumsWebController.list()
-GET		/albums/:pk/:title			controllers.web.AlbumsWebController.detail(pk, title)
+GET		/albums						controllers.web.AlbumsWebController.listPage()
+GET		/albums/:pk/:title			controllers.web.AlbumsWebController.detailPage(pk, title)
 POST	/albums/new					controllers.web.AlbumsWebController.create()
 
 # --------------------------------------------------------------------- #
@@ -46,9 +47,9 @@ POST	/albums/new					controllers.web.AlbumsWebController.create()
 # --------------------------------------------------------------------- #
 #	BEGIN /INTERNAL/DEVTOOLS PAGE ROUTING								#
 # --------------------------------------------------------------------- #
-GET		/internal/devtools							controllers.web.devtools.DevtoolsWebController.directory()
+GET		/internal/devtools							controllers.web.devtools.DevtoolsWebController.directoryPage()
 GET		/internal/devtools/killserver				controllers.web.devtools.DevtoolsWebController.killServer()
-GET		/internal/devtools/login/listusers			controllers.web.devtools.DevtoolsLoginWebController.listUsers()
+GET		/internal/devtools/login/listusers			controllers.web.devtools.DevtoolsLoginWebController.userListPage()
 POST	/internal/devtools/login/create				controllers.web.devtools.DevtoolsLoginWebController.create()
 GET		/internal/devtools/login/login/:pk			controllers.web.devtools.DevtoolsLoginWebController.login(pk, targetUrl ?= "/")
 
@@ -75,4 +76,4 @@ GET     /public/*file               controllers.Assets.at(path="/public", file)
 # --------------------------------------------------------------------- #
 #	CATCH-ALL NOT FOUND PAGE											#
 # --------------------------------------------------------------------- #
-GET		/*path						controllers.web.SimpleWebController.pageNotFound(path)
+GET		/*path						controllers.web.SimpleWebController.notFoundPage(path)

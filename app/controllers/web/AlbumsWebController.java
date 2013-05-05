@@ -20,12 +20,12 @@ import controllers.web.base.BaseWebController;
 public class AlbumsWebController extends BaseWebController {
 	
 	/** Show the album list page */
-	public static Result list() {
+	public static Result listPage() {
 		return list(new AlbumForm());
 	}
 	
 	/** Show the album detail page */
-	public static Result detail(String pk, String title) {
+	public static Result detailPage(String pk, String title) {
 		//check that the title is the correct one for that pk
 		AlbumModel album = AlbumModel.getByPk(pk);
 		if (album == null) {
@@ -43,7 +43,7 @@ public class AlbumsWebController extends BaseWebController {
 		AlbumForm albumModelForm = new AlbumForm();
 		try {
 			albumModelForm.bind();
-			return redirect(controllers.web.routes.AlbumsWebController.list());
+			return redirect(controllers.web.routes.AlbumsWebController.listPage());
 		}
 		catch (JuiFormValidationException ex) {
 			return list(albumModelForm);
@@ -58,7 +58,7 @@ public class AlbumsWebController extends BaseWebController {
 	 *  the detail URL because it will populate the correct title */
 	public static String detailUrl(AlbumModel album) {
 		if (album != null) {
-			return controllers.web.routes.AlbumsWebController.detail(
+			return controllers.web.routes.AlbumsWebController.detailPage(
 				album.getPk().toString(),
 				EscapingUtil.escape(album.getTitle(), Escaper.URL_DESCRIPTIVE_PARAM)
 			).url();
@@ -66,7 +66,7 @@ public class AlbumsWebController extends BaseWebController {
 		else {
 			//don't throw exception, simply return a path that will not work
 			Logger.warn("Called with null argument", new RuntimeException("album cannot be null"));
-			return controllers.web.routes.SimpleWebController.pageNotFound(null).url();
+			return controllers.web.routes.SimpleWebController.notFoundPage(null).url();
 		}
 	}
 	

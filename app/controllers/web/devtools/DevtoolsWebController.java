@@ -17,7 +17,7 @@ import controllers.web.base.BaseWebController;
 public class DevtoolsWebController extends BaseWebController {
 	
 	/** Lists all the devtools pages */
-	public static Result directory() {
+	public static Result directoryPage() {
 		//TODO do this
 		return ok("Not implemented yet");
 	}
