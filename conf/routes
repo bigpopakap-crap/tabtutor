@@ -28,15 +28,15 @@ GET		/logout						controllers.web.AuthWebController.logout(targetUrl ?= "/")
 
 GET		/songs						controllers.web.SongsWebController.list()
 GET		/songs/:pk/:title			controllers.web.SongsWebController.detail(pk, title)
-POST	/songs/create				controllers.web.SongsWebController.create()
+POST	/songs/new					controllers.web.SongsWebController.create()
 
 GET		/artists					controllers.web.ArtistsWebController.list()
 GET		/artists/:pk/:name			controllers.web.ArtistsWebController.detail(pk, name)
-POST	/artists/create				controllers.web.ArtistsWebController.create()
+POST	/artists/new				controllers.web.ArtistsWebController.create()
 
 GET		/albums						controllers.web.AlbumsWebController.list()
 GET		/albums/:pk/:title			controllers.web.AlbumsWebController.detail(pk, title)
-POST	/albums/create				controllers.web.AlbumsWebController.create()
+POST	/albums/new					controllers.web.AlbumsWebController.create()
 
 # --------------------------------------------------------------------- #
 #	BEGIN /INTERNAL/ADMIN PAGE ROUTING									#
