@@ -1,5 +1,6 @@
 word_user=user
 word_sign_in=Sign in
+word_edit=Edit
 
 formError_required={0} is required
 formError_notUnique={0} is not available

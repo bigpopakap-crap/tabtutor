@@ -32,7 +32,7 @@ public class AlbumsWebController extends BaseWebController {
 			throw new NotFoundOops(null);
 		}
 		else if (!EscapingUtil.escape(album.getTitle(), Escaper.URL_DESCRIPTIVE_PARAM).equals(title)) { //this takes care of null title
-			return redirect(detailUrl(album));
+			return redirect(detailPageUrl(album));
 		}
 		
 		return ok("Detail page for album " + album);
@@ -56,7 +56,7 @@ public class AlbumsWebController extends BaseWebController {
 	
 	/** Gets the URL of the detail page for this album. This is the best way of getting
 	 *  the detail URL because it will populate the correct title */
-	public static String detailUrl(AlbumModel album) {
+	public static String detailPageUrl(AlbumModel album) {
 		if (album != null) {
 			return controllers.web.routes.AlbumsWebController.detailPage(
 				album.getPk().toString(),

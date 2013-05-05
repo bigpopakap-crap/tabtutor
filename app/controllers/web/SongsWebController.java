@@ -4,7 +4,6 @@ import juiforms.JuiFormValidationException;
 import models.SongModel;
 import models.forms.SongForm;
 import oops.NotFoundOops;
-import play.Logger;
 import play.mvc.Result;
 import utils.EscapingUtil;
 import utils.EscapingUtil.Escaper;
@@ -32,7 +31,7 @@ public class SongsWebController extends BaseWebController {
 			throw new NotFoundOops(null);
 		}
 		else if (!EscapingUtil.escape(song.getTitle(), Escaper.URL_DESCRIPTIVE_PARAM).equals(title)) { //this takes care of null title
-			return redirect(detailUrl(song));
+			return redirect(detailPageUrl(song));
 		}
 		
 		return ok("Detail page for song " + song);
@@ -59,20 +58,24 @@ public class SongsWebController extends BaseWebController {
 	 *  PUBLIC HELPERS
 	 ************************************************************************** */
 	
-	/** Gets the URL of the detail page for this song. This is the best way of getting
+	/** Gets the URL of the detail page for the given song. This is the best way of getting
 	 *  the detail URL because it will populate the correct title */
-	public static String detailUrl(SongModel song) {
-		if (song != null) {
-			return controllers.web.routes.SongsWebController.detailPage(
-				song.getPk().toString(),
-				EscapingUtil.escape(song.getTitle(), Escaper.URL_DESCRIPTIVE_PARAM)
-			).url();
-		}
-		else {
-			//don't throw exception, simply return a path that will not work
-			Logger.warn("Called with null argument", new RuntimeException("song cannot be null"));
-			return controllers.web.routes.SimpleWebController.notFoundPage(null).url();
-		}
+	public static String detailPageUrl(SongModel song) {
+		if (song == null) throw new IllegalArgumentException("song cannot be null");
+		return controllers.web.routes.SongsWebController.detailPage(
+			song.getPk().toString(),
+			EscapingUtil.escape(song.getTitle(), Escaper.URL_DESCRIPTIVE_PARAM)
+		).url();
+	}
+	
+	/** Gets the URL of the edit page for the given song. This it the best way of getting
+	 *  the detail URL because it will populate the correct title */
+	public static String editPageUrl(SongModel song) {
+		if (song == null) throw new IllegalArgumentException("song cannot be null");
+		return controllers.web.routes.SongsWebController.editPage(
+			song.getPk().toString(),
+			EscapingUtil.escape(song.getTitle(), Escaper.URL_DESCRIPTIVE_PARAM)
+		).url();
 	}
 	
 	/* **************************************************************************

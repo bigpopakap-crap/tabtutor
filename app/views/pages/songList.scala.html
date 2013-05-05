@@ -6,6 +6,7 @@
 *@
 @(songs: List[SongModel], songForm: models.forms.SongForm)
 @import controllers.web.SongsWebController
+@import helpers.Message
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,12 +28,13 @@
 			<th>Is live</th>
 			<th>Has youtube</th>
 			<th>Youtube</th>
+			<th>Edit</th>
 		</tr>
 		
 		<!-- Value rows -->
 		@for(song <- songs) {
 			<tr>
-				<td><a href="@(SongsWebController.detailUrl(song))">@(song.getTitle())</a></td>
+				<td><a href="@(SongsWebController.detailPageUrl(song))">@(song.getTitle())</a></td>
 				<td>@(song.getArtist().getName())</td>
 				@if(song.hasAlbum()) {
 					<td>@(song.getAlbum().getTitle())</td>
@@ -43,6 +45,7 @@
 				<td>@(song.isLive())</td>
 				<td>@(song.isYoutubeEnabled())</td>
 				<td>@(song.getYoutubeId())</td>
+				<td><a href="@(SongsWebController.editPageUrl(song))">@(Message.word_edit.get())</a></td>
 			</tr>
 		}
 	</table>

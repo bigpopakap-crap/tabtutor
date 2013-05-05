@@ -29,7 +29,7 @@
 		<!-- Value rows -->
 		@for(album <- albums) {
 			<tr>
-				<td><a href="@(AlbumsWebController.detailUrl(album))">@(album.getTitle())</a></td>
+				<td><a href="@(AlbumsWebController.detailPageUrl(album))">@(album.getTitle())</a></td>
 				@if(album.hasArtist()) {
 					<td>@(album.getArtist().getName())</td>
 				} else {

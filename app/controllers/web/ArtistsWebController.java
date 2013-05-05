@@ -32,7 +32,7 @@ public class ArtistsWebController extends BaseWebController {
 			throw new NotFoundOops(null);
 		}
 		else if (!EscapingUtil.escape(artist.getName(), Escaper.URL_DESCRIPTIVE_PARAM).equals(name)) { //this takes care of null name
-			return redirect(detailUrl(artist));
+			return redirect(detailPageUrl(artist));
 		}
 		
 		return ok("Detail page for artist " + artist);
@@ -56,7 +56,7 @@ public class ArtistsWebController extends BaseWebController {
 	
 	/** Gets the URL of the detail page for this artist. This is the best way of getting
 	 *  the detail URL because it will populate the correct name */
-	public static String detailUrl(ArtistModel artist) {
+	public static String detailPageUrl(ArtistModel artist) {
 		if (artist != null) {
 			return controllers.web.routes.ArtistsWebController.detailPage(
 				artist.getPk().toString(),

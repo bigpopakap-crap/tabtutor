@@ -24,45 +24,46 @@ public class Message {
 	 *  STATIC MESSAGE DECLARATIONS
 	 ************************************************************************** */
 	
-	public static final Message word_user = new Message("word_user") {};
-	public static final Message word_sign_in = new Message("word_sign_in") {};
+	public static final Message word_user = new Message("word_user");
+	public static final Message word_sign_in = new Message("word_sign_in");
+	public static final Message word_edit = new Message("word_edit");
 	
-	public static final Message formError_required = new Message("formError_required") {};
-	public static final Message formError_notUnique = new Message("formError_notUnique") {};
-	public static final Message formError_notInteger = new Message("formError_notInteger") {};
+	public static final Message formError_required = new Message("formError_required");
+	public static final Message formError_notUnique = new Message("formError_notUnique");
+	public static final Message formError_notInteger = new Message("formError_notInteger");
 	
-	public static final Message formInput_submit_label = new Message("formInput_submit_label") {};
+	public static final Message formInput_submit_label = new Message("formInput_submit_label");
 	
-	public static final Message formInput_username_label = new Message("formInput_username_label") {};
-	public static final Message formInput_username_placeholder = new Message("formInput_username_placeholder") {};
-	public static final Message formInput_username_helpText = new Message("formInput_username_helpText") {};
+	public static final Message formInput_username_label = new Message("formInput_username_label");
+	public static final Message formInput_username_placeholder = new Message("formInput_username_placeholder");
+	public static final Message formInput_username_helpText = new Message("formInput_username_helpText");
 	
-	public static final Message formInput_email_label = new Message("formInput_email_label") {};
-	public static final Message formInput_email_placeholder = new Message("formInput_email_placeholder") {};
-	public static final Message formInput_email_helpText = new Message("formInput_email_helpText") {};
+	public static final Message formInput_email_label = new Message("formInput_email_label");
+	public static final Message formInput_email_placeholder = new Message("formInput_email_placeholder");
+	public static final Message formInput_email_helpText = new Message("formInput_email_helpText");
 	
-	public static final Message formInput_songTitle_label = new Message("formInput_songTitle_label") {};
-	public static final Message formInput_songTitle_placeholder = new Message("formInput_songTitle_placeholder") {};
-	public static final Message formInput_songTitle_helpText = new Message("formInput_songTitle_helpText") {};
+	public static final Message formInput_songTitle_label = new Message("formInput_songTitle_label");
+	public static final Message formInput_songTitle_placeholder = new Message("formInput_songTitle_placeholder");
+	public static final Message formInput_songTitle_helpText = new Message("formInput_songTitle_helpText");
 	
-	public static final Message formInput_artistName_label = new Message("formInput_artistName_label") {};
-	public static final Message formInput_artistName_placeholder = new Message("formInput_artistName_placeholder") {};
-	public static final Message formInput_artistName_helpText = new Message("formInput_artistName_helpText") {};
+	public static final Message formInput_artistName_label = new Message("formInput_artistName_label");
+	public static final Message formInput_artistName_placeholder = new Message("formInput_artistName_placeholder");
+	public static final Message formInput_artistName_helpText = new Message("formInput_artistName_helpText");
 	
-	public static final Message formInput_albumTitle_label = new Message("formInput_albumTitle_label") {};
-	public static final Message formInput_albumTitle_placeholder = new Message("formInput_albumTitle_placeholder") {};
-	public static final Message formInput_albumTitle_helpText = new Message("formInput_albumTitle_helpText") {};
+	public static final Message formInput_albumTitle_label = new Message("formInput_albumTitle_label");
+	public static final Message formInput_albumTitle_placeholder = new Message("formInput_albumTitle_placeholder");
+	public static final Message formInput_albumTitle_helpText = new Message("formInput_albumTitle_helpText");
 	
-	public static final Message errorPage_title = new Message("errorPage_title") {};
-	public static final Message errorPage_sampleDescription = new Message("errorPage_sampleDescription") {};
-	public static final Message errorPage_internalServerErrorDescription = new Message("errorPage_internalServerErrorDescription") {};
-	public static final Message errorPage_pageNotFoundDescription = new Message("errorPage_pageNotFoundDescription") {};
-	public static final Message errorPage_csrfTokenInvalidDescription = new Message("errorPage_csrfTokenInvalidDescription") {};
-	public static final Message errorPage_notAuthedDescription = new Message("errorPage_notAuthedDescription") {};
-	public static final Message errorPage_insufficientPrivilegesDescription = new Message("errorPage_insufficientPrivilegesDescription") {};
-	public static final Message errorPage_toGoBack = new Message("errorPage_toGoBack") {};
-	public static final Message errorPage_toGoHome = new Message("errorPage_toGoHome") {};
-	public static final Message errorPage_toSignIn = new Message("errorPage_toSignIn") {};
+	public static final Message errorPage_title = new Message("errorPage_title");
+	public static final Message errorPage_sampleDescription = new Message("errorPage_sampleDescription");
+	public static final Message errorPage_internalServerErrorDescription = new Message("errorPage_internalServerErrorDescription");
+	public static final Message errorPage_pageNotFoundDescription = new Message("errorPage_pageNotFoundDescription");
+	public static final Message errorPage_csrfTokenInvalidDescription = new Message("errorPage_csrfTokenInvalidDescription");
+	public static final Message errorPage_notAuthedDescription = new Message("errorPage_notAuthedDescription");
+	public static final Message errorPage_insufficientPrivilegesDescription = new Message("errorPage_insufficientPrivilegesDescription");
+	public static final Message errorPage_toGoBack = new Message("errorPage_toGoBack");
+	public static final Message errorPage_toGoHome = new Message("errorPage_toGoHome");
+	public static final Message errorPage_toSignIn = new Message("errorPage_toSignIn");
 	
 	/* **************************************************************************
 	 *  CLASS DEFINITION
@@ -70,6 +71,8 @@ public class Message {
 	
 	/** The key used to access the string in the messages files */
 	private final UniverseElement<String> key;
+	
+	private Message() { this(null); } //prevent instantiation from the outside
 	
 	/** Creates a new message with the given lookup key */
 	private Message(String key) {
