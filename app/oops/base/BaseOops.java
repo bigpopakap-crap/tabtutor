@@ -23,16 +23,26 @@ public abstract class BaseOops extends RuntimeException {
 
 	private static final long serialVersionUID = -935805780499802623L;
 	
+	/** The message specified by the exception that should be surfaced with the expression */
+	private final String uiMessage;
+	
 	//do *NOT* support a no-argument constructor in order to force classes to specify a cause
 	
 	/** Only define this constructor so all subclasses are forced to specify the cause */
 	public BaseOops(Throwable cause) {
 		super(cause);
+		this.uiMessage = null; //don't populate since no message is explicitly specified
 	}
 	
 	/** Only define this constructor so all subclasses are forced to specify the cause */
-	public BaseOops(Throwable cause, String message) {
-		super(message, cause);
+	public BaseOops(Throwable cause, String uiMessage) {
+		super(uiMessage, cause);
+		this.uiMessage = uiMessage;
+	}
+	
+	/** Gets the {@link #uiMessage} */
+	protected String getUiMessage() {
+		return uiMessage;
 	}
 	
 	/** Gets the result that should be returned to the client */

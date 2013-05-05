@@ -1,8 +1,8 @@
 package oops;
 
+import helpers.Message;
 import oops.base.BaseOops;
 import oops.base.OopsPageRenderUtil;
-import helpers.Message;
 import play.api.templates.Html;
 import play.mvc.Result;
 import play.mvc.Results;
@@ -24,7 +24,7 @@ public class CsrfTokenInvalidOops extends BaseOops {
 
 	@Override
 	protected Html hook_renderWebResult() {
-		return OopsPageRenderUtil.renderGoHomePage(this, getMessage());
+		return OopsPageRenderUtil.renderGoHomePage(this, getUiMessage());
 	}
 
 	@Override

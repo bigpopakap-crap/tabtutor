@@ -33,6 +33,11 @@ public class RequestStaticResourceContext extends BaseContext {
 		return get().contains(url);
 	}
 	
+	/** Clears the context */
+	public static synchronized void reset() {
+		refresh(PAGE_RESOURCE_CONTEXT_KEY);
+	}
+	
 	/** Adds the given static resource url to the request context
 	 *  @return the given url for convenience */
 	public static synchronized String add(String url) {

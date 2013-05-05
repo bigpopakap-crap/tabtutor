@@ -29,7 +29,7 @@ public class InternalServerOops extends BaseOops {
 
 	@Override
 	protected Html hook_renderWebResult() {
-		return OopsPageRenderUtil.renderGoBackPage(this, getMessage());
+		return OopsPageRenderUtil.renderGoBackPage(this, getUiMessage());
 	}
 
 	@Override
